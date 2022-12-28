@@ -22,6 +22,11 @@
  * OR OTHER DEALINGS IN THE SOFTWARE. 
  */
 
+/*
+ * Modified version by Controllino Firmware Team to be compatible with RP2040 SDK
+ *
+ */
+
 /*!
  * \file
  *
@@ -30,7 +35,6 @@
 #include "expand6.h"
 
 // ------------------------------------------------------------------ VARIABLES
-
 static uint8_t port_slave_addr;
 static uint8_t eeprom_slave_addr;
 

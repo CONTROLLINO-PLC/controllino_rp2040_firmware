@@ -22,6 +22,11 @@
  * OR OTHER DEALINGS IN THE SOFTWARE. 
  */
 
+/*
+ * Modified version by Controllino Firmware Team to be compatible with RP2040 SDK
+ *
+ */
+
 /*!
  * \file
  *
