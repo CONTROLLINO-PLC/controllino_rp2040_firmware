@@ -1,0 +1,25 @@
+{
+    "cmake.generator": "MinGW Makefiles",
+    "cmake.statusbar.advanced": {
+        "debug": {
+            "visibility": "hidden"
+        },
+        "launch": {
+            "visibility": "hidden"
+        },
+        "build": {
+            "visibility": "default"
+        },
+        "buildTarget": {
+            "visibility": "hidden"
+        }
+    },
+    "cmake.buildBeforeRun": true,
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "cortex-debug.openocdPath": "${env:RPI_OPENOCD_PATH}/src/openocd.exe",
+    "files.associations": {
+        "stdlib.h": "c",
+        "i2c.h": "c",
+        "timeout_helper.h": "c"
+    }
+}
