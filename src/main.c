@@ -4,44 +4,58 @@
 static expand6_t expand6;
 
 uint8_t pin_num;
+uint8_t pin_state;
 
 // ------------------------------------------------------ APPLICATION FUNCTIONS
-
-void application_init(void)
+void expander_task(void)
 {
-    expand6_cfg_t cfg;
-    printf("---- Application Init ----\r\n");
-
-    //  Click initialization.
-    expand6_cfg_default_setup(&cfg);
-    expand6_init(&expand6, &cfg);
-    expand6_reset(&expand6);
-    sleep_ms(1000);
-
-    printf("------------------- \r\n");
-    printf("   EXPAND 6 click   \r\n");
-    printf("------------------- \r\n");
-}
-
-void application_task(void)
-{
-    expand6_write_port(&expand6, EXPAND6_PORT_0, 0xFF);
-    // expand6_write_port(&expand6, EXPAND6_PORT_1, 0xFF);
+    // Out Test
+    expand6_write_port(&expand6, EXPAND6_PORT_1, 0xFF);
     // expand6_write_port(&expand6, EXPAND6_PORT_2, 0xFF);
 
     printf("All pins set to HIGH logic level!\r\n");
     printf("---------------------------------\r\n");
     sleep_ms(2000);
 
-    for (pin_num = 0; pin_num < 7; pin_num++)
+    for (pin_num = 8; pin_num < 15; pin_num++)
     {
         expand6_write_pin(&expand6, pin_num, EXPAND6_LOW);
-        printf("Pin %u is set to LOW logic level!\r\n", (uint16_t)pin_num);
+        printf("Pin %u is set to LOW logic level!\r\n", pin_num);
         sleep_ms(300);
     }
 
+    // // In test
+    // pin_num = 0;
+    // pin_state = expand6_read_pin(&expand6, pin_num, 0);
+    // printf("Pin %u level is %u!\r\n", pin_num, pin_state);
+
     printf("---------------------------------\r\n");
     sleep_ms(1000);
+}
+
+void expander_init(void)
+{
+    expand6_cfg_t cfg;
+    printf("---- Port expander Init ----\r\n");
+
+    //  Click initialization.
+    expand6_cfg_default_setup(&cfg);
+    if (expand6_init(&expand6, &cfg) == EXPAND6_OK) {
+        expand6_reset(&expand6);
+        sleep_ms(1000);
+
+        printf("------------------- \r\n");
+        printf("   EXPAND 6 click   \r\n");
+        printf("------------------- \r\n");
+
+        // Main task
+        while (1) {
+            expander_task();
+        }
+    }
+    else {
+        printf("---- Port expander Error ----\r\n");
+    }
 }
 
 // I2C reserves some addresses for special purposes. We exclude these from the scan.
@@ -57,10 +71,7 @@ int main() {
     #warning i2c / bus_scan example requires a board with I2C pins
         puts("Default I2C pins were not defined");
 #else
-    application_init();
-    while (1) {
-        application_task();
-    }
+    expander_init();
     return 0;
 #endif
 }

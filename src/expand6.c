@@ -304,7 +304,7 @@ void expand6_write_pin ( expand6_t *ctx, uint16_t pin, uint8_t pin_val )
 void expand6_write_port ( expand6_t *ctx, uint8_t port, uint8_t value )
 {
     expand6_write_byte( ctx, EXPAND6_REG_PORT_SEL_ADR, port );
-    expand6_write_byte( ctx, EXPAND6_REG_PORT_DIR_ADR, 0xFF );
+    expand6_write_byte( ctx, EXPAND6_REG_PORT_DIR_ADR, 0x00 );
 
     expand6_write_byte( ctx, ( EXPAND6_REG_OUT_PORT0_ADR + port ), value );
 }
