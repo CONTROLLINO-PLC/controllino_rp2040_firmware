@@ -20,6 +20,10 @@
     "files.associations": {
         "stdlib.h": "c",
         "i2c.h": "c",
-        "timeout_helper.h": "c"
+        "timeout_helper.h": "c",
+        "expand6.h": "c",
+        "binary_info.h": "c",
+        "cy8c95x0a.h": "c",
+        "cy8c95xx.h": "c"
     }
 }

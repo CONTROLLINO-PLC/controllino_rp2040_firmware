@@ -1,7 +1,7 @@
-#include "expand6.h"
+#include "cy8C95xx.h"
 #include "pico/binary_info.h"
 
-static expand6_t expand6;
+static cy8C95xx_t cy8C95xx;
 
 uint8_t pin_num;
 uint8_t pin_state;
@@ -10,8 +10,8 @@ uint8_t pin_state;
 void expander_task(void)
 {
     // Out Test
-    expand6_write_port(&expand6, EXPAND6_PORT_1, 0xFF);
-    // expand6_write_port(&expand6, EXPAND6_PORT_2, 0xFF);
+    cy8C95xx_write_port(&cy8C95xx, CY8C95XX_PORT_1, 0xFF);
+    // cy8C95xx_write_port(&cy8C95xx, CY8C95XX_PORT_2, 0xFF);
 
     printf("All pins set to HIGH logic level!\r\n");
     printf("---------------------------------\r\n");
@@ -19,14 +19,14 @@ void expander_task(void)
 
     for (pin_num = 8; pin_num < 15; pin_num++)
     {
-        expand6_write_pin(&expand6, pin_num, EXPAND6_LOW);
+        cy8C95xx_write_pin(&cy8C95xx, pin_num, CY8C95XX_LOW);
         printf("Pin %u is set to LOW logic level!\r\n", pin_num);
         sleep_ms(300);
     }
 
     // // In test
     // pin_num = 0;
-    // pin_state = expand6_read_pin(&expand6, pin_num, 0);
+    // pin_state = cy8C95xx_read_pin(&cy8C95xx, pin_num, 0);
     // printf("Pin %u level is %u!\r\n", pin_num, pin_state);
 
     printf("---------------------------------\r\n");
@@ -35,13 +35,13 @@ void expander_task(void)
 
 void expander_init(void)
 {
-    expand6_cfg_t cfg;
+    cy8C95xx_cfg_t cfg;
     printf("---- Port expander Init ----\r\n");
 
     //  Click initialization.
-    expand6_cfg_default_setup(&cfg);
-    if (expand6_init(&expand6, &cfg) == EXPAND6_OK) {
-        expand6_reset(&expand6);
+    cy8C95xx_cfg_default_setup(&cfg);
+    if (cy8C95xx_init(&cy8C95xx, &cfg) == CY8C95XX_OK) {
+        cy8C95xx_reset(&cy8C95xx);
         sleep_ms(1000);
 
         printf("------------------- \r\n");

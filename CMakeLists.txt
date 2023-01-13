@@ -31,7 +31,7 @@ add_executable(firmware)
 
 file(GLOB_RECURSE SOURCES 
     ${CMAKE_CURRENT_LIST_DIR}/src/main.c
-    ${CMAKE_CURRENT_LIST_DIR}/src/expand6.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/cy8C95xx.c
 )
 
 target_sources(firmware PUBLIC ${SOURCES})
