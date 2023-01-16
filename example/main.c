@@ -1,4 +1,4 @@
-#include "cy8C95xx.h"
+#include "drivers/cy8C95xx.h"
 #include "pico/binary_info.h"
 
 static cy8C95xx_t cy8C95xx;
@@ -6,7 +6,7 @@ static cy8C95xx_t cy8C95xx;
 uint8_t pin_num;
 uint8_t pin_state;
 
-// ------------------------------------------------------ APPLICATION FUNCTIONS
+/* Task to test port expander functions */
 void expander_task(void)
 {
     // Out Test
@@ -33,22 +33,20 @@ void expander_task(void)
     sleep_ms(1000);
 }
 
+/* Initialize port expander */
 void expander_init(void)
 {
-    cy8C95xx_cfg_t cfg;
     printf("---- Port expander Init ----\r\n");
-
-    //  Click initialization.
-    cy8C95xx_cfg_default_setup(&cfg);
+    cy8C95xx_cfg_t cfg;
+    cy8C95xx_set_default_cfg(&cfg);
     if (cy8C95xx_init(&cy8C95xx, &cfg) == CY8C95XX_OK) {
         cy8C95xx_reset(&cy8C95xx);
         sleep_ms(1000);
 
-        printf("------------------- \r\n");
-        printf("   EXPAND 6 click   \r\n");
-        printf("------------------- \r\n");
-
-        // Main task
+        printf("-------------------------- \r\n");
+        printf("  CY8C95XX PORT EXPANDER   \r\n");
+        printf("-------------------------- \r\n");
+        // Test task
         while (1) {
             expander_task();
         }
@@ -58,20 +56,12 @@ void expander_init(void)
     }
 }
 
-// I2C reserves some addresses for special purposes. We exclude these from the scan.
-// These are any addresses of the form 000 0xxx or 111 1xxx
-bool reserved_addr(uint8_t addr) {
-    return (addr & 0x78) == 0 || (addr & 0x78) == 0x78;
-}
-
 int main() {
-    // Enable UART so we can print status output
+    // Enable print status output
     stdio_init_all();
-#if !defined(i2c_default) || !defined(PICO_DEFAULT_I2C_SDA_PIN) || !defined(PICO_DEFAULT_I2C_SCL_PIN)
-    #warning i2c / bus_scan example requires a board with I2C pins
-        puts("Default I2C pins were not defined");
-#else
+    
+    // Init and test port expander
     expander_init();
+    
     return 0;
-#endif
 }

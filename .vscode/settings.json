@@ -24,6 +24,15 @@
         "expand6.h": "c",
         "binary_info.h": "c",
         "cy8c95x0a.h": "c",
-        "cy8c95xx.h": "c"
+        "cy8c95xx.h": "c",
+        "time.h": "c",
+        "pico.h": "c",
+        "version.h": "c",
+        "types.h": "c",
+        "stdio.h": "c",
+        "cy8c95xx_config.h": "c",
+        "uart.h": "c",
+        "gpio.h": "c",
+        "platform.h": "c"
     }
 }

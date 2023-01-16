@@ -4,9 +4,12 @@
  *
  * SPDX-License-Identifier: MIT
  */
-
+ 
+#ifndef CY8C95XX_H
+#define CY8C95XX_H
+ 
 /**
- * \file driver/cy8C95xx.h
+ * \file drivers/cy8C95xx.h
  * \ingroup drivers
  * \defgroup cy8C95xx
  *
@@ -14,12 +17,8 @@
  * Based on MikroE Expand 6 Click Driver (copyright notice included)
  */
  
-#ifndef CY8C95XX_H
-#define CY8C95XX_H
-
 #include <stdio.h>
-#include "pico/stdlib.h"
-#include "hardware/i2c.h"
+#include "cy8C95xx_config.h" /* External harware interface configuration */
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,8 +30,9 @@ extern "C" {
  */
 enum cy8C95xx_error_code {
     CY8C95XX_OK = 0x00,
-    CY8C95XX_INIT_ERROR = 0x01
-}; 
+    CY8C95XX_INIT_ERROR = 0x01,
+    CY8C95XX_I2C_ERROR = 0x02
+};
  
 /**
  * \brief Base addresses for comunications
@@ -98,7 +98,7 @@ enum cy8C95xx_error_code {
 #define CY8C95XX_REG_CMD_ADR                0x30
  
 /**
- * \brief Pwm select
+ * \brief Select pwm output
  * \ingroup cy8C95xx
  */
 #define CY8C95XX_SEL_PWM_0                  0x00
@@ -107,7 +107,7 @@ enum cy8C95xx_error_code {
 #define CY8C95XX_SEL_PWM_3                  0x03
  
 /**
- * \brief Pwm clock source
+ * \brief Clock source for pwm
  * \ingroup cy8C95xx
  */
 #define CY8C95XX_PWM_CLK_SRC_32_KHZ         0x00
@@ -118,7 +118,7 @@ enum cy8C95xx_error_code {
 #define CY8C95XX_PWM_CLK_SRC_PREV           0x05
  
 /**
- * \brief Pwm clock source
+ * \brief Available commands
  * \ingroup cy8C95xx
  */
 #define CY8C95XX_STORE_POR_CFG_TO_EEPROM    0x01
@@ -155,7 +155,7 @@ enum cy8C95xx_error_code {
 #define CY8C95XX_INT_INVERTED               0x01
  
 /**
- * \brief Configure data structure offsets
+ * \brief Configuration offsets
  * \ingroup cy8C95xx
  */
 #define CY8C95XX_PORT0_OUT_INX              0x00
@@ -210,7 +210,6 @@ enum cy8C95xx_error_code {
 #define CY8C95XX_PORT0_STRONG_INX           0x2C
 #define CY8C95XX_PORT0_SLOW_STRONG_INX      0x2D
 #define CY8C95XX_PORT0_HIGH_Z_INX           0x2E
-
 #define CY8C95XX_PORT1_PULL_UP_INX          0x2F
 #define CY8C95XX_PORT1_PULL_DOWN_INX        0x30
 #define CY8C95XX_PORT1_OPEN_DRAIN_HIGH_INX  0x31
@@ -218,7 +217,6 @@ enum cy8C95xx_error_code {
 #define CY8C95XX_PORT1_STRONG_INX           0x33
 #define CY8C95XX_PORT1_SLOW_STRONG_INX      0x34
 #define CY8C95XX_PORT1_HIGH_Z_INX           0x35
-
 #define CY8C95XX_PORT2_PULL_UP_INX          0x36
 #define CY8C95XX_PORT2_PULL_DOWN_INX        0x37
 #define CY8C95XX_PORT2_OPEN_DRAIN_HIGH_INX  0x38
@@ -226,7 +224,6 @@ enum cy8C95xx_error_code {
 #define CY8C95XX_PORT2_STRONG_INX           0x3A
 #define CY8C95XX_PORT2_SLOW_STRONG_INX      0x3B
 #define CY8C95XX_PORT2_HIGH_Z_INX           0x3C
-
 #define CY8C95XX_PORT3_PULL_UP_INX          0x3D
 #define CY8C95XX_PORT3_PULL_DOWN_INX        0x3E
 #define CY8C95XX_PORT3_OPEN_DRAIN_HIGH_INX  0x3F
@@ -234,7 +231,6 @@ enum cy8C95xx_error_code {
 #define CY8C95XX_PORT3_STRONG_INX           0x41
 #define CY8C95XX_PORT3_SLOW_STRONG_INX      0x42
 #define CY8C95XX_PORT3_HIGH_Z_INX           0x43
-
 #define CY8C95XX_PORT4_PULL_UP_INX          0x44
 #define CY8C95XX_PORT4_PULL_DOWN_INX        0x45
 #define CY8C95XX_PORT4_OPEN_DRAIN_HIGH_INX  0x46
@@ -242,7 +238,6 @@ enum cy8C95xx_error_code {
 #define CY8C95XX_PORT4_STRONG_INX           0x48
 #define CY8C95XX_PORT4_SLOW_STRONG_INX      0x49
 #define CY8C95XX_PORT4_HIGH_Z_INX           0x4A
-
 #define CY8C95XX_PORT5_PULL_UP_INX          0x4B
 #define CY8C95XX_PORT5_PULL_DOWN_INX        0x4C
 #define CY8C95XX_PORT5_OPEN_DRAIN_HIGH_INX  0x4D
@@ -250,7 +245,6 @@ enum cy8C95xx_error_code {
 #define CY8C95XX_PORT5_STRONG_INX           0x4F
 #define CY8C95XX_PORT5_SLOW_STRONG_INX      0x50
 #define CY8C95XX_PORT5_HIGH_Z_INX           0x51
-
 #define CY8C95XX_PORT6_PULL_UP_INX          0x52
 #define CY8C95XX_PORT6_PULL_DOWN_INX        0x53
 #define CY8C95XX_PORT6_OPEN_DRAIN_HIGH_INX  0x54
@@ -258,7 +252,6 @@ enum cy8C95xx_error_code {
 #define CY8C95XX_PORT6_STRONG_INX           0x56
 #define CY8C95XX_PORT6_SLOW_STRONG_INX      0x57
 #define CY8C95XX_PORT6_HIGH_Z_INX           0x58
-
 #define CY8C95XX_PORT7_PULL_UP_INX          0x59
 #define CY8C95XX_PORT7_PULL_DOWN_INX        0x5A
 #define CY8C95XX_PORT7_OPEN_DRAIN_HIGH_INX  0x5B
@@ -270,63 +263,48 @@ enum cy8C95xx_error_code {
 #define CY8C95XX_PWM0_CFG_INX               0x60
 #define CY8C95XX_PWM0_PERIOD_INX            0x61
 #define CY8C95XX_PWM0_PULSE_WIDTH_INX       0x62
-
 #define CY8C95XX_PWM1_CFG_INX               0x63
 #define CY8C95XX_PWM1_PERIOD_INX            0x64
 #define CY8C95XX_PWM1_PULSE_WIDTH_INX       0x65
-
 #define CY8C95XX_PWM2_CFG_INX               0x66
 #define CY8C95XX_PWM2_PERIOD_INX            0x67
 #define CY8C95XX_PWM2_PULSE_WIDTH_INX       0x68
-
 #define CY8C95XX_PWM3_CFG_INX               0x69
 #define CY8C95XX_PWM3_PERIOD_INX            0x6A
 #define CY8C95XX_PWM3_PULSE_WIDTH_INX       0x6B
-
 #define CY8C95XX_PWM4_CFG_INX               0x6C
 #define CY8C95XX_PWM4_PERIOD_INX            0x6D
 #define CY8C95XX_PWM4_PULSE_WIDTH_INX       0x6E
-
 #define CY8C95XX_PWM5_CFG_INX               0x6F
 #define CY8C95XX_PWM5_PERIOD_INX            0x70
 #define CY8C95XX_PWM5_PULSE_WIDTH_INX       0x71
-
 #define CY8C95XX_PWM6_CFG_INX               0x72
 #define CY8C95XX_PWM6_PERIOD_INX            0x73
 #define CY8C95XX_PWM6_PULSE_WIDTH_INX       0x74
-
 #define CY8C95XX_PWM7_CFG_INX               0x75
 #define CY8C95XX_PWM7_PERIOD_INX            0x76
 #define CY8C95XX_PWM7_PULSE_WIDTH_INX       0x77
-
 #define CY8C95XX_PWM8_CFG_INX               0x78
 #define CY8C95XX_PWM8_PERIOD_INX            0x79
 #define CY8C95XX_PWM8_PULSE_WIDTH_INX       0x7A
-
 #define CY8C95XX_PWM9_CFG_INX               0x7B
 #define CY8C95XX_PWM9_PERIOD_INX            0x7C
 #define CY8C95XX_PWM9_PULSE_WIDTH_INX       0x7D
-
 #define CY8C95XX_PWM10_CFG_INX              0x7E
 #define CY8C95XX_PWM10_PERIOD_INX           0x7F
 #define CY8C95XX_PWM10_PULSE_WIDTH_INX      0x80
-
 #define CY8C95XX_PWM11_CFG_INX              0x81
 #define CY8C95XX_PWM11_PERIOD_INX           0x82
 #define CY8C95XX_PWM11_PULSE_WIDTH_INX      0x83
-
 #define CY8C95XX_PWM12_CFG_INX              0x84
 #define CY8C95XX_PWM12_PERIOD_INX           0x85
 #define CY8C95XX_PWM12_PULSE_WIDTH_INX      0x86
-
 #define CY8C95XX_PWM13_CFG_INX              0x87
 #define CY8C95XX_PWM13_PERIOD_INX           0x88
 #define CY8C95XX_PWM13_PULSE_WIDTH_INX      0x89
-
 #define CY8C95XX_PWM14_CFG_INX              0x8A
 #define CY8C95XX_PWM14_PERIOD_INX           0x8B
 #define CY8C95XX_PWM14_PULSE_WIDTH_INX      0x8C
-
 #define CY8C95XX_PWM15_CFG_INX              0x8D
 #define CY8C95XX_PWM15_PERIOD_INX           0x8E
 #define CY8C95XX_PWM15_PULSE_WIDTH_INX      0x8F
@@ -334,9 +312,35 @@ enum cy8C95xx_error_code {
 #define CY8C95XX_DIVIDER_INX                0x90
 #define CY8C95XX_EEPROM_ENABLE_INX          0x91
 #define CY8C95XX_CRC_INX                    0x92
+
+/**
+ * \brief Object to store port expander initial config
+ * \ingroup cy8C95xx
+ */
+typedef struct {
+    int scl_pin;
+    int sda_pin;
+    int rst_pin;
+    int int_pin;
+    hw_i2c_t* i2c;
+    uint i2c_speed;
+    uint8_t i2c_addr;
+} cy8C95xx_cfg_t;
  
 /**
- * \brief PWM configuration
+ * \brief Port expander instance
+ * \ingroup cy8C95xx
+ */
+typedef struct
+{
+    int rst_pin;
+    int int_pin;
+    hw_i2c_t* i2c;
+    uint8_t slave_addr;
+} cy8C95xx_t;
+ 
+/**
+ * \brief Object to store pwm config
  * \ingroup cy8C95xx
  */
 typedef struct
@@ -348,325 +352,290 @@ typedef struct
     uint8_t devider;
 } cy8C95xx_pwm_cfg_t;
  
-/**
- * \brief Click ctx object definition.
+/*!
+ * \brief Initializes all necessary pins and peripherals used by expander object
  * \ingroup cy8C95xx
+ *
+ * \param exp Port expander instance
+ * \param cfg Click configuration structure
+ * \return CY8C95XX_INIT_ERROR : error
+ *         CY8C95XX_OK : successful
  */
-typedef struct
-{ 
-    int rst_pin;
-    int int_pin;
-    i2c_inst_t* i2c;
-    uint8_t slave_addr;
-} cy8C95xx_t;
- 
-/**
- * \brief Click configuration structure definition.
- * \ingroup cy8C95xx
- */
-typedef struct
-{
-    int scl_pin;
-    int sda_pin;
-    int rst_pin;
-    int int_pin;
-    i2c_inst_t* i2c;
-    uint i2c_speed;
-    uint8_t i2c_addr;
-} cy8C95xx_cfg_t;
+int cy8C95xx_init(cy8C95xx_t *exp, cy8C95xx_cfg_t *cfg);
  
 /*!
- * \brief Config Object Initialization function.
+ * \brief Writes data to register
  * \ingroup cy8C95xx
  *
- * Initializes default configuration:
- * i2c: i2c0, sda:4, scl:5, i2c_speed: 100000, i2c_address: CY8C95XX_DEV_ADR_GND
- * rst: -1, int_pin: 15
- *
- * \param cfg  Click configuration structure.
- * \note The gpio will not be initialized, that happens in cy8C95xx_init().
+ * \param exp Port expander instance
+ * \param reg Register address
+ * \param data_buf Data buf to be written
+ * \param len Number of the bytes in data buf
  */
-void cy8C95xx_cfg_default_setup(cy8C95xx_cfg_t *cfg);
-
-/**
- * \brief Initialization function.
+void cy8C95xx_generic_write(cy8C95xx_t *exp, uint8_t reg, uint8_t *data_buf, uint8_t len);
+ 
+/*!
+ * \brief Reads data from register
  * \ingroup cy8C95xx
  *
- * Initializes all necessary pins and peripherals used for this click.
- *
- * \param cy8C95xx Click object.
- * \param cfg Click configuration structure.
+ * \param exp Port expander instance
+ * \param reg Register address
+ * \param data_buf Output data buf
+ * \param len Number of the bytes to be read
  */
-uint cy8C95xx_init(cy8C95xx_t *ctx, cy8C95xx_cfg_t *cfg);
-
-/**
- * \brief Generic write function.
+void cy8C95xx_generic_read(cy8C95xx_t *exp, uint8_t reg, uint8_t *data_buf, uint8_t len);
+ 
+/*!
+ * \brief Write single byte of data to register
  * \ingroup cy8C95xx
  *
- * Writes data to the desired register.
- *
- * \param ctx          Click object.
- * \param reg          Register address.
- * \param data_buf     Data buf to be written.
- * \param len          Number of the bytes in data buf.
+ * \param exp Port expander instance
+ * \param reg_adr 8-bit value that defines the register
+ * \param wr_data 8-bit value that defines the input data
  */
-void cy8C95xx_generic_write ( cy8C95xx_t *ctx, uint8_t reg, uint8_t *data_buf, uint8_t len );
-
-/**
- * \brief Generic read function.
+void cy8C95xx_write_byte(cy8C95xx_t *exp, uint8_t reg_adr, uint8_t wr_data);
+ 
+/*!
+ * \brief Read single byte of data fromregister
  * \ingroup cy8C95xx
  *
- * Reads data from the desired register.
- *
- * \param ctx          Click object.
- * \param reg          Register address.
- * \param data_buf     Output data buf
- * \param len          Number of the bytes to be read
+ * \param exp Port expander instance
+ * \param reg_adr 8-bit value that defines the register
+ * \return rx_buf 8-bit value that defines the output data
  */
-void cy8C95xx_generic_read ( cy8C95xx_t *ctx, uint8_t reg, uint8_t *data_buf, uint8_t len );
-
-/**
- * \brief Write byte function
+uint8_t cy8C95xx_read_byte(cy8C95xx_t *exp, uint8_t reg_adr);
+ 
+/*!
+ * \brief Writes number of bytes into register
+ * \ingroup cy8C95xx
  *
- * \param ctx          Click object.
- * \param reg_adr  8-bit value that defines the register
- * \param wr_data  8-bit value that defines the input data
+ * \param exp Port expander instance
+ * \param reg 8-bit register address
+ * \param buf 8-bit write data
+ * \param len 8-bit number of bytes
+ */
+void cy8C95xx_write_port_exp(cy8C95xx_t *exp, uint8_t reg, uint8_t *buf, uint8_t len);
+ 
+/*!
+ * \brief Reads number of bytes from register
+ * \ingroup cy8C95xx
  *
- * Function is used to write single byte of data into user defined register.
-**/
-void cy8C95xx_write_byte ( cy8C95xx_t *ctx, uint8_t reg_adr, uint8_t wr_data );
-
-/**
- * \brief Read byte function
+ * \param exp Port expander instance
+ * \param reg 8-bit register address
+ * \param buf 8-bit read data
+ * \param len 8-bit number of bytes
+ */
+void cy8C95xx_read_port_exp(cy8C95xx_t *exp, uint8_t reg, uint8_t *buf, uint8_t len);
+ 
+/*!
+ * \brief Send EEPROM comand
+ * \ingroup cy8C95xx
  *
- * \param ctx          Click object.
- * \param reg_adr  8-bit value that defines the register
+ * \param exp Port expander instance
+ * \param cmd 8-bit value that defines the command
+ */
+void cy8C95xx_send_eeprom_cmd(cy8C95xx_t *exp, uint8_t cmd);
+ 
+/*!
+ * \brief Writes number of bytes into EEPROM
  *
- * \returns rx_buf 8-bit value that defines the output data
+ * \param exp Port expander instance
+ * \param reg 8-bit register address
+ * \param wr_data 8-bit write data
+ * \param len 8-bit number of bytes
+ */
+void cy8C95xx_write_eeprom(cy8C95xx_t *exp, uint16_t mem_adr, uint8_t *buf, uint8_t len);
+ 
+/*!
+ * \brief Reads number of bytes from EEPROM
+ * \ingroup cy8C95xx
  *
- * Function is used to read single byte of data from user defined register.
-**/
-uint8_t cy8C95xx_read_byte ( cy8C95xx_t *ctx, uint8_t reg_adr );
-
-/**
- * \brief Port Expander Write function
+ * \param exp Port expander instance
+ * \param reg 8-bit register address
+ * \param buf 8-bit read data
+ * \param len 8-bit number of bytes
+ */
+void cy8C95xx_read_eeprom(cy8C95xx_t *exp, uint16_t mem_adr, uint8_t *buf, uint8_t len);
+ 
+/*!
+ * \brief Read state of a single bit from register
+ * \ingroup cy8C95xx
  *
- * \param ctx          Click object.
- * \param reg  8-bit register address
- * \param buf  8-bit write data
- * \param len  8-bit number of bytes
+ * \param exp Port expander instance
+ * \param reg_adr 8-bit value that defines the register
+ * \param bit_num 8-bit value that defines the specific bit
+ * \return 8-bit value that represents the specific bit value
+ */
+uint8_t cy8C95xx_read_bit(cy8C95xx_t *exp, uint8_t reg_adr, uint8_t bit_num);
+ 
+/*!
+ * \brief Set or Clear specific bit in selected register
+ * \ingroup cy8C95xx
  *
- * Writes user defined number of bytes into registers defined by 8-bit register
- * address
-**/
-void cy8C95xx_write_port_exp ( cy8C95xx_t *ctx, uint8_t reg, uint8_t *buf, uint8_t len );
-
-/**
- * \brief Port Expander Read function
+ * \param exp Port expander instance
+ * \param reg_adr 8-bit value that defines the register
+ * \param bit_num 8-bit value that defines the specific bit
+ * \param bit_val 8-bit value that defines the specific bit value
+ */
+void cy8C95xx_write_bit(cy8C95xx_t* exp, uint8_t reg_adr, uint8_t bit_num, uint8_t bit_val);
+ 
+/*!
+ * \brief Get a single INPUT pin logic level
+ * \ingroup cy8C95xx
  *
- * \param ctx          Click object.
- * \param reg  8-bit register address
- * \param buf  8-bit read data
- * \param len  8-bit number of bytes
+ * \param exp Port expander instance
+ * \param pin 16-bit value that defines the specific pin
+ * \return 8-bit value that represents the specific pin state
+ */
+uint8_t cy8C95xx_read_pin(cy8C95xx_t *exp, uint16_t pin, uint8_t inv);
+ 
+/*!
+ * \brief Get all pin logic levels from port
+ * \ingroup cy8C95xx
  *
- * Reads user defined number of bytes from registers defined by 8-bit register
- * address
-**/
-void cy8C95xx_read_port_exp ( cy8C95xx_t *ctx, uint8_t reg, uint8_t *buf, uint8_t len );
-
-/**
- * \brief Send Command function
- *
- * \param ctx          Click object.
- * \param cmd  8-bit value that defines the command
- *
- * Function is used to send the command to Command Register.
-**/
-void cy8C95xx_send_eeprom_cmd ( cy8C95xx_t *ctx, uint8_t cmd );
-
-/**
- * \brief EEPROM Write function
- *
- * \param ctx          Click object.
- * \param reg  8-bit register address
- * \param wr_data  8-bit write data
- * \param len  8-bit number of bytes
- *
- * Writes user defined number of bytes into EEPROM defined by 8-bit address
-**/
-void cy8C95xx_write_eeprom ( cy8C95xx_t *ctx, uint16_t mem_adr, uint8_t *buf, uint8_t len );
-
-/**
- * \brief EEPROM Read function
- *
- * \param ctx          Click object.
- * \param reg  8-bit register address
- * \param buf  8-bit read data
- * \param len  8-bit number of bytes
- *
- * Reads user defined number of bytes from EEPROM defined by 8-bit address
-**/
-void cy8C95xx_read_eeprom ( cy8C95xx_t *ctx, uint16_t mem_adr, uint8_t *buf, uint8_t len );
-
-/**
- * \brief Read bit function
- *
- * \param ctx          Click object.
- * \param reg_adr  8-bit value that defines the register
- * \param bit_num  8-bit value that defines the specific bit
- *
- * \returns 8-bit value that represents the specific bit's value
- *
- * Function is used to read state of a single bit of data from user defined register.
-**/
-uint8_t cy8C95xx_read_bit ( cy8C95xx_t *ctx, uint8_t reg_adr, uint8_t bit_num );
-
-/**
- * \brief Write bit function
- *
- * \param ctx          Click object.
- * \param reg_adr  8-bit value that defines the register
- * \param bit_num  8-bit value that defines the specific bit
- * \param pin_val  8-bit value that defines the specific bit's value
- *
- * Function is used to set or clear the specific bit.
-**/
-void cy8C95xx_write_bit ( cy8C95xx_t *ctx, uint8_t reg_adr, uint8_t bit_num, uint8_t pin_val );
-
-/**
- * \brief Get a single INPUT pin's logic level function
- *
- * \param ctx          Click object.
- * \param pin  16-bit value that defines the specific pin
- *
- * \returns 8-bit value that represents the specific pin's state
- *
- * Function is used to read the state of a defined pin.
-**/
-uint8_t cy8C95xx_read_pin ( cy8C95xx_t *ctx, uint16_t pin, uint8_t inv );
-
-/**
- * \brief Get all pin logic levels from one port function
- *
- * \param ctx          Click object.
+ * \param exp Port expander instance
  * \param port 8-bit value that defines the port
+ * \return 8-bit value that represents the states of pins in selected port
+ */
+uint8_t cy8C95xx_read_port(cy8C95xx_t *exp, uint8_t port, uint8_t inv);
+ 
+/*!
+ * \brief Get a single OUTPUT pin setting
+ * \ingroup cy8C95xx
  *
- * \returns 8-bit value that represents the states of pins in selected port.
+ * \param exp Port expander instance
+ * \param pin 16-bit value that defines the specific pin
+ * \return Pin output setting (0 or 1)
+ */
+uint8_t cy8C95xx_get_pin_out_lvl(cy8C95xx_t *exp, uint16_t pin);
+ 
+/*!
+ * \brief Get all pin output settings from port
+ * \ingroup cy8C95xx
  *
- * Function is used to read the states of pins in selected port.
-**/
-uint8_t cy8C95xx_read_port ( cy8C95xx_t *ctx, uint8_t port, uint8_t inv );
-
-/**
- * \brief Get a single OUTPUT pin's setting function
- *
- * \param ctx          Click object.
- * \param pin  16-bit value that defines the specific pin
- *
- * \returns Pin output setting (0 or 1)
- *
- * Function is used to get a single OUTPUT pin's setting.
-**/
-uint8_t cy8C95xx_get_pin_out_lvl ( cy8C95xx_t *ctx, uint16_t pin );
-
-/**
- * \brief Get all pin output settings from one port function
- *
- * \param ctx          Click object.
+ * \param exp Port expander instance
  * \param port 8-bit value that defines the port
+ * \return Pin output setting (0 or 1)
+ */
+uint8_t cy8C95xx_get_port_out_lvl(cy8C95xx_t *exp, uint8_t port);
+ 
+/*!
+ * \brief Set a single OUTPUT pin logic level
+ * \ingroup cy8C95xx
  *
- * \returns Pin output setting (0 or 1)
- *
- * Function is used to get all pin output settings from one port.
-**/
-uint8_t cy8C95xx_get_port_out_lvl ( cy8C95xx_t *ctx, uint8_t port );
-
-/**
- * \brief Set a single OUTPUT pin's logic level function
- *
- * \param ctx          Click object.
+ * \param exp Port expander instance
  * \param pin 8-bit value that defines the specific pin
- * \param pin_val 8-bit value that defines the specific pin's value
+ * \param pin_val 8-bit value that defines the specific pin value 
+ */
+void cy8C95xx_write_pin(cy8C95xx_t *exp, uint16_t pin, uint8_t pin_val);
+ 
+/*!
+ * \brief Set all OUTPUT pins logic levels in one port
  *
- * Function is used to set a single output pin's logic level.
-**/
-void cy8C95xx_write_pin ( cy8C95xx_t *ctx, uint16_t pin, uint8_t pin_val );
-
-/**
- * \brief Set all OUTPUT pins' logic levels in one port function
+ * \param exp Port expander instance
+ * \param port 8-bit value that defines which port to write to
+ * \param value 8-bit value that defines pins' output logic level (0 or 1)
+ */
+void cy8C95xx_write_port(cy8C95xx_t *exp, uint8_t port, uint8_t value);
+ 
+/*!
+ * \brief Enable or disable PWM output on pin
+ * \ingroup cy8C95xx
  *
- * \param ctx          Click object.
- * \param port  8-bit value that defines which port to write to.
- * \param value  8-bit value that defines pins' output logic level (0 or 1 for each pin).
+ * \param exp Port expander instance
+ * \param port 8-bit value that defines PWM output pin
+ * \param value 8-bit value that enables or disables PWM output (0 or 1)
+ */
+void cy8C95xx_sel_pwm_pin(cy8C95xx_t *exp, uint16_t pin, uint8_t pwm_en);
+ 
+/*!
+ * \brief Configure pwm output
+ * \ingroup cy8C95xx
  *
- * Function is used to set logic levels in one port.
-**/
-void cy8C95xx_write_port ( cy8C95xx_t *ctx, uint8_t port, uint8_t value );
-
-/**
- * \brief Select a PWM output pin function
+ * \param exp Port expander instance
+ * \param pwm_cfg cy8C95xx_pwm_cfg_t pwm Configuration structure
+ * \param duty_cyc float value representing pwm duty cycle
+ * \param freq float value representing output frequency
+ */
+void cy8C95xx_pwm_cfg(cy8C95xx_t *exp, cy8C95xx_pwm_cfg_t pwm_cfg, float *duty_cyc, float *freq);
+ 
+/*!
+ * \brief Configures EEPROM enable register
+ * \ingroup cy8C95xx
  *
- * \param ctx          Click object.
- * \param port  8-bit value that defines PWM output pin.
- * \param value  8-bit value that enables or disables PWM output (0 or 1 for each pin).
- *
- * Function is used to enable or disable PWM output on a specific pin.
-**/
-void cy8C95xx_sel_pwm_pin ( cy8C95xx_t *ctx, uint16_t pin, uint8_t pwm_en );
-
-/**
- * \brief PWM Configuration function
- *
- * \param ctx          Click object.
- * \param cy8C95xx_pwm_cfg_t  structure where PWM Configuration data are stored.
- * \param duty_cyc  float value representing PWM duty cycle
- * \param freq  float value representing output frequency
- *
- * Function is used to configure PWM output.
-**/
-void cy8C95xx_pwm_cfg ( cy8C95xx_t *ctx, cy8C95xx_pwm_cfg_t pwm_cfg, float *duty_cyc, float *freq );
-
-/**
- * \brief Enable Register Configuration function
- *
- * \param ctx          Click object.
+ * \param exp Port expander instance
  * \param cmd value that represents input data to Enable Register
+ * \note Writes to this register differ from other registers, see datasheet
+ */
+void cy8C95xx_eeprom_enable(cy8C95xx_t *exp, uint8_t cmd);
+ 
+/************************************************************************************
+* External hardware interfase API
+************************************************************************************/
+/*!
+ * \brief Initializes default configuration
+ * \ingroup cy8C95xx
  *
- * Function is used to write to Enable Register.
- * \note Writes to this register differ from other registers, 
- * consult datasheet for further information.
-**/
-void cy8C95xx_eeprom_enable ( cy8C95xx_t *ctx, uint8_t cmd );
+ * \param cfg Port expander initail configuration
+ */
+void cy8C95xx_set_default_cfg(cy8C95xx_cfg_t* cfg);
+ 
+/*!
+ * \brief Init hardware according to configuration
+ * \ingroup cy8C95xx
+ *
+ * \param cfg Port expander initail configuration
+ * \return CY8C95XX_INIT_ERROR : error
+ *         CY8C95XX_OK : successful
+ */
+int cy8C95xx_hw_init(cy8C95xx_cfg_t* cfg);
+ 
+/*!
+ * \brief Reset port expander using rst_pin
+ * \ingroup cy8C95xx
+ *
+ * \param exp Port expander instance
+ * \note Functon holds two 100 ms reset delays
+ */
+void cy8C95xx_reset(cy8C95xx_t* exp);
+ 
+/*!
+ * \brief Check interrupt by reading int_pin level
+ * \ingroup cy8C95xx
+ *
+ * \param exp Port expander instance
+ * \return 0 : Interrupt has not occured
+ *         1 : Interrupt has occured
+ */
+uint8_t cy8C95xx_check_int(cy8C95xx_t* exp);
 
-/**
- * \brief Reset function
+/*!
+ * \brief Attempt to read specified number of bytes from address over i2c
+ * \ingroup cy8C95xx
  *
- * \param ctx          Click object.
- * 
- * Function is used to reset the device.
- * \note Functon holds two 100 ms reset delays.
-**/
-void cy8C95xx_reset ( cy8C95xx_t *ctx );
+ * \param i2c hw_i2c_t i2c interfase
+ * \param addr 7-bit address of device to read from
+ * \param rxdata Pointer to buffer to receive data
+ * \param len Length of data in bytes to receive
+ * \return CY8C95XX_I2C_ERROR : error
+ *         CY8C95XX_OK : successful
+ */
+int cy8C95xx_i2c_read(hw_i2c_t* i2c, uint8_t addr, uint8_t* rxdata, size_t len);
 
-/**
- * \brief Get Interrupt state function
+/*!
+ * \brief Attempt to write specified number of bytes to address over i2c
+ * \ingroup cy8C95xx
  *
- * \param ctx          Click object.
- * 
- * \return
- * - 0 : Interrupt has not occured
- * - 1 : Interrupt has occured
- *
- * Function is used to check if an interrupt has occured.
-**/
-uint8_t cy8C95xx_check_int ( cy8C95xx_t *ctx );
+ * \param i2c hw_i2c_t i2c interfase
+ * \param addr 7-bit address of device to write to
+ * \param txdata Pointer to data to send
+ * \param len Length of data in bytes to send
+ * \return CY8C95XX_I2C_ERROR : error
+ *         CY8C95XX_OK : successful
+ */
+int cy8C95xx_i2c_write(hw_i2c_t* i2c, uint8_t addr, const uint8_t* txdata, size_t len);
 
 #ifdef __cplusplus
 }
 #endif
 #endif  // _CY8C95XX_H_
-
-/** \} */ // End public_function group
-/// \}    // End click Driver group  
-/*! \} */
-// ------------------------------------------------------------------------- END

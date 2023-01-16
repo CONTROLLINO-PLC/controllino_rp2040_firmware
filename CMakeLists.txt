@@ -13,38 +13,35 @@ pico_sdk_init()
 
 add_compile_options(
     -Wall
-    -Wno-format          # int != int32_t as far as the compiler is concerned because gcc has int32_t as long int
+    -Wno-format # int != int32_t as far as the compiler is concerned because gcc has int32_t as long int
+    -Wno-unused-function # we have some for the docs that aren't called
     -Wno-maybe-uninitialized
 )
 
 add_definitions(
-    -DCO_DRIVER_CUSTOM   # include CO_driver_custom.h in CO_driver_target to add custom configurations
+    -DPLATFORM_RP2040 # RP2040 as compile platform
 )
 
-add_compile_options(-Wall
-        -Wno-format          # int != int32_t as far as the compiler is concerned because gcc has int32_t as long int
-        -Wno-unused-function # we have some for the docs that aren't called
-        -Wno-maybe-uninitialized
-        )
+add_executable(example)
 
-add_executable(firmware)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/cy8C95xx)
 
 file(GLOB_RECURSE SOURCES 
-    ${CMAKE_CURRENT_LIST_DIR}/src/main.c
-    ${CMAKE_CURRENT_LIST_DIR}/src/cy8C95xx.c
+    ${CMAKE_CURRENT_LIST_DIR}/example/main.c
+    ${CMAKE_CURRENT_LIST_DIR}/example/cy8C95xx_rp2040.c
 )
 
-target_sources(firmware PUBLIC ${SOURCES})
+target_sources(example PUBLIC ${SOURCES})
 
-target_include_directories(firmware PUBLIC
-    ${CMAKE_CURRENT_LIST_DIR}/src
+target_include_directories(example PUBLIC
+    ${CMAKE_CURRENT_LIST_DIR}/example
 )
 
-target_link_libraries(firmware PUBLIC pico_stdlib hardware_i2c hardware_pio)
+target_link_libraries(example cy8C95xx_driver pico_stdlib hardware_i2c hardware_pio)
 
-pico_enable_stdio_usb(firmware 1)
-pico_enable_stdio_uart(firmware 1)
+pico_enable_stdio_usb(example 1)
+pico_enable_stdio_uart(example 1)
 
-pico_add_extra_outputs(firmware)
+pico_add_extra_outputs(example)
 
-pico_set_program_url(firmware ${CMAKE_CURRENT_LIST_DIR})
+pico_set_program_url(example ${CMAKE_CURRENT_LIST_DIR})
