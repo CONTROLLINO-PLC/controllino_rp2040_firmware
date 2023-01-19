@@ -22,26 +22,27 @@ add_definitions(
     -DPLATFORM_RP2040 # RP2040 as compile platform
 )
 
-add_executable(example)
+add_executable(firmware)
 
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/cy8C95xx)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/cy8c95xx)
 
 file(GLOB_RECURSE SOURCES 
-    ${CMAKE_CURRENT_LIST_DIR}/example/main.c
-    ${CMAKE_CURRENT_LIST_DIR}/example/cy8C95xx_rp2040.c
+    ${CMAKE_CURRENT_LIST_DIR}/rp2040/main.c
+    ${CMAKE_CURRENT_LIST_DIR}/rp2040/cy8c95xx_rp2040.c
 )
 
-target_sources(example PUBLIC ${SOURCES})
+target_sources(firmware PUBLIC ${SOURCES})
 
-target_include_directories(example PUBLIC
-    ${CMAKE_CURRENT_LIST_DIR}/example
+target_include_directories(firmware PUBLIC
+    ${CMAKE_CURRENT_LIST_DIR}/rp2040
 )
 
-target_link_libraries(example cy8C95xx_driver pico_stdlib hardware_i2c hardware_pio)
+target_link_libraries(firmware cy8c95xx_driver pico_stdlib hardware_i2c hardware_pio)
 
-pico_enable_stdio_usb(example 1)
-pico_enable_stdio_uart(example 1)
+pico_enable_stdio_usb(firmware 1)
+pico_enable_stdio_uart(firmware 1)
 
-pico_add_extra_outputs(example)
+pico_add_extra_outputs(firmware)
 
-pico_set_program_url(example ${CMAKE_CURRENT_LIST_DIR})
+pico_set_program_url(firmware ${CMAKE_CURRENT_LIST_DIR})
+

@@ -1,1 +1,1 @@
-# CY8C95XXA I/O Expander library for RP2040
+# cy8c95xxA I/O Expander library for RP2040

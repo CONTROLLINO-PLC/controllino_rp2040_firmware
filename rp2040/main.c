@@ -1,7 +1,7 @@
-#include "drivers/cy8C95xx.h"
+#include "drivers/cy8c95xx.h"
 #include "pico/binary_info.h"
 
-static cy8C95xx_t cy8C95xx;
+static cy8c95xx_t cy8c95xx;
 
 uint8_t pin_num;
 uint8_t pin_state;
@@ -10,8 +10,8 @@ uint8_t pin_state;
 void expander_task(void)
 {
     // Out Test
-    cy8C95xx_write_port(&cy8C95xx, CY8C95XX_PORT_1, 0xFF);
-    // cy8C95xx_write_port(&cy8C95xx, CY8C95XX_PORT_2, 0xFF);
+    cy8c95xx_write_port(&cy8c95xx, cy8c95xx_PORT_1, 0xFF);
+    // cy8c95xx_write_port(&cy8c95xx, cy8c95xx_PORT_2, 0xFF);
 
     printf("All pins set to HIGH logic level!\r\n");
     printf("---------------------------------\r\n");
@@ -19,14 +19,14 @@ void expander_task(void)
 
     for (pin_num = 8; pin_num < 15; pin_num++)
     {
-        cy8C95xx_write_pin(&cy8C95xx, pin_num, CY8C95XX_LOW);
+        cy8c95xx_write_pin(&cy8c95xx, pin_num, cy8c95xx_LOW);
         printf("Pin %u is set to LOW logic level!\r\n", pin_num);
         sleep_ms(300);
     }
 
     // // In test
     // pin_num = 0;
-    // pin_state = cy8C95xx_read_pin(&cy8C95xx, pin_num, 0);
+    // pin_state = cy8c95xx_read_pin(&cy8c95xx, pin_num, 0);
     // printf("Pin %u level is %u!\r\n", pin_num, pin_state);
 
     printf("---------------------------------\r\n");
@@ -37,14 +37,14 @@ void expander_task(void)
 void expander_init(void)
 {
     printf("---- Port expander Init ----\r\n");
-    cy8C95xx_cfg_t cfg;
-    cy8C95xx_set_default_cfg(&cfg);
-    if (cy8C95xx_init(&cy8C95xx, &cfg) == CY8C95XX_OK) {
-        cy8C95xx_reset(&cy8C95xx);
+    cy8c95xx_cfg_t cfg;
+    cy8c95xx_set_default_cfg(&cfg);
+    if (cy8c95xx_init(&cy8c95xx, &cfg) == cy8c95xx_OK) {
+        cy8c95xx_reset(&cy8c95xx);
         sleep_ms(1000);
 
         printf("-------------------------- \r\n");
-        printf("  CY8C95XX PORT EXPANDER   \r\n");
+        printf("  cy8c95xx PORT EXPANDER   \r\n");
         printf("-------------------------- \r\n");
         // Test task
         while (1) {
