@@ -1,5 +1,4 @@
 {
-    "cmake.generator": "MinGW Makefiles",
     "cmake.statusbar.advanced": {
         "debug": {
             "visibility": "hidden"
