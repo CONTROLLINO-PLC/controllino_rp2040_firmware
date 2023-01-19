@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: MIT
  */
  
-#ifndef cy8c95xx_H
-#define cy8c95xx_H
+#ifndef CY8C95XX_H
+#define CY8C95XX_H
  
 /**
  * \file drivers/cy8c95xx.h
