@@ -1,1 +1,2 @@
 add_subdirectory(cy8c95xx)
+add_subdirectory(ad56x4)

@@ -20,12 +20,21 @@ extern "C" {
 #ifdef PLATFORM_RP2040
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
+#include "hardware/spi.h"
+
 typedef struct i2c_inst_t hw_i2c_t;
+typedef struct spi_inst_t hw_spi_t;
 
 #define PLATFORM_I2C_HW    (hw_i2c_t*)i2c0
 #define PLATFORM_I2C_SPEED 100000
 #define PLATFORM_I2C_SDA   4
 #define PLATFORM_I2C_SCL   5
+
+#define PLATFORM_SPI_HW    (hw_spi_t*)spi0
+#define PLATFORM_SPI_SPEED 1000000
+#define PLATFORM_SPI_MOSI  19
+#define PLATFORM_SPI_MISO  16
+#define PLATFORM_SPI_SCK   18
 
 #endif /* PLATFORM_RP2040 */
  
@@ -35,10 +44,10 @@ typedef struct i2c_inst_t hw_i2c_t;
  */
 enum PLATFORM_ERROR_CODE
 {
-    PLATFORM_OK = 0x00,
+    PLATFORM_OK =              0x00,
     PLATFORM_GPIO_INIT_ERROR = 0x01,
-    PLATFORM_I2C_INIT_ERROR = 0x02,
-    PLATFORM_I2C_COM_ERROR = 0x02,
+    PLATFORM_I2C_INIT_ERROR =  0x02,
+    PLATFORM_I2C_COM_ERROR =   0x02,
 };
  
 /**

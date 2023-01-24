@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2023 CONTROLLINO GmbH.
- * Copyright© 2020 MikroElektronika d.o.o.
  *
  * SPDX-License-Identifier: MIT
  */
@@ -9,12 +8,12 @@
 #define CY8C95XX_H
  
 /**
- * \file drivers/cy8c95xx.h
+ * \file cy8c95xx.h
  * \ingroup drivers
  * \defgroup cy8c95xx
  *
  * Driver librarry to handle cy8c95xx port expander.
- * Based on MikroE Expand 6 Click Driver (copyright notice included)
+ * Based on MikroE Expand 6 Click Driver (Copyright© 2020 MikroElektronika d.o.o.)
  */
  
 #include <stdio.h>
@@ -29,9 +28,9 @@ extern "C" {
  * \ingroup cy8c95xx
  */
 enum CY8C95XX_ERROR_CODE {
-    CY8C95XX_OK = 0x00,
+    CY8C95XX_OK =         0x00,
     CY8C95XX_INIT_ERROR = 0x01,
-    CY8C95XX_I2C_ERROR = 0x02
+    CY8C95XX_I2C_ERROR =  0x02
 };
  
 /**
@@ -323,9 +322,9 @@ enum CY8C95XX_ERROR_CODE {
 #ifndef CY8C95XX_INT
 #define CY8C95XX_INT       15
 #endif
-
+ 
 /**
- * \brief Object to store port expander initial config
+ * \brief Object to store initial config
  * \ingroup cy8c95xx
  */
 typedef struct {
@@ -333,9 +332,9 @@ typedef struct {
     int sda_pin;
     int rst_pin;
     int int_pin;
-    hw_i2c_t* i2c;
     uint i2c_speed;
     uint8_t i2c_addr;
+    hw_i2c_t* i2c;
 } cy8c95xx_cfg_t;
  
 /**
@@ -346,8 +345,8 @@ typedef struct
 {
     int rst_pin;
     int int_pin;
-    hw_i2c_t* i2c;
     uint8_t slave_addr;
+    hw_i2c_t* i2c;
 } cy8c95xx_t;
  
 /**

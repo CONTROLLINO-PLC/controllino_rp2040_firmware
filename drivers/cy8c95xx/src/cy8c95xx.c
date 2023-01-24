@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2023 CONTROLLINO GmbH.
- * Copyright© 2020 MikroElektronika d.o.o.
  *
  * SPDX-License-Identifier: MIT
  */
@@ -14,13 +13,13 @@ static uint8_t eeprom_slave_addr;
 /* Initializes default configuration */
 void cy8c95xx_set_default_cfg(cy8c95xx_cfg_t* cfg)
 {
-    cfg->i2c = PLATFORM_I2C_HW;
+    cfg->i2c =       PLATFORM_I2C_HW;
     cfg->i2c_speed = PLATFORM_I2C_SPEED;
-    cfg->i2c_addr = CY8C95XX_DEV_ADR_GND;
-    cfg->sda_pin = PLATFORM_I2C_SDA;
-    cfg->scl_pin = PLATFORM_I2C_SCL;
-    cfg->rst_pin = CY8C95XX_RST;
-    cfg->int_pin = CY8C95XX_INT;
+    cfg->sda_pin =   PLATFORM_I2C_SDA;
+    cfg->scl_pin =   PLATFORM_I2C_SCL;
+    cfg->i2c_addr =  CY8C95XX_DEV_ADR_GND;
+    cfg->rst_pin =   CY8C95XX_RST;
+    cfg->int_pin =   CY8C95XX_INT;
 }
  
 /* Initializes hardware according to configuration */
