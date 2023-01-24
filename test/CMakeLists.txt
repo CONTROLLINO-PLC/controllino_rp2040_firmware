@@ -1,0 +1,1 @@
+add_subdirectory(cy8c95xx)

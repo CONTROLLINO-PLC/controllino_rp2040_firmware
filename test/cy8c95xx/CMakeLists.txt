@@ -1,0 +1,7 @@
+add_executable(test_cy8c95xx)
+target_sources(test_cy8c95xx PUBLIC ${CMAKE_CURRENT_LIST_DIR}/main.c)
+target_link_libraries(test_cy8c95xx platform_rp2040_lib cy8c95xx_driver pico_stdlib hardware_i2c hardware_pio)
+pico_enable_stdio_usb(test_cy8c95xx 1)
+pico_enable_stdio_uart(test_cy8c95xx 1)
+pico_add_extra_outputs(test_cy8c95xx)
+pico_set_program_url(test_cy8c95xx ${CMAKE_CURRENT_LIST_DIR})

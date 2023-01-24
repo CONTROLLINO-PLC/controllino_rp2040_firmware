@@ -1,1 +1,3 @@
-# cy8c95xx I2C I/O Expander library for RP2040
+# Controllino NEO hardware "C" libraries
+
+- CY8C95XX I2C port expander
