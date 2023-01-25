@@ -78,23 +78,27 @@ enum ad56x4_error_code {
  * \ingroup ad56x4
  */
 #define AD56X4_PWR_MODE_NORMAL                           0x00
-#define AD56X4_PWR_MODE_POWERDOWN_1K                     0x10
-#define AD56X4_PWR_MODE_POWERDOWN_100K                   0x20
-#define AD56X4_PWR_MODE_POWERDOWN_TRISTATE               0x30
- 
-/**
- * \brief LDAC mode AD56X4_COMMAND_SET_LDAC mask for DB0-DB3
- * \ingroup ad56x4
- */
-#define AD56X4_LDAC_NORMAL                               0x00
-#define AD56X4_LDAC_TRANSP                               0x01
+#define AD56X4_PWR_MODE_POWERDOWN_1K                     0x01
+#define AD56X4_PWR_MODE_POWERDOWN_100K                   0x02
+#define AD56X4_PWR_MODE_POWERDOWN_TRISTATE               0x03
  
 /**
  * \brief Max digital resolution 
  * \ingroup ad56x4
  */
-#define AD56X4_12_BITS                                   0x0FFF
-#define AD56X4_16_BITS                                   0xFFFF
+#define AD5624_12_BITS                                   0x0FFF
+#define AD5664_16_BITS                                   0xFFFF
+#ifndef AD56X4_RESOLUTION
+#define AD56X4_RESOLUTION                                AD5664_16_BITS 
+#endif
+ 
+/**
+ * \brief External pins
+ * \ingroup cy8c95xx
+ */
+#ifndef AD56X4_CS
+#define AD56X4_CS -1
+#endif
  
 /**
  * \brief Object to store initial config
@@ -102,13 +106,15 @@ enum ad56x4_error_code {
  */
 typedef struct
 {
-    int miso_pin;
     int mosi_pin;
+    int miso_pin;
     int sck_pin;
     int cs_pin;
     uint spi_speed;
     uint8_t spi_mode;
+    uint8_t spi_bit_order;
     hw_spi_t* spi;
+    uint16_t resolution;
 } ad56x4_cfg_t;
  
 /**
@@ -118,7 +124,11 @@ typedef struct
 typedef struct
 {
     int cs_pin;
+    uint spi_speed;
+    uint8_t spi_mode;
+    uint8_t spi_bit_order;
     hw_spi_t* spi;
+    uint16_t resolution;
 } ad56x4_t;
  
 /*!
@@ -143,22 +153,20 @@ int ad56x4_init(ad56x4_t* dac, ad56x4_cfg_t* cfg);
 /*!
  * \brief Check command bits
  *
- * \param dac Driver instance
  * \param cmd Comand to check
  * \return AD56X4_ARG_ERROR : error
  *         AD56X4_OK : successful
  */
-int ad56x4_check_cmd(ad56x4_t* dac, uint8_t cmd);
+int ad56x4_check_cmd(uint8_t cmd);
  
 /**
  *\brief Check address bits
  *
- * \param dac Driver instance
  * \param addr Channel address to check
  * \return AD56X4_ARG_ERROR : error
  *         AD56X4_OK : successful
  */
-int ad56x4_check_addr(ad56x4_t* dac, uint8_t addr);
+int ad56x4_check_addr(uint8_t addr);
  
 /*!
  * \brief Generic write data function.
@@ -225,7 +233,7 @@ int ad56x4_write_input_reg_update_all_dac(ad56x4_t* dac, uint8_t ch_addr, uint16
 int ad56x4_write_update_dac_reg(ad56x4_t* dac, uint8_t ch_addr, uint16_t data);
  
 /*!
- * \brief Set power mode
+ * \brief Set power mode AD56X4_COMMAND_POWER_UPDOWN
  * \ingroup ad56x4
  *
  * \param dac Driver instance
@@ -238,42 +246,43 @@ int ad56x4_write_update_dac_reg(ad56x4_t* dac, uint8_t ch_addr, uint16_t data);
 int ad56x4_set_pwr(ad56x4_t* dac, uint8_t pwr_mode, uint8_t ch_sel);
  
 /*!
- * \brief Software reset
+ * \brief Software reset AD56X4_COMMAND_SW_RESET
  * \ingroup ad56x4
  *
  * \param dac Driver instance
+ * \param rst_mode Reset mode
  * \return AD56X4_SPI_ERROR : error in coms
  *         AD56X4_ARG_ERROR : error in arguments
  *         AD56X4_OK : successful
  */
-int ad56x4_sw_reset(ad56x4_t *dac);
+int ad56x4_sw_reset(ad56x4_t* dac, uint8_t rst_mode);
  
 /*!
- * \brief Set channel LDAC mode
+ * \brief Set channel LDAC mode AD56X4_COMMAND_SET_LDAC
  * \ingroup ad56x4
  *
  * \param dac Driver instance
- * \param ldac_mode Normal or transparent operation
- * \param ch_sel Channel selection
+ * \param ch_ldac_mode DB0-DB3 channel LDAC config
  * \return AD56X4_SPI_ERROR : error in coms
  *         AD56X4_ARG_ERROR : error in arguments
  *         AD56X4_OK : successful
+ * \note Value 1 in channel bit means LDAC transparent, 0 means LDAC normal
  */
-int ad56x4_set_ldac(ad56x4_t* dac, uint8_t ldac_mode, uint8_t ch_sel);
+int ad56x4_set_ldac(ad56x4_t* dac, uint8_t ch_ldac_mode);
  
 /*!
- * \brief Set the voltage values of the specified channel function.
+ * \brief Set the voltage values of the specified channel
  * \ingroup ad56x4
  *
  * \param dac Driver instance
- * \param addr_ch       3-bit address command.
- * \param vol_val       Voltage values [ from 0 mV to 4096 mV or 5000 mV ].
- * \param v_ref_mv      Voltage reference value.
+ * \param ch_addr Channel address
+ * \param vol_val Desired voltage value in millivolts
+ * \param vol_ref_max Maximun reference voltage in millivolts equivalent to max resolution
  * \return AD56X4_SPI_ERROR : error in coms
  *         AD56X4_ARG_ERROR : error in arguments
  *         AD56X4_OK : successful
  */
-int ad56x4_set_ch_voltage(ad56x4_t* dac, uint8_t addr_ch, uint16_t vol_val, uint16_t v_ref_mv);
+int ad56x4_set_ch_voltage(ad56x4_t* dac, uint8_t ch_addr, uint16_t vol_val, uint16_t vol_ref_max);
  
 /*!
  * \brief Enable CS for start SPI coms

@@ -9,43 +9,36 @@
 /* Initializes default configuration */
 void ad56x4_set_default_cfg(ad56x4_cfg_t* cfg)
 {
-    cfg->sck_pin =          PLATFORM_SPI_SCK;
-    cfg->miso_pin =         PLATFORM_SPI_MISO;
     cfg->mosi_pin =         PLATFORM_SPI_MOSI;
-    cfg->cs_pin   =         HAL_PIN_NC;
-    cfg->spi_speed =    PLATFORM_SPI_SPEED;
-    cfg->spi_mode =     SPI_MASTER_MODE_0;
+    cfg->miso_pin =         PLATFORM_SPI_MISO;
+    cfg->sck_pin =          PLATFORM_SPI_SCK;
+    cfg->cs_pin =           AD56X4_CS;
+    cfg->spi_speed =        PLATFORM_SPI_SPEED;
+    cfg->spi_mode =         PLATFORM_SPI_MODE_1;
+    cfg->spi_bit_order =    PLATFORM_SPI_MSBFIRST;
+    cfg->spi =              PLATFORM_SPI_HW;
+    cfg->resolution =       AD56X4_RESOLUTION;
 }
-
+ 
 int ad56x4_init(ad56x4_t* dac, ad56x4_cfg_t* cfg)
 {
-    spi_master_config_t spi_cfg;
-
-    spi_master_configure_default( &spi_cfg);
-    spi_cfg.speed     = cfg->spi_speed;
-    spi_cfg.sck       = cfg->sck;
-    spi_cfg.miso      = cfg->miso;
-    spi_cfg.mosi      = cfg->mosi;
-    spi_cfg.default_data = AD56X4_DUMMY;
-
-    digital_out_init( &dac->cs_pin, cfg->cs_pin);
-    dac->cs_pin = cfg->cs_pin;
-
-    if ( spi_master_open( &dac->spi, &spi_cfg) == SPI_MASTER_ERROR)
-    {
+    // Init hardware SPI interface
+    if (platform_spi_init(cfg->spi, cfg->spi_speed, cfg->mosi_pin, cfg->miso_pin, cfg->sck_pin) != PLATFORM_OK)
         return AD56X4_INIT_ERROR;
-    }
-
-    spi_master_set_default_data( &dac->spi, AD56X4_DUMMY);
-    spi_master_set_speed( &dac->spi, cfg->spi_speed);
-    spi_master_set_mode( &dac->spi, cfg->spi_mode);
-    spi_master_set_cs_pin_polarity( cfg->cs_pin_polarity);
-
+    // Init hardware cs pin
+    platform_gpio_init(cfg->cs_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_UP);
+    // Set values from cfg
+    dac->cs_pin =           cfg->cs_pin;
+    dac->spi_speed =        cfg->spi_speed;
+    dac->spi_mode =         cfg->spi_mode;
+    dac->spi_bit_order =    cfg->spi_bit_order;
+    dac->spi =              cfg->spi;
+    dac->resolution =       cfg->resolution;
     return AD56X4_OK;
 }
-
+ 
 /* Check command bits */
-int ad56x4_check_cmd(ad56x4_t* dac, uint8_t cmd)
+int ad56x4_check_cmd(uint8_t cmd)
 {
     if (cmd != AD56X4_COMMAND_WRITE_INPUT_REGISTER &&
         cmd != AD56X4_COMMAND_UPDATE_DAC_REGISTER &&
@@ -59,9 +52,9 @@ int ad56x4_check_cmd(ad56x4_t* dac, uint8_t cmd)
     }
     return AD56X4_OK;
 }
-
+ 
 /* Check address bits */
-int ad56x4_check_addr(ad56x4_t* dac, uint8_t addr)
+int ad56x4_check_addr(uint8_t addr)
 {
     if (addr != AD56X4_ADDRESS_CHANNEL_A &&
         addr != AD56X4_ADDRESS_CHANNEL_B &&
@@ -73,135 +66,105 @@ int ad56x4_check_addr(ad56x4_t* dac, uint8_t addr)
     }
     return AD56X4_OK;
 }
-
+ 
 int ad56x4_generic_write(ad56x4_t* dac, uint8_t cmd, uint8_t ch_addr, uint16_t data)
 {
     uint8_t tx_buf[3];
-    uint8_t rx_buf;
-
-    cmd <<= 3;
-    cmd &= AD56X4_MASK_BIT_COMMAND;
-    ch_addr &= AD56X4_MASK_BIT_ADDRESS;
-
-    tx_buf[0]  =(uint8_t)cmd;
-    tx_buf[0] |= (uint8_t)ch_addr;
-    
-    data  &= AD56X4_MASK_BIT_12_BITS;
-    data <<= 4;
-    
-    tx_buf[1] =(uint8_t)(( data >> 8) & AD56X4_MASK_BIT_LBS);
-    tx_buf[2] =(uint8_t) data;
-    
-    spi_master_select_device( dac->cs_pin);
-    spi_master_write( &dac->spi, tx_buf, 3);
-    spi_master_deselect_device( dac->cs_pin);  
+    // Check arguments
+    if (ad56x4_check_cmd(cmd) != AD56X4_OK)
+        return AD56X4_ARG_ERROR;
+    if (ad56x4_check_addr(ch_addr) != AD56X4_OK)
+        return AD56X4_ARG_ERROR;
+    // Prepare txdata
+    tx_buf[0] = (cmd << 3) | ch_addr;
+    tx_buf[1] = (uint8_t)((data >> 8) & 0xFF);
+    tx_buf[2] = (uint8_t)(data & 0xFF);
+    // Set ad56x4 SPI settings and attempt to transmit data
+    platform_spi_set_config(dac->spi, dac->spi_speed, dac->spi_mode, dac->spi_bit_order);
+    ad56x4_cs_select(dac);
+    platform_sleep_us(600); // Necesary delay
+    if (platform_spi_write(dac->spi, tx_buf, sizeof(tx_buf)) != PLATFORM_OK)
+        return AD56X4_SPI_ERROR;
+    ad56x4_cs_deselect(dac);
+    return AD56X4_OK;
 }
-
-int ad56x4_update_channel(ad56x4_t* dac, uint8_t addr_ch, uint16_t ch_data)
+ 
+/* Write to input register n */
+int ad56x4_write_input_reg(ad56x4_t* dac, uint8_t ch_addr, uint16_t data)
 {
-    if (ad56x4_check_addr(dac, addr_ch))
-    {
-        ad56x4_generic_write( dac, AD56X4_COMMAND_WRITE_UPDATE_CHANNEL, addr_ch, ch_data);
-        
-        return AD56X4_SUCCESS;
-    }
-    else
-    {
-        return AD56X4_ERROR;
-    }
+    return ad56x4_generic_write(dac, AD56X4_COMMAND_WRITE_INPUT_REGISTER, ch_addr, data);
 }
-
+ 
+/* Update DAC register n */
+int ad56x4_update_dac_reg(ad56x4_t* dac, uint8_t ch_addr)
+{
+    return ad56x4_generic_write(dac, AD56X4_COMMAND_UPDATE_DAC_REGISTER, ch_addr, 0x0000 /* don't care */);
+}
+ 
+/* Write to input register n, update all */
+int ad56x4_write_input_reg_update_all_dac(ad56x4_t* dac, uint8_t ch_addr, uint16_t data)
+{
+    return ad56x4_generic_write(dac, AD56X4_COMMAND_WRITE_INPUT_REGISTER_UPDATE_ALL, ch_addr, data);
+}
+ 
+/* Write to and update DAC channel n */
+int ad56x4_write_update_dac_reg(ad56x4_t* dac, uint8_t ch_addr, uint16_t data)
+{
+    return ad56x4_generic_write(dac, AD56X4_COMMAND_WRITE_UPDATE_CHANNEL, ch_addr, data);
+}
+ 
+/* Set power mode */
 int ad56x4_set_pwr(ad56x4_t* dac, uint8_t pwr_mode, uint8_t ch_sel)
 {
-    uint8_t tx_buf[3];
-    uint8_t rx_buf;
-    
-    if (ch_sel > AD56X4_MASK_BIT_SEL_CHANNEL)
+    uint16_t data;
+    // Check arguments
+    if (pwr_mode != AD56X4_PWR_MODE_NORMAL &&
+        pwr_mode != AD56X4_PWR_MODE_POWERDOWN_1K &&
+        pwr_mode != AD56X4_PWR_MODE_POWERDOWN_100K &&
+        pwr_mode != AD56X4_PWR_MODE_POWERDOWN_TRISTATE)
     {
-        return AD56X4_ERROR;
+        return AD56X4_ARG_ERROR;
     }
-    else
+    if (ch_sel != AD56X4_SELECT_CHANNEL_A &&
+        ch_sel != AD56X4_SELECT_CHANNEL_B &&
+        ch_sel != AD56X4_SELECT_CHANNEL_C &&
+        ch_sel != AD56X4_SELECT_CHANNEL_D &&
+        ch_sel != AD56X4_SELECT_CHANNEL_ALL)
     {
-        tx_buf[0]  = AD56X4_COMMAND_POWER_UPDOWN;
-        tx_buf[1]  = AD56X4_DONT_CARE_COMMAND;
-        tx_buf[2] = (pwr_mode & AD56X4_MASK_BIT_POWERMODE);
-        tx_buf[2] |=(ch_sel & AD56X4_MASK_BIT_SEL_CHANNEL);
-        
-        spi_master_select_device( dac->cs_pin);
-        spi_master_write( &dac->spi, tx_buf, 3);
-        spi_master_deselect_device( dac->cs_pin);  
-        
-        return AD56X4_SUCCESS;
+        return AD56X4_ARG_ERROR;
     }
+    // Prepare txdata
+    data = ((uint16_t)pwr_mode << 4) | (uint16_t)ch_sel;
+    return ad56x4_generic_write(dac, AD56X4_COMMAND_POWER_UPDOWN, 0x00 /* don't care */, data);
 }
-
-int ad56x4_sw_reset(ad56x4_t* dac)
+ 
+/* Software reset */
+int ad56x4_sw_reset(ad56x4_t* dac, uint8_t rst_mode)
 {
-    uint8_t tx_buf[3];
-    uint8_t rx_buf;
-
-    tx_buf[0] = AD56X4_COMMAND_RESET;
-    tx_buf[1] = AD56X4_DONT_CARE_COMMAND;
-    tx_buf[2] = AD56X4_SW_RST_COMMAND;
-    
-    spi_master_select_device( dac->cs_pin);
-    spi_master_write( &dac->spi, tx_buf, 3);
-    spi_master_deselect_device( dac->cs_pin);  
-    
-    return AD56X4_SUCCESS;
+    // Check arguments
+    if (rst_mode != AD56X4_SW_RST_PARTIAL &&
+        rst_mode != AD56X4_SW_RST_FULL)
+    {
+        return AD56X4_ARG_ERROR;
+    }
+    return ad56x4_generic_write(dac, AD56X4_COMMAND_SW_RESET, 0x00 /* don't care */, (uint16_t)rst_mode);
 }
-
-int ad56x4_set_ldac(ad56x4_t* dac, uint8_t ldac_mode, uint8_t ch_sel)
+ 
+/* Set channel LDAC mode */
+int ad56x4_set_ldac(ad56x4_t* dac, uint8_t ch_ldac_mode)
 {
-    uint8_t tx_buf[3];
-    uint8_t rx_buf[3];
-
-    if (ch_sel > AD56X4_MASK_BIT_SEL_CHANNEL)
-    {
-        return AD56X4_ERROR;
-    }
-    else
-    {
-        tx_buf[0] = AD56X4_COMMAND_SET_LDAC;
-        tx_buf[1] = AD56X4_DONT_CARE_COMMAND;
-        tx_buf[2] = ch_sel & AD56X4_MASK_BIT_SEL_CHANNEL;
-    
-        spi_master_select_device( dac->cs_pin);
-        spi_master_write( &dac->spi, tx_buf, 3);
-        spi_master_deselect_device( dac->cs_pin);  
-
-        return AD56X4_SUCCESS;
-    }
+    // Pending ch_ldac_mode arg check 
+    return ad56x4_generic_write(dac, AD56X4_COMMAND_SET_LDAC, 0x00 /* don't care */, (uint16_t)ch_ldac_mode);
 }
-
-int ad56x4_set_ch_voltage(ad56x4_t* dac, uint8_t addr_ch, uint16_t vol_val, uint16_t v_ref_mv)
+ 
+/* Set the voltage values of the specified channel */
+int ad56x4_set_ch_voltage(ad56x4_t* dac, uint8_t ch_addr, uint16_t vol_val, uint16_t vol_ref_max)
 {
-    uint16_t tmp;
-
-    if ((v_ref_mv == AD56X4_VREF_4096mV) || (v_ref_mv == AD56X4_VREF_5000mV))
-    {
-        if ((vol_val >= 0) || (vol_val < v_ref_mv))
-        {
-            tmp = (uint16_t)(((uint32_t)vol_val * 4095) / v_ref_mv);
-
-            if (ad56x4_check_addr(dac, addr_ch))
-            {
-                ad56x4_set_channel(dac, AD56X4_COMMAND_WRITE_UPDATE_CHANNEL, addr_ch, tmp);
-
-                return AD56X4_SUCCESS;
-            }
-            else
-            {
-                return AD56X4_ERROR;
-            }
-        }
-        else
-        {
-            return AD56X4_ERROR;
-        }
-    }
-    else
-    {
-        return AD56X4_ERROR;
-    }
+    int ret;
+    float float_dac = ((float)vol_val / (float)vol_ref_max) * (float)dac->resolution;
+    int data = (int)float_dac;
+    ret = ad56x4_write_input_reg(dac, ch_addr, (uint16_t)data);
+    if (ret != AD56X4_OK) return ret;
+    ret = ad56x4_update_dac_reg(dac, ch_addr);
+    return ret;
 }

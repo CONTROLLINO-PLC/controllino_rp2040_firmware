@@ -13,29 +13,29 @@ static uint8_t eeprom_slave_addr;
 /* Initializes default configuration */
 void cy8c95xx_set_default_cfg(cy8c95xx_cfg_t* cfg)
 {
-    cfg->i2c =       PLATFORM_I2C_HW;
-    cfg->i2c_speed = PLATFORM_I2C_SPEED;
-    cfg->sda_pin =   PLATFORM_I2C_SDA;
-    cfg->scl_pin =   PLATFORM_I2C_SCL;
-    cfg->i2c_addr =  CY8C95XX_DEV_ADR_GND;
-    cfg->rst_pin =   CY8C95XX_RST;
-    cfg->int_pin =   CY8C95XX_INT;
+    cfg->sda_pin =      PLATFORM_I2C_SDA;
+    cfg->scl_pin =      PLATFORM_I2C_SCL;
+    cfg->rst_pin =      CY8C95XX_RST;
+    cfg->int_pin =      CY8C95XX_INT;
+    cfg->i2c_speed =    PLATFORM_I2C_SPEED;
+    cfg->i2c_addr =     CY8C95XX_DEV_ADR_GND;
+    cfg->i2c =          PLATFORM_I2C_HW;
 }
  
 /* Initializes hardware according to configuration */
 int cy8c95xx_init(cy8c95xx_t* exp, cy8c95xx_cfg_t* cfg)
 {
-    // Init hardware i2c interface
+    // Init hardware I2C interface
     if (platform_i2c_init(cfg->i2c, cfg->i2c_speed, cfg->sda_pin, cfg->scl_pin) != PLATFORM_OK)
         return CY8C95XX_INIT_ERROR;
     // Init hardware reset and int pins 
     platform_gpio_init(cfg->rst_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_DISABLED);
     platform_gpio_init(cfg->int_pin, PLATFORM_GPIO_IN, PLATFORM_GPIO_PULL_DISABLED);
     // Set values from cfg
-    exp->i2c = cfg->i2c;
     exp->rst_pin = cfg->rst_pin;
     exp->int_pin = cfg->int_pin;
     exp->slave_addr = cfg->i2c_addr;
+    exp->i2c = cfg->i2c;
     // Base addresses
     port_slave_addr = CY8C95XX_M_PORT_BASE_ADR | exp->slave_addr;
     eeprom_slave_addr = CY8C95XX_EEPROM_BASE_ADR | exp->slave_addr;

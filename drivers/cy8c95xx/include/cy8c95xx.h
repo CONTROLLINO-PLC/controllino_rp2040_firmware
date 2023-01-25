@@ -313,14 +313,14 @@ enum CY8C95XX_ERROR_CODE {
 #define CY8C95XX_CRC_INX                    0x92
  
 /**
- * \brief Optional external pins
+ * \brief External pins
  * \ingroup cy8c95xx
  */
 #ifndef CY8C95XX_RST
-#define CY8C95XX_RST       -1
+#define CY8C95XX_RST -1
 #endif
 #ifndef CY8C95XX_INT
-#define CY8C95XX_INT       15
+#define CY8C95XX_INT -1
 #endif
  
 /**
@@ -328,8 +328,8 @@ enum CY8C95XX_ERROR_CODE {
  * \ingroup cy8c95xx
  */
 typedef struct {
-    int scl_pin;
     int sda_pin;
+    int scl_pin;
     int rst_pin;
     int int_pin;
     uint i2c_speed;

@@ -22,14 +22,21 @@ extern "C" {
 #include "hardware/i2c.h"
 #include "hardware/spi.h"
 
+/**
+ * \brief RP2040 default I2C settings
+ * \ingroup platform
+ */
 typedef struct i2c_inst_t hw_i2c_t;
-typedef struct spi_inst_t hw_spi_t;
-
 #define PLATFORM_I2C_HW    (hw_i2c_t*)i2c0
 #define PLATFORM_I2C_SPEED 100000
 #define PLATFORM_I2C_SDA   4
 #define PLATFORM_I2C_SCL   5
 
+/**
+ * \brief RP2040 default SPI settings
+ * \ingroup platform
+ */
+typedef struct spi_inst_t hw_spi_t;
 #define PLATFORM_SPI_HW    (hw_spi_t*)spi0
 #define PLATFORM_SPI_SPEED 1000000
 #define PLATFORM_SPI_MOSI  19
@@ -44,10 +51,13 @@ typedef struct spi_inst_t hw_spi_t;
  */
 enum PLATFORM_ERROR_CODE
 {
-    PLATFORM_OK =              0x00,
-    PLATFORM_GPIO_INIT_ERROR = 0x01,
-    PLATFORM_I2C_INIT_ERROR =  0x02,
-    PLATFORM_I2C_COM_ERROR =   0x02,
+    PLATFORM_OK =               0x00,
+    PLATFORM_ARGUMENT_ERROR =   0x01,
+    PLATFORM_GPIO_INIT_ERROR =  0x02,
+    PLATFORM_I2C_INIT_ERROR =   0x03,
+    PLATFORM_I2C_COM_ERROR =    0x04,
+    PLATFORM_SPI_INIT_ERROR =   0x05,
+    PLATFORM_SPI_COM_ERROR =    0x06,
 };
  
 /**
@@ -71,23 +81,25 @@ enum PLATFORM_GPIO_PULL_MODE
     PLATFORM_GPIO_PULL_DOWN
 };
  
-// /**
-//  * \brief GPIO configuration object
-//  * \ingroup platform
-//  */
-// typedef struct {
-//     uint8_t gpio_dir;
-//     uint8_t gpio_pull_mode;
-// } platform_gpio_cfg_t;
+/**
+ * \brief SPI modes
+ * \ingroup platform
+ */
+enum platform_spi_mode {
+    PLATFORM_SPI_MODE_0 = 0x0,
+    PLATFORM_SPI_MODE_1 = 0x1,
+    PLATFORM_SPI_MODE_2 = 0x2,
+    PLATFORM_SPI_MODE_3 = 0x3
+};
  
-// /**
-//  * \brief GPIO instance
-//  * \ingroup platform
-//  */
-// typedef struct {
-//     platform_gpio_cfg_t cfg;
-//     int pin_num;
-// } platform_gpio_t;
+/**
+ * \brief SPI bit order
+ * \ingroup platform
+ */
+enum platform_spi_bit_order {
+    PLATFORM_SPI_LSBFIRST = 0x0, 
+    PLATFORM_SPI_MSBFIRST = 0x1
+};
  
 /*!
  * \brief Initialize and config gpio pin
@@ -134,47 +146,83 @@ void platform_sleep_ms(uint32_t ms);
  *
  * \param us microseconds to wait for
  */
-void platform_sleep_us(uint32_t us);
+void platform_sleep_us(uint64_t us);
  
 /*!
- * \brief Init i2c interface
+ * \brief Init I2C interface
  * \ingroup platform
  *
- * \param i2c_hw hw_i2c_t pointer to hardware i2c interface
- * \param speed baudrate
- * \param sda_pin sda pin number
- * \param scl_pin scl pin number
+ * \param i2c_hw Pointer to I2C interface
+ * \param speed Baudrate
+ * \param sda_pin SDA pin number
+ * \param scl_pin SCL pin number
  * \return PLATFORM_I2C_INIT_ERROR : error
  *         PLATFORM_OK : successful
  */
 int platform_i2c_init(hw_i2c_t* i2c_hw, uint speed, int sda_pin, int scl_pin);
  
 /*!
- * \brief Attempt to read specified number of bytes from address over i2c
+ * \brief Attempt to read specified number of bytes from address over I2C
  * \ingroup platform
  *
- * \param i2c hw_i2c_t i2c interfase
+ * \param i2c_hw Pointer to I2C interface
  * \param addr 7-bit address of device to read from
  * \param rxdata Pointer to buffer to receive data
  * \param len Length of data in bytes to receive
  * \return PLATFORM_I2C_COM_ERROR : error
  *         PLATFORM_OK : successful
  */
-int platform_i2c_read(hw_i2c_t* i2c, uint8_t addr, uint8_t* rxdata, size_t len);
+int platform_i2c_read(hw_i2c_t* i2c_hw, uint8_t addr, uint8_t* rxdata, size_t len);
  
 /*!
- * \brief Attempt to write specified number of bytes to address over i2c
+ * \brief Attempt to write specified number of bytes to address over I2C
  * \ingroup platform
  *
- * \param i2c hw_i2c_t i2c interfase
+ * \param i2c_hw Pointer to I2C interface
  * \param addr 7-bit address of device to write to
  * \param txdata Pointer to data to send
  * \param len Length of data in bytes to send
  * \return PLATFORM_I2C_COM_ERROR : error
  *         PLATFORM_OK : successful
  */
-int platform_i2c_write(hw_i2c_t* i2c, uint8_t addr, const uint8_t* txdata, size_t len);
+int platform_i2c_write(hw_i2c_t* i2c_hw, uint8_t addr, const uint8_t* txdata, size_t len);
  
+/*!
+ * \brief Init SPI interface
+ * 
+ * \param spi_hw Pointer to SPI interface
+ * \param speed Baudrate
+ * \param mosi_pin MOSI pin number
+ * \param miso_pin MISO pin number
+ * \param sck_pin SCK pin number
+ * \return PLATFORM_SPI_INIT_ERROR : error
+ *         PLATFORM_OK : successful
+ */
+int platform_spi_init(hw_spi_t* spi_hw, uint speed, int mosi_pin, int miso_pin, int sck_pin);
+ 
+/**
+ * \brief Change SPI settings
+ * 
+ * \param spi_hw Pointer to SPI interface
+ * \param speed Baudrate
+ * \param mode SPI mode (0, 1, 2, 3)
+ * \param bit_order SPI bit order
+ * \return PLATFORM_ARGUMENT_ERROR : error
+ *         PLATFORM_OK : successful
+ */
+int platform_spi_set_config(hw_spi_t* spi_hw, uint speed, uint8_t mode, uint8_t bit_order);
+ 
+/**
+ * \brief Write specified number of bytes to an SPI device
+ * 
+ * \param spi_hw Pointer to SPI interface
+ * \param txdata Pointer to data to send
+ * \param len Length of data in bytes to send
+ * \return PLATFORM_SPI_COM_ERROR : error
+ *         PLATFORM_OK : successful
+ */
+int platform_spi_write(hw_spi_t* spi_hw, const uint8_t* txdata, size_t len);
+
 #ifdef __cplusplus
 }
 #endif
