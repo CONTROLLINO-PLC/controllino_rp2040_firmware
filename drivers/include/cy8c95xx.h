@@ -28,73 +28,74 @@ extern "C" {
  * \ingroup cy8c95xx
  */
 enum CY8C95XX_ERROR_CODE {
-    CY8C95XX_OK =         0x00,
-    CY8C95XX_INIT_ERROR = 0x01,
-    CY8C95XX_I2C_ERROR =  0x02
+    CY8C95XX_OK =         PLATFORM_OK,
+    CY8C95XX_ARG_ERROR =  PLATFORM_ARGUMENT_ERROR,
+    CY8C95XX_INIT_ERROR = PLATFORM_I2C_INIT_ERROR,
+    CY8C95XX_I2C_ERROR =  PLATFORM_I2C_COM_ERROR
 };
  
 /**
  * \brief Base addresses for comunications
  * \ingroup cy8c95xx
  */
-#define CY8C95XX_M_PORT_BASE_ADR            0x20
-#define CY8C95XX_EEPROM_BASE_ADR            0x50
-#define CY8C95XX_DEV_ADR_GND                0x00
-#define CY8C95XX_DEV_ADR_VCC                0x01
+#define CY8C95XX_M_PORT_BASE_ADDR            0x20
+#define CY8C95XX_EEPROM_BASE_ADDR            0x50
+#define CY8C95XX_DEV_ADDR_GND                0x00
+#define CY8C95XX_DEV_ADDR_VCC                0x01
  
 /**
  * \brief Register map
  * \ingroup cy8c95xx
  */
-#define CY8C95XX_REG_IN_PORT0_ADR           0x00
-#define CY8C95XX_REG_IN_PORT1_ADR           0x01
-#define CY8C95XX_REG_IN_PORT2_ADR           0x02
-#define CY8C95XX_REG_IN_PORT3_ADR           0x03
-#define CY8C95XX_REG_IN_PORT4_ADR           0x04
-#define CY8C95XX_REG_IN_PORT5_ADR           0x05
-#define CY8C95XX_REG_IN_PORT6_ADR           0x06
-#define CY8C95XX_REG_IN_PORT7_ADR           0x07
-#define CY8C95XX_REG_OUT_PORT0_ADR          0x08
-#define CY8C95XX_REG_OUT_PORT1_ADR          0x09
-#define CY8C95XX_REG_OUT_PORT2_ADR          0x0A
-#define CY8C95XX_REG_OUT_PORT3_ADR          0x0B
-#define CY8C95XX_REG_OUT_PORT4_ADR          0x0C
-#define CY8C95XX_REG_OUT_PORT5_ADR          0x0D
-#define CY8C95XX_REG_OUT_PORT6_ADR          0x0E
-#define CY8C95XX_REG_OUT_PORT7_ADR          0x0F
-#define CY8C95XX_REG_INT_STAT_PORT0_ADR     0x10
-#define CY8C95XX_REG_INT_STAT_PORT1_ADR     0x11
-#define CY8C95XX_REG_INT_STAT_PORT2_ADR     0x12
-#define CY8C95XX_REG_INT_STAT_PORT3_ADR     0x13
-#define CY8C95XX_REG_INT_STAT_PORT4_ADR     0x14
-#define CY8C95XX_REG_INT_STAT_PORT5_ADR     0x15
-#define CY8C95XX_REG_INT_STAT_PORT6_ADR     0x16
-#define CY8C95XX_REG_INT_STAT_PORT7_ADR     0x17
-#define CY8C95XX_REG_PORT_SEL_ADR           0x18
-#define CY8C95XX_REG_INT_MASK_ADR           0x19
-#define CY8C95XX_REG_SEL_PWM_OUT_ADR        0x1A
-#define CY8C95XX_REG_INV_ADR                0x1B
-#define CY8C95XX_REG_PORT_DIR_ADR           0x1C
-#define CY8C95XX_REG_PULL_UP_ADR            0x1D
-#define CY8C95XX_REG_PULL_DOWN_ADR          0x1E
-#define CY8C95XX_REG_OPEN_DRAIN_HIGH_ADR    0x1F
-#define CY8C95XX_REG_OPEN_DRAIN_LOW_ADR     0x20
-#define CY8C95XX_REG_STRONG_ADR             0x21
-#define CY8C95XX_REG_SLOW_STRONG_ADR        0x22
-#define CY8C95XX_REG_HIGH_Z_ADR             0x23
-#define CY8C95XX_REG_RSRVD_1_ADR            0x24
-#define CY8C95XX_REG_RSRVD_2_ADR            0x25
-#define CY8C95XX_REG_RSRVD_3_ADR            0x26
-#define CY8C95XX_REG_RSRVD_4_ADR            0x27
-#define CY8C95XX_REG_PWM_SEL_ADR            0x28
-#define CY8C95XX_REG_CFG_PWM_ADR            0x29
-#define CY8C95XX_REG_PERIOD_PWM_ADR         0x2A
-#define CY8C95XX_REG_PULSE_WIDTH_PWM_ADR    0x2B
-#define CY8C95XX_REG_DIVIDER_ADR            0x2C
-#define CY8C95XX_REG_EEPROM_ADR             0x2D
-#define CY8C95XX_REG_DEV_ID_ADR             0x2E
-#define CY8C95XX_REG_WDT_ADR                0x2F
-#define CY8C95XX_REG_CMD_ADR                0x30
+#define CY8C95XX_REG_IN_PORT0_ADDR           0x00
+#define CY8C95XX_REG_IN_PORT1_ADDR           0x01
+#define CY8C95XX_REG_IN_PORT2_ADDR           0x02
+#define CY8C95XX_REG_IN_PORT3_ADDR           0x03
+#define CY8C95XX_REG_IN_PORT4_ADDR           0x04
+#define CY8C95XX_REG_IN_PORT5_ADDR           0x05
+#define CY8C95XX_REG_IN_PORT6_ADDR           0x06
+#define CY8C95XX_REG_IN_PORT7_ADDR           0x07
+#define CY8C95XX_REG_OUT_PORT0_ADDR          0x08
+#define CY8C95XX_REG_OUT_PORT1_ADDR          0x09
+#define CY8C95XX_REG_OUT_PORT2_ADDR          0x0A
+#define CY8C95XX_REG_OUT_PORT3_ADDR          0x0B
+#define CY8C95XX_REG_OUT_PORT4_ADDR          0x0C
+#define CY8C95XX_REG_OUT_PORT5_ADDR          0x0D
+#define CY8C95XX_REG_OUT_PORT6_ADDR          0x0E
+#define CY8C95XX_REG_OUT_PORT7_ADDR          0x0F
+#define CY8C95XX_REG_INT_STAT_PORT0_ADDR     0x10
+#define CY8C95XX_REG_INT_STAT_PORT1_ADDR     0x11
+#define CY8C95XX_REG_INT_STAT_PORT2_ADDR     0x12
+#define CY8C95XX_REG_INT_STAT_PORT3_ADDR     0x13
+#define CY8C95XX_REG_INT_STAT_PORT4_ADDR     0x14
+#define CY8C95XX_REG_INT_STAT_PORT5_ADDR     0x15
+#define CY8C95XX_REG_INT_STAT_PORT6_ADDR     0x16
+#define CY8C95XX_REG_INT_STAT_PORT7_ADDR     0x17
+#define CY8C95XX_REG_PORT_SEL_ADDR           0x18
+#define CY8C95XX_REG_INT_MASK_ADDR           0x19
+#define CY8C95XX_REG_SEL_PWM_OUT_ADDR        0x1A
+#define CY8C95XX_REG_INV_ADDR                0x1B
+#define CY8C95XX_REG_PORT_DIR_ADDR           0x1C
+#define CY8C95XX_REG_PULL_UP_ADDR            0x1D
+#define CY8C95XX_REG_PULL_DOWN_ADDR          0x1E
+#define CY8C95XX_REG_OPEN_DRAIN_HIGH_ADDR    0x1F
+#define CY8C95XX_REG_OPEN_DRAIN_LOW_ADDR     0x20
+#define CY8C95XX_REG_STRONG_ADDR             0x21
+#define CY8C95XX_REG_SLOW_STRONG_ADDR        0x22
+#define CY8C95XX_REG_HIGH_Z_ADDR             0x23
+#define CY8C95XX_REG_RSRVD_1_ADDR            0x24
+#define CY8C95XX_REG_RSRVD_2_ADDR            0x25
+#define CY8C95XX_REG_RSRVD_3_ADDR            0x26
+#define CY8C95XX_REG_RSRVD_4_ADDR            0x27
+#define CY8C95XX_REG_PWM_SEL_ADDR            0x28
+#define CY8C95XX_REG_CFG_PWM_ADDR            0x29
+#define CY8C95XX_REG_PERIOD_PWM_ADDR         0x2A
+#define CY8C95XX_REG_PULSE_WIDTH_PWM_ADDR    0x2B
+#define CY8C95XX_REG_DIVIDER_ADDR            0x2C
+#define CY8C95XX_REG_EEPROM_ADDR             0x2D
+#define CY8C95XX_REG_DEV_ID_ADDR             0x2E
+#define CY8C95XX_REG_WDT_ADDR                0x2F
+#define CY8C95XX_REG_CMD_ADDR                0x30
  
 /**
  * \brief Select pwm output
@@ -317,10 +318,10 @@ enum CY8C95XX_ERROR_CODE {
  * \ingroup cy8c95xx
  */
 #ifndef CY8C95XX_RST
-#define CY8C95XX_RST -1
+#define CY8C95XX_RST        -1
 #endif
 #ifndef CY8C95XX_INT
-#define CY8C95XX_INT -1
+#define CY8C95XX_INT        -1
 #endif
  
 /**
@@ -366,7 +367,7 @@ typedef struct
  * \brief Initializes default configuration
  * \ingroup cy8c95xx
  *
- * \param cfg Port expander initail configuration
+ * \param cfg Initial config struct
  */
 void cy8c95xx_set_default_cfg(cy8c95xx_cfg_t* cfg);
  
@@ -375,7 +376,7 @@ void cy8c95xx_set_default_cfg(cy8c95xx_cfg_t* cfg);
  * \ingroup cy8c95xx
  *
  * \param exp Pointer to CY8C95XX expander struct
- * \param cfg Click configuration structure
+ * \param cfg Initial config struct
  * \return CY8C95XX_INIT_ERROR : error
  *         CY8C95XX_OK : successful
  */

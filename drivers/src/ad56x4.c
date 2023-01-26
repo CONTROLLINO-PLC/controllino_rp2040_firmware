@@ -40,13 +40,13 @@ int ad56x4_init(ad56x4_t* dac, ad56x4_cfg_t* cfg)
 /* Check command bits */
 int ad56x4_check_cmd(uint8_t cmd)
 {
-    if (cmd != AD56X4_COMMAND_WRITE_INPUT_REGISTER &&
-        cmd != AD56X4_COMMAND_UPDATE_DAC_REGISTER &&
-        cmd != AD56X4_COMMAND_WRITE_INPUT_REGISTER_UPDATE_ALL &&
-        cmd != AD56X4_COMMAND_WRITE_UPDATE_CHANNEL &&
-        cmd != AD56X4_COMMAND_POWER_UPDOWN &&
-        cmd != AD56X4_COMMAND_SW_RESET &&
-        cmd != AD56X4_COMMAND_SET_LDAC)
+    if (cmd != AD56X4_CMD_WRITE_INPUT_REGISTER &&
+        cmd != AD56X4_CMD_UPDATE_DAC_REGISTER &&
+        cmd != AD56X4_CMD_WRITE_INPUT_REGISTER_UPDATE_ALL &&
+        cmd != AD56X4_CMD_WRITE_UPDATE_CH &&
+        cmd != AD56X4_CMD_POWER_UPDOWN &&
+        cmd != AD56X4_CMD_SW_RESET &&
+        cmd != AD56X4_CMD_SET_LDAC)
     {
         return AD56X4_ARG_ERROR;
     }
@@ -56,11 +56,11 @@ int ad56x4_check_cmd(uint8_t cmd)
 /* Check address bits */
 int ad56x4_check_addr(uint8_t addr)
 {
-    if (addr != AD56X4_ADDRESS_CHANNEL_A &&
-        addr != AD56X4_ADDRESS_CHANNEL_B &&
-        addr != AD56X4_ADDRESS_CHANNEL_C &&
-        addr != AD56X4_ADDRESS_CHANNEL_D &&
-        addr != AD56X4_ADDRESS_CHANNEL_ALL)
+    if (addr != AD56X4_ADDR_CH_A &&
+        addr != AD56X4_ADDR_CH_B &&
+        addr != AD56X4_ADDR_CH_C &&
+        addr != AD56X4_ADDR_CH_D &&
+        addr != AD56X4_ADDR_CH_ALL)
     {
         return AD56X4_ARG_ERROR;
     }
@@ -92,25 +92,25 @@ int ad56x4_generic_write(ad56x4_t* dac, uint8_t cmd, uint8_t ch_addr, uint16_t d
 /* Write to input register n */
 int ad56x4_write_input_reg(ad56x4_t* dac, uint8_t ch_addr, uint16_t data)
 {
-    return ad56x4_generic_write(dac, AD56X4_COMMAND_WRITE_INPUT_REGISTER, ch_addr, data);
+    return ad56x4_generic_write(dac, AD56X4_CMD_WRITE_INPUT_REGISTER, ch_addr, data);
 }
  
 /* Update DAC register n */
 int ad56x4_update_dac_reg(ad56x4_t* dac, uint8_t ch_addr)
 {
-    return ad56x4_generic_write(dac, AD56X4_COMMAND_UPDATE_DAC_REGISTER, ch_addr, 0x0000 /* don't care */);
+    return ad56x4_generic_write(dac, AD56X4_CMD_UPDATE_DAC_REGISTER, ch_addr, 0x0000 /* don't care */);
 }
  
 /* Write to input register n, update all */
 int ad56x4_write_input_reg_update_all_dac(ad56x4_t* dac, uint8_t ch_addr, uint16_t data)
 {
-    return ad56x4_generic_write(dac, AD56X4_COMMAND_WRITE_INPUT_REGISTER_UPDATE_ALL, ch_addr, data);
+    return ad56x4_generic_write(dac, AD56X4_CMD_WRITE_INPUT_REGISTER_UPDATE_ALL, ch_addr, data);
 }
  
 /* Write to and update DAC channel n */
 int ad56x4_write_update_dac_reg(ad56x4_t* dac, uint8_t ch_addr, uint16_t data)
 {
-    return ad56x4_generic_write(dac, AD56X4_COMMAND_WRITE_UPDATE_CHANNEL, ch_addr, data);
+    return ad56x4_generic_write(dac, AD56X4_CMD_WRITE_UPDATE_CH, ch_addr, data);
 }
  
 /* Set power mode */
@@ -125,17 +125,17 @@ int ad56x4_set_pwr(ad56x4_t* dac, uint8_t pwr_mode, uint8_t ch_sel)
     {
         return AD56X4_ARG_ERROR;
     }
-    if (ch_sel != AD56X4_SELECT_CHANNEL_A &&
-        ch_sel != AD56X4_SELECT_CHANNEL_B &&
-        ch_sel != AD56X4_SELECT_CHANNEL_C &&
-        ch_sel != AD56X4_SELECT_CHANNEL_D &&
-        ch_sel != AD56X4_SELECT_CHANNEL_ALL)
+    if (ch_sel != AD56X4_SELECT_CH_A &&
+        ch_sel != AD56X4_SELECT_CH_B &&
+        ch_sel != AD56X4_SELECT_CH_C &&
+        ch_sel != AD56X4_SELECT_CH_D &&
+        ch_sel != AD56X4_SELECT_CH_ALL)
     {
         return AD56X4_ARG_ERROR;
     }
     // Prepare txdata
     data = ((uint16_t)pwr_mode << 4) | (uint16_t)ch_sel;
-    return ad56x4_generic_write(dac, AD56X4_COMMAND_POWER_UPDOWN, 0x00 /* don't care */, data);
+    return ad56x4_generic_write(dac, AD56X4_CMD_POWER_UPDOWN, 0x00 /* don't care */, data);
 }
  
 /* Software reset */
@@ -147,14 +147,14 @@ int ad56x4_sw_reset(ad56x4_t* dac, uint8_t rst_mode)
     {
         return AD56X4_ARG_ERROR;
     }
-    return ad56x4_generic_write(dac, AD56X4_COMMAND_SW_RESET, 0x00 /* don't care */, (uint16_t)rst_mode);
+    return ad56x4_generic_write(dac, AD56X4_CMD_SW_RESET, 0x00 /* don't care */, (uint16_t)rst_mode);
 }
  
 /* Set channel LDAC mode */
 int ad56x4_set_ldac(ad56x4_t* dac, uint8_t ch_ldac_mode)
 {
     // Pending ch_ldac_mode arg check 
-    return ad56x4_generic_write(dac, AD56X4_COMMAND_SET_LDAC, 0x00 /* don't care */, (uint16_t)ch_ldac_mode);
+    return ad56x4_generic_write(dac, AD56X4_CMD_SET_LDAC, 0x00 /* don't care */, (uint16_t)ch_ldac_mode);
 }
  
 /* Set the voltage values of the specified channel */

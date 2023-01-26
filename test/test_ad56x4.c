@@ -41,11 +41,11 @@ int main() {
     // Init AD5664
     dac_init();
     // Set test voltage to output
-    // uint8_t channel = AD56X4_ADDRESS_CHANNEL_A;
-    // uint8_t channel = AD56X4_ADDRESS_CHANNEL_B;
-    // uint8_t channel = AD56X4_ADDRESS_CHANNEL_C;
-    // uint8_t channel = AD56X4_ADDRESS_CHANNEL_D;
-    uint8_t channel = AD56X4_ADDRESS_CHANNEL_ALL;
+    // uint8_t channel = AD56X4_ADDR_CH_A;
+    // uint8_t channel = AD56X4_ADDR_CH_B;
+    // uint8_t channel = AD56X4_ADDR_CH_C;
+    // uint8_t channel = AD56X4_ADDR_CH_D;
+    uint8_t channel = AD56X4_ADDR_CH_ALL;
     ad56x4_set_ch_voltage(&ad5664, channel, 2000,  NEO_AO_MAX_10V);
     ad56x4_set_ch_voltage(&ad5664, channel, 5555,  NEO_AO_MAX_10V);
     ad56x4_set_ch_voltage(&ad5664, channel, 8000,  NEO_AO_MAX_10V);
