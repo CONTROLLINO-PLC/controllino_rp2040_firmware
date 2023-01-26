@@ -3,10 +3,10 @@
  *
  * SPDX-License-Identifier: MIT
  */
-
+ 
 #ifndef AD56X4_H
 #define AD56X4_H
-
+ 
 /**
  * \file ad56x4.h
  * \ingroup drivers
@@ -28,10 +28,10 @@ extern "C" {
  * \ingroup ad56x4
  */
 enum ad56x4_error_code {
-    AD56X4_OK =         0x00,
-    AD56X4_INIT_ERROR = 0x01,
-    AD56X4_SPI_ERROR =  0x02,
-    AD56X4_ARG_ERROR =  0x03
+    AD56X4_OK =         PLATFORM_OK,
+    AD56X4_ARG_ERROR =  PLATFORM_ARGUMENT_ERROR,
+    AD56X4_INIT_ERROR = PLATFORM_SPI_INIT_ERROR,
+    AD56X4_SPI_ERROR =  PLATFORM_SPI_COM_ERROR
 };
  
 /**
@@ -94,14 +94,14 @@ enum ad56x4_error_code {
  
 /**
  * \brief External pins
- * \ingroup cy8c95xx
+ * \ingroup ad56x4
  */
 #ifndef AD56X4_CS
 #define AD56X4_CS -1
 #endif
  
 /**
- * \brief Object to store initial config
+ * \brief Initial config struct
  * \ingroup ad56x4
  */
 typedef struct
@@ -118,7 +118,7 @@ typedef struct
 } ad56x4_cfg_t;
  
 /**
- * \brief AD56X4 dac instance
+ * \brief AD56X4 DAC instance
  * \ingroup ad56x4
  */
 typedef struct
@@ -143,7 +143,7 @@ void ad56x4_set_default_cfg(ad56x4_cfg_t* cfg);
  * \brief Initializes hardware according to configuration
  * \ingroup ad56x4
  *
- * \param dac Driver instance
+ * \param dac Pointer to AD56X4 DAC struct
  * \param cfg Driver initial configuration
  * \return AD56X4_INIT_ERROR : error
  *         AD56X4_OK : successful
@@ -172,7 +172,7 @@ int ad56x4_check_addr(uint8_t addr);
  * \brief Generic write data function.
  * \ingroup ad56x4
  *
- * \param dac Driver instance
+ * \param dac Pointer to AD56X4 DAC struct
  * \param cmd Comand
  * \param ch_addr Channel address
  * \param data Data to write
@@ -186,7 +186,7 @@ int ad56x4_generic_write(ad56x4_t* dac, uint8_t cmd, uint8_t ch_addr, uint16_t d
  * \brief Write to input register n AD56X4_COMMAND_WRITE_INPUT_REGISTER
  * \ingroup ad56x4
  *
- * \param dac Driver instance
+ * \param dac Pointer to AD56X4 DAC struct
  * \param ch_addr Channel address
  * \param data Data to write
  * \return AD56X4_SPI_ERROR : error in coms
@@ -199,7 +199,7 @@ int ad56x4_write_input_reg(ad56x4_t* dac, uint8_t ch_addr, uint16_t data);
  * \brief Update DAC register n AD56X4_COMMAND_UPDATE_DAC_REGISTER
  * \ingroup ad56x4
  *
- * \param dac Driver instance
+ * \param dac Pointer to AD56X4 DAC struct
  * \param ch_addr Channel address
  * \return AD56X4_SPI_ERROR : error in coms
  *         AD56X4_ARG_ERROR : error in arguments
@@ -211,7 +211,7 @@ int ad56x4_update_dac_reg(ad56x4_t* dac, uint8_t ch_addr);
  * \brief Write to input register n, update all (software LDAC) AD56X4_COMMAND_WRITE_INPUT_REGISTER_UPDATE_ALL
  * \ingroup ad56x4
  *
- * \param dac Driver instance
+ * \param dac Pointer to AD56X4 DAC struct
  * \param ch_addr Channel address
  * \return AD56X4_SPI_ERROR : error in coms
  *         AD56X4_ARG_ERROR : error in arguments
@@ -223,7 +223,7 @@ int ad56x4_write_input_reg_update_all_dac(ad56x4_t* dac, uint8_t ch_addr, uint16
  * \brief Write to and update DAC channel n AD56X4_COMMAND_WRITE_UPDATE_CHANNEL
  * \ingroup ad56x4
  *
- * \param dac Driver instance
+ * \param dac Pointer to AD56X4 DAC struct
  * \param ch_addr Channel address
  * \param data Data to write
  * \return AD56X4_SPI_ERROR : error in coms
@@ -236,7 +236,7 @@ int ad56x4_write_update_dac_reg(ad56x4_t* dac, uint8_t ch_addr, uint16_t data);
  * \brief Set power mode AD56X4_COMMAND_POWER_UPDOWN
  * \ingroup ad56x4
  *
- * \param dac Driver instance
+ * \param dac Pointer to AD56X4 DAC struct
  * \param pwr_mode Power up or power down mode
  * \param ch_sel Channel selection
  * \return AD56X4_SPI_ERROR : error in coms
@@ -249,7 +249,7 @@ int ad56x4_set_pwr(ad56x4_t* dac, uint8_t pwr_mode, uint8_t ch_sel);
  * \brief Software reset AD56X4_COMMAND_SW_RESET
  * \ingroup ad56x4
  *
- * \param dac Driver instance
+ * \param dac Pointer to AD56X4 DAC struct
  * \param rst_mode Reset mode
  * \return AD56X4_SPI_ERROR : error in coms
  *         AD56X4_ARG_ERROR : error in arguments
@@ -261,7 +261,7 @@ int ad56x4_sw_reset(ad56x4_t* dac, uint8_t rst_mode);
  * \brief Set channel LDAC mode AD56X4_COMMAND_SET_LDAC
  * \ingroup ad56x4
  *
- * \param dac Driver instance
+ * \param dac Pointer to AD56X4 DAC struct
  * \param ch_ldac_mode DB0-DB3 channel LDAC config
  * \return AD56X4_SPI_ERROR : error in coms
  *         AD56X4_ARG_ERROR : error in arguments
@@ -274,7 +274,7 @@ int ad56x4_set_ldac(ad56x4_t* dac, uint8_t ch_ldac_mode);
  * \brief Set the voltage values of the specified channel
  * \ingroup ad56x4
  *
- * \param dac Driver instance
+ * \param dac Pointer to AD56X4 DAC struct
  * \param ch_addr Channel address
  * \param vol_val Desired voltage value in millivolts
  * \param vol_ref_max Maximun reference voltage in millivolts equivalent to max resolution
@@ -288,7 +288,7 @@ int ad56x4_set_ch_voltage(ad56x4_t* dac, uint8_t ch_addr, uint16_t vol_val, uint
  * \brief Enable CS for start SPI coms
  * \ingroup ad56x4
  *
- * \param dac Driver instance
+ * \param dac Pointer to AD56X4 DAC struct
  * \note Should be implemented externally
  */
 void ad56x4_cs_select(ad56x4_t* dac);
@@ -297,7 +297,7 @@ void ad56x4_cs_select(ad56x4_t* dac);
  * \brief Disable CS after SPI coms
  * \ingroup ad56x4
  *
- * \param dac Driver instance
+ * \param dac Pointer to AD56X4 DAC struct
  * \note Should be implemented externally
  */
 void ad56x4_cs_deselect(ad56x4_t* dac);

@@ -1,7 +1,0 @@
-add_executable(test_ad56x4)
-target_sources(test_ad56x4 PUBLIC ${CMAKE_CURRENT_LIST_DIR}/main.c)
-target_link_libraries(test_ad56x4 platform_rp2040_lib cy8c95xx_driver ad56x4_driver pico_stdlib hardware_i2c hardware_spi hardware_pio)
-pico_enable_stdio_usb(test_ad56x4 1)
-pico_enable_stdio_uart(test_ad56x4 1)
-pico_add_extra_outputs(test_ad56x4)
-pico_set_program_url(test_ad56x4 ${CMAKE_CURRENT_LIST_DIR})

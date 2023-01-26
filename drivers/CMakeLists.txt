@@ -1,2 +1,9 @@
-add_subdirectory(cy8c95xx)
-add_subdirectory(ad56x4)
+# cy8c95xx_driver
+add_library(cy8c95xx_driver INTERFACE)
+target_sources(cy8c95xx_driver INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/cy8c95xx.c)
+target_include_directories(cy8c95xx_driver INTERFACE ${CMAKE_CURRENT_LIST_DIR}/include)
+ 
+# ad56x4_driver
+add_library(ad56x4_driver INTERFACE)
+target_sources(ad56x4_driver INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/ad56x4.c)
+target_include_directories(ad56x4_driver INTERFACE ${CMAKE_CURRENT_LIST_DIR}/include)
