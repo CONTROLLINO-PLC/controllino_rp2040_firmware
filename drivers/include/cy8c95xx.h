@@ -331,11 +331,11 @@ enum CY8C95XX_ERROR_CODE {
 typedef struct {
     int sda_pin;
     int scl_pin;
-    int rst_pin;
-    int int_pin;
     uint i2c_speed;
     uint8_t i2c_addr;
     hw_i2c_t* i2c;
+    int rst_pin;
+    int int_pin;
 } cy8c95xx_cfg_t;
  
 /**
@@ -344,10 +344,10 @@ typedef struct {
  */
 typedef struct
 {
-    int rst_pin;
-    int int_pin;
     uint8_t slave_addr;
     hw_i2c_t* i2c;
+    int rst_pin;
+    int int_pin;
 } cy8c95xx_t;
  
 /**
@@ -375,237 +375,237 @@ void cy8c95xx_set_default_cfg(cy8c95xx_cfg_t* cfg);
  * \brief Initializes hardware according to configuration
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param cfg Initial config struct
  * \return CY8C95XX_INIT_ERROR : error
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_init(cy8c95xx_t *exp, cy8c95xx_cfg_t *cfg);
+int cy8c95xx_init(cy8c95xx_t *dev, cy8c95xx_cfg_t *cfg);
  
 /*!
  * \brief Reset port expander using rst_pin
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \note Functon holds two 100 ms reset delays
  */
-void cy8c95xx_reset(cy8c95xx_t* exp);
+void cy8c95xx_reset(cy8c95xx_t* dev);
  
 /*!
  * \brief Check interrupt by reading int_pin level
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \return 0 : Interrupt has not occured
  *         1 : Interrupt has occured
  */
-uint8_t cy8c95xx_check_int(cy8c95xx_t* exp);
+uint8_t cy8c95xx_check_int(cy8c95xx_t* dev);
  
 /*!
  * \brief Writes data to register
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param reg Register address
  * \param data_buf Data buf to be written
  * \param len Number of the bytes in data buf
  */
-void cy8c95xx_generic_write(cy8c95xx_t *exp, uint8_t reg, uint8_t *data_buf, uint8_t len);
+void cy8c95xx_generic_write(cy8c95xx_t *dev, uint8_t reg, uint8_t *data_buf, uint8_t len);
  
 /*!
  * \brief Reads data from register
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param reg Register address
  * \param data_buf Output data buf
  * \param len Number of the bytes to be read
  */
-void cy8c95xx_generic_read(cy8c95xx_t *exp, uint8_t reg, uint8_t *data_buf, uint8_t len);
+void cy8c95xx_generic_read(cy8c95xx_t *dev, uint8_t reg, uint8_t *data_buf, uint8_t len);
  
 /*!
  * \brief Write single byte of data to register
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param reg_adr 8-bit value that defines the register
  * \param wr_data 8-bit value that defines the input data
  */
-void cy8c95xx_write_byte(cy8c95xx_t *exp, uint8_t reg_adr, uint8_t wr_data);
+void cy8c95xx_write_byte(cy8c95xx_t *dev, uint8_t reg_adr, uint8_t wr_data);
  
 /*!
  * \brief Read single byte of data fromregister
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param reg_adr 8-bit value that defines the register
  * \return rx_buf 8-bit value that defines the output data
  */
-uint8_t cy8c95xx_read_byte(cy8c95xx_t *exp, uint8_t reg_adr);
+uint8_t cy8c95xx_read_byte(cy8c95xx_t *dev, uint8_t reg_adr);
  
 /*!
  * \brief Writes number of bytes into register
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param reg 8-bit register address
  * \param buf 8-bit write data
  * \param len 8-bit number of bytes
  */
-void cy8c95xx_write_port_exp(cy8c95xx_t *exp, uint8_t reg, uint8_t *buf, uint8_t len);
+void cy8c95xx_write_port_exp(cy8c95xx_t *dev, uint8_t reg, uint8_t *buf, uint8_t len);
  
 /*!
  * \brief Reads number of bytes from register
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param reg 8-bit register address
  * \param buf 8-bit read data
  * \param len 8-bit number of bytes
  */
-void cy8c95xx_read_port_exp(cy8c95xx_t *exp, uint8_t reg, uint8_t *buf, uint8_t len);
+void cy8c95xx_read_port_exp(cy8c95xx_t *dev, uint8_t reg, uint8_t *buf, uint8_t len);
  
 /*!
  * \brief Send EEPROM comand
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param cmd 8-bit value that defines the command
  */
-void cy8c95xx_send_eeprom_cmd(cy8c95xx_t *exp, uint8_t cmd);
+void cy8c95xx_send_eeprom_cmd(cy8c95xx_t *dev, uint8_t cmd);
  
 /*!
  * \brief Writes number of bytes into EEPROM
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param reg 8-bit register address
  * \param wr_data 8-bit write data
  * \param len 8-bit number of bytes
  */
-void cy8c95xx_write_eeprom(cy8c95xx_t *exp, uint16_t mem_adr, uint8_t *buf, uint8_t len);
+void cy8c95xx_write_eeprom(cy8c95xx_t *dev, uint16_t mem_adr, uint8_t *buf, uint8_t len);
  
 /*!
  * \brief Reads number of bytes from EEPROM
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param reg 8-bit register address
  * \param buf 8-bit read data
  * \param len 8-bit number of bytes
  */
-void cy8c95xx_read_eeprom(cy8c95xx_t *exp, uint16_t mem_adr, uint8_t *buf, uint8_t len);
+void cy8c95xx_read_eeprom(cy8c95xx_t *dev, uint16_t mem_adr, uint8_t *buf, uint8_t len);
  
 /*!
  * \brief Read state of a single bit from register
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param reg_adr 8-bit value that defines the register
  * \param bit_num 8-bit value that defines the specific bit
  * \return 8-bit value that represents the specific bit value
  */
-uint8_t cy8c95xx_read_bit(cy8c95xx_t *exp, uint8_t reg_adr, uint8_t bit_num);
+uint8_t cy8c95xx_read_bit(cy8c95xx_t *dev, uint8_t reg_adr, uint8_t bit_num);
  
 /*!
  * \brief Set or Clear specific bit in selected register
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param reg_adr 8-bit value that defines the register
  * \param bit_num 8-bit value that defines the specific bit
  * \param bit_val 8-bit value that defines the specific bit value
  */
-void cy8c95xx_write_bit(cy8c95xx_t* exp, uint8_t reg_adr, uint8_t bit_num, uint8_t bit_val);
+void cy8c95xx_write_bit(cy8c95xx_t* dev, uint8_t reg_adr, uint8_t bit_num, uint8_t bit_val);
  
 /*!
  * \brief Get a single INPUT pin logic level
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param pin 16-bit value that defines the specific pin
  * \return 8-bit value that represents the specific pin state
  */
-uint8_t cy8c95xx_read_pin(cy8c95xx_t *exp, uint16_t pin, uint8_t inv);
+uint8_t cy8c95xx_read_pin(cy8c95xx_t *dev, uint16_t pin, uint8_t inv);
  
 /*!
  * \brief Get all pin logic levels from port
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param port 8-bit value that defines the port
  * \return 8-bit value that represents the states of pins in selected port
  */
-uint8_t cy8c95xx_read_port(cy8c95xx_t *exp, uint8_t port, uint8_t inv);
+uint8_t cy8c95xx_read_port(cy8c95xx_t *dev, uint8_t port, uint8_t inv);
  
 /*!
  * \brief Get a single OUTPUT pin setting
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param pin 16-bit value that defines the specific pin
  * \return Pin output setting (0 or 1)
  */
-uint8_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t *exp, uint16_t pin);
+uint8_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t *dev, uint16_t pin);
  
 /*!
  * \brief Get all pin output settings from port
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param port 8-bit value that defines the port
  * \return Pin output setting (0 or 1)
  */
-uint8_t cy8c95xx_get_port_out_lvl(cy8c95xx_t *exp, uint8_t port);
+uint8_t cy8c95xx_get_port_out_lvl(cy8c95xx_t *dev, uint8_t port);
  
 /*!
  * \brief Set a single OUTPUT pin logic level
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param pin 8-bit value that defines the specific pin
  * \param pin_val 8-bit value that defines the specific pin value 
  */
-void cy8c95xx_write_pin(cy8c95xx_t *exp, uint16_t pin, uint8_t pin_val);
+void cy8c95xx_write_pin(cy8c95xx_t *dev, uint16_t pin, uint8_t pin_val);
  
 /*!
  * \brief Set all OUTPUT pins logic levels in one port
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param port 8-bit value that defines which port to write to
  * \param value 8-bit value that defines pins' output logic level (0 or 1)
  */
-void cy8c95xx_write_port(cy8c95xx_t *exp, uint8_t port, uint8_t value);
+void cy8c95xx_write_port(cy8c95xx_t *dev, uint8_t port, uint8_t value);
  
 /*!
  * \brief Enable or disable PWM output on pin
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param port 8-bit value that defines PWM output pin
  * \param value 8-bit value that enables or disables PWM output (0 or 1)
  */
-void cy8c95xx_sel_pwm_pin(cy8c95xx_t *exp, uint16_t pin, uint8_t pwm_en);
+void cy8c95xx_sel_pwm_pin(cy8c95xx_t *dev, uint16_t pin, uint8_t pwm_en);
  
 /*!
  * \brief Configure pwm output
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param pwm_cfg cy8c95xx_pwm_cfg_t pwm Configuration structure
  * \param duty_cyc float value representing pwm duty cycle
  * \param freq float value representing output frequency
  */
-void cy8c95xx_pwm_cfg(cy8c95xx_t *exp, cy8c95xx_pwm_cfg_t pwm_cfg, float *duty_cyc, float *freq);
+void cy8c95xx_pwm_cfg(cy8c95xx_t *dev, cy8c95xx_pwm_cfg_t pwm_cfg, float *duty_cyc, float *freq);
  
 /*!
  * \brief Configures EEPROM enable register
  * \ingroup cy8c95xx
  *
- * \param exp Pointer to CY8C95XX expander struct
+ * \param dev Pointer to CY8C95XX expander struct
  * \param cmd value that represents input data to Enable Register
- * \note Writes to this register differ from other registers, see datasheet
+ * \note Writes to dev register differ from other registers, see datasheet
  */
-void cy8c95xx_eeprom_enable(cy8c95xx_t *exp, uint8_t cmd);
+void cy8c95xx_eeprom_enable(cy8c95xx_t *dev, uint8_t cmd);
  
 #ifdef __cplusplus
 }

@@ -346,8 +346,6 @@ enum mcp356x_error_code {
  */
 typedef struct
 {
-    int mclk_pin;
-    int int_pin;
     int mosi_pin;
     int miso_pin;
     int sck_pin;
@@ -356,6 +354,8 @@ typedef struct
     uint8_t spi_mode;
     uint8_t spi_bit_order;
     hw_spi_t* spi;
+    int mclk_pin;
+    int int_pin;
 } mcp356x_cfg_t;
  
 /**
@@ -364,14 +364,14 @@ typedef struct
  */
 typedef struct
 {
-    uint8_t status;
-    int mclk_pin;
-    int int_pin;
     int cs_pin;
     uint spi_speed;
     uint8_t spi_mode;
     uint8_t spi_bit_order;
     hw_spi_t* spi;
+    uint8_t status;
+    int mclk_pin;
+    int int_pin;
 } mcp356x_t;
  
 /*!
@@ -393,7 +393,7 @@ void mcp356x_set_default_cfg(mcp356x_cfg_t* cfg);
  * \note Set default ADC data format
  *       Set MUX mode and MUX config for single ended channel 0
  */
-int mcp356x_init(mcp356x_t* adc, mcp356x_cfg_t* cfg);
+int mcp356x_init(mcp356x_t* dev, mcp356x_cfg_t* cfg);
  
 /*!
  * \brief Check interrupt by reading int_pin level
@@ -403,185 +403,137 @@ int mcp356x_init(mcp356x_t* adc, mcp356x_cfg_t* cfg);
  * \return 0 : Interrupt has not occured
  *         1 : Interrupt has occured
  */
-uint8_t mcp356x_check_int(mcp356x_t* adc)
+uint8_t mcp356x_check_int(mcp356x_t* dev);
  
 /*!
- * \brief Generic transfer
+ * \brief Generic SPI data transfer
  * \ingroup mcp356x
  *
- * \param adc Pointer MCP356X ADC struct
- * \param wr_buf Write data buffer
- * \param wr_len Number of byte in write data buffer
- * \param rd_buf Read data buffer
- * \param rd_len Number of byte in read data buffer
+ * \param dev Pointer MCP356X ADC struct
+ * \param txdata Pointer to write data
+ * \param txlen Number of bytes to write
+ * \param rxdata Pointer to recieve data
+ * \param rxlen Number of bytes to read
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
  */
-int mcp356x_generic_transfer(mcp356x_t *adc, uint8_t *wr_buf, uint16_t wr_len, uint8_t *rd_buf, uint16_t rd_len);
+int mcp356x_generic_transfer(mcp356x_t* dev, uint8_t* txdata, uint8_t txlen, uint8_t* rxdata, uint8_t rxlen);
  
 /*!
  * \brief Write fast commands
  * \ingroup mcp356x
  *
- * \param adc Pointer MCP356X ADC struct
+ * \param dev Pointer MCP356X ADC struct
  * \param fast_cmd Fast command to send
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
  */
-int mcp356x_write_fast_cmd(mcp356x_t* adc, uint8_t fast_cmd);
+int mcp356x_write_fast_cmd(mcp356x_t* dev, uint8_t fast_cmd);
  
 /*!
- * \brief Write byte to register
+ * \brief Write incremental data to registers
  * \ingroup mcp356x
  *
- * \param adc Pointer MCP356X ADC struct
- * \param reg Register address
- * \param txdata Byte to write
+ * \param dev Pointer MCP356X ADC struct
+ * \param reg Start register address
+ * \param txdata Pointer to transmit data
+ * \param txlen Number of bytes to write should fit registers data size
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
  */
-int mcp356x_write_u8(mcp356x_t* adc, uint8_t reg, uint8_t txdata);
+int mcp356x_iwrite(mcp356x_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen);
  
 /*!
- * \brief Read byte from register
+ * \brief Read static register data
  * \ingroup mcp356x
  *
- * \param adc  Pointer MCP356X ADC struct
+ * \param dev Pointer MCP356X ADC struct
  * \param reg Register address
- * \param rxdata Pointer to receive byte
+ * \param rxdata Pointer to recieve data
+ * \param rxlen Number of bytes to read should fit register data size
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
  */
-int mcp356x_read_u8(mcp356x_t* adc, uint8_t reg, uint8_t* rxdata);
+int mcp356x_sread(mcp356x_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen);
  
 /*!
- * \brief Write word to register
+ * \brief Read incremental from registers
  * \ingroup mcp356x
  *
- * \param adc Pointer MCP356X ADC struct
- * \param reg Register address
- * \param txdata Word(uint16_t) to write
+ * \param dev Pointer MCP356X ADC struct
+ * \param reg Start register address
+ * \param rxdata Pointer to recieve data
+ * \param rxlen Number of bytes to read should fit registers data size
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
  */
-int mcp356x_write_u16(mcp356x_t* adc, uint8_t reg, uint16_t txdata);
- 
-/*!
- * \brief Read word from register
- * \ingroup mcp356x
- *
- * \param adc  Pointer MCP356X ADC struct
- * \param reg Register address
- * \param rxdata Pointer to receive word(uint16_t*)
- * \return MCP356X_SPI_ERROR : error in coms
- *         MCP356X_ARG_ERROR : error in arguments
- *         MCP356X_OK : successful
- */
-int mcp356x_read_u16(mcp356x_t* adc, uint8_t reg, uint16_t* rxdata);
- 
-/*!
- * \brief Write 24bit to register
- * \ingroup mcp356x
- *
- * \param adc Pointer MCP356X ADC struct
- * \param reg Register address
- * \param txdata 24bit(uint32_t) data to write
- * \return MCP356X_SPI_ERROR : error in coms
- *         MCP356X_ARG_ERROR : error in arguments
- *         MCP356X_OK : successful
- */
-int mcp356x_write_u24(mcp356x_t* adc, uint8_t reg, uint32_t txdata);
- 
-/*!
- * \brief Read 24bit from register
- * \ingroup mcp356x
- *
- * \param adc Pointer MCP356X ADC struct
- * \param reg Register address
- * \param rxdata Pointer to receive 24bit(uint32_t*) data
- * \return MCP356X_SPI_ERROR : error in coms
- *         MCP356X_ARG_ERROR : error in arguments
- *         MCP356X_OK : successful
- */
-int mcp356x_read_u24(mcp356x_t* adc, uint8_t reg, uint32_t* rxdata);
- 
-/*!
- * \brief Read 32bit from register
- * \ingroup mcp356x
- *
- * \param adc Pointer MCP356X ADC struct
- * \param reg Register address
- * \param rxdata Pointer to receive 32bit(uint32_t*) data
- * \return MCP356X_SPI_ERROR : error in coms
- *         MCP356X_ARG_ERROR : error in arguments
- *         MCP356X_OK : successful
- */
-int mcp356x_read_u32(mcp356x_t* adc, uint8_t reg, uint32_t* rxdata);
+int mcp356x_iread(mcp356x_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen);
  
 /*!
  * \brief Read ADC data in default format MCP356X_CFG_3_DATA_FORMAT_DEF
  * \ingroup mcp356x
  *
- * \param adc Pointer MCP356X ADC struct
- * \param adc_data Pointer to receive 23bit(uint32_t*) ADC data
+ * \param dev Pointer MCP356X ADC struct
+ * \param dev_data Pointer to receive 23bit(uint32_t*) ADC data
  * \param sgn Pointer to receive sign bit
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
  */
-int mcp356x_read_adc_def(mcp356x_t* adc, uint32_t* adc_data, uint8_t* sgn);
+int mcp356x_read_dev_def(mcp356x_t* dev, uint32_t* dev_data, uint8_t* sgn);
  
 /*!
  * \brief Read ADC data in left justified format MCP356X_CFG_3_DATA_FORMAT_LEFT_JUST
  * \ingroup mcp356x
  *
- * \param adc Pointer MCP356X ADC struct
- * \param adc_data Pointer to receive 23bit(uint32_t*) ADC data
+ * \param dev Pointer MCP356X ADC struct
+ * \param dev_data Pointer to receive 23bit(uint32_t*) ADC data
  * \param sgn Pointer to receive sign bit
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
  */
-int mcp356x_read_adc_left_just(mcp356x_t* adc, uint32_t* adc_data, uint8_t* sgn);
+int mcp356x_read_dev_left_just(mcp356x_t* dev, uint32_t* dev_data, uint8_t* sgn);
  
 /*!
  * \brief Read ADC data in extended format MCP356X_CFG_3_DATA_FORMAT_EXT_ADC
  * \ingroup mcp356x
  *
- * \param adc Pointer MCP356X ADC struct
- * \param adc_data Pointer to receive 24bit(uint32_t*) ADC data
+ * \param dev Pointer MCP356X ADC struct
+ * \param dev_data Pointer to receive 24bit(uint32_t*) ADC data
  * \param sgn Pointer to receive sign bit
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
  */
-int mcp356x_read_adc_ext(mcp356x_t* adc, uint32_t* adc_data, uint8_t* sgn);
+int mcp356x_read_dev_ext(mcp356x_t* dev, uint32_t* dev_data, uint8_t* sgn);
  
 /*!
  * \brief Read ADC data in extended format including ch_id MCP356X_CFG_3_DATA_FORMAT_CH_ADC
  * \ingroup mcp356x
  *
- * \param adc Pointer MCP356X ADC struct
- * \param adc_data Pointer to receive 24bit(uint32_t*) ADC data
+ * \param dev Pointer MCP356X ADC struct
+ * \param dev_data Pointer to receive 24bit(uint32_t*) ADC data
  * \param sgn Pointer to receive sign bit
  * \param ch_id Pointer to receive channel identifier
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
  */
-int mcp356x_read_adc_ch_ext(mcp356x_t* adc, uint32_t* adc_data, uint8_t* sgn, uint8_t* ch_id);
+int mcp356x_read_dev_ch_ext(mcp356x_t* dev, uint32_t* dev_data, uint8_t* sgn, uint8_t* ch_id);
  
 /*!
  * \brief Read channel voltage in millivolts using 0 to \p vol_ref_max as reference
+ * \ingroup mcp356x
  *
- * \param adc Pointer MCP356X ADC struct 
+ * \param dev Pointer MCP356X ADC struct 
  * \param ch_id Channnel identifier
- * \param gain Current adc gain
+ * \param gain Current dev gain
  * \param vol_ref_max Maximun reference voltage in millivolts equivalent to max resolution
  * \param vol_val Pointer to receive voltage value in millivolts
  * \return MCP356X_SPI_ERROR : error in coms
@@ -590,8 +542,26 @@ int mcp356x_read_adc_ch_ext(mcp356x_t* adc, uint32_t* adc_data, uint8_t* sgn, ui
  * \note Set default ADC data format
  *       MUX mode and MUX config according to \p ch_id
  */
-int mcp356x_volt_calc(mcp356x_t* adc, uint8_t ch_id, uint8_t gain, uint16_t vol_ref_max, uint16_t* vol_val);
+int mcp356x_read_ch_voltage(mcp356x_t* dev, uint8_t ch_id, uint8_t gain, uint16_t vol_ref_max, uint16_t* vol_val);
  
+/*!
+ * \brief Enable CS for start SPI coms
+ * \ingroup mcp356x
+ *
+ * \param dev Pointer MCP356X ADC struct
+ * \note Should be implemented externally
+ */
+void mcp356x_cs_select(mcp356x_t* dev);
+
+/*!
+ * \brief Disable CS after SPI coms
+ * \ingroup mcp356x
+ *
+ * \param dev Pointer MCP356X ADC struct
+ * \note Should be implemented externally
+ */
+void mcp356x_cs_deselect(mcp356x_t* dev);
+
 #ifdef __cplusplus
 }
 #endif

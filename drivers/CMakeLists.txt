@@ -7,3 +7,8 @@ target_include_directories(cy8c95xx_driver INTERFACE ${CMAKE_CURRENT_LIST_DIR}/i
 add_library(ad56x4_driver INTERFACE)
 target_sources(ad56x4_driver INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/ad56x4.c)
 target_include_directories(ad56x4_driver INTERFACE ${CMAKE_CURRENT_LIST_DIR}/include)
+
+# mcp356x_driver
+add_library(mcp356x_driver INTERFACE)
+target_sources(mcp356x_driver INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/mcp356x.c)
+target_include_directories(mcp356x_driver INTERFACE ${CMAKE_CURRENT_LIST_DIR}/include)
