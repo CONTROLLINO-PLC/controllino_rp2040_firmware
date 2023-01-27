@@ -272,6 +272,6 @@ void cy8c95xx_eeprom_enable(cy8c95xx_t* dev, uint8_t cmd)
     tx_buf[1] = 0x4D;
     tx_buf[2] = 0x53;
     tx_buf[3] = cmd;
-    cy8c95xx_write_port_dev(dev, CY8C95XX_REG_EEPROM_ADDR, tx_buf, 4);
+    cy8c95xx_write_port_exp(dev, CY8C95XX_REG_EEPROM_ADDR, tx_buf, 4);
 }
 

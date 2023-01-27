@@ -41,7 +41,7 @@ enum mcp356x_error_code {
 #define MCP356X_DEVICE_ADDR                  0x01
  
 /**
- * \brief Fast commands
+ * \brief Fast commands CMD[5:2]
  * \ingroup mcp356x
  */
 #define MCP356X_FAST_CMD_ADC_CONV_START      0x28
@@ -51,7 +51,7 @@ enum mcp356x_error_code {
 #define MCP356X_FAST_CMD_DEV_FULL_RESET      0x38
  
 /**
- * \brief Commands type
+ * \brief Write/read commands CMD[1:0]
  * \ingroup mcp356x
  */
 #define MCP356X_CMD_DONT_CARE                0x00
@@ -60,7 +60,7 @@ enum mcp356x_error_code {
 #define MCP356X_CMD_INC_READ                 0x03
  
 /**
- * \brief Internal Registers
+ * \brief Internal register addresses CMD[5:2]
  * \ingroup mcp356x
  */
 #define MCP356X_REG_ADC_DATA                 0x00
@@ -83,20 +83,18 @@ enum mcp356x_error_code {
  * \brief CONFIG0 Register
  * \ingroup mcp356x
  */
-#define MCP356X_CFG_0_VREF_SEL_0             0x00
-#define MCP356X_CFG_0_VREF_SEL_1             0x40
-#define MCP356X_CFG_0_VREF_SEL_2             0x80
-#define MCP356X_CFG_0_VREF_SEL_3             0xC0
+#define MCP356X_CFG_0_VREF_EXT               0x00
+#define MCP356X_CFG_0_VREF_INT               0x80
 
-#define MCP356X_CFG_0_CLK_SEL_0              0x00
-#define MCP356X_CFG_0_CLK_SEL_1              0x10
-#define MCP356X_CFG_0_CLK_SEL_2              0x20
-#define MCP356X_CFG_0_CLK_SEL_3              0x30
+#define MCP356X_CFG_0_CLK_EXT                0x00
+#define MCP356X_CFG_0_CLK_EXT_               0x10
+#define MCP356X_CFG_0_CLK_INT_NO_OUT         0x20
+#define MCP356X_CFG_0_CLK_INT_OUT            0x30
 
-#define MCP356X_CFG_0_CS_SEL_0               0x00
-#define MCP356X_CFG_0_CS_SEL_1               0x04
-#define MCP356X_CFG_0_CS_SEL_2               0x08
-#define MCP356X_CFG_0_CS_SEL_3               0x0C
+#define MCP356X_CFG_0_CS_SEL_NONE            0x00
+#define MCP356X_CFG_0_CS_SEL_0_9_UA          0x04
+#define MCP356X_CFG_0_CS_SEL_3_7_UA          0x08
+#define MCP356X_CFG_0_CS_SEL_15_UA           0x0C
 
 #define MCP356X_CFG_0_MODE_SHD_DEF           0x00
 #define MCP356X_CFG_0_MODE_SHD               0x01
@@ -128,11 +126,6 @@ enum mcp356x_error_code {
 #define MCP356X_CFG_1_OSR_128                0x08
 #define MCP356X_CFG_1_OSR_64                 0x04
 #define MCP356X_CFG_1_OSR_32                 0x00
-
-#define MCP356X_CFG_1_DITHER_MAX             0x03
-#define MCP356X_CFG_1_DITHER_MED             0x02
-#define MCP356X_CFG_1_DITHER_MIN             0x01
-#define MCP356X_CFG_1_DITHER_DEF             0x00
  
 /**
  * \brief CONFIG2 Register
@@ -156,9 +149,6 @@ enum mcp356x_error_code {
 #define MCP356X_CFG_2_AZ_MUX_DIS             0x00
 #define MCP356X_CFG_2_AZ_VREF_EN             0x02
 #define MCP356X_CFG_2_AZ_VREF_DIS            0x00
-
-#define MCP356X_CFG_2_AZ_FREQ_HIGH           0x01
-#define MCP356X_CFG_2_AZ_FREQ_LOW            0x00
  
 /**
  * \brief CONFIG3 Register
@@ -244,31 +234,31 @@ enum mcp356x_error_code {
  * \brief SCAN Register
  * \ingroup mcp356x
  */
-#define MCP356X_SCAN_DLY_DM_CLK_X_512        0x07
-#define MCP356X_SCAN_DLY_DM_CLK_X_256        0x06
-#define MCP356X_SCAN_DLY_DM_CLK_X_128        0x05
-#define MCP356X_SCAN_DLY_DM_CLK_X_64         0x04
-#define MCP356X_SCAN_DLY_DM_CLK_X_32         0x03
-#define MCP356X_SCAN_DLY_DM_CLK_X_16         0x02
-#define MCP356X_SCAN_DLY_DM_CLK_X_8          0x01
-#define MCP356X_SCAN_DLY_NO_DELAY            0x00
+#define MCP356X_SCAN_DLY_DM_CLK_X_512        0x00E00000
+#define MCP356X_SCAN_DLY_DM_CLK_X_256        0x00C00000
+#define MCP356X_SCAN_DLY_DM_CLK_X_128        0x00A00000
+#define MCP356X_SCAN_DLY_DM_CLK_X_64         0x00800000
+#define MCP356X_SCAN_DLY_DM_CLK_X_32         0x00600000
+#define MCP356X_SCAN_DLY_DM_CLK_X_16         0x00400000
+#define MCP356X_SCAN_DLY_DM_CLK_X_8          0x00200000
+#define MCP356X_SCAN_DLY_NO_DELAY            0x00000000
 
-#define MCP356X_SCAN_OFFSET                  0x8000
-#define MCP356X_SCAN_VREF                    0x4000
-#define MCP356X_SCAN_AVDD                    0x2000
-#define MCP356X_SCAN_TEMP                    0x1000
-#define MCP356X_SCAN_DIFF_D                  0x0800
-#define MCP356X_SCAN_DIFF_C                  0x0400
-#define MCP356X_SCAN_DIFF_B                  0x0200
-#define MCP356X_SCAN_DIFF_A                  0x0100
-#define MCP356X_SCAN_CH7                     0x0080
-#define MCP356X_SCAN_CH6                     0x0040
-#define MCP356X_SCAN_CH5                     0x0020
-#define MCP356X_SCAN_CH4                     0x0010
-#define MCP356X_SCAN_CH3                     0x0008
-#define MCP356X_SCAN_CH2                     0x0004
-#define MCP356X_SCAN_CH1                     0x0002
-#define MCP356X_SCAN_CH0                     0x0001
+#define MCP356X_SCAN_OFFSET                  0x00008000
+#define MCP356X_SCAN_VREF                    0x00004000
+#define MCP356X_SCAN_AVDD                    0x00002000
+#define MCP356X_SCAN_TEMP                    0x00001000
+#define MCP356X_SCAN_DIFF_D                  0x00000800
+#define MCP356X_SCAN_DIFF_C                  0x00000400
+#define MCP356X_SCAN_DIFF_B                  0x00000200
+#define MCP356X_SCAN_DIFF_A                  0x00000100
+#define MCP356X_SCAN_CH7                     0x00000080
+#define MCP356X_SCAN_CH6                     0x00000040
+#define MCP356X_SCAN_CH5                     0x00000020
+#define MCP356X_SCAN_CH4                     0x00000010
+#define MCP356X_SCAN_CH3                     0x00000008
+#define MCP356X_SCAN_CH2                     0x00000004
+#define MCP356X_SCAN_CH1                     0x00000002
+#define MCP356X_SCAN_CH0                     0x00000001
  
 /**
  * \brief Timer Register
@@ -300,7 +290,7 @@ enum mcp356x_error_code {
 #define MCP356X_TIMER_DLY_NO_DELAY           0x00000000
  
 /**
- * \brief Channel identifier
+ * \brief Channel identifiers
  * \ingroup mcp356x
  */
 #define MCP356X_CH_OFFSET                    0x0F
@@ -356,6 +346,14 @@ typedef struct
     hw_spi_t* spi;
     int mclk_pin;
     int int_pin;
+    uint8_t config_0_reg;
+    uint8_t config_1_reg;
+    uint8_t config_2_reg;
+    uint8_t config_3_reg;
+    uint8_t irq_reg;
+    uint8_t mux_reg;
+    uint32_t scan_reg;
+    uint32_t timer_reg;
 } mcp356x_cfg_t;
  
 /**
@@ -369,9 +367,9 @@ typedef struct
     uint8_t spi_mode;
     uint8_t spi_bit_order;
     hw_spi_t* spi;
-    uint8_t status;
     int mclk_pin;
     int int_pin;
+    uint8_t status;
 } mcp356x_t;
  
 /*!
@@ -390,8 +388,6 @@ void mcp356x_set_default_cfg(mcp356x_cfg_t* cfg);
  * \param cfg Initial config struct
  * \return MCP356X_INIT_ERROR : error
  *         MCP356X_OK : successful
- * \note Set default ADC data format
- *       Set MUX mode and MUX config for single ended channel 0
  */
 int mcp356x_init(mcp356x_t* dev, mcp356x_cfg_t* cfg);
  
@@ -410,15 +406,16 @@ uint8_t mcp356x_check_int(mcp356x_t* dev);
  * \ingroup mcp356x
  *
  * \param dev Pointer MCP356X ADC struct
- * \param txdata Pointer to write data
- * \param txlen Number of bytes to write
- * \param rxdata Pointer to recieve data
- * \param rxlen Number of bytes to read
+ * \param fcmd_addr Fast command or register address CMD[5:2]
+ * \param r_w_cmd Static read or incremental write or read CMD[1:0] set to MCP356X_CMD_DONT_CARE if fast command
+ * \param txdata Pointer to write data set to NULL for only read
+ * \param rxdata Pointer to receive data set to NULL for only write
+ * \param len Number of bytes to exchange
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
  */
-int mcp356x_generic_transfer(mcp356x_t* dev, uint8_t* txdata, uint8_t txlen, uint8_t* rxdata, uint8_t rxlen);
+int mcp356x_generic_transfer(mcp356x_t* dev, uint8_t fcmd_addr, uint8_t r_w_cmd, uint8_t* txdata, uint8_t* rxdata, uint8_t len);
  
 /*!
  * \brief Write fast commands
@@ -452,7 +449,7 @@ int mcp356x_iwrite(mcp356x_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen);
  *
  * \param dev Pointer MCP356X ADC struct
  * \param reg Register address
- * \param rxdata Pointer to recieve data
+ * \param rxdata Pointer to receive data
  * \param rxlen Number of bytes to read should fit register data size
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
@@ -466,7 +463,7 @@ int mcp356x_sread(mcp356x_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen);
  *
  * \param dev Pointer MCP356X ADC struct
  * \param reg Start register address
- * \param rxdata Pointer to recieve data
+ * \param rxdata Pointer to receive data
  * \param rxlen Number of bytes to read should fit registers data size
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
@@ -479,70 +476,67 @@ int mcp356x_iread(mcp356x_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen);
  * \ingroup mcp356x
  *
  * \param dev Pointer MCP356X ADC struct
- * \param dev_data Pointer to receive 23bit(uint32_t*) ADC data
+ * \param adc_data Pointer to receive 23bit(uint32_t*) ADC data
  * \param sgn Pointer to receive sign bit
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
  */
-int mcp356x_read_dev_def(mcp356x_t* dev, uint32_t* dev_data, uint8_t* sgn);
+int mcp356x_read_adc_def(mcp356x_t* dev, uint32_t* adc_data, uint8_t* sgn);
  
 /*!
  * \brief Read ADC data in left justified format MCP356X_CFG_3_DATA_FORMAT_LEFT_JUST
  * \ingroup mcp356x
  *
  * \param dev Pointer MCP356X ADC struct
- * \param dev_data Pointer to receive 23bit(uint32_t*) ADC data
+ * \param adc_data Pointer to receive 23bit(uint32_t*) ADC data
  * \param sgn Pointer to receive sign bit
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
  */
-int mcp356x_read_dev_left_just(mcp356x_t* dev, uint32_t* dev_data, uint8_t* sgn);
+int mcp356x_read_adc_left_just(mcp356x_t* dev, uint32_t* adc_data, uint8_t* sgn);
  
 /*!
  * \brief Read ADC data in extended format MCP356X_CFG_3_DATA_FORMAT_EXT_ADC
  * \ingroup mcp356x
  *
  * \param dev Pointer MCP356X ADC struct
- * \param dev_data Pointer to receive 24bit(uint32_t*) ADC data
+ * \param adc_data Pointer to receive 24bit(uint32_t*) ADC data
  * \param sgn Pointer to receive sign bit
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
  */
-int mcp356x_read_dev_ext(mcp356x_t* dev, uint32_t* dev_data, uint8_t* sgn);
+int mcp356x_read_adc_ext(mcp356x_t* dev, uint32_t* adc_data, uint8_t* sgn);
  
 /*!
  * \brief Read ADC data in extended format including ch_id MCP356X_CFG_3_DATA_FORMAT_CH_ADC
  * \ingroup mcp356x
  *
  * \param dev Pointer MCP356X ADC struct
- * \param dev_data Pointer to receive 24bit(uint32_t*) ADC data
+ * \param adc_data Pointer to receive 24bit(uint32_t*) ADC data
  * \param sgn Pointer to receive sign bit
  * \param ch_id Pointer to receive channel identifier
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
  */
-int mcp356x_read_dev_ch_ext(mcp356x_t* dev, uint32_t* dev_data, uint8_t* sgn, uint8_t* ch_id);
+int mcp356x_read_adc_ch_ext(mcp356x_t* dev, uint32_t* adc_data, uint8_t* sgn, uint8_t* ch_id);
  
 /*!
- * \brief Read channel voltage in millivolts using 0 to \p vol_ref_max as reference
+ * \brief Read channel voltage in millivolts using \p vol_ref_min to \p vol_ref_max as reference
  * \ingroup mcp356x
  *
  * \param dev Pointer MCP356X ADC struct 
- * \param ch_id Channnel identifier
- * \param gain Current dev gain
+ * \param vol_ref_min Min reference voltage in millivolts equivalent to 0 in ADC
  * \param vol_ref_max Maximun reference voltage in millivolts equivalent to max resolution
  * \param vol_val Pointer to receive voltage value in millivolts
  * \return MCP356X_SPI_ERROR : error in coms
  *         MCP356X_ARG_ERROR : error in arguments
  *         MCP356X_OK : successful
- * \note Set default ADC data format
- *       MUX mode and MUX config according to \p ch_id
  */
-int mcp356x_read_ch_voltage(mcp356x_t* dev, uint8_t ch_id, uint8_t gain, uint16_t vol_ref_max, uint16_t* vol_val);
+int mcp356x_read_voltage(mcp356x_t* dev, uint32_t vol_ref_min, uint32_t vol_ref_max, uint32_t* vol_val);
  
 /*!
  * \brief Enable CS for start SPI coms

@@ -30,7 +30,6 @@ void dac_init(void) {
     ad56x4_cfg_t cfg;
     ad56x4_set_default_cfg(&cfg);
     ad56x4_init(&ad5664, &cfg);
-    ad56x4_sw_reset(&ad5664, AD56X4_SW_RST_FULL);
 }
 
 int main() {

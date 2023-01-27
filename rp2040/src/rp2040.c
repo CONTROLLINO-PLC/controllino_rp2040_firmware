@@ -134,9 +134,19 @@ int platform_spi_set_config(hw_spi_t* spi_hw, uint speed, uint8_t mode, uint8_t 
 }
  
 /* Write specified number of bytes to an SPI device */
-int platform_spi_write(hw_spi_t* spi_hw, const uint8_t* txdata, size_t len)
+int platform_spi_write(hw_spi_t* spi_hw, uint8_t* txdata, size_t len)
 {
-    if (spi_write_blocking((spi_inst_t*)spi_hw, txdata, len) != len)
+    size_t ret;
+    ret = spi_write_blocking((spi_inst_t*)spi_hw, txdata, len);
+    if (ret != len)
+        return PLATFORM_SPI_COM_ERROR;
+    return PLATFORM_OK;
+}
+
+/* Write and read specified number of bytes over SPI */
+int platform_spi_write_read(hw_spi_t* spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len)
+{
+    if (spi_write_read_blocking((spi_inst_t*)spi_hw, txdata, rxdata, len) != len)
         return PLATFORM_SPI_COM_ERROR;
     return PLATFORM_OK;
 }

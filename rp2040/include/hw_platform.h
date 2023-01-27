@@ -167,7 +167,7 @@ int platform_i2c_init(hw_i2c_t* i2c_hw, uint speed, int sda_pin, int scl_pin);
  *
  * \param i2c_hw Pointer to I2C interface
  * \param addr 7-bit address of device to read from
- * \param rxdata Pointer to buffer to receive data
+ * \param rxdata Pointer to data to receive
  * \param len Length of data in bytes to receive
  * \return PLATFORM_I2C_COM_ERROR : error
  *         PLATFORM_OK : successful
@@ -221,7 +221,19 @@ int platform_spi_set_config(hw_spi_t* spi_hw, uint speed, uint8_t mode, uint8_t 
  * \return PLATFORM_SPI_COM_ERROR : error
  *         PLATFORM_OK : successful
  */
-int platform_spi_write(hw_spi_t* spi_hw, const uint8_t* txdata, size_t len);
+int platform_spi_write(hw_spi_t* spi_hw, uint8_t* txdata, size_t len);
+ 
+/**
+ * \brief Write and read specified number of bytes over SPI
+ *
+ * \param spi_hw Pointer to SPI interface
+ * \param txdata Pointer to data to send
+ * \param rxdata Pointer to data to receive
+ * \param len Length of data in bytes to send
+ * \return PLATFORM_SPI_COM_ERROR : error
+ *         PLATFORM_OK : successful
+ */
+int platform_spi_write_read(hw_spi_t* spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len);
 
 #ifdef __cplusplus
 }

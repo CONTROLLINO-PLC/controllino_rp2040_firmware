@@ -151,24 +151,6 @@ void ad56x4_set_default_cfg(ad56x4_cfg_t* cfg);
 int ad56x4_init(ad56x4_t* dev, ad56x4_cfg_t* cfg);
  
 /*!
- * \brief Check command bits
- *
- * \param cmd Comand to check
- * \return AD56X4_ARG_ERROR : error
- *         AD56X4_OK : successful
- */
-int ad56x4_check_cmd(uint8_t cmd);
- 
-/**
- *\brief Check address bits
- *
- * \param addr Channel address to check
- * \return AD56X4_ARG_ERROR : error
- *         AD56X4_OK : successful
- */
-int ad56x4_check_addr(uint8_t addr);
- 
-/*!
  * \brief Generic write data function.
  * \ingroup ad56x4
  *
