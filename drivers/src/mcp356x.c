@@ -102,7 +102,7 @@ void mcp356x_set_default_cfg(mcp356x_cfg_t* cfg)
     cfg->int_pin = MCP356X_INT;
     cfg->config_0_reg = MCP356X_CFG_0_VREF_INT | MCP356X_CFG_0_CLK_INT_NO_OUT | MCP356X_CFG_0_CS_SEL_NONE | MCP356X_CFG_0_MODE_CONV;
     cfg->config_1_reg = MCP356X_CFG_1_PRE_1 | MCP356X_CFG_1_OSR_4096;
-    cfg->config_2_reg = MCP356X_CFG_2_BOOST_X_1 | MCP356X_CFG_2_GAIN_X_1 | MCP356X_CFG_2_AZ_MUX_DIS | MCP356X_CFG_2_AZ_VREF_DIS;
+    cfg->config_2_reg = MCP356X_CFG_2_BOOST_X_1 | MCP356X_CFG_2_GAIN_X_2 | MCP356X_CFG_2_AZ_MUX_DIS | MCP356X_CFG_2_AZ_VREF_DIS;
     cfg->config_3_reg = MCP356X_CFG_3_CONV_MODE_CONT | MCP356X_CFG_3_DATA_FORMAT_DEF | MCP356X_CFG_3_CRC_COM_DIS | MCP356X_CFG_3_CRC_GAIN_CAL_DIS;
     cfg->irq_reg = MCP356X_IRQ_MODE_IRQ | MCP356X_IRQ_MODE_LOGIC_HIGH | MCP356X_IRQ_FASTCMD_EN | MCP356X_IRQ_STP_EN;
     cfg->mux_reg = MCP356X_MUX_VIN_POS_CH0 | MCP356X_MUX_VIN_NEG_VREF_EXT_MINUS;
@@ -130,6 +130,7 @@ int mcp356x_init(mcp356x_t* dev, mcp356x_cfg_t* cfg)
     dev->int_pin = cfg->int_pin;
     // Configure initial registers
     uint8_t txdata[12];
+    memset(txdata, 0x00, sizeof(txdata));
     if (mcp356x_write_fast_cmd(dev, MCP356X_FAST_CMD_DEV_FULL_RESET) != MCP356X_OK)
         return MCP356X_INIT_ERROR;
     txdata[0] = cfg->config_0_reg;
@@ -162,12 +163,14 @@ uint8_t mcp356x_check_int(mcp356x_t* dev)
 /* Generic SPI data transfer */
 int mcp356x_generic_transfer(mcp356x_t* dev, uint8_t fcmd_addr, uint8_t r_w_cmd, uint8_t* txdata, uint8_t* rxdata, uint8_t len)
 {
-    // Check arguments
-    if ((mcp356x_check_reg_addr(fcmd_addr) != MCP356X_OK) &&
-        (mcp356x_check_fast_cmd(fcmd_addr) != MCP356X_OK))
-        return MCP356X_ARG_ERROR;
     uint8_t tx_buff[len + 1];
     uint8_t rx_buff[len + 1];
+    memset(tx_buff, 0x00, sizeof(tx_buff));
+    // Check arguments
+    if (((mcp356x_check_reg_addr(fcmd_addr) != MCP356X_OK) &&
+        (mcp356x_check_fast_cmd(fcmd_addr) != MCP356X_OK)) ||
+        (r_w_cmd > MCP356X_CMD_INC_READ))
+        return MCP356X_ARG_ERROR;
     // Set first command byte
     tx_buff[0] = (((uint8_t)MCP356X_DEVICE_ADDR << 6) | (fcmd_addr << 2)) | r_w_cmd;
     // Copy data to transmit if necessary
@@ -209,7 +212,7 @@ int mcp356x_sread(mcp356x_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen)
 /* Read incremental from registers */
 int mcp356x_iread(mcp356x_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen)
 {
-    return mcp356x_generic_transfer(dev, reg, MCP356X_CMD_STAT_READ, NULL, rxdata, rxlen);
+    return mcp356x_generic_transfer(dev, reg, MCP356X_CMD_INC_READ, NULL, rxdata, rxlen);
 }
  
 /* Read ADC data in default format */
@@ -305,7 +308,7 @@ int mcp356x_read_voltage(mcp356x_t* dev, uint32_t vol_ref_min, uint32_t vol_ref_
         break;
     }
     // Calulate voltage
-    *vol_val = (int)((float)((vol_ref_max - vol_ref_min) * adc_data) / (float)max_resolution);
+    *vol_val = (int)(((float)(vol_ref_max - vol_ref_min) * (float)adc_data) / (float)max_resolution);
     return MCP356X_OK;
 }
 
