@@ -15,16 +15,8 @@
  */
 int ad56x4_check_cmd(uint8_t cmd)
 {
-    if (cmd != AD56X4_CMD_WRITE_INPUT_REGISTER &&
-        cmd != AD56X4_CMD_UPDATE_DAC_REGISTER &&
-        cmd != AD56X4_CMD_WRITE_INPUT_REGISTER_UPDATE_ALL &&
-        cmd != AD56X4_CMD_WRITE_UPDATE_CH &&
-        cmd != AD56X4_CMD_POWER_UPDOWN &&
-        cmd != AD56X4_CMD_SW_RESET &&
-        cmd != AD56X4_CMD_SET_LDAC)
-    {
+    if (cmd > AD56X4_CMD_SET_LDAC)
         return AD56X4_ARG_ERROR;
-    }
     return AD56X4_OK;
 }
  
@@ -57,13 +49,8 @@ int ad56x4_check_addr(uint8_t addr)
  */
 int ad56x4_check_pwr_mode(uint8_t pwr_mode)
 {
-    if (pwr_mode != AD56X4_PWR_MODE_NORMAL &&
-        pwr_mode != AD56X4_PWR_MODE_POWERDOWN_1K &&
-        pwr_mode != AD56X4_PWR_MODE_POWERDOWN_100K &&
-        pwr_mode != AD56X4_PWR_MODE_POWERDOWN_TRISTATE)
-    {
+    if (pwr_mode > AD56X4_PWR_MODE_POWERDOWN_TRISTATE)
         return AD56X4_ARG_ERROR;
-    }
     return AD56X4_OK;
 }
  
@@ -96,11 +83,8 @@ int ad56x4_check_ch_sel(uint8_t ch_sel)
  */
 int ad56x4_check_rst_mode(uint8_t rst_mode)
 {
-    if (rst_mode != AD56X4_SW_RST_PARTIAL &&
-        rst_mode != AD56X4_SW_RST_FULL)
-    {
+    if (rst_mode > AD56X4_SW_RST_FULL)
         return AD56X4_ARG_ERROR;
-    }
     return AD56X4_OK;
 }
 

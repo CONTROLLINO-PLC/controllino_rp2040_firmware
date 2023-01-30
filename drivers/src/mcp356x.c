@@ -16,13 +16,8 @@
   */
 int mcp356x_check_fast_cmd(uint8_t fast_cmd)
 {
-    if (fast_cmd != MCP356X_FAST_CMD_ADC_CONV_START &&
-        fast_cmd != MCP356X_FAST_CMD_ADC_STANDBY_MODE &&
-        fast_cmd != MCP356X_FAST_CMD_ADC_SHUTDOWN_MODE &&
-        fast_cmd != MCP356X_FAST_CMD_DEV_FULL_RESET)
-    {
+    if ((fast_cmd < MCP356X_FAST_CMD_ADC_CONV_START) || (fast_cmd > MCP356X_FAST_CMD_DEV_FULL_RESET))
         return MCP356X_ARG_ERROR;
-    }
     return MCP356X_OK;
 }
  
@@ -35,24 +30,8 @@ int mcp356x_check_fast_cmd(uint8_t fast_cmd)
  */
 int mcp356x_check_reg_addr(uint8_t reg)
 {
-    if (reg != MCP356X_REG_ADC_DATA &&
-        reg != MCP356X_REG_CFG_0 &&
-        reg != MCP356X_REG_CFG_1 &&
-        reg != MCP356X_REG_CFG_2 &&
-        reg != MCP356X_REG_CFG_3 &&
-        reg != MCP356X_REG_IRQ &&
-        reg != MCP356X_REG_MUX &&
-        reg != MCP356X_REG_SCAN &&
-        reg != MCP356X_REG_TIMER &&
-        reg != MCP356X_REG_OFFSET_CAL &&
-        reg != MCP356X_REG_GAIN_CAL &&
-        reg != MCP356X_RSV_REG_W_A &&
-        reg != MCP356X_REG_LOCK &&
-        reg != MCP356X_RSV_REG &&
-        reg != MCP356X_REG_CRC_CFG)
-    {
+    if (reg > MCP356X_REG_CRC_CFG)
         return MCP356X_ARG_ERROR;
-    }
     return MCP356X_OK;
 }
  
@@ -65,25 +44,8 @@ int mcp356x_check_reg_addr(uint8_t reg)
  */
 int mcp356x_check_ch_id(uint8_t ch_id)
 {
-    if (ch_id != MCP356X_CH_OFFSET &&
-        ch_id != MCP356X_CH_VREF &&
-        ch_id != MCP356X_CH_AVDD &&
-        ch_id != MCP356X_CH_TEMP &&
-        ch_id != MCP356X_CH_DIFF_D &&
-        ch_id != MCP356X_CH_DIFF_C &&
-        ch_id != MCP356X_CH_DIFF_B &&
-        ch_id != MCP356X_CH_DIFF_A &&
-        ch_id != MCP356X_CH_CH7 &&
-        ch_id != MCP356X_CH_CH6 &&
-        ch_id != MCP356X_CH_CH5 &&
-        ch_id != MCP356X_CH_CH4 &&
-        ch_id != MCP356X_CH_CH3 &&
-        ch_id != MCP356X_CH_CH2 &&
-        ch_id != MCP356X_CH_CH1 &&
-        ch_id != MCP356X_CH_CH0)
-    {
+    if (ch_id > MCP356X_CH_OFFSET)
         return MCP356X_ARG_ERROR;
-    }
     return MCP356X_OK;
 }
  
@@ -163,31 +125,31 @@ uint8_t mcp356x_check_int(mcp356x_t* dev)
 /* Generic SPI data transfer */
 int mcp356x_generic_transfer(mcp356x_t* dev, uint8_t fcmd_addr, uint8_t r_w_cmd, uint8_t* txdata, uint8_t* rxdata, uint8_t len)
 {
-    uint8_t tx_buff[len + 1];
-    uint8_t rx_buff[len + 1];
-    memset(tx_buff, 0x00, sizeof(tx_buff));
+    uint8_t tx_buf[len + 1];
+    uint8_t rx_buf[len + 1];
+    memset(tx_buf, 0x00, sizeof(tx_buf));
     // Check arguments
     if (((mcp356x_check_reg_addr(fcmd_addr) != MCP356X_OK) &&
         (mcp356x_check_fast_cmd(fcmd_addr) != MCP356X_OK)) ||
         (r_w_cmd > MCP356X_CMD_INC_READ))
         return MCP356X_ARG_ERROR;
     // Set first command byte
-    tx_buff[0] = (((uint8_t)MCP356X_DEVICE_ADDR << 6) | (fcmd_addr << 2)) | r_w_cmd;
+    tx_buf[0] = (((uint8_t)MCP356X_DEVICE_ADDR << 6) | (fcmd_addr << 2)) | r_w_cmd;
     // Copy data to transmit if necessary
     if (txdata != NULL)
-        memcpy(&tx_buff[1], txdata, len);
+        memcpy(&tx_buf[1], txdata, len);
     platform_spi_set_config(dev->spi, dev->spi_speed, dev->spi_mode, dev->spi_bit_order);
     mcp356x_cs_select(dev);
     platform_sleep_us(600);
-    if (platform_spi_write_read(dev->spi, tx_buff, rx_buff, sizeof(rx_buff)) != MCP356X_OK)
+    if (platform_spi_write_read(dev->spi, tx_buf, rx_buf, sizeof(rx_buf)) != MCP356X_OK)
         return MCP356X_SPI_ERROR;
     mcp356x_cs_deselect(dev);
     // Get status from first byte of received data
     // Pending analyce status byte
-    dev->status = rx_buff[0];
+    dev->status = rx_buf[0];
     // Copy received data if necessary
     if (rxdata != NULL)
-        memcpy(rxdata, &rx_buff[1], len);
+        memcpy(rxdata, &rx_buf[1], len);
     return MCP356X_OK;
 }
  
