@@ -27,12 +27,12 @@ extern "C" {
  * \brief Error codes
  * \ingroup ad56x4
  */
-enum ad56x4_error_code {
+typedef enum {
     AD56X4_OK =         PLATFORM_OK,
     AD56X4_ARG_ERROR =  PLATFORM_ARGUMENT_ERROR,
     AD56X4_INIT_ERROR = PLATFORM_SPI_INIT_ERROR,
     AD56X4_SPI_ERROR =  PLATFORM_SPI_COM_ERROR
-};
+} ad56x4_error_code_t;
  
 /**
  * \brief Commands bits DB19-DB21
@@ -148,7 +148,7 @@ void ad56x4_set_default_cfg(ad56x4_cfg_t* cfg);
  * \return AD56X4_INIT_ERROR : error
  *         AD56X4_OK : successful
  */
-int ad56x4_init(ad56x4_t* dev, ad56x4_cfg_t* cfg);
+ad56x4_error_code_t ad56x4_init(ad56x4_t* dev, ad56x4_cfg_t* cfg);
  
 /*!
  * \brief Generic write data function.
@@ -162,7 +162,7 @@ int ad56x4_init(ad56x4_t* dev, ad56x4_cfg_t* cfg);
  *         AD56X4_ARG_ERROR : error in arguments
  *         AD56X4_OK : successful
  */
-int ad56x4_generic_write(ad56x4_t* dev, uint8_t cmd, uint8_t ch_addr, uint16_t data);
+ad56x4_error_code_t ad56x4_generic_write(ad56x4_t* dev, uint8_t cmd, uint8_t ch_addr, uint16_t data);
  
 /*!
  * \brief Write to input register n AD56X4_CMD_WRITE_INPUT_REGISTER
@@ -175,7 +175,7 @@ int ad56x4_generic_write(ad56x4_t* dev, uint8_t cmd, uint8_t ch_addr, uint16_t d
  *         AD56X4_ARG_ERROR : error in arguments
  *         AD56X4_OK : successful
  */
-int ad56x4_write_input_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_t data);
+ad56x4_error_code_t ad56x4_write_input_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_t data);
  
 /*!
  * \brief Update DAC register n AD56X4_CMD_UPDATE_DAC_REGISTER
@@ -187,7 +187,7 @@ int ad56x4_write_input_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_t data);
  *         AD56X4_ARG_ERROR : error in arguments
  *         AD56X4_OK : successful
  */
-int ad56x4_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr);
+ad56x4_error_code_t ad56x4_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr);
  
 /*!
  * \brief Write to input register n, update all (software LDAC) AD56X4_CMD_WRITE_INPUT_REGISTER_UPDATE_ALL
@@ -199,7 +199,7 @@ int ad56x4_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr);
  *         AD56X4_ARG_ERROR : error in arguments
  *         AD56X4_OK : successfull
  */
-int ad56x4_write_input_reg_update_all_dev(ad56x4_t* dev, uint8_t ch_addr, uint16_t data);
+ad56x4_error_code_t ad56x4_write_input_reg_update_all_dev(ad56x4_t* dev, uint8_t ch_addr, uint16_t data);
  
 /*!
  * \brief Write to and update DAC channel n AD56X4_CMD_WRITE_UPDATE_CH
@@ -212,7 +212,7 @@ int ad56x4_write_input_reg_update_all_dev(ad56x4_t* dev, uint8_t ch_addr, uint16
  *         AD56X4_ARG_ERROR : error in arguments
  *         AD56X4_OK : successful
  */
-int ad56x4_write_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_t data);
+ad56x4_error_code_t ad56x4_write_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_t data);
  
 /*!
  * \brief Set power mode AD56X4_CMD_POWER_UPDOWN
@@ -225,7 +225,7 @@ int ad56x4_write_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_t data);
  *         AD56X4_ARG_ERROR : error in arguments
  *         AD56X4_OK : successful
  */
-int ad56x4_set_pwr(ad56x4_t* dev, uint8_t pwr_mode, uint8_t ch_sel);
+ad56x4_error_code_t ad56x4_set_pwr(ad56x4_t* dev, uint8_t pwr_mode, uint8_t ch_sel);
  
 /*!
  * \brief Software reset AD56X4_CMD_SW_RESET
@@ -237,7 +237,7 @@ int ad56x4_set_pwr(ad56x4_t* dev, uint8_t pwr_mode, uint8_t ch_sel);
  *         AD56X4_ARG_ERROR : error in arguments
  *         AD56X4_OK : successful
  */
-int ad56x4_sw_reset(ad56x4_t* dev, uint8_t rst_mode);
+ad56x4_error_code_t ad56x4_sw_reset(ad56x4_t* dev, uint8_t rst_mode);
  
 /*!
  * \brief Set channel LDAC mode AD56X4_CMD_SET_LDAC
@@ -250,7 +250,7 @@ int ad56x4_sw_reset(ad56x4_t* dev, uint8_t rst_mode);
  *         AD56X4_OK : successful
  * \note Value 1 in channel bit means LDAC transparent, 0 means LDAC normal
  */
-int ad56x4_set_ldev(ad56x4_t* dev, uint8_t ch_ldev_mode);
+ad56x4_error_code_t ad56x4_set_ldev(ad56x4_t* dev, uint8_t ch_ldev_mode);
  
 /*!
  * \brief Set the voltage values of the specified channel
@@ -264,7 +264,7 @@ int ad56x4_set_ldev(ad56x4_t* dev, uint8_t ch_ldev_mode);
  *         AD56X4_ARG_ERROR : error in arguments
  *         AD56X4_OK : successful
  */
-int ad56x4_set_ch_voltage(ad56x4_t* dev, uint8_t ch_addr, uint16_t vol_val, uint16_t vol_ref_max);
+ad56x4_error_code_t ad56x4_set_ch_voltage(ad56x4_t* dev, uint8_t ch_addr, uint16_t vol_val, uint16_t vol_ref_max);
  
 /*!
  * \brief Enable CS for start SPI coms

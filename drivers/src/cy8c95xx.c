@@ -18,7 +18,7 @@ static uint8_t eeprom_slave_addr;
  * \return CY8C95XX_ARG_ERROR : error
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_check_reg_addr(uint8_t reg)
+cy8c95xx_error_code_t cy8c95xx_check_reg_addr(uint8_t reg)
 {
     if (reg > CY8C95XX_REG_CMD)
         return CY8C95XX_ARG_ERROR;
@@ -37,7 +37,7 @@ void cy8c95xx_set_default_cfg(cy8c95xx_cfg_t* cfg)
 }
  
 /* Initializes hardware according to configuration */
-int cy8c95xx_init(cy8c95xx_t* dev, cy8c95xx_cfg_t* cfg)
+cy8c95xx_error_code_t cy8c95xx_init(cy8c95xx_t* dev, cy8c95xx_cfg_t* cfg)
 {
     // Init hardware I2C interface
     if (platform_i2c_init(cfg->i2c, cfg->i2c_speed, cfg->sda_pin, cfg->scl_pin) != CY8C95XX_OK)
@@ -74,7 +74,7 @@ uint8_t cy8c95xx_check_int(cy8c95xx_t* dev)
 }
  
 /* Writes data to register */
-int cy8c95xx_generic_write(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen)
+cy8c95xx_error_code_t cy8c95xx_generic_write(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen)
 {
     uint8_t tx_buf[txlen + 1];
     if (cy8c95xx_check_reg_addr(reg) != CY8C95XX_OK)
@@ -85,7 +85,7 @@ int cy8c95xx_generic_write(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8_
 }
  
 /* Reads data from register */
-int cy8c95xx_generic_read(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen)
+cy8c95xx_error_code_t cy8c95xx_generic_read(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen)
 {
     if (cy8c95xx_check_reg_addr(reg) != CY8C95XX_OK)
         return CY8C95XX_ARG_ERROR;
@@ -95,42 +95,42 @@ int cy8c95xx_generic_read(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t
 }
  
 /* Write single byte of data to register */
-int cy8c95xx_write_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t txdata)
+cy8c95xx_error_code_t cy8c95xx_write_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t txdata)
 {
     dev->slave_addr = port_slave_addr;
     return cy8c95xx_generic_write(dev, reg, &txdata, 1);
 }
  
 /* Write single byte of data to register */
-int cy8c95xx_read_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata)
+cy8c95xx_error_code_t cy8c95xx_read_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata)
 {
     dev->slave_addr = port_slave_addr;
     return cy8c95xx_generic_read(dev, reg, rxdata, 1);
 }
  
 /* Writes number of bytes into register */
-int cy8c95xx_write_port_exp(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen)
+cy8c95xx_error_code_t cy8c95xx_write_port_exp(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen)
 {
     dev->slave_addr = port_slave_addr;
     return cy8c95xx_generic_write(dev, reg, txdata, txlen);
 }
  
 /* Reads number of bytes from register */
-int cy8c95xx_read_port_exp(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen)
+cy8c95xx_error_code_t cy8c95xx_read_port_exp(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen)
 {
     dev->slave_addr = port_slave_addr;
     return cy8c95xx_generic_read(dev, reg, rxdata, rxlen);
 }
  
 /* Send EEPROM comand */
-int cy8c95xx_send_eeprom_cmd(cy8c95xx_t* dev, uint8_t cmd)
+cy8c95xx_error_code_t cy8c95xx_send_eeprom_cmd(cy8c95xx_t* dev, uint8_t cmd)
 {
     dev->slave_addr = port_slave_addr;
     return cy8c95xx_generic_write(dev, CY8C95XX_REG_CMD, &cmd, 1);
 }
  
 /* Writes number of bytes into EEPROM */
-int cy8c95xx_write_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* txdata, uint8_t txlen)
+cy8c95xx_error_code_t cy8c95xx_write_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* txdata, uint8_t txlen)
 {
     uint8_t tx_buf[txlen + 2];
     dev->slave_addr = eeprom_slave_addr;
@@ -141,7 +141,7 @@ int cy8c95xx_write_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* txdata, uint8_
 }
  
 /* Reads number of bytes from EEPROM */
-int cy8c95xx_read_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* rxdata, uint8_t rxlen)
+cy8c95xx_error_code_t cy8c95xx_read_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* rxdata, uint8_t rxlen)
 {
     uint8_t tx_buf[2];
     dev->slave_addr = eeprom_slave_addr;
@@ -153,7 +153,7 @@ int cy8c95xx_read_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* rxdata, uint8_t
 }
  
 /* Read state of a single bit from register */
-int cy8c95xx_read_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t* state)
+cy8c95xx_error_code_t cy8c95xx_read_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t* state)
 {
     uint8_t reg_byte;
     uint8_t ret;
@@ -165,7 +165,7 @@ int cy8c95xx_read_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t* st
 }
  
 /* Set or clear specific bit in register */
-int cy8c95xx_write_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t val)
+cy8c95xx_error_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t val)
 {
     uint8_t reg_byte;
     uint8_t ret;
@@ -177,7 +177,7 @@ int cy8c95xx_write_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t va
 }
  
 /* Get a single input pin logic level */
-int cy8c95xx_read_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t inv, uint8_t* state)
+cy8c95xx_error_code_t cy8c95xx_read_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t inv, uint8_t* state)
 {
     uint8_t ret;
     if (inv == 0x01) {
@@ -198,7 +198,7 @@ int cy8c95xx_read_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t inv, uint8_t* state)
 }
  
 /* Get all pin logic levels from port */
-int cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t inv, uint8_t* port_state)
+cy8c95xx_error_code_t cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t inv, uint8_t* port_state)
 {
     uint8_t ret;
     if (inv == 0x01) {
@@ -219,7 +219,7 @@ int cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t inv, uint8_t* port
 }
  
 /* Get a single output pin logic level*/
-int cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, uint8_t pin, uint8_t* state)
+cy8c95xx_error_code_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, uint8_t pin, uint8_t* state)
 {
     uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
@@ -232,7 +232,7 @@ int cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, uint8_t pin, uint8_t* state)
 }
  
 /* Get all output pin logic levels from port */
-int cy8c95xx_get_port_out_lvl(cy8c95xx_t* dev, uint8_t port, uint8_t* port_state)
+cy8c95xx_error_code_t cy8c95xx_get_port_out_lvl(cy8c95xx_t* dev, uint8_t port, uint8_t* port_state)
 {
     uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, port);
@@ -245,7 +245,7 @@ int cy8c95xx_get_port_out_lvl(cy8c95xx_t* dev, uint8_t port, uint8_t* port_state
 }
  
 /* Set a single output pin logic level */
-int cy8c95xx_write_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t val)
+cy8c95xx_error_code_t cy8c95xx_write_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t val)
 {
     uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
@@ -258,7 +258,7 @@ int cy8c95xx_write_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t val)
 }
  
 /* Set all output pins logic levels in a port */
-int cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t port_val)
+cy8c95xx_error_code_t cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t port_val)
 {
     uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, port);
@@ -271,7 +271,7 @@ int cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t port_val)
 }
  
 /* Enable or disable pwm output on pin */
-int cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t pwm_en)
+cy8c95xx_error_code_t cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t pwm_en)
 {
     uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
@@ -290,7 +290,7 @@ int cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t pwm_en)
 }
  
 /* Configure pwm output */
-int cy8c95xx_set_pwm_cfg(cy8c95xx_t* dev, cy8c95xx_pwm_cfg_t* pwm_cfg, float* duty_cyc, float* freq)
+cy8c95xx_error_code_t cy8c95xx_set_pwm_cfg(cy8c95xx_t* dev, cy8c95xx_pwm_cfg_t* pwm_cfg, float* duty_cyc, float* freq)
 {
     uint8_t tx_buf[5];
     uint8_t ret;
@@ -318,7 +318,7 @@ int cy8c95xx_set_pwm_cfg(cy8c95xx_t* dev, cy8c95xx_pwm_cfg_t* pwm_cfg, float* du
 }
  
 /* Configures EEPROM enable register */
-int cy8c95xx_eeprom_enable(cy8c95xx_t* dev, uint8_t cmd)
+cy8c95xx_error_code_t cy8c95xx_eeprom_enable(cy8c95xx_t* dev, uint8_t cmd)
 {
     uint8_t tx_buf[4];
     tx_buf[0] = 0x43;

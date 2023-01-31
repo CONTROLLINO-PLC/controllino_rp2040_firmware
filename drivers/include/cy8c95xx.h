@@ -27,12 +27,12 @@ extern "C" {
  * \brief Error codes
  * \ingroup cy8c95xx
  */
-enum CY8C95XX_ERROR_CODE {
+typedef enum  {
     CY8C95XX_OK =         PLATFORM_OK,
     CY8C95XX_ARG_ERROR =  PLATFORM_ARGUMENT_ERROR,
     CY8C95XX_INIT_ERROR = PLATFORM_I2C_INIT_ERROR,
     CY8C95XX_I2C_ERROR =  PLATFORM_I2C_COM_ERROR
-};
+} cy8c95xx_error_code_t;
  
 /**
  * \brief Base addresses for comunications
@@ -381,7 +381,7 @@ void cy8c95xx_set_default_cfg(cy8c95xx_cfg_t* cfg);
  * \return CY8C95XX_INIT_ERROR : error
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_init(cy8c95xx_t *dev, cy8c95xx_cfg_t *cfg);
+cy8c95xx_error_code_t cy8c95xx_init(cy8c95xx_t *dev, cy8c95xx_cfg_t *cfg);
  
 /*!
  * \brief Reset port expander using rst_pin
@@ -414,7 +414,7 @@ uint8_t cy8c95xx_check_int(cy8c95xx_t* dev);
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_generic_write(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen);
+cy8c95xx_error_code_t cy8c95xx_generic_write(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen);
  
 /*!
  * \brief Reads data from register
@@ -428,7 +428,7 @@ int cy8c95xx_generic_write(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8_
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_generic_read(cy8c95xx_t *dev, uint8_t reg, uint8_t *rxdata, uint8_t rxlen);
+cy8c95xx_error_code_t cy8c95xx_generic_read(cy8c95xx_t *dev, uint8_t reg, uint8_t *rxdata, uint8_t rxlen);
  
 /*!
  * \brief Write single byte of data to register
@@ -441,7 +441,7 @@ int cy8c95xx_generic_read(cy8c95xx_t *dev, uint8_t reg, uint8_t *rxdata, uint8_t
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_write_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t txdata);
+cy8c95xx_error_code_t cy8c95xx_write_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t txdata);
  
 /*!
  * \brief Read single byte of data fromregister
@@ -454,7 +454,7 @@ int cy8c95xx_write_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t txdata);
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_read_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata);
+cy8c95xx_error_code_t cy8c95xx_read_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata);
  
 /*!
  * \brief Writes number of bytes into register
@@ -468,7 +468,7 @@ int cy8c95xx_read_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata);
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_write_port_exp(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen);
+cy8c95xx_error_code_t cy8c95xx_write_port_exp(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen);
  
 /*!
  * \brief Reads number of bytes from register
@@ -482,7 +482,7 @@ int cy8c95xx_write_port_exp(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_read_port_exp(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen);
+cy8c95xx_error_code_t cy8c95xx_read_port_exp(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen);
  
 /*!
  * \brief Send EEPROM comand
@@ -494,7 +494,7 @@ int cy8c95xx_read_port_exp(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata, uint8_
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_send_eeprom_cmd(cy8c95xx_t *dev, uint8_t cmd);
+cy8c95xx_error_code_t cy8c95xx_send_eeprom_cmd(cy8c95xx_t *dev, uint8_t cmd);
  
 /*!
  * \brief Writes number of bytes into EEPROM
@@ -507,7 +507,7 @@ int cy8c95xx_send_eeprom_cmd(cy8c95xx_t *dev, uint8_t cmd);
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_write_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* txdata, uint8_t txlen);
+cy8c95xx_error_code_t cy8c95xx_write_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* txdata, uint8_t txlen);
  
 /*!
  * \brief Reads number of bytes from EEPROM
@@ -521,7 +521,7 @@ int cy8c95xx_write_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* txdata, uint8_
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_read_eeprom(cy8c95xx_t *dev, uint16_t mem, uint8_t *rxdata, uint8_t rxlen);
+cy8c95xx_error_code_t cy8c95xx_read_eeprom(cy8c95xx_t *dev, uint16_t mem, uint8_t *rxdata, uint8_t rxlen);
  
 /*!
  * \brief Read state of a single bit from register
@@ -535,7 +535,7 @@ int cy8c95xx_read_eeprom(cy8c95xx_t *dev, uint16_t mem, uint8_t *rxdata, uint8_t
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_read_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t* state);
+cy8c95xx_error_code_t cy8c95xx_read_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t* state);
  
 /*!
  * \brief Set or clear specific bit in register
@@ -549,7 +549,7 @@ int cy8c95xx_read_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t* st
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_write_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t val);
+cy8c95xx_error_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t val);
  
 /*!
  * \brief Get a single input pin logic level
@@ -563,7 +563,7 @@ int cy8c95xx_write_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t va
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_read_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t inv, uint8_t* state);
+cy8c95xx_error_code_t cy8c95xx_read_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t inv, uint8_t* state);
  
 /*!
  * \brief Get all input pin logic levels from port
@@ -577,7 +577,7 @@ int cy8c95xx_read_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t inv, uint8_t* state)
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t inv, uint8_t* port_state);
+cy8c95xx_error_code_t cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t inv, uint8_t* port_state);
  
 /*!
  * \brief Get a single output pin logic level
@@ -590,7 +590,7 @@ int cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t inv, uint8_t* port
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, uint8_t pin, uint8_t* state);
+cy8c95xx_error_code_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, uint8_t pin, uint8_t* state);
  
 /*!
  * \brief Get all output pin logic levels from port
@@ -603,7 +603,7 @@ int cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, uint8_t pin, uint8_t* state);
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_get_port_out_lvl(cy8c95xx_t *dev, uint8_t port, uint8_t* port_state);
+cy8c95xx_error_code_t cy8c95xx_get_port_out_lvl(cy8c95xx_t *dev, uint8_t port, uint8_t* port_state);
  
 /*!
  * \brief Set a single output pin logic level
@@ -616,7 +616,7 @@ int cy8c95xx_get_port_out_lvl(cy8c95xx_t *dev, uint8_t port, uint8_t* port_state
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_write_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t val);
+cy8c95xx_error_code_t cy8c95xx_write_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t val);
  
 /*!
  * \brief Set all output pins logic levels in a port
@@ -628,7 +628,7 @@ int cy8c95xx_write_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t val);
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t port_val);
+cy8c95xx_error_code_t cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t port_val);
  
 /*!
  * \brief Enable or disable pwm output on pin
@@ -641,7 +641,7 @@ int cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t port_val);
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t pwm_en);
+cy8c95xx_error_code_t cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t pwm_en);
  
 /*!
  * \brief Configure pwm output
@@ -655,7 +655,7 @@ int cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t pwm_en);
  *         CY8C95XX_ARG_ERROR : error in arguments
  *         CY8C95XX_OK : successful
  */
-int cy8c95xx_set_pwm_cfg(cy8c95xx_t *dev, cy8c95xx_pwm_cfg_t* pwm_cfg, float *duty_cyc, float *freq);
+cy8c95xx_error_code_t cy8c95xx_set_pwm_cfg(cy8c95xx_t *dev, cy8c95xx_pwm_cfg_t* pwm_cfg, float *duty_cyc, float *freq);
  
 /*!
  * \brief Configures EEPROM enable register
@@ -668,7 +668,7 @@ int cy8c95xx_set_pwm_cfg(cy8c95xx_t *dev, cy8c95xx_pwm_cfg_t* pwm_cfg, float *du
  *         CY8C95XX_OK : successful
  * \note Writes to dev register differ from other registers, see datasheet
  */
-int cy8c95xx_eeprom_enable(cy8c95xx_t *dev, uint8_t cmd);
+cy8c95xx_error_code_t cy8c95xx_eeprom_enable(cy8c95xx_t *dev, uint8_t cmd);
  
 #ifdef __cplusplus
 }

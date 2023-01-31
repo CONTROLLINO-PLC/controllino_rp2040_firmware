@@ -32,7 +32,7 @@ typedef enum {
     WSEN_TEMP_ARG_ERROR =   PLATFORM_ARGUMENT_ERROR,
     WSEN_TEMP_INIT_ERROR =  PLATFORM_I2C_INIT_ERROR,
     WSEN_TEMP_I2C_ERROR =   PLATFORM_I2C_COM_ERROR
-} wsen_error_code_t;
+} wsen_temp_error_code_t;
  
 /**
  * \brief Posible I2C Slave addresses
@@ -179,7 +179,7 @@ void wsen_temp_set_default_cfg(wsen_temp_cfg_t* cfg);
  * \return WSEN_TEMP_INIT_ERROR : error
  *         WSEN_TEMP_OK : successful
  */
-wsen_error_code_t wsen_temp_init(wsen_temp_t* dev, wsen_temp_cfg_t* cfg);
+wsen_temp_error_code_t wsen_temp_init(wsen_temp_t* dev, wsen_temp_cfg_t* cfg);
  
 /*!
  * \brief Writes data to registers
@@ -193,7 +193,7 @@ wsen_error_code_t wsen_temp_init(wsen_temp_t* dev, wsen_temp_cfg_t* cfg);
  *         WSEN_TEMP_ARG_ERROR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_error_code_t wsen_temp_generic_write(wsen_temp_t* dev, wsen_temp_reg_t reg, uint8_t* txdata, uint8_t txlen);
+wsen_temp_error_code_t wsen_temp_generic_write(wsen_temp_t* dev, wsen_temp_reg_t reg, uint8_t* txdata, uint8_t txlen);
  
 /*!
  * \brief Reads data from registers
@@ -207,7 +207,7 @@ wsen_error_code_t wsen_temp_generic_write(wsen_temp_t* dev, wsen_temp_reg_t reg,
  *         WSEN_TEMP_ARG_ERROR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_error_code_t wsen_temp_generic_read(wsen_temp_t* dev, wsen_temp_reg_t reg, uint8_t* rxdata, uint8_t rxlen);
+wsen_temp_error_code_t wsen_temp_generic_read(wsen_temp_t* dev, wsen_temp_reg_t reg, uint8_t* rxdata, uint8_t rxlen);
  
 /*!
  * \brief Read the device id
@@ -219,7 +219,7 @@ wsen_error_code_t wsen_temp_generic_read(wsen_temp_t* dev, wsen_temp_reg_t reg, 
  *         WSEN_TEMP_ARG_ERROR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_error_code_t wsen_temp_get_id(wsen_temp_t* dev, uint8_t* id);
+wsen_temp_error_code_t wsen_temp_get_id(wsen_temp_t* dev, uint8_t* id);
  
 /*!
  * \brief Software reset
@@ -230,7 +230,7 @@ wsen_error_code_t wsen_temp_get_id(wsen_temp_t* dev, uint8_t* id);
  *         WSEN_TEMP_ARG_ERROR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_error_code_t wsen_temp_sw_rst(wsen_temp_t* dev);
+wsen_temp_error_code_t wsen_temp_sw_rst(wsen_temp_t* dev);
  
 /*!
  * \brief Set CONTROL register settings
@@ -242,7 +242,7 @@ wsen_error_code_t wsen_temp_sw_rst(wsen_temp_t* dev);
  *         WSEN_TEMP_ARG_ERROR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_error_code_t wsen_temp_set_ctrl(wsen_temp_t* dev, wsen_temp_ctrl_t* ctrl);
+wsen_temp_error_code_t wsen_temp_set_ctrl(wsen_temp_t* dev, wsen_temp_ctrl_t* ctrl);
  
 /*!
  * \brief Get CONTROL register current state
@@ -254,7 +254,7 @@ wsen_error_code_t wsen_temp_set_ctrl(wsen_temp_t* dev, wsen_temp_ctrl_t* ctrl);
  *         WSEN_TEMP_ARG_ERROR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_error_code_t wsen_temp_get_ctrl(wsen_temp_t* dev, wsen_temp_ctrl_t* ctrl);
+wsen_temp_error_code_t wsen_temp_get_ctrl(wsen_temp_t* dev, wsen_temp_ctrl_t* ctrl);
  
 /*!
  * \brief Get STATUS register current state
@@ -266,7 +266,7 @@ wsen_error_code_t wsen_temp_get_ctrl(wsen_temp_t* dev, wsen_temp_ctrl_t* ctrl);
  *         WSEN_TEMP_ARG_ERROR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_error_code_t wsen_temp_get_status(wsen_temp_t* dev, wsen_temp_status_t* status);
+wsen_temp_error_code_t wsen_temp_get_status(wsen_temp_t* dev, wsen_temp_status_t* status);
  
 /*!
  * \brief Set temperature high limit for interrupt
@@ -278,7 +278,7 @@ wsen_error_code_t wsen_temp_get_status(wsen_temp_t* dev, wsen_temp_status_t* sta
  *         WSEN_TEMP_ARG_ERROR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_error_code_t wsen_temp_set_high_lim(wsen_temp_t* dev, uint8_t limit);
+wsen_temp_error_code_t wsen_temp_set_high_lim(wsen_temp_t* dev, uint8_t limit);
  
 /*!
  * \brief Get temperature high limit for interrupt
@@ -290,7 +290,7 @@ wsen_error_code_t wsen_temp_set_high_lim(wsen_temp_t* dev, uint8_t limit);
  *         WSEN_TEMP_ARG_ERROR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_error_code_t wsen_temp_get_high_lim(wsen_temp_t* dev, uint8_t* limit);
+wsen_temp_error_code_t wsen_temp_get_high_lim(wsen_temp_t* dev, uint8_t* limit);
  
 /*!
  * \brief Set temperature low limit for interrupt
@@ -302,7 +302,7 @@ wsen_error_code_t wsen_temp_get_high_lim(wsen_temp_t* dev, uint8_t* limit);
  *         WSEN_TEMP_ARG_ERROR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_error_code_t wsen_temp_set_low_lim(wsen_temp_t* dev, uint8_t limit);
+wsen_temp_error_code_t wsen_temp_set_low_lim(wsen_temp_t* dev, uint8_t limit);
  
 /*!
  * \brief Get temperature low limit for interrupt
@@ -314,7 +314,7 @@ wsen_error_code_t wsen_temp_set_low_lim(wsen_temp_t* dev, uint8_t limit);
  *         WSEN_TEMP_ARG_ERROR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_error_code_t wsen_temp_get_low_lim(wsen_temp_t* dev, uint8_t* limit);
+wsen_temp_error_code_t wsen_temp_get_low_lim(wsen_temp_t* dev, uint8_t* limit);
  
 /*!
  * \brief Get raw temperature digital value
@@ -326,7 +326,7 @@ wsen_error_code_t wsen_temp_get_low_lim(wsen_temp_t* dev, uint8_t* limit);
  *         WSEN_TEMP_ARG_ERROR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_error_code_t wsen_temp_get_raw(wsen_temp_t* dev, uint16_t* temp);
+wsen_temp_error_code_t wsen_temp_get_raw(wsen_temp_t* dev, uint16_t* temp);
  
 /*!
  * \brief Get temperature value in °C
@@ -338,7 +338,7 @@ wsen_error_code_t wsen_temp_get_raw(wsen_temp_t* dev, uint16_t* temp);
  *         WSEN_TEMP_ARG_ERROR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_error_code_t wsen_temp_get_celsius(wsen_temp_t* dev, float* temp);
+wsen_temp_error_code_t wsen_temp_get_celsius(wsen_temp_t* dev, float* temp);
  
 #ifdef __cplusplus
 }

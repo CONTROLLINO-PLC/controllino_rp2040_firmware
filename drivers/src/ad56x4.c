@@ -13,7 +13,7 @@
  * \return AD56X4_ARG_ERROR : error
  *         AD56X4_OK : successful
  */
-int ad56x4_check_cmd(uint8_t cmd)
+ad56x4_error_code_t ad56x4_check_cmd(uint8_t cmd)
 {
     if (cmd > AD56X4_CMD_SET_LDAC)
         return AD56X4_ARG_ERROR;
@@ -27,7 +27,7 @@ int ad56x4_check_cmd(uint8_t cmd)
  * \return AD56X4_ARG_ERROR : error
  *         AD56X4_OK : successful
  */
-int ad56x4_check_addr(uint8_t addr)
+ad56x4_error_code_t ad56x4_check_addr(uint8_t addr)
 {
     if (addr != AD56X4_ADDR_CH_A &&
         addr != AD56X4_ADDR_CH_B &&
@@ -47,7 +47,7 @@ int ad56x4_check_addr(uint8_t addr)
  * \return AD56X4_ARG_ERROR : error
  *         AD56X4_OK : successful
  */
-int ad56x4_check_pwr_mode(uint8_t pwr_mode)
+ad56x4_error_code_t ad56x4_check_pwr_mode(uint8_t pwr_mode)
 {
     if (pwr_mode > AD56X4_PWR_MODE_POWERDOWN_TRISTATE)
         return AD56X4_ARG_ERROR;
@@ -61,7 +61,7 @@ int ad56x4_check_pwr_mode(uint8_t pwr_mode)
  * \return AD56X4_ARG_ERROR : error
  *         AD56X4_OK : successful
  */
-int ad56x4_check_ch_sel(uint8_t ch_sel)
+ad56x4_error_code_t ad56x4_check_ch_sel(uint8_t ch_sel)
 {
     if (ch_sel != AD56X4_SELECT_CH_A &&
         ch_sel != AD56X4_SELECT_CH_B &&
@@ -81,7 +81,7 @@ int ad56x4_check_ch_sel(uint8_t ch_sel)
  * \return AD56X4_ARG_ERROR : error
  *         AD56X4_OK : successful
  */
-int ad56x4_check_rst_mode(uint8_t rst_mode)
+ad56x4_error_code_t ad56x4_check_rst_mode(uint8_t rst_mode)
 {
     if (rst_mode > AD56X4_SW_RST_FULL)
         return AD56X4_ARG_ERROR;
@@ -102,7 +102,7 @@ void ad56x4_set_default_cfg(ad56x4_cfg_t* cfg)
     cfg->resolution = AD56X4_RESOLUTION;
 }
  
-int ad56x4_init(ad56x4_t* dev, ad56x4_cfg_t* cfg)
+ad56x4_error_code_t ad56x4_init(ad56x4_t* dev, ad56x4_cfg_t* cfg)
 {
     // Init hardware SPI interface
     if (platform_spi_init(cfg->spi, cfg->spi_speed, cfg->mosi_pin, cfg->miso_pin, cfg->sck_pin) != AD56X4_OK)
@@ -122,7 +122,7 @@ int ad56x4_init(ad56x4_t* dev, ad56x4_cfg_t* cfg)
     return AD56X4_OK;
 }
  
-int ad56x4_generic_write(ad56x4_t* dev, uint8_t cmd, uint8_t ch_addr, uint16_t data)
+ad56x4_error_code_t ad56x4_generic_write(ad56x4_t* dev, uint8_t cmd, uint8_t ch_addr, uint16_t data)
 {
     uint8_t tx_buf[3];
     // Check arguments
@@ -145,31 +145,31 @@ int ad56x4_generic_write(ad56x4_t* dev, uint8_t cmd, uint8_t ch_addr, uint16_t d
 }
  
 /* Write to input register n */
-int ad56x4_write_input_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_t data)
+ad56x4_error_code_t ad56x4_write_input_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_t data)
 {
     return ad56x4_generic_write(dev, AD56X4_CMD_WRITE_INPUT_REGISTER, ch_addr, data);
 }
  
 /* Update DAC register n */
-int ad56x4_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr)
+ad56x4_error_code_t ad56x4_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr)
 {
     return ad56x4_generic_write(dev, AD56X4_CMD_UPDATE_DAC_REGISTER, ch_addr, 0x0000 /* don't care */);
 }
  
 /* Write to input register n, update all */
-int ad56x4_write_input_reg_update_all_dev(ad56x4_t* dev, uint8_t ch_addr, uint16_t data)
+ad56x4_error_code_t ad56x4_write_input_reg_update_all_dev(ad56x4_t* dev, uint8_t ch_addr, uint16_t data)
 {
     return ad56x4_generic_write(dev, AD56X4_CMD_WRITE_INPUT_REGISTER_UPDATE_ALL, ch_addr, data);
 }
  
 /* Write to and update DAC channel n */
-int ad56x4_write_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_t data)
+ad56x4_error_code_t ad56x4_write_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_t data)
 {
     return ad56x4_generic_write(dev, AD56X4_CMD_WRITE_UPDATE_CH, ch_addr, data);
 }
  
 /* Set power mode */
-int ad56x4_set_pwr(ad56x4_t* dev, uint8_t pwr_mode, uint8_t ch_sel)
+ad56x4_error_code_t ad56x4_set_pwr(ad56x4_t* dev, uint8_t pwr_mode, uint8_t ch_sel)
 {
     uint16_t data;
     // Check arguments
@@ -183,7 +183,7 @@ int ad56x4_set_pwr(ad56x4_t* dev, uint8_t pwr_mode, uint8_t ch_sel)
 }
  
 /* Software reset */
-int ad56x4_sw_reset(ad56x4_t* dev, uint8_t rst_mode)
+ad56x4_error_code_t ad56x4_sw_reset(ad56x4_t* dev, uint8_t rst_mode)
 {
     // Check arguments
     if (ad56x4_check_rst_mode(rst_mode) != AD56X4_OK)
@@ -192,14 +192,14 @@ int ad56x4_sw_reset(ad56x4_t* dev, uint8_t rst_mode)
 }
  
 /* Set channel LDAC mode */
-int ad56x4_set_ldev(ad56x4_t* dev, uint8_t ch_ldev_mode)
+ad56x4_error_code_t ad56x4_set_ldev(ad56x4_t* dev, uint8_t ch_ldev_mode)
 {
     // Pending ch_ldev_mode arg check 
     return ad56x4_generic_write(dev, AD56X4_CMD_SET_LDAC, 0x00 /* don't care */, (uint16_t)ch_ldev_mode);
 }
  
 /* Set the voltage values of the specified channel */
-int ad56x4_set_ch_voltage(ad56x4_t* dev, uint8_t ch_addr, uint16_t vol_val, uint16_t vol_ref_max)
+ad56x4_error_code_t ad56x4_set_ch_voltage(ad56x4_t* dev, uint8_t ch_addr, uint16_t vol_val, uint16_t vol_ref_max)
 {
     int ret;
     float float_dev = ((float)vol_val / (float)vol_ref_max) * (float)dev->resolution;
