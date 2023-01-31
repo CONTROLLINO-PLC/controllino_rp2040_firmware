@@ -1,6 +1,5 @@
 #include "cy8c95xx.h"
 #include "ad56x4.h"
-#include "pico/binary_info.h"
 
 cy8c95xx_t cy8c9520;
 
@@ -45,15 +44,18 @@ int main() {
     // uint8_t channel = AD56X4_ADDR_CH_C;
     // uint8_t channel = AD56X4_ADDR_CH_D;
     uint8_t channel = AD56X4_ADDR_CH_ALL;
-    ad56x4_set_ch_voltage(&ad5664, channel, 2000,  NEO_AO_MAX_10V);
-    ad56x4_set_ch_voltage(&ad5664, channel, 5555,  NEO_AO_MAX_10V);
-    ad56x4_set_ch_voltage(&ad5664, channel, 8000,  NEO_AO_MAX_10V);
-    ad56x4_set_ch_voltage(&ad5664, channel, 10000, NEO_AO_MAX_10V);
-    ad56x4_set_ch_voltage(&ad5664, channel, 0,     NEO_AO_MAX_10V);
     while (1)
     {
-        asm volatile("nop");
+        ad56x4_set_ch_voltage(&ad5664, channel, 2000, NEO_AO_MAX_10V);
+        platform_sleep_ms(1000);
+        ad56x4_set_ch_voltage(&ad5664, channel, 5555, NEO_AO_MAX_10V);
+        platform_sleep_ms(1000);
+        ad56x4_set_ch_voltage(&ad5664, channel, 8000, NEO_AO_MAX_10V);
+        platform_sleep_ms(1000);
+        ad56x4_set_ch_voltage(&ad5664, channel, 10000, NEO_AO_MAX_10V);
+        platform_sleep_ms(1000);
+        ad56x4_set_ch_voltage(&ad5664, channel, 0, NEO_AO_MAX_10V);
+        platform_sleep_ms(1000);
     }
-
     return 0;
 }
