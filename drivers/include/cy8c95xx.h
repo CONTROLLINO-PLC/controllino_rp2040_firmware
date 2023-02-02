@@ -564,7 +564,7 @@ cy8c95xx_err_code_t cy8c95xx_read_eeprom(cy8c95xx_t *dev, uint16_t mem, uint8_t 
  *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, uint8_t pin, cy8c95xx_dir_mode_t dir, cy8c95xx_drv_mode_t drv);
+cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, int pin, cy8c95xx_dir_mode_t dir, cy8c95xx_drv_mode_t drv);
  
 /*!
  * \brief Set pin input inverted mode
@@ -578,7 +578,7 @@ cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, uint8_t pin, cy8c95xx_dir
  *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_err_code_t cy8c95xx_pin_inv_in(cy8c95xx_t* dev, uint8_t pin);
+cy8c95xx_err_code_t cy8c95xx_pin_inv_in(cy8c95xx_t* dev, int pin);
  
 /*!
  * \brief Get a single input pin logic level
@@ -591,7 +591,7 @@ cy8c95xx_err_code_t cy8c95xx_pin_inv_in(cy8c95xx_t* dev, uint8_t pin);
  *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_err_code_t cy8c95xx_read_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t* state);
+cy8c95xx_err_code_t cy8c95xx_read_pin(cy8c95xx_t* dev, int pin, uint8_t* state);
  
 /*!
  * \brief Get all input pin logic levels from port
@@ -617,7 +617,7 @@ cy8c95xx_err_code_t cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t* p
  *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_err_code_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, uint8_t pin, uint8_t* state);
+cy8c95xx_err_code_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, int pin, uint8_t* state);
  
 /*!
  * \brief Get all output pin logic levels from port
@@ -643,7 +643,7 @@ cy8c95xx_err_code_t cy8c95xx_get_port_out_lvl(cy8c95xx_t *dev, uint8_t port, uin
  *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_err_code_t cy8c95xx_write_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t val);
+cy8c95xx_err_code_t cy8c95xx_write_pin(cy8c95xx_t* dev, int pin, uint8_t val);
  
 /*!
  * \brief Set all output pins logic levels in a port
@@ -668,7 +668,7 @@ cy8c95xx_err_code_t cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t p
  *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_err_code_t cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t pwm_en);
+cy8c95xx_err_code_t cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, int pin, uint8_t pwm_en);
  
 /*!
  * \brief Configure pwm output

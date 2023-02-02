@@ -141,8 +141,9 @@ cy8c95xx_err_code_t cy8c95xx_read_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t*
 }
  
 /* Set pin especific configuration */
-cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, uint8_t pin, cy8c95xx_dir_mode_t dir, cy8c95xx_drv_mode_t drv)
+cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, int pin, cy8c95xx_dir_mode_t dir, cy8c95xx_drv_mode_t drv)
 {
+    if (pin < 0) return CY8C95XX_ARG_ERR;
     uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
     if (ret != CY8C95XX_OK)
@@ -158,8 +159,9 @@ cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, uint8_t pin, cy8c95xx_dir
 }
  
 /* Set pin input inverted mode */
-cy8c95xx_err_code_t cy8c95xx_pin_inv_in(cy8c95xx_t* dev, uint8_t pin)
+cy8c95xx_err_code_t cy8c95xx_pin_inv_in(cy8c95xx_t* dev, int pin)
 {
+    if (pin < 0) return CY8C95XX_ARG_ERR;
     uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
     if (ret != CY8C95XX_OK)
@@ -168,8 +170,9 @@ cy8c95xx_err_code_t cy8c95xx_pin_inv_in(cy8c95xx_t* dev, uint8_t pin)
 }
  
 /* Get a single input pin logic level */
-cy8c95xx_err_code_t cy8c95xx_read_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t* state)
+cy8c95xx_err_code_t cy8c95xx_read_pin(cy8c95xx_t* dev, int pin, uint8_t* state)
 {
+    if (pin < 0) return CY8C95XX_ARG_ERR;
     return cy8c95xx_read_bit(dev, (CY8C95XX_REG_IN_PORT0 + (pin / 8)), (pin % 8), state);
 }
  
@@ -180,8 +183,9 @@ cy8c95xx_err_code_t cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t* p
 }
  
 /* Get a single output pin logic level*/
-cy8c95xx_err_code_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, uint8_t pin, uint8_t* state)
+cy8c95xx_err_code_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, int pin, uint8_t* state)
 {
+    if (pin < 0) return CY8C95XX_ARG_ERR;
     return cy8c95xx_read_bit(dev, (CY8C95XX_REG_OUT_PORT0 + (pin / 8)), (pin % 8), state);
 }
  
@@ -192,8 +196,9 @@ cy8c95xx_err_code_t cy8c95xx_get_port_out_lvl(cy8c95xx_t* dev, uint8_t port, uin
 }
  
 /* Set a single output pin logic level */
-cy8c95xx_err_code_t cy8c95xx_write_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t val)
+cy8c95xx_err_code_t cy8c95xx_write_pin(cy8c95xx_t* dev, int pin, uint8_t val)
 {
+    if (pin < 0) return CY8C95XX_ARG_ERR;
     return cy8c95xx_write_bit(dev, (CY8C95XX_REG_OUT_PORT0 + (pin / 8)), (pin % 8), val);
 }
  
@@ -204,8 +209,9 @@ cy8c95xx_err_code_t cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t p
 }
  
 /* Enable or disable pwm output on pin */
-cy8c95xx_err_code_t cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t pwm_en)
+cy8c95xx_err_code_t cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, int pin, uint8_t pwm_en)
 {
+    if (pin < 0) return CY8C95XX_ARG_ERR;
     uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
     if (ret != CY8C95XX_OK)
