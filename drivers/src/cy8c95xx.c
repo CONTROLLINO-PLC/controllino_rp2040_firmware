@@ -11,19 +11,6 @@
 static uint8_t port_slave_addr;
 static uint8_t eeprom_slave_addr;
  
-/*!
- * \brief Check register address
- *
- * \param reg Register address to check
- * \return CY8C95XX_ARG_ERROR : error
- *         CY8C95XX_OK : successful
- */
-cy8c95xx_error_code_t cy8c95xx_check_reg_addr(uint8_t reg)
-{
-    if (reg > CY8C95XX_REG_CMD)
-        return CY8C95XX_ARG_ERROR;
-    return CY8C95XX_OK;
-}
 /* Initializes default configuration */
 void cy8c95xx_set_default_cfg(cy8c95xx_cfg_t* cfg)
 {
@@ -37,22 +24,21 @@ void cy8c95xx_set_default_cfg(cy8c95xx_cfg_t* cfg)
 }
  
 /* Initializes hardware according to configuration */
-cy8c95xx_error_code_t cy8c95xx_init(cy8c95xx_t* dev, cy8c95xx_cfg_t* cfg)
+cy8c95xx_err_code_t cy8c95xx_init(cy8c95xx_t* dev, cy8c95xx_cfg_t* cfg)
 {
     // Init hardware I2C interface
     if (platform_i2c_init(cfg->i2c, cfg->i2c_speed, cfg->sda_pin, cfg->scl_pin) != CY8C95XX_OK)
-        return CY8C95XX_INIT_ERROR;
+        return CY8C95XX_INIT_ERR;
     // Init hardware reset and int pins 
     platform_gpio_init(cfg->rst_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_DISABLED);
     platform_gpio_init(cfg->int_pin, PLATFORM_GPIO_IN, PLATFORM_GPIO_PULL_DISABLED);
+    // Base addresses
+    port_slave_addr = CY8C95XX_M_PORT_BASE_ADDR | cfg->i2c_addr;
+    eeprom_slave_addr = CY8C95XX_EEPROM_BASE_ADDR | cfg->i2c_addr;
     // Set values from cfg
-    dev->slave_addr = cfg->i2c_addr;
     dev->i2c = cfg->i2c;
     dev->rst_pin = cfg->rst_pin;
     dev->int_pin = cfg->int_pin;
-    // Base addresses
-    port_slave_addr = CY8C95XX_M_PORT_BASE_ADDR | dev->slave_addr;
-    eeprom_slave_addr = CY8C95XX_EEPROM_BASE_ADDR | dev->slave_addr;
     // Check coms
     uint8_t rxdata;
     return platform_i2c_read(dev->i2c, port_slave_addr, &rxdata, 1);
@@ -74,100 +60,57 @@ uint8_t cy8c95xx_check_int(cy8c95xx_t* dev)
 }
  
 /* Writes data to register */
-cy8c95xx_error_code_t cy8c95xx_generic_write(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen)
+cy8c95xx_err_code_t cy8c95xx_generic_write(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t* txdata, uint8_t txlen)
 {
     uint8_t tx_buf[txlen + 1];
-    if (cy8c95xx_check_reg_addr(reg) != CY8C95XX_OK)
-        return CY8C95XX_ARG_ERROR;
+    
     tx_buf[0] = reg;
     memcpy(&tx_buf[1], txdata, txlen);
-    return platform_i2c_write(dev->i2c, dev->slave_addr, tx_buf, sizeof(tx_buf));
+    return platform_i2c_write(dev->i2c, port_slave_addr, tx_buf, sizeof(tx_buf));
 }
  
 /* Reads data from register */
-cy8c95xx_error_code_t cy8c95xx_generic_read(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen)
+cy8c95xx_err_code_t cy8c95xx_generic_read(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t* rxdata, uint8_t rxlen)
 {
-    if (cy8c95xx_check_reg_addr(reg) != CY8C95XX_OK)
-        return CY8C95XX_ARG_ERROR;
-    if (platform_i2c_write(dev->i2c, dev->slave_addr, &reg, 1) != CY8C95XX_OK)
-        return CY8C95XX_I2C_ERROR;
-    return platform_i2c_read(dev->i2c, dev->slave_addr, rxdata, rxlen);
+    if (platform_i2c_write(dev->i2c, port_slave_addr, &reg, 1) != CY8C95XX_OK)
+        return CY8C95XX_I2C_ERR;
+    return platform_i2c_read(dev->i2c, port_slave_addr, rxdata, rxlen);
 }
  
 /* Write single byte of data to register */
-cy8c95xx_error_code_t cy8c95xx_write_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t txdata)
+cy8c95xx_err_code_t cy8c95xx_write_byte(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t txdata)
 {
-    dev->slave_addr = port_slave_addr;
     return cy8c95xx_generic_write(dev, reg, &txdata, 1);
 }
  
 /* Write single byte of data to register */
-cy8c95xx_error_code_t cy8c95xx_read_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata)
+cy8c95xx_err_code_t cy8c95xx_read_byte(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t* rxdata)
 {
-    dev->slave_addr = port_slave_addr;
     return cy8c95xx_generic_read(dev, reg, rxdata, 1);
 }
  
-/* Writes number of bytes into register */
-cy8c95xx_error_code_t cy8c95xx_write_port_exp(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen)
-{
-    dev->slave_addr = port_slave_addr;
-    return cy8c95xx_generic_write(dev, reg, txdata, txlen);
-}
- 
-/* Reads number of bytes from register */
-cy8c95xx_error_code_t cy8c95xx_read_port_exp(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen)
-{
-    dev->slave_addr = port_slave_addr;
-    return cy8c95xx_generic_read(dev, reg, rxdata, rxlen);
-}
- 
 /* Send EEPROM comand */
-cy8c95xx_error_code_t cy8c95xx_send_eeprom_cmd(cy8c95xx_t* dev, uint8_t cmd)
+cy8c95xx_err_code_t cy8c95xx_send_eeprom_cmd(cy8c95xx_t* dev, uint8_t cmd)
 {
-    dev->slave_addr = port_slave_addr;
     return cy8c95xx_generic_write(dev, CY8C95XX_REG_CMD, &cmd, 1);
 }
  
-/* Writes number of bytes into EEPROM */
-cy8c95xx_error_code_t cy8c95xx_write_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* txdata, uint8_t txlen)
-{
-    uint8_t tx_buf[txlen + 2];
-    dev->slave_addr = eeprom_slave_addr;
-    tx_buf[1] = (uint8_t)(mem & 0x00FF);
-    tx_buf[0] =(uint8_t)((mem >> 8) & 0x00FF);
-    memcpy(&tx_buf[2], txdata, txlen);
-    return platform_i2c_write(dev->i2c, dev->slave_addr, tx_buf, sizeof(tx_buf));
-}
- 
-/* Reads number of bytes from EEPROM */
-cy8c95xx_error_code_t cy8c95xx_read_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* rxdata, uint8_t rxlen)
-{
-    uint8_t tx_buf[2];
-    dev->slave_addr = eeprom_slave_addr;
-    tx_buf[1] = (uint8_t)(mem & 0x00FF);
-    tx_buf[0] =(uint8_t)((mem >> 8) & 0x00FF);
-    if (platform_i2c_write(dev->i2c, dev->slave_addr, tx_buf, 2) != CY8C95XX_OK)
-        return CY8C95XX_I2C_ERROR;
-    return platform_i2c_read(dev->i2c, dev->slave_addr, rxdata, rxlen);
-}
- 
 /* Read state of a single bit from register */
-cy8c95xx_error_code_t cy8c95xx_read_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t* state)
+cy8c95xx_err_code_t cy8c95xx_read_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t bit_num, uint8_t* state)
 {
-    uint8_t reg_byte;
+    cy8c95xx_reg_t reg_byte;
     uint8_t ret;
     ret = cy8c95xx_read_byte(dev, reg, &reg_byte);
     if (ret != CY8C95XX_OK)
         return ret;
-    *state = reg_byte & (1 << bit_num);
+    *state = (reg_byte >> bit_num) & 0x01;
     return CY8C95XX_OK;
 }
  
 /* Set or clear specific bit in register */
-cy8c95xx_error_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t val)
+cy8c95xx_err_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t bit_num, uint8_t val)
 {
-    uint8_t reg_byte;
+    cy8c95xx_reg_t reg_byte;
     uint8_t ret;
     ret = cy8c95xx_read_byte(dev, reg, &reg_byte);
     if (ret != CY8C95XX_OK)
@@ -176,121 +119,102 @@ cy8c95xx_error_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t b
     return cy8c95xx_write_byte(dev, reg, reg_byte);
 }
  
-/* Get a single input pin logic level */
-cy8c95xx_error_code_t cy8c95xx_read_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t inv, uint8_t* state)
+/* Writes number of bytes into EEPROM */
+cy8c95xx_err_code_t cy8c95xx_write_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* txdata, uint8_t txlen)
+{
+    uint8_t tx_buf[txlen + 2];
+    tx_buf[1] = (uint8_t)(mem & 0x00FF);
+    tx_buf[0] =(uint8_t)((mem >> 8) & 0x00FF);
+    memcpy(&tx_buf[2], txdata, txlen);
+    return platform_i2c_write(dev->i2c, eeprom_slave_addr, tx_buf, sizeof(tx_buf));
+}
+ 
+/* Reads number of bytes from EEPROM */
+cy8c95xx_err_code_t cy8c95xx_read_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* rxdata, uint8_t rxlen)
+{
+    uint8_t tx_buf[2];
+    tx_buf[1] = (uint8_t)(mem & 0x00FF);
+    tx_buf[0] =(uint8_t)((mem >> 8) & 0x00FF);
+    if (platform_i2c_write(dev->i2c, eeprom_slave_addr, tx_buf, 2) != CY8C95XX_OK)
+        return CY8C95XX_I2C_ERR;
+    return platform_i2c_read(dev->i2c, eeprom_slave_addr, rxdata, rxlen);
+}
+ 
+/* Set pin especific configuration */
+cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, uint8_t pin, cy8c95xx_dir_mode_t dir, cy8c95xx_drv_mode_t drv)
 {
     uint8_t ret;
-    if (inv == 0x01) {
-        ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
-        if (ret != CY8C95XX_OK)
-            return ret;
-        ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_INV, (pin % 8));
-        if (ret != CY8C95XX_OK)
-            return ret;
-    }
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
     if (ret != CY8C95XX_OK)
         return ret;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_DIR, 0xFF);
+    uint8_t dir_val = 0;
+    if (dir == CY8C95XX_GPIO_IN) {
+        dir_val = 1;
+    }
+    ret = cy8c95xx_write_bit(dev, CY8C95XX_REG_PORT_DIR, (pin % 8), dir_val);
     if (ret != CY8C95XX_OK)
         return ret;
+    return cy8c95xx_write_bit(dev, (uint8_t)drv, (pin % 8), 1);
+}
+ 
+/* Set pin input inverted mode */
+cy8c95xx_err_code_t cy8c95xx_pin_inv_in(cy8c95xx_t* dev, uint8_t pin)
+{
+    uint8_t ret;
+    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
+    if (ret != CY8C95XX_OK)
+        return ret;
+    return cy8c95xx_write_bit(dev, CY8C95XX_REG_INV, (pin % 8), 1);
+}
+ 
+/* Get a single input pin logic level */
+cy8c95xx_err_code_t cy8c95xx_read_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t* state)
+{
     return cy8c95xx_read_bit(dev, (CY8C95XX_REG_IN_PORT0 + (pin / 8)), (pin % 8), state);
 }
  
 /* Get all pin logic levels from port */
-cy8c95xx_error_code_t cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t inv, uint8_t* port_state)
+cy8c95xx_err_code_t cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t* port_state)
 {
-    uint8_t ret;
-    if (inv == 0x01) {
-        ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, port);
-        if (ret != CY8C95XX_OK)
-            return ret;
-        ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_INV, 0xFF);
-        if (ret != CY8C95XX_OK)
-            return ret;
-    }
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, port);
-    if (ret != CY8C95XX_OK)
-        return ret;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_DIR, 0xFF);
-    if (ret != CY8C95XX_OK)
-        return ret;
     return cy8c95xx_read_byte(dev, CY8C95XX_REG_IN_PORT0 + port, port_state);
 }
  
 /* Get a single output pin logic level*/
-cy8c95xx_error_code_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, uint8_t pin, uint8_t* state)
+cy8c95xx_err_code_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, uint8_t pin, uint8_t* state)
 {
-    uint8_t ret;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
-    if (ret != CY8C95XX_OK)
-        return ret;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_DIR, 0xFF);
-    if (ret != CY8C95XX_OK)
-        return ret;
     return cy8c95xx_read_bit(dev, (CY8C95XX_REG_OUT_PORT0 + (pin / 8)), (pin % 8), state);
 }
  
 /* Get all output pin logic levels from port */
-cy8c95xx_error_code_t cy8c95xx_get_port_out_lvl(cy8c95xx_t* dev, uint8_t port, uint8_t* port_state)
+cy8c95xx_err_code_t cy8c95xx_get_port_out_lvl(cy8c95xx_t* dev, uint8_t port, uint8_t* port_state)
 {
-    uint8_t ret;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, port);
-    if (ret != CY8C95XX_OK)
-        return ret;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_DIR, 0xFF);
-    if (ret != CY8C95XX_OK)
-        return ret;
     return cy8c95xx_read_byte(dev, CY8C95XX_REG_OUT_PORT0 + port, port_state);
 }
  
 /* Set a single output pin logic level */
-cy8c95xx_error_code_t cy8c95xx_write_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t val)
+cy8c95xx_err_code_t cy8c95xx_write_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t val)
 {
-    uint8_t ret;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
-    if (ret != CY8C95XX_OK)
-        return ret;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_DIR, 0x00);
-    if (ret != CY8C95XX_OK)
-        return ret;
     return cy8c95xx_write_bit(dev, (CY8C95XX_REG_OUT_PORT0 + (pin / 8)), (pin % 8), val);
 }
  
 /* Set all output pins logic levels in a port */
-cy8c95xx_error_code_t cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t port_val)
+cy8c95xx_err_code_t cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t port_val)
 {
-    uint8_t ret;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, port);
-    if (ret != CY8C95XX_OK)
-        return ret;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_DIR, 0x00);
-    if (ret != CY8C95XX_OK)
-        return ret;
     return cy8c95xx_write_byte(dev, (CY8C95XX_REG_OUT_PORT0 + port), port_val);
 }
  
 /* Enable or disable pwm output on pin */
-cy8c95xx_error_code_t cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t pwm_en)
+cy8c95xx_err_code_t cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t pwm_en)
 {
     uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
     if (ret != CY8C95XX_OK)
         return ret;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_DIR, 0x00);
-    if (ret != CY8C95XX_OK)
-        return ret;
-    ret = cy8c95xx_write_bit(dev, (CY8C95XX_REG_OUT_PORT0 + (pin / 8)), (pin % 8), pwm_en);
-    if (ret != CY8C95XX_OK)
-        return ret;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
-    if (ret != CY8C95XX_OK)
-        return ret;
-    return cy8c95xx_write_byte(dev, CY8C95XX_REG_SEL_PWM_OUT, (pwm_en << (pin % 8)));
+    return cy8c95xx_write_bit(dev, CY8C95XX_REG_SEL_PWM_OUT, (pin % 8), pwm_en);
 }
  
 /* Configure pwm output */
-cy8c95xx_error_code_t cy8c95xx_set_pwm_cfg(cy8c95xx_t* dev, cy8c95xx_pwm_cfg_t* pwm_cfg, float* duty_cyc, float* freq)
+cy8c95xx_err_code_t cy8c95xx_set_pwm_cfg(cy8c95xx_t* dev, cy8c95xx_pwm_cfg_t* pwm_cfg, float* duty_cyc, float* freq)
 {
     uint8_t tx_buf[5];
     uint8_t ret;
@@ -318,13 +242,13 @@ cy8c95xx_error_code_t cy8c95xx_set_pwm_cfg(cy8c95xx_t* dev, cy8c95xx_pwm_cfg_t* 
 }
  
 /* Configures EEPROM enable register */
-cy8c95xx_error_code_t cy8c95xx_eeprom_enable(cy8c95xx_t* dev, uint8_t cmd)
+cy8c95xx_err_code_t cy8c95xx_eeprom_enable(cy8c95xx_t* dev, uint8_t cmd)
 {
     uint8_t tx_buf[4];
     tx_buf[0] = 0x43;
     tx_buf[1] = 0x4D;
     tx_buf[2] = 0x53;
     tx_buf[3] = cmd;
-    return cy8c95xx_write_port_exp(dev, CY8C95XX_REG_EEPROM, tx_buf, 4);
+    return cy8c95xx_generic_write(dev, CY8C95XX_REG_EEPROM, tx_buf, 4);
 }
 

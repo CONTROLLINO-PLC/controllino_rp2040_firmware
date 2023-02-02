@@ -3,19 +3,19 @@
 
 cy8c95xx_t cy8c9520;
 
-/* Init cy8c95xx port expander */
+mcp356x_t mcp3564;
+#define CY8C9520_GPIO_14    14
+#define MCP3564_CS          CY8C9520_GPIO_14
+#define NEO_AO_MAX_10V      10000 
+
 void exp_init(void)
 {
     cy8c95xx_cfg_t cfg;
     cy8c95xx_set_default_cfg(&cfg);
     cy8c95xx_init(&cy8c9520, &cfg);
     cy8c95xx_reset(&cy8c9520);
+    cy8c95xx_pin_mode(&cy8c9520, CY8C9520_GPIO_14, CY8C95XX_GPIO_OUT, CY8C95XX_REG_PULL_UP);
 }
-
-mcp356x_t mcp3564;
-#define CY8C9520_GPIO_14    14
-#define MCP3564_CS          CY8C9520_GPIO_14
-#define NEO_AO_MAX_10V      10000 
 
 void mcp356x_cs_select(mcp356x_t* dac)
 {

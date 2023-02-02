@@ -3,19 +3,19 @@
 
 cy8c95xx_t cy8c9520;
 
-/* Init cy8c95xx port expander */
+ad56x4_t ad5664;
+#define CY8C9520_GPIO_15    15
+#define AD5664_CS           CY8C9520_GPIO_15
+#define NEO_AO_MAX_10V      10000 
+
 void exp_init(void)
 {
     cy8c95xx_cfg_t cfg;
     cy8c95xx_set_default_cfg(&cfg);
     cy8c95xx_init(&cy8c9520, &cfg);
     cy8c95xx_reset(&cy8c9520);
+    cy8c95xx_pin_mode(&cy8c9520, CY8C9520_GPIO_15, CY8C95XX_GPIO_OUT, CY8C95XX_REG_PULL_UP);
 }
-
-ad56x4_t ad5664;
-#define CY8C9520_GPIO_15    15
-#define AD5664_CS           CY8C9520_GPIO_15
-#define NEO_AO_MAX_10V      10000 
 
 void ad56x4_cs_select(ad56x4_t* dac) {
     cy8c95xx_write_pin(&cy8c9520, AD5664_CS, CY8C95XX_LOW);

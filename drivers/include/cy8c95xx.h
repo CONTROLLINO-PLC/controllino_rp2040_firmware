@@ -27,12 +27,13 @@ extern "C" {
  * \brief Error codes
  * \ingroup cy8c95xx
  */
-typedef enum  {
+typedef enum 
+{
     CY8C95XX_OK =         PLATFORM_OK,
-    CY8C95XX_ARG_ERROR =  PLATFORM_ARGUMENT_ERROR,
-    CY8C95XX_INIT_ERROR = PLATFORM_I2C_INIT_ERROR,
-    CY8C95XX_I2C_ERROR =  PLATFORM_I2C_COM_ERROR
-} cy8c95xx_error_code_t;
+    CY8C95XX_ARG_ERR =  PLATFORM_ARGUMENT_ERR,
+    CY8C95XX_INIT_ERR = PLATFORM_I2C_INIT_ERR,
+    CY8C95XX_I2C_ERR =  PLATFORM_I2C_COM_ERR
+} cy8c95xx_err_code_t;
  
 /**
  * \brief Base addresses for comunications
@@ -47,55 +48,58 @@ typedef enum  {
  * \brief Register map
  * \ingroup cy8c95xx
  */
-#define CY8C95XX_REG_IN_PORT0                0x00
-#define CY8C95XX_REG_IN_PORT1                0x01
-#define CY8C95XX_REG_IN_PORT2                0x02
-#define CY8C95XX_REG_IN_PORT3                0x03
-#define CY8C95XX_REG_IN_PORT4                0x04
-#define CY8C95XX_REG_IN_PORT5                0x05
-#define CY8C95XX_REG_IN_PORT6                0x06
-#define CY8C95XX_REG_IN_PORT7                0x07
-#define CY8C95XX_REG_OUT_PORT0               0x08
-#define CY8C95XX_REG_OUT_PORT1               0x09
-#define CY8C95XX_REG_OUT_PORT2               0x0A
-#define CY8C95XX_REG_OUT_PORT3               0x0B
-#define CY8C95XX_REG_OUT_PORT4               0x0C
-#define CY8C95XX_REG_OUT_PORT5               0x0D
-#define CY8C95XX_REG_OUT_PORT6               0x0E
-#define CY8C95XX_REG_OUT_PORT7               0x0F
-#define CY8C95XX_REG_INT_STAT_PORT0          0x10
-#define CY8C95XX_REG_INT_STAT_PORT1          0x11
-#define CY8C95XX_REG_INT_STAT_PORT2          0x12
-#define CY8C95XX_REG_INT_STAT_PORT3          0x13
-#define CY8C95XX_REG_INT_STAT_PORT4          0x14
-#define CY8C95XX_REG_INT_STAT_PORT5          0x15
-#define CY8C95XX_REG_INT_STAT_PORT6          0x16
-#define CY8C95XX_REG_INT_STAT_PORT7          0x17
-#define CY8C95XX_REG_PORT_SEL                0x18
-#define CY8C95XX_REG_INT_MASK                0x19
-#define CY8C95XX_REG_SEL_PWM_OUT             0x1A
-#define CY8C95XX_REG_INV                     0x1B
-#define CY8C95XX_REG_PORT_DIR                0x1C
-#define CY8C95XX_REG_PULL_UP                 0x1D
-#define CY8C95XX_REG_PULL_DOWN               0x1E
-#define CY8C95XX_REG_OPEN_DRAIN_HIGH         0x1F
-#define CY8C95XX_REG_OPEN_DRAIN_LOW          0x20
-#define CY8C95XX_REG_STRONG                  0x21
-#define CY8C95XX_REG_SLOW_STRONG             0x22
-#define CY8C95XX_REG_HIGH_Z                  0x23
-#define CY8C95XX_REG_RSRVD_1                 0x24
-#define CY8C95XX_REG_RSRVD_2                 0x25
-#define CY8C95XX_REG_RSRVD_3                 0x26
-#define CY8C95XX_REG_RSRVD_4                 0x27
-#define CY8C95XX_REG_PWM_SEL                 0x28
-#define CY8C95XX_REG_CFG_PWM                 0x29
-#define CY8C95XX_REG_PERIOD_PWM              0x2A
-#define CY8C95XX_REG_PULSE_WIDTH_PWM         0x2B
-#define CY8C95XX_REG_DIVIDER                 0x2C
-#define CY8C95XX_REG_EEPROM                  0x2D
-#define CY8C95XX_REG_DEV_ID                  0x2E
-#define CY8C95XX_REG_WDT                     0x2F
-#define CY8C95XX_REG_CMD                     0x30
+typedef enum
+{
+    CY8C95XX_REG_IN_PORT0 =                 0x00,
+    CY8C95XX_REG_IN_PORT1 =                 0x01,
+    CY8C95XX_REG_IN_PORT2 =                 0x02,
+    CY8C95XX_REG_IN_PORT3 =                 0x03,
+    CY8C95XX_REG_IN_PORT4 =                 0x04,
+    CY8C95XX_REG_IN_PORT5 =                 0x05,
+    CY8C95XX_REG_IN_PORT6 =                 0x06,
+    CY8C95XX_REG_IN_PORT7 =                 0x07,
+    CY8C95XX_REG_OUT_PORT0 =                0x08,
+    CY8C95XX_REG_OUT_PORT1 =                0x09,
+    CY8C95XX_REG_OUT_PORT2 =                0x0A,
+    CY8C95XX_REG_OUT_PORT3 =                0x0B,
+    CY8C95XX_REG_OUT_PORT4 =                0x0C,
+    CY8C95XX_REG_OUT_PORT5 =                0x0D,
+    CY8C95XX_REG_OUT_PORT6 =                0x0E,
+    CY8C95XX_REG_OUT_PORT7 =                0x0F,
+    CY8C95XX_REG_INT_STAT_PORT0 =           0x10,
+    CY8C95XX_REG_INT_STAT_PORT1 =           0x11,
+    CY8C95XX_REG_INT_STAT_PORT2 =           0x12,
+    CY8C95XX_REG_INT_STAT_PORT3 =           0x13,
+    CY8C95XX_REG_INT_STAT_PORT4 =           0x14,
+    CY8C95XX_REG_INT_STAT_PORT5 =           0x15,
+    CY8C95XX_REG_INT_STAT_PORT6 =           0x16,
+    CY8C95XX_REG_INT_STAT_PORT7 =           0x17,
+    CY8C95XX_REG_PORT_SEL =                 0x18,
+    CY8C95XX_REG_INT_MASK =                 0x19,
+    CY8C95XX_REG_SEL_PWM_OUT =              0x1A,
+    CY8C95XX_REG_INV =                      0x1B,
+    CY8C95XX_REG_PORT_DIR =                 0x1C,
+    CY8C95XX_REG_PULL_UP =                  0x1D,
+    CY8C95XX_REG_PULL_DOWN =                0x1E,
+    CY8C95XX_REG_OPEN_DRAIN_HIGH =          0x1F,
+    CY8C95XX_REG_OPEN_DRAIN_LOW =           0x20,
+    CY8C95XX_REG_STRONG =                   0x21,
+    CY8C95XX_REG_SLOW_STRONG =              0x22,
+    CY8C95XX_REG_HIGH_Z =                   0x23,
+    CY8C95XX_REG_RSRVD_1 =                  0x24,
+    CY8C95XX_REG_RSRVD_2 =                  0x25,
+    CY8C95XX_REG_RSRVD_3 =                  0x26,
+    CY8C95XX_REG_RSRVD_4 =                  0x27,
+    CY8C95XX_REG_PWM_SEL =                  0x28,
+    CY8C95XX_REG_CFG_PWM =                  0x29,
+    CY8C95XX_REG_PERIOD_PWM =               0x2A,
+    CY8C95XX_REG_PULSE_WIDTH_PWM =          0x2B,
+    CY8C95XX_REG_DIVIDER =                  0x2C,
+    CY8C95XX_REG_EEPROM =                   0x2D,
+    CY8C95XX_REG_DEV_ID =                   0x2E,
+    CY8C95XX_REG_WDT =                      0x2F,
+    CY8C95XX_REG_CMD =                      0x30
+} cy8c95xx_reg_t;
  
 /**
  * \brief Select pwm output
@@ -315,6 +319,31 @@ typedef enum  {
 #define CY8C95XX_CRC_INX                    0x92
  
 /**
+ * \brief Drive mode for pins
+ * \ingroup cy8c95xx
+ */
+typedef enum
+{
+    CY8C95XX_DRV_PULL_UP =                  CY8C95XX_REG_PULL_UP,
+    CY8C95XX_DRV_PULL_DOWN =                CY8C95XX_REG_PULL_DOWN,
+    CY8C95XX_DRV_OPEN_DRAIN_HIGH =          CY8C95XX_REG_OPEN_DRAIN_HIGH,
+    CY8C95XX_DRV_OPEN_DRAIN_LOW =           CY8C95XX_REG_OPEN_DRAIN_LOW,
+    CY8C95XX_DRV_STRONG =                   CY8C95XX_REG_STRONG,
+    CY8C95XX_DRV_SLOW_STRONG =              CY8C95XX_REG_SLOW_STRONG,
+    CY8C95XX_DRV_HIGH_Z =                   CY8C95XX_REG_HIGH_Z
+} cy8c95xx_drv_mode_t;
+ 
+/**
+ * \brief Direction input/output mode for pins
+ * \ingroup cy8c95xx
+ */
+typedef enum 
+{
+    CY8C95XX_GPIO_IN =                      PLATFORM_GPIO_IN,
+    CY8C95XX_GPIO_OUT =                     PLATFORM_GPIO_OUT
+} cy8c95xx_dir_mode_t;
+ 
+/**
  * \brief External pins
  * \ingroup cy8c95xx
  */
@@ -329,7 +358,8 @@ typedef enum  {
  * \brief Initial config struct
  * \ingroup cy8c95xx
  */
-typedef struct {
+typedef struct
+{
     int sda_pin;
     int scl_pin;
     uint i2c_speed;
@@ -343,9 +373,8 @@ typedef struct {
  * \brief CY8C95XX expander struct
  * \ingroup cy8c95xx
  */
-typedef struct
+typedef struct 
 {
-    uint8_t slave_addr;
     hw_i2c_t* i2c;
     int rst_pin;
     int int_pin;
@@ -378,10 +407,10 @@ void cy8c95xx_set_default_cfg(cy8c95xx_cfg_t* cfg);
  *
  * \param dev Pointer to CY8C95XX expander struct
  * \param cfg Initial config struct
- * \return CY8C95XX_INIT_ERROR : error
+ * \return CY8C95XX_INIT_ERR : error
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_init(cy8c95xx_t *dev, cy8c95xx_cfg_t *cfg);
+cy8c95xx_err_code_t cy8c95xx_init(cy8c95xx_t *dev, cy8c95xx_cfg_t *cfg);
  
 /*!
  * \brief Reset port expander using rst_pin
@@ -410,11 +439,11 @@ uint8_t cy8c95xx_check_int(cy8c95xx_t* dev);
  * \param reg Register address
  * \param txdata Pointer to data to send
  * \param txlen Number of the bytes in data buf
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_generic_write(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen);
+cy8c95xx_err_code_t cy8c95xx_generic_write(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t* txdata, uint8_t txlen);
  
 /*!
  * \brief Reads data from register
@@ -424,11 +453,11 @@ cy8c95xx_error_code_t cy8c95xx_generic_write(cy8c95xx_t* dev, uint8_t reg, uint8
  * \param reg Register address
  * \param rxdata Pointer to receive data
  * \param rxlen Number of the bytes to be read
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_generic_read(cy8c95xx_t *dev, uint8_t reg, uint8_t *rxdata, uint8_t rxlen);
+cy8c95xx_err_code_t cy8c95xx_generic_read(cy8c95xx_t *dev, cy8c95xx_reg_t reg, uint8_t *rxdata, uint8_t rxlen);
  
 /*!
  * \brief Write single byte of data to register
@@ -437,11 +466,11 @@ cy8c95xx_error_code_t cy8c95xx_generic_read(cy8c95xx_t *dev, uint8_t reg, uint8_
  * \param dev Pointer to CY8C95XX expander struct
  * \param reg Register address
  * \param txdata Byte to be written
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_write_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t txdata);
+cy8c95xx_err_code_t cy8c95xx_write_byte(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t txdata);
  
 /*!
  * \brief Read single byte of data fromregister
@@ -450,78 +479,11 @@ cy8c95xx_error_code_t cy8c95xx_write_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t 
  * \param dev Pointer to CY8C95XX expander struct
  * \param reg Register address
  * \param rxdata Pointer to readed byte
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_read_byte(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata);
- 
-/*!
- * \brief Writes number of bytes into register
- * \ingroup cy8c95xx
- *
- * \param dev Pointer to CY8C95XX expander struct
- * \param reg Register address
- * \param txdata Pointer to data to send
- * \param txlen Number of the bytes in data buf
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
- *         CY8C95XX_OK : successful
- */
-cy8c95xx_error_code_t cy8c95xx_write_port_exp(cy8c95xx_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen);
- 
-/*!
- * \brief Reads number of bytes from register
- * \ingroup cy8c95xx
- *
- * \param dev Pointer to CY8C95XX expander struct
- * \param reg Register address
- * \param rxdata Pointer to receive data
- * \param rxlen Number of the bytes to be read
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
- *         CY8C95XX_OK : successful
- */
-cy8c95xx_error_code_t cy8c95xx_read_port_exp(cy8c95xx_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen);
- 
-/*!
- * \brief Send EEPROM comand
- * \ingroup cy8c95xx
- *
- * \param dev Pointer to CY8C95XX expander struct
- * \param cmd Command to send
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
- *         CY8C95XX_OK : successful
- */
-cy8c95xx_error_code_t cy8c95xx_send_eeprom_cmd(cy8c95xx_t *dev, uint8_t cmd);
- 
-/*!
- * \brief Writes number of bytes into EEPROM
- *
- * \param dev Pointer to CY8C95XX expander struct
- * \param mem Memory address
- * \param txdata Pointer to data to send
- * \param txlen Number of the bytes in data buf
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
- *         CY8C95XX_OK : successful
- */
-cy8c95xx_error_code_t cy8c95xx_write_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* txdata, uint8_t txlen);
- 
-/*!
- * \brief Reads number of bytes from EEPROM
- * \ingroup cy8c95xx
- *
- * \param dev Pointer to CY8C95XX expander struct
- * \param mem Memory address
- * \param rxdata Pointer to receive data
- * \param rxlen Number of the bytes to be read
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
- *         CY8C95XX_OK : successful
- */
-cy8c95xx_error_code_t cy8c95xx_read_eeprom(cy8c95xx_t *dev, uint16_t mem, uint8_t *rxdata, uint8_t rxlen);
+cy8c95xx_err_code_t cy8c95xx_read_byte(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t* rxdata);
  
 /*!
  * \brief Read state of a single bit from register
@@ -531,11 +493,11 @@ cy8c95xx_error_code_t cy8c95xx_read_eeprom(cy8c95xx_t *dev, uint16_t mem, uint8_
  * \param reg Register address
  * \param bit_num Specific bit to read
  * \param state Pointer to receive bit state
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_read_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t* state);
+cy8c95xx_err_code_t cy8c95xx_read_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t bit_num, uint8_t* state);
  
 /*!
  * \brief Set or clear specific bit in register
@@ -545,11 +507,78 @@ cy8c95xx_error_code_t cy8c95xx_read_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bi
  * \param reg_adr Register address
  * \param bit_num Specific bit to write
  * \param val Value to apply on bit
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t bit_num, uint8_t val);
+cy8c95xx_err_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t bit_num, uint8_t val);
+ 
+/*!
+ * \brief Send EEPROM comand
+ * \ingroup cy8c95xx
+ *
+ * \param dev Pointer to CY8C95XX expander struct
+ * \param cmd Command to send
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
+ *         CY8C95XX_OK : successful
+ */
+cy8c95xx_err_code_t cy8c95xx_send_eeprom_cmd(cy8c95xx_t *dev, uint8_t cmd);
+ 
+/*!
+ * \brief Writes number of bytes into EEPROM
+ *
+ * \param dev Pointer to CY8C95XX expander struct
+ * \param mem Memory address
+ * \param txdata Pointer to data to send
+ * \param txlen Number of the bytes in data buf
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
+ *         CY8C95XX_OK : successful
+ */
+cy8c95xx_err_code_t cy8c95xx_write_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* txdata, uint8_t txlen);
+ 
+/*!
+ * \brief Reads number of bytes from EEPROM
+ * \ingroup cy8c95xx
+ *
+ * \param dev Pointer to CY8C95XX expander struct
+ * \param mem Memory address
+ * \param rxdata Pointer to receive data
+ * \param rxlen Number of the bytes to be read
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
+ *         CY8C95XX_OK : successful
+ */
+cy8c95xx_err_code_t cy8c95xx_read_eeprom(cy8c95xx_t *dev, uint16_t mem, uint8_t *rxdata, uint8_t rxlen);
+ 
+/*!
+ * \brief Set pin especific configuration
+ * \ingroup cy8c95xx
+ *
+ * \param dev Pointer to CY8C95XX expander struct
+ * \param pin Specific pin to configure
+ * \param dir Pin input/output direction
+ * \param drv Pin drver configuration
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
+ *         CY8C95XX_OK : successful
+ */
+cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, uint8_t pin, cy8c95xx_dir_mode_t dir, cy8c95xx_drv_mode_t drv);
+ 
+/*!
+ * \brief Set pin input inverted mode
+ * \ingroup cy8c95xx
+ *
+ * \param dev Pointer to CY8C95XX expander struct
+ * \param pin Specific pin to configure
+ * \param dir Pin input/output direction
+ * \param drv Pin drver configuration
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
+ *         CY8C95XX_OK : successful
+ */
+cy8c95xx_err_code_t cy8c95xx_pin_inv_in(cy8c95xx_t* dev, uint8_t pin);
  
 /*!
  * \brief Get a single input pin logic level
@@ -557,13 +586,12 @@ cy8c95xx_error_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, uint8_t reg, uint8_t b
  *
  * \param dev Pointer to CY8C95XX expander struct
  * \param pin Specific pin to read
- * \param inv Read value on inverted way
  * \param state Pointer to receive pin state
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_read_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t inv, uint8_t* state);
+cy8c95xx_err_code_t cy8c95xx_read_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t* state);
  
 /*!
  * \brief Get all input pin logic levels from port
@@ -571,13 +599,12 @@ cy8c95xx_error_code_t cy8c95xx_read_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t in
  *
  * \param dev Pointer to CY8C95XX expander struct
  * \param port Port to read
- * \param inv Read values on inverted way
  * \param port_state Pointer to receive port state
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t inv, uint8_t* port_state);
+cy8c95xx_err_code_t cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t* port_state);
  
 /*!
  * \brief Get a single output pin logic level
@@ -586,11 +613,11 @@ cy8c95xx_error_code_t cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t 
  * \param dev Pointer to CY8C95XX expander struct
  * \param pin Specific pin to read
  * \param state Pointer to receive pin state
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, uint8_t pin, uint8_t* state);
+cy8c95xx_err_code_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, uint8_t pin, uint8_t* state);
  
 /*!
  * \brief Get all output pin logic levels from port
@@ -599,11 +626,11 @@ cy8c95xx_error_code_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, uint8_t pin, uin
  * \param dev Pointer to CY8C95XX expander struct
  * \param port Port to read
  * \param port_state Pointer to receive port state
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_get_port_out_lvl(cy8c95xx_t *dev, uint8_t port, uint8_t* port_state);
+cy8c95xx_err_code_t cy8c95xx_get_port_out_lvl(cy8c95xx_t *dev, uint8_t port, uint8_t* port_state);
  
 /*!
  * \brief Set a single output pin logic level
@@ -612,11 +639,11 @@ cy8c95xx_error_code_t cy8c95xx_get_port_out_lvl(cy8c95xx_t *dev, uint8_t port, u
  * \param dev Pointer to CY8C95XX expander struct
  * \param pin Specific pin to write
  * \param val Value to apply on bit
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_write_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t val);
+cy8c95xx_err_code_t cy8c95xx_write_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t val);
  
 /*!
  * \brief Set all output pins logic levels in a port
@@ -624,11 +651,11 @@ cy8c95xx_error_code_t cy8c95xx_write_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t v
  * \param dev Pointer to CY8C95XX expander struct
  * \param port Port to write
  * \param port_val Port pins logic level to write
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t port_val);
+cy8c95xx_err_code_t cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t port_val);
  
 /*!
  * \brief Enable or disable pwm output on pin
@@ -637,11 +664,11 @@ cy8c95xx_error_code_t cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t
  * \param dev Pointer to CY8C95XX expander struct
  * \param pin Specific pin to configure pwm
  * \param pwm_en Enables or disables pwm
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t pwm_en);
+cy8c95xx_err_code_t cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t pwm_en);
  
 /*!
  * \brief Configure pwm output
@@ -651,11 +678,11 @@ cy8c95xx_error_code_t cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, uint8_t pin, uint8_t
  * \param pwm_cfg Pointer to pwm Configuration structure
  * \param duty_cyc Pointer  to resoulting pwm duty cycle
  * \param freq Pointer to resoulting frequency
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_error_code_t cy8c95xx_set_pwm_cfg(cy8c95xx_t *dev, cy8c95xx_pwm_cfg_t* pwm_cfg, float *duty_cyc, float *freq);
+cy8c95xx_err_code_t cy8c95xx_set_pwm_cfg(cy8c95xx_t *dev, cy8c95xx_pwm_cfg_t* pwm_cfg, float *duty_cyc, float *freq);
  
 /*!
  * \brief Configures EEPROM enable register
@@ -663,12 +690,12 @@ cy8c95xx_error_code_t cy8c95xx_set_pwm_cfg(cy8c95xx_t *dev, cy8c95xx_pwm_cfg_t* 
  *
  * \param dev Pointer to CY8C95XX expander struct
  * \param cmd Enable EEPROM commad
- * \return CY8C95XX_I2C_ERROR : error in coms
- *         CY8C95XX_ARG_ERROR : error in arguments
+ * \return CY8C95XX_I2C_ERR : error in coms
+ *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  * \note Writes to dev register differ from other registers, see datasheet
  */
-cy8c95xx_error_code_t cy8c95xx_eeprom_enable(cy8c95xx_t *dev, uint8_t cmd);
+cy8c95xx_err_code_t cy8c95xx_eeprom_enable(cy8c95xx_t *dev, uint8_t cmd);
  
 #ifdef __cplusplus
 }

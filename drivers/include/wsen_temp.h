@@ -27,12 +27,13 @@ extern "C" {
  * \brief Error codes
  * \ingroup wsen_temp
  */
-typedef enum {
+typedef enum 
+{
     WSEN_TEMP_OK =          PLATFORM_OK,
-    WSEN_TEMP_ARG_ERROR =   PLATFORM_ARGUMENT_ERROR,
-    WSEN_TEMP_INIT_ERROR =  PLATFORM_I2C_INIT_ERROR,
-    WSEN_TEMP_I2C_ERROR =   PLATFORM_I2C_COM_ERROR
-} wsen_temp_error_code_t;
+    WSEN_TEMP_ARG_ERR =   PLATFORM_ARGUMENT_ERR,
+    WSEN_TEMP_INIT_ERR =  PLATFORM_I2C_INIT_ERR,
+    WSEN_TEMP_I2C_ERR =   PLATFORM_I2C_COM_ERR
+} wsen_temp_err_code_t;
  
 /**
  * \brief Posible I2C Slave addresses
@@ -51,8 +52,9 @@ typedef enum {
  * \brief Register map
  * \ingroup wsen_temp
  */
-typedef enum {
-    WSEN_TEMP_REG_DEVICE_ID =  0x01, /* Device ID register */
+typedef enum
+{
+    WSEN_TEMP_REG_DEVICE_ID = 0x01, /* Device ID register */
     WSEN_TEMP_REG_HIGH_LIM =   0x02, /* Temperature high limit register */
     WSEN_TEMP_REG_LOW_LIM =    0x03, /* Temperature low limit register */
     WSEN_TEMP_REG_CTRL =       0x04, /* Control Register*/
@@ -70,8 +72,9 @@ typedef enum {
  * Type  R/W
  * Default value: 0x00
  */
-typedef struct {
-    uint8_t one_shot        : 1; /* Trigger a single measurement by setting this bit to 1; Bit automatically reset to 0*/
+typedef struct
+{
+    uint8_t one_shot : 1; /* Trigger a single measurement by setting this bit to 1; Bit automatically reset to 0*/
     uint8_t reserved01      : 1; /* Must be set to 0 */
     uint8_t free_run        : 1; /* FREERUN : 1:Enable continuous mode 0:Disable continuous mode */
     uint8_t add_inc         : 1; /* IF_ADD_INC : Register address automatically incremented during a multiple byte access with I2C interface. Default value 1.( 0: disable; 1: enable) */
@@ -109,8 +112,9 @@ typedef struct {
  * Type R only
  * Default value: 0x00
  */
-typedef struct {
-    uint8_t busy            : 1; /* BUSY : Temperature conversion status.(0: data conversion complete; 1: data conversion in progress) */
+typedef struct
+{
+    uint8_t busy : 1; /* BUSY : Temperature conversion status.(0: data conversion complete; 1: data conversion in progress) */
     uint8_t over_lim        : 1; /* OVER_THL :Temperature higher limit status. (0: temperature is below limit or disabled; 1: temperature exceeded high limit*/
     uint8_t under_lim       : 1; /* UNDER_TLL :Temperature lower limit status. (0: temperature is below limit or disabled; 1: temperature exceeded low limit*/
     uint8_t reserved05      : 5; /* Must be set to 0 */
@@ -124,8 +128,9 @@ typedef struct {
  * Type  R/W
  * Default value: 0x00
  */
-typedef struct {
-    uint8_t reserved01      : 1; /* Must be set to 0 */
+typedef struct
+{
+    uint8_t reserved01 : 1; /* Must be set to 0 */
     uint8_t reset           : 1; /* SOFT_RESET : Reset the digital block by setting this bit to 1 */
     uint8_t reserved06      : 6; /* Must be set to 0 */
 } wsen_temp_reset_t;
@@ -142,7 +147,8 @@ typedef struct {
  * \brief Initial config struct
  * \ingroup wsen_temp
  */
-typedef struct {
+typedef struct
+{
     int sda_pin;
     int scl_pin;
     int i2c_speed;
@@ -176,10 +182,10 @@ void wsen_temp_set_default_cfg(wsen_temp_cfg_t* cfg);
  *
  * \param dev Pointer to temp sensor struct
  * \param cfg Initial config struct
- * \return WSEN_TEMP_INIT_ERROR : error
+ * \return WSEN_TEMP_INIT_ERR : error
  *         WSEN_TEMP_OK : successful
  */
-wsen_temp_error_code_t wsen_temp_init(wsen_temp_t* dev, wsen_temp_cfg_t* cfg);
+wsen_temp_err_code_t wsen_temp_init(wsen_temp_t* dev, wsen_temp_cfg_t* cfg);
  
 /*!
  * \brief Writes data to registers
@@ -189,11 +195,11 @@ wsen_temp_error_code_t wsen_temp_init(wsen_temp_t* dev, wsen_temp_cfg_t* cfg);
  * \param reg Register address
  * \param txdata Pointer to data to send
  * \param txlen Number of the bytes in data buf
- * \return WSEN_TEMP_I2C_ERROR : error in coms
- *         WSEN_TEMP_ARG_ERROR : error in arguments
+ * \return WSEN_TEMP_I2C_ERR : error in coms
+ *         WSEN_TEMP_ARG_ERR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_temp_error_code_t wsen_temp_generic_write(wsen_temp_t* dev, wsen_temp_reg_t reg, uint8_t* txdata, uint8_t txlen);
+wsen_temp_err_code_t wsen_temp_generic_write(wsen_temp_t* dev, wsen_temp_reg_t reg, uint8_t* txdata, uint8_t txlen);
  
 /*!
  * \brief Reads data from registers
@@ -203,11 +209,11 @@ wsen_temp_error_code_t wsen_temp_generic_write(wsen_temp_t* dev, wsen_temp_reg_t
  * \param reg Register address
  * \param rxdata Pointer to receive data
  * \param rxlen Number of the bytes to be read
- * \return WSEN_TEMP_I2C_ERROR : error in coms
- *         WSEN_TEMP_ARG_ERROR : error in arguments
+ * \return WSEN_TEMP_I2C_ERR : error in coms
+ *         WSEN_TEMP_ARG_ERR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_temp_error_code_t wsen_temp_generic_read(wsen_temp_t* dev, wsen_temp_reg_t reg, uint8_t* rxdata, uint8_t rxlen);
+wsen_temp_err_code_t wsen_temp_generic_read(wsen_temp_t* dev, wsen_temp_reg_t reg, uint8_t* rxdata, uint8_t rxlen);
  
 /*!
  * \brief Read the device id
@@ -215,22 +221,22 @@ wsen_temp_error_code_t wsen_temp_generic_read(wsen_temp_t* dev, wsen_temp_reg_t 
  *
  * \param dev Pointer to temp sensor struct
  * \param id Pointer to receive the device id
- * \return WSEN_TEMP_I2C_ERROR : error in coms
- *         WSEN_TEMP_ARG_ERROR : error in arguments
+ * \return WSEN_TEMP_I2C_ERR : error in coms
+ *         WSEN_TEMP_ARG_ERR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_temp_error_code_t wsen_temp_get_id(wsen_temp_t* dev, uint8_t* id);
+wsen_temp_err_code_t wsen_temp_get_id(wsen_temp_t* dev, uint8_t* id);
  
 /*!
  * \brief Software reset
  * \ingroup wsen_temp
  *
  * \param dev Pointer to temp sensor struct
- * \return WSEN_TEMP_I2C_ERROR : error in coms
- *         WSEN_TEMP_ARG_ERROR : error in arguments
+ * \return WSEN_TEMP_I2C_ERR : error in coms
+ *         WSEN_TEMP_ARG_ERR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_temp_error_code_t wsen_temp_sw_rst(wsen_temp_t* dev);
+wsen_temp_err_code_t wsen_temp_sw_rst(wsen_temp_t* dev);
  
 /*!
  * \brief Set CONTROL register settings
@@ -238,11 +244,11 @@ wsen_temp_error_code_t wsen_temp_sw_rst(wsen_temp_t* dev);
  *
  * \param dev Pointer to temp sensor struct
  * \param ctrl Pointer to control register settings
- * \return WSEN_TEMP_I2C_ERROR : error in coms
- *         WSEN_TEMP_ARG_ERROR : error in arguments
+ * \return WSEN_TEMP_I2C_ERR : error in coms
+ *         WSEN_TEMP_ARG_ERR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_temp_error_code_t wsen_temp_set_ctrl(wsen_temp_t* dev, wsen_temp_ctrl_t* ctrl);
+wsen_temp_err_code_t wsen_temp_set_ctrl(wsen_temp_t* dev, wsen_temp_ctrl_t* ctrl);
  
 /*!
  * \brief Get CONTROL register current state
@@ -250,11 +256,11 @@ wsen_temp_error_code_t wsen_temp_set_ctrl(wsen_temp_t* dev, wsen_temp_ctrl_t* ct
  *
  * \param dev Pointer to temp sensor struct
  * \param ctrl Pointer to receive current control register state
- * \return WSEN_TEMP_I2C_ERROR : error in coms
- *         WSEN_TEMP_ARG_ERROR : error in arguments
+ * \return WSEN_TEMP_I2C_ERR : error in coms
+ *         WSEN_TEMP_ARG_ERR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_temp_error_code_t wsen_temp_get_ctrl(wsen_temp_t* dev, wsen_temp_ctrl_t* ctrl);
+wsen_temp_err_code_t wsen_temp_get_ctrl(wsen_temp_t* dev, wsen_temp_ctrl_t* ctrl);
  
 /*!
  * \brief Get STATUS register current state
@@ -262,11 +268,11 @@ wsen_temp_error_code_t wsen_temp_get_ctrl(wsen_temp_t* dev, wsen_temp_ctrl_t* ct
  *
  * \param dev Pointer to temp sensor struct
  * \param status Pointer to receive current status register state
- * \return WSEN_TEMP_I2C_ERROR : error in coms
- *         WSEN_TEMP_ARG_ERROR : error in arguments
+ * \return WSEN_TEMP_I2C_ERR : error in coms
+ *         WSEN_TEMP_ARG_ERR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_temp_error_code_t wsen_temp_get_status(wsen_temp_t* dev, wsen_temp_status_t* status);
+wsen_temp_err_code_t wsen_temp_get_status(wsen_temp_t* dev, wsen_temp_status_t* status);
  
 /*!
  * \brief Set temperature high limit for interrupt
@@ -274,11 +280,11 @@ wsen_temp_error_code_t wsen_temp_get_status(wsen_temp_t* dev, wsen_temp_status_t
  *
  * \param dev Pointer to temp sensor struct
  * \param limit Limit to set
- * \return WSEN_TEMP_I2C_ERROR : error in coms
- *         WSEN_TEMP_ARG_ERROR : error in arguments
+ * \return WSEN_TEMP_I2C_ERR : error in coms
+ *         WSEN_TEMP_ARG_ERR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_temp_error_code_t wsen_temp_set_high_lim(wsen_temp_t* dev, uint8_t limit);
+wsen_temp_err_code_t wsen_temp_set_high_lim(wsen_temp_t* dev, uint8_t limit);
  
 /*!
  * \brief Get temperature high limit for interrupt
@@ -286,11 +292,11 @@ wsen_temp_error_code_t wsen_temp_set_high_lim(wsen_temp_t* dev, uint8_t limit);
  *
  * \param dev Pointer to temp sensor struct
  * \param limit Pointer to receive current limit value
- * \return WSEN_TEMP_I2C_ERROR : error in coms
- *         WSEN_TEMP_ARG_ERROR : error in arguments
+ * \return WSEN_TEMP_I2C_ERR : error in coms
+ *         WSEN_TEMP_ARG_ERR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_temp_error_code_t wsen_temp_get_high_lim(wsen_temp_t* dev, uint8_t* limit);
+wsen_temp_err_code_t wsen_temp_get_high_lim(wsen_temp_t* dev, uint8_t* limit);
  
 /*!
  * \brief Set temperature low limit for interrupt
@@ -298,11 +304,11 @@ wsen_temp_error_code_t wsen_temp_get_high_lim(wsen_temp_t* dev, uint8_t* limit);
  *
  * \param dev Pointer to temp sensor struct
  * \param limit Limit to set
- * \return WSEN_TEMP_I2C_ERROR : error in coms
- *         WSEN_TEMP_ARG_ERROR : error in arguments
+ * \return WSEN_TEMP_I2C_ERR : error in coms
+ *         WSEN_TEMP_ARG_ERR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_temp_error_code_t wsen_temp_set_low_lim(wsen_temp_t* dev, uint8_t limit);
+wsen_temp_err_code_t wsen_temp_set_low_lim(wsen_temp_t* dev, uint8_t limit);
  
 /*!
  * \brief Get temperature low limit for interrupt
@@ -310,11 +316,11 @@ wsen_temp_error_code_t wsen_temp_set_low_lim(wsen_temp_t* dev, uint8_t limit);
  *
  * \param dev Pointer to temp sensor struct
  * \param limit Pointer to receive current limit value
- * \return WSEN_TEMP_I2C_ERROR : error in coms
- *         WSEN_TEMP_ARG_ERROR : error in arguments
+ * \return WSEN_TEMP_I2C_ERR : error in coms
+ *         WSEN_TEMP_ARG_ERR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_temp_error_code_t wsen_temp_get_low_lim(wsen_temp_t* dev, uint8_t* limit);
+wsen_temp_err_code_t wsen_temp_get_low_lim(wsen_temp_t* dev, uint8_t* limit);
  
 /*!
  * \brief Get raw temperature digital value
@@ -322,11 +328,11 @@ wsen_temp_error_code_t wsen_temp_get_low_lim(wsen_temp_t* dev, uint8_t* limit);
  *
  * \param dev Pointer to temp sensor struct
  * \param temp Pointer to receive temperature
- * \return WSEN_TEMP_I2C_ERROR : error in coms
- *         WSEN_TEMP_ARG_ERROR : error in arguments
+ * \return WSEN_TEMP_I2C_ERR : error in coms
+ *         WSEN_TEMP_ARG_ERR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_temp_error_code_t wsen_temp_get_raw(wsen_temp_t* dev, uint16_t* temp);
+wsen_temp_err_code_t wsen_temp_get_raw(wsen_temp_t* dev, uint16_t* temp);
  
 /*!
  * \brief Get temperature value in °C
@@ -334,11 +340,11 @@ wsen_temp_error_code_t wsen_temp_get_raw(wsen_temp_t* dev, uint16_t* temp);
  *
  * \param dev Pointer to temp sensor struct
  * \param temp Pointer to receive temperature
- * \return WSEN_TEMP_I2C_ERROR : error in coms
- *         WSEN_TEMP_ARG_ERROR : error in arguments
+ * \return WSEN_TEMP_I2C_ERR : error in coms
+ *         WSEN_TEMP_ARG_ERR : error in arguments
  *         WSEN_TEMP_OK : successful
  */
-wsen_temp_error_code_t wsen_temp_get_celsius(wsen_temp_t* dev, float* temp);
+wsen_temp_err_code_t wsen_temp_get_celsius(wsen_temp_t* dev, float* temp);
  
 #ifdef __cplusplus
 }

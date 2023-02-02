@@ -49,57 +49,59 @@ typedef struct spi_inst_t hw_spi_t;
  * \brief Error codes
  * \ingroup platform
  */
-enum PLATFORM_ERROR_CODE
+typedef enum
 {
-    PLATFORM_OK =               0x00,
-    PLATFORM_ARGUMENT_ERROR =   0x01,
-    PLATFORM_GPIO_INIT_ERROR =  0x02,
-    PLATFORM_I2C_INIT_ERROR =   0x03,
-    PLATFORM_I2C_COM_ERROR =    0x04,
-    PLATFORM_SPI_INIT_ERROR =   0x05,
-    PLATFORM_SPI_COM_ERROR =    0x06,
-};
+    PLATFORM_OK = 0x00,
+    PLATFORM_ARGUMENT_ERR =   0x01,
+    PLATFORM_GPIO_INIT_ERR =  0x02,
+    PLATFORM_I2C_INIT_ERR =   0x03,
+    PLATFORM_I2C_COM_ERR =    0x04,
+    PLATFORM_SPI_INIT_ERR =   0x05,
+    PLATFORM_SPI_COM_ERR =    0x06,
+} platform_err_code_t;
  
 /**
  * \brief GPIO direction
  * \ingroup platform
  */
-enum PLATFORM_GPIO_DIR
+typedef enum
 {
     PLATFORM_GPIO_IN,
     PLATFORM_GPIO_OUT
-};
+} platform_gpio_dir_t;
  
 /**
  * \brief GPIO internal pull resistor
  * \ingroup platform
  */
-enum PLATFORM_GPIO_PULL_MODE
+typedef enum
 {
     PLATFORM_GPIO_PULL_DISABLED,
     PLATFORM_GPIO_PULL_UP,
     PLATFORM_GPIO_PULL_DOWN
-};
+} platform_gpio_pull_mod_t;
  
 /**
  * \brief SPI modes
  * \ingroup platform
  */
-enum platform_spi_mode {
+typedef enum
+{
     PLATFORM_SPI_MODE_0 = 0x0,
     PLATFORM_SPI_MODE_1 = 0x1,
     PLATFORM_SPI_MODE_2 = 0x2,
     PLATFORM_SPI_MODE_3 = 0x3
-};
+} platform_spi_mode_t;
  
 /**
  * \brief SPI bit order
  * \ingroup platform
  */
-enum platform_spi_bit_order {
-    PLATFORM_SPI_LSBFIRST = 0x0, 
+typedef enum
+{
+    PLATFORM_SPI_LSBFIRST = 0x0,
     PLATFORM_SPI_MSBFIRST = 0x1
-};
+} platform_spi_bit_order_t;
  
 /*!
  * \brief Initialize and config gpio pin
@@ -108,10 +110,10 @@ enum platform_spi_bit_order {
  * \param pin pin number -1 for unused pins
  * \param dir in/out configuration
  * \param pull internal pull resistor configuration
- * \return PLATFORM_GPIO_INIT_ERROR : error
+ * \return PLATFORM_GPIO_INIT_ERR : error
  *         PLATFORM_OK : successful
  */
-int platform_gpio_init(int pin, uint dir, uint pull);
+int platform_gpio_init(int pin, platform_gpio_dir_t dir, platform_gpio_pull_mod_t pull);
  
 /*!
  * \brief Set out gpio value
@@ -156,7 +158,7 @@ void platform_sleep_us(uint64_t us);
  * \param speed Baudrate
  * \param sda_pin SDA pin number
  * \param scl_pin SCL pin number
- * \return PLATFORM_I2C_INIT_ERROR : error
+ * \return PLATFORM_I2C_INIT_ERR : error
  *         PLATFORM_OK : successful
  */
 int platform_i2c_init(hw_i2c_t* i2c_hw, uint speed, int sda_pin, int scl_pin);
@@ -169,7 +171,7 @@ int platform_i2c_init(hw_i2c_t* i2c_hw, uint speed, int sda_pin, int scl_pin);
  * \param addr 7-bit address of device to read from
  * \param rxdata Pointer to data to receive
  * \param len Length of data in bytes to receive
- * \return PLATFORM_I2C_COM_ERROR : error
+ * \return PLATFORM_I2C_COM_ERR : error
  *         PLATFORM_OK : successful
  */
 int platform_i2c_read(hw_i2c_t* i2c_hw, uint8_t addr, uint8_t* rxdata, size_t len);
@@ -182,7 +184,7 @@ int platform_i2c_read(hw_i2c_t* i2c_hw, uint8_t addr, uint8_t* rxdata, size_t le
  * \param addr 7-bit address of device to write to
  * \param txdata Pointer to data to send
  * \param len Length of data in bytes to send
- * \return PLATFORM_I2C_COM_ERROR : error
+ * \return PLATFORM_I2C_COM_ERR : error
  *         PLATFORM_OK : successful
  */
 int platform_i2c_write(hw_i2c_t* i2c_hw, uint8_t addr, const uint8_t* txdata, size_t len);
@@ -195,7 +197,7 @@ int platform_i2c_write(hw_i2c_t* i2c_hw, uint8_t addr, const uint8_t* txdata, si
  * \param mosi_pin MOSI pin number
  * \param miso_pin MISO pin number
  * \param sck_pin SCK pin number
- * \return PLATFORM_SPI_INIT_ERROR : error
+ * \return PLATFORM_SPI_INIT_ERR : error
  *         PLATFORM_OK : successful
  */
 int platform_spi_init(hw_spi_t* spi_hw, uint speed, int mosi_pin, int miso_pin, int sck_pin);
@@ -207,7 +209,7 @@ int platform_spi_init(hw_spi_t* spi_hw, uint speed, int mosi_pin, int miso_pin, 
  * \param speed Baudrate
  * \param mode SPI mode (0, 1, 2, 3)
  * \param bit_order SPI bit order
- * \return PLATFORM_ARGUMENT_ERROR : error
+ * \return PLATFORM_ARGUMENT_ERR : error
  *         PLATFORM_OK : successful
  */
 int platform_spi_set_config(hw_spi_t* spi_hw, uint speed, uint8_t mode, uint8_t bit_order);
@@ -218,7 +220,7 @@ int platform_spi_set_config(hw_spi_t* spi_hw, uint speed, uint8_t mode, uint8_t 
  * \param spi_hw Pointer to SPI interface
  * \param txdata Pointer to data to send
  * \param len Length of data in bytes to send
- * \return PLATFORM_SPI_COM_ERROR : error
+ * \return PLATFORM_SPI_COM_ERR : error
  *         PLATFORM_OK : successful
  */
 int platform_spi_write(hw_spi_t* spi_hw, uint8_t* txdata, size_t len);
@@ -230,7 +232,7 @@ int platform_spi_write(hw_spi_t* spi_hw, uint8_t* txdata, size_t len);
  * \param txdata Pointer to data to send
  * \param rxdata Pointer to data to receive
  * \param len Length of data in bytes to send
- * \return PLATFORM_SPI_COM_ERROR : error
+ * \return PLATFORM_SPI_COM_ERR : error
  *         PLATFORM_OK : successful
  */
 int platform_spi_write_read(hw_spi_t* spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len);
