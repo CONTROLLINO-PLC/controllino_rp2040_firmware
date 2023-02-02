@@ -617,7 +617,7 @@ cy8c95xx_err_code_t cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t* p
  *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_err_code_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, int pin, uint8_t* state);
+cy8c95xx_err_code_t cy8c95xx_read_pin_out_lvl(cy8c95xx_t* dev, int pin, uint8_t* state);
  
 /*!
  * \brief Get all output pin logic levels from port
@@ -630,7 +630,7 @@ cy8c95xx_err_code_t cy8c95xx_get_pin_out_lvl(cy8c95xx_t* dev, int pin, uint8_t* 
  *         CY8C95XX_ARG_ERR : error in arguments
  *         CY8C95XX_OK : successful
  */
-cy8c95xx_err_code_t cy8c95xx_get_port_out_lvl(cy8c95xx_t *dev, uint8_t port, uint8_t* port_state);
+cy8c95xx_err_code_t cy8c95xx_read_port_out_lvl(cy8c95xx_t* dev, uint8_t port, uint8_t* port_state);
  
 /*!
  * \brief Set a single output pin logic level

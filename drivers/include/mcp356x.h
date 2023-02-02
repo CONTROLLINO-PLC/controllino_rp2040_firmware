@@ -526,7 +526,21 @@ mcp356x_err_code_t mcp356x_read_adc_ext(mcp356x_t* dev, uint32_t* adc_data, uint
 mcp356x_err_code_t mcp356x_read_adc_ch_ext(mcp356x_t* dev, uint32_t* adc_data, uint8_t* sgn, uint8_t* ch_id);
  
 /*!
- * \brief Read channel voltage in millivolts using \p vol_ref_min to \p vol_ref_max as reference
+ * \brief Read current adc raw conversion data
+ * \ingroup mcp356x
+ *
+ * \param dev Pointer MCP356X ADC struct
+ * \param adc_data Pointer to receive ADC raw data
+ * \param sgn Pointer to receive sign bit
+ * \param max_resolution Pointer to receive max resulution of ADC conversion
+ * \return MCP356X_SPI_ERR : error in coms
+ *         MCP356X_ARG_ERR : error in arguments
+ *         MCP356X_OK : successful
+ */
+mcp356x_err_code_t mcp356x_read_raw_adc(mcp356x_t* dev, uint32_t* adc_data, uint8_t* sgn, uint32_t* max_resolution);
+ 
+/*!
+ * \brief Read current adc voltage conversion in millivolts using \p vol_ref_min to \p vol_ref_max as reference
  * \ingroup mcp356x
  *
  * \param dev Pointer MCP356X ADC struct 

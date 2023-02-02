@@ -231,21 +231,14 @@ mcp356x_err_code_t mcp356x_read_adc_ch_ext(mcp356x_t* dev, uint32_t* adc_data, u
         return MCP356X_SPI_ERR;
     return MCP356X_OK;
 }
-
-/* Read channel voltage in millivolts using vol_ref_min to vol_ref_max as reference */
-mcp356x_err_code_t mcp356x_read_voltage(mcp356x_t* dev, uint32_t vol_ref_min, uint32_t vol_ref_max, uint32_t* vol_val)
+ 
+/* Read current adc raw conversion data */
+mcp356x_err_code_t mcp356x_read_raw_adc(mcp356x_t* dev, uint32_t* adc_data, uint8_t* sgn, uint32_t* max_resolution)
 {
     uint8_t ret;
     uint8_t config_3_reg;
     uint8_t adc_data_format;
-    uint32_t max_resolution;
-    uint32_t adc_data;
-    uint8_t sgn;
     uint8_t ch_id;
-    // Check arguments
-    if (vol_ref_min > vol_ref_max)
-        return MCP356X_ARG_ERR;
-    // Read ADC data format
     ret = mcp356x_iread(dev, MCP356X_REG_CFG_3, &config_3_reg, 1);
     if (ret != MCP356X_OK)
         return ret;
@@ -253,22 +246,39 @@ mcp356x_err_code_t mcp356x_read_voltage(mcp356x_t* dev, uint32_t vol_ref_min, ui
     switch (adc_data_format)
     {
     case MCP356X_CFG_3_DATA_FORMAT_CH_ADC:
-        mcp356x_read_adc_ch_ext(dev, &adc_data, &sgn, &ch_id);
-        max_resolution = 0xFFFFFF;
+        ret = mcp356x_read_adc_ch_ext(dev, adc_data, sgn, &ch_id);
+        *max_resolution = 0xFFFFFF;
         break;
     case MCP356X_CFG_3_DATA_FORMAT_EXT_ADC:
-        mcp356x_read_adc_ext(dev, &adc_data, &sgn);
-        max_resolution = 0xFFFFFF;
+        ret = mcp356x_read_adc_ext(dev, adc_data, sgn);
+        *max_resolution = 0xFFFFFF;
         break;
     case MCP356X_CFG_3_DATA_FORMAT_LEFT_JUST:
-        mcp356x_read_adc_left_just(dev, &adc_data, &sgn);
-        max_resolution = 0x7FFFFF;
+        ret = mcp356x_read_adc_left_just(dev, adc_data, sgn);
+        *max_resolution = 0x7FFFFF;
         break;
     case MCP356X_CFG_3_DATA_FORMAT_DEF:
-        mcp356x_read_adc_def(dev, &adc_data, &sgn);
-        max_resolution = 0x7FFFFF;
+        ret = mcp356x_read_adc_def(dev, adc_data, sgn);
+        *max_resolution = 0x7FFFFF;
         break;
     }
+    return ret;
+}
+
+/* Read current adc voltage conversion in millivolts */
+mcp356x_err_code_t mcp356x_read_voltage(mcp356x_t* dev, uint32_t vol_ref_min, uint32_t vol_ref_max, uint32_t* vol_val)
+{
+    uint8_t ret;
+    uint32_t adc_data;
+    uint8_t sgn;
+    uint32_t max_resolution;
+    // Check arguments
+    if (vol_ref_min > vol_ref_max)
+        return MCP356X_ARG_ERR;
+    // Read ADC data format
+    ret = mcp356x_read_raw_adc(dev, &adc_data, &sgn, &max_resolution);
+    if (ret != MCP356X_OK)
+        return ret;
     // Calulate voltage
     *vol_val = (int)(((float)(vol_ref_max - vol_ref_min) * (float)adc_data) / (float)max_resolution);
     return MCP356X_OK;

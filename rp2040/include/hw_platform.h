@@ -26,8 +26,8 @@ extern "C" {
  * \brief RP2040 default I2C settings
  * \ingroup platform
  */
-typedef struct i2c_inst_t hw_i2c_t;
-#define PLATFORM_I2C_HW    (hw_i2c_t*)i2c0
+#define hw_i2c_t           i2c_inst_t
+#define PLATFORM_I2C_HW    i2c0
 #define PLATFORM_I2C_SPEED 100000
 #define PLATFORM_I2C_SDA   4
 #define PLATFORM_I2C_SCL   5
@@ -36,8 +36,8 @@ typedef struct i2c_inst_t hw_i2c_t;
  * \brief RP2040 default SPI settings
  * \ingroup platform
  */
-typedef struct spi_inst_t hw_spi_t;
-#define PLATFORM_SPI_HW    (hw_spi_t*)spi0
+#define hw_spi_t           spi_inst_t
+#define PLATFORM_SPI_HW    spi0
 #define PLATFORM_SPI_SPEED 1000000
 #define PLATFORM_SPI_MOSI  19
 #define PLATFORM_SPI_MISO  16

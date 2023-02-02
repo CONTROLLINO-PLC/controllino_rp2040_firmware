@@ -151,19 +151,19 @@ ad56x4_err_code_t ad56x4_write_input_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_
 }
  
 /* Update DAC register n */
-ad56x4_err_code_t ad56x4_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr)
+ad56x4_err_code_t ad56x4_update_dac_reg(ad56x4_t* dev, uint8_t ch_addr)
 {
     return ad56x4_generic_write(dev, AD56X4_CMD_UPDATE_DAC_REGISTER, ch_addr, 0x0000 /* don't care */);
 }
  
 /* Write to input register n, update all */
-ad56x4_err_code_t ad56x4_write_input_reg_update_all_dev(ad56x4_t* dev, uint8_t ch_addr, uint16_t data)
+ad56x4_err_code_t ad56x4_write_input_reg_update_all_dac(ad56x4_t* dev, uint8_t ch_addr, uint16_t data)
 {
     return ad56x4_generic_write(dev, AD56X4_CMD_WRITE_INPUT_REGISTER_UPDATE_ALL, ch_addr, data);
 }
  
 /* Write to and update DAC channel n */
-ad56x4_err_code_t ad56x4_write_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_t data)
+ad56x4_err_code_t ad56x4_write_update_dac_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_t data)
 {
     return ad56x4_generic_write(dev, AD56X4_CMD_WRITE_UPDATE_CH, ch_addr, data);
 }
@@ -202,10 +202,10 @@ ad56x4_err_code_t ad56x4_set_ldev(ad56x4_t* dev, uint8_t ch_ldev_mode)
 ad56x4_err_code_t ad56x4_set_ch_voltage(ad56x4_t* dev, uint8_t ch_addr, uint16_t vol_val, uint16_t vol_ref_max)
 {
     int ret;
-    float float_dev = ((float)vol_val / (float)vol_ref_max) * (float)dev->resolution;
-    int data = (int)float_dev;
-    ret = ad56x4_write_input_reg(dev, ch_addr, (uint16_t)data);
+    float float_dac = ((float)vol_val / (float)vol_ref_max) * (float)dev->resolution;
+    int txdata = (int)float_dac;
+    ret = ad56x4_write_input_reg(dev, ch_addr, (uint16_t)txdata);
     if (ret != AD56X4_OK) return ret;
-    ret = ad56x4_update_dev_reg(dev, ch_addr);
+    ret = ad56x4_update_dac_reg(dev, ch_addr);
     return ret;
 }

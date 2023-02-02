@@ -188,7 +188,7 @@ ad56x4_err_code_t ad56x4_write_input_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_
  *         AD56X4_ARG_ERR : error in arguments
  *         AD56X4_OK : successful
  */
-ad56x4_err_code_t ad56x4_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr);
+ad56x4_err_code_t ad56x4_update_dac_reg(ad56x4_t* dev, uint8_t ch_addr);
  
 /*!
  * \brief Write to input register n, update all (software LDAC) AD56X4_CMD_WRITE_INPUT_REGISTER_UPDATE_ALL
@@ -200,7 +200,7 @@ ad56x4_err_code_t ad56x4_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr);
  *         AD56X4_ARG_ERR : error in arguments
  *         AD56X4_OK : successfull
  */
-ad56x4_err_code_t ad56x4_write_input_reg_update_all_dev(ad56x4_t* dev, uint8_t ch_addr, uint16_t data);
+ad56x4_err_code_t ad56x4_write_input_reg_update_all_dac(ad56x4_t* dev, uint8_t ch_addr, uint16_t data);
  
 /*!
  * \brief Write to and update DAC channel n AD56X4_CMD_WRITE_UPDATE_CH
@@ -213,7 +213,7 @@ ad56x4_err_code_t ad56x4_write_input_reg_update_all_dev(ad56x4_t* dev, uint8_t c
  *         AD56X4_ARG_ERR : error in arguments
  *         AD56X4_OK : successful
  */
-ad56x4_err_code_t ad56x4_write_update_dev_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_t data);
+ad56x4_err_code_t ad56x4_write_update_dac_reg(ad56x4_t* dev, uint8_t ch_addr, uint16_t data);
  
 /*!
  * \brief Set power mode AD56X4_CMD_POWER_UPDOWN

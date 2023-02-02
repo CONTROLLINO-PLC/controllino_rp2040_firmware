@@ -10,11 +10,11 @@ void expander_test_output(void)
 {
     uint8_t pin_state;
     cy8c95xx_write_pin(&cy8c9520, OUTPIN, CY8C95XX_LOW);
-    cy8c95xx_get_pin_out_lvl(&cy8c9520, OUTPIN, &pin_state);
+    cy8c95xx_read_pin_out_lvl(&cy8c9520, OUTPIN, &pin_state);
     printf("Pin %u out level is %u!\r\n", OUTPIN, pin_state);
     platform_sleep_ms(1000);
     cy8c95xx_write_pin(&cy8c9520, OUTPIN, CY8C95XX_HIGH);
-    cy8c95xx_get_pin_out_lvl(&cy8c9520, OUTPIN, &pin_state);
+    cy8c95xx_read_pin_out_lvl(&cy8c9520, OUTPIN, &pin_state);
     printf("Pin %u out level is %u!\r\n", OUTPIN, pin_state);
     
 }

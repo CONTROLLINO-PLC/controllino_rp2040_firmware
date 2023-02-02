@@ -51,18 +51,18 @@ void platform_sleep_us(uint64_t us)
 /* Init I2C interface */
 int platform_i2c_init(hw_i2c_t* i2c_hw, uint speed, int sda_pin, int scl_pin)
 {
-    if ((i2c_hw != (hw_i2c_t*)i2c0 && i2c_hw != (hw_i2c_t*)i2c1) || (sda_pin < 0 && sda_pin > 31) || (scl_pin < 0 && scl_pin > 31))
+    if ((i2c_hw != i2c0 && i2c_hw != i2c1) || (sda_pin < 0 && sda_pin > 31) || (scl_pin < 0 && scl_pin > 31))
         return PLATFORM_I2C_INIT_ERR;
     gpio_set_function(sda_pin, GPIO_FUNC_I2C);
     gpio_set_function(scl_pin, GPIO_FUNC_I2C);
-    i2c_init((i2c_inst_t*)i2c_hw, speed);
+    i2c_init(i2c_hw, speed);
     return PLATFORM_OK;
 }
  
 /* Attempt to read specified number of bytes from address over I2C */
 int platform_i2c_read(hw_i2c_t* i2c_hw, uint8_t addr, uint8_t* rxdata, size_t len)
 {
-    if (i2c_read_blocking((i2c_inst_t*)i2c_hw, addr, rxdata, len, false) != len)
+    if (i2c_read_blocking(i2c_hw, addr, rxdata, len, false) != len)
         return PLATFORM_I2C_COM_ERR;
     return PLATFORM_OK;
 }
@@ -70,7 +70,7 @@ int platform_i2c_read(hw_i2c_t* i2c_hw, uint8_t addr, uint8_t* rxdata, size_t le
 /* Attempt to write specified number of bytes to address over I2C */
 int platform_i2c_write(hw_i2c_t* i2c_hw, uint8_t addr, const uint8_t* txdata, size_t len)
 {
-    if (i2c_write_blocking((i2c_inst_t*)i2c_hw, addr, txdata, len, false) != len)
+    if (i2c_write_blocking(i2c_hw, addr, txdata, len, false) != len)
         return PLATFORM_I2C_COM_ERR;
     return PLATFORM_OK;
 }
@@ -79,7 +79,7 @@ int platform_i2c_write(hw_i2c_t* i2c_hw, uint8_t addr, const uint8_t* txdata, si
 int platform_spi_init(hw_spi_t* spi_hw, uint speed, int mosi_pin, int miso_pin, int sck_pin)
 {
     // Check arguments
-    if ((spi_hw != (hw_spi_t*)spi0 && spi_hw != (hw_spi_t*)spi1))
+    if ((spi_hw != spi0 && spi_hw != spi1))
         return PLATFORM_I2C_INIT_ERR;
     if ((mosi_pin < 0 && mosi_pin > 31) || (miso_pin < 0 && miso_pin > 31) || (sck_pin < 0 && sck_pin > 31))
         return PLATFORM_I2C_INIT_ERR;
@@ -88,7 +88,7 @@ int platform_spi_init(hw_spi_t* spi_hw, uint speed, int mosi_pin, int miso_pin, 
     gpio_set_function(miso_pin, GPIO_FUNC_SPI);
     gpio_set_function(sck_pin, GPIO_FUNC_SPI);
     // Init interface
-    spi_init((spi_inst_t*)spi_hw, speed);
+    spi_init(spi_hw, speed);
     return PLATFORM_OK;
 }
  
@@ -128,8 +128,8 @@ int platform_spi_set_config(hw_spi_t* spi_hw, uint speed, uint8_t mode, uint8_t 
     else
         order = SPI_MSB_FIRST;
 
-    spi_set_baudrate((spi_inst_t*)spi_hw, speed);
-    spi_set_format((spi_inst_t*)spi_hw, 8, cpol, cpha, order);
+    spi_set_baudrate(spi_hw, speed);
+    spi_set_format(spi_hw, 8, cpol, cpha, order);
     return PLATFORM_OK;
 }
  
@@ -137,7 +137,7 @@ int platform_spi_set_config(hw_spi_t* spi_hw, uint speed, uint8_t mode, uint8_t 
 int platform_spi_write(hw_spi_t* spi_hw, uint8_t* txdata, size_t len)
 {
     size_t ret;
-    ret = spi_write_blocking((spi_inst_t*)spi_hw, txdata, len);
+    ret = spi_write_blocking(spi_hw, txdata, len);
     if (ret != len)
         return PLATFORM_SPI_COM_ERR;
     return PLATFORM_OK;
@@ -146,7 +146,7 @@ int platform_spi_write(hw_spi_t* spi_hw, uint8_t* txdata, size_t len)
 /* Write and read specified number of bytes over SPI */
 int platform_spi_write_read(hw_spi_t* spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len)
 {
-    if (spi_write_read_blocking((spi_inst_t*)spi_hw, txdata, rxdata, len) != len)
+    if (spi_write_read_blocking(spi_hw, txdata, rxdata, len) != len)
         return PLATFORM_SPI_COM_ERR;
     return PLATFORM_OK;
 }
