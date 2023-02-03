@@ -344,6 +344,59 @@ typedef enum
 } cy8c95xx_dir_mode_t;
  
 /**
+ * \brief GPIO numbers only up to cy8c9520(20 GPIOs)
+ * \ingroup cy8c95xx
+ */
+typedef enum
+{
+    CY8C95XX_GPIO_0 =                       0x00,
+    CY8C95XX_GPIO_1 =                       0x01,
+    CY8C95XX_GPIO_2 =                       0x02,
+    CY8C95XX_GPIO_3 =                       0x03,
+    CY8C95XX_GPIO_4 =                       0x04,
+    CY8C95XX_GPIO_5 =                       0x05,
+    CY8C95XX_GPIO_6 =                       0x06,
+    CY8C95XX_GPIO_7 =                       0x07,
+    CY8C95XX_GPIO_8 =                       0x08,
+    CY8C95XX_GPIO_9 =                       0x09,
+    CY8C95XX_GPIO_10 =                      0x0A,
+    CY8C95XX_GPIO_11 =                      0x0B,
+    CY8C95XX_GPIO_12 =                      0x0C,
+    CY8C95XX_GPIO_13 =                      0x0D,
+    CY8C95XX_GPIO_14 =                      0x0E,
+    CY8C95XX_GPIO_15 =                      0x0F,
+    CY8C95XX_GPIO_16 =                      0x10,
+    CY8C95XX_GPIO_17 =                      0x11,
+    CY8C95XX_GPIO_18 =                      0x12,
+    CY8C95XX_GPIO_19 =                      0x13,
+} cy8c95xx_gpio_t;
+ 
+/**
+ * \brief PWM selection for each GPIO up to cy8c9520(20 GPIOs)
+ * \ingroup cy8c95xx
+ */
+#define CY8C95XX_GPIO_0_PWM                 CY8C95XX_SEL_PWM_3
+#define CY8C95XX_GPIO_1_PWM                 CY8C95XX_SEL_PWM_1
+#define CY8C95XX_GPIO_2_PWM                 CY8C95XX_SEL_PWM_3
+#define CY8C95XX_GPIO_3_PWM                 CY8C95XX_SEL_PWM_1
+#define CY8C95XX_GPIO_4_PWM                 CY8C95XX_SEL_PWM_3
+#define CY8C95XX_GPIO_5_PWM                 CY8C95XX_SEL_PWM_1
+#define CY8C95XX_GPIO_6_PWM                 CY8C95XX_SEL_PWM_3
+#define CY8C95XX_GPIO_7_PWM                 CY8C95XX_SEL_PWM_1
+#define CY8C95XX_GPIO_8_PWM                 CY8C95XX_SEL_PWM_2
+#define CY8C95XX_GPIO_9_PWM                 CY8C95XX_SEL_PWM_0
+#define CY8C95XX_GPIO_10_PWM                CY8C95XX_SEL_PWM_2
+#define CY8C95XX_GPIO_11_PWM                CY8C95XX_SEL_PWM_0
+#define CY8C95XX_GPIO_12_PWM                CY8C95XX_SEL_PWM_2
+#define CY8C95XX_GPIO_13_PWM                CY8C95XX_SEL_PWM_0
+#define CY8C95XX_GPIO_14_PWM                CY8C95XX_SEL_PWM_2
+#define CY8C95XX_GPIO_15_PWM                CY8C95XX_SEL_PWM_0
+#define CY8C95XX_GPIO_16_PWM                CY8C95XX_SEL_PWM_2
+#define CY8C95XX_GPIO_17_PWM                CY8C95XX_SEL_PWM_0
+#define CY8C95XX_GPIO_18_PWM                CY8C95XX_SEL_PWM_0
+#define CY8C95XX_GPIO_19_PWM                CY8C95XX_SEL_PWM_3
+ 
+/**
  * \brief External pins
  * \ingroup cy8c95xx
  */
