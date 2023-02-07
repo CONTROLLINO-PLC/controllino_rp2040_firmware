@@ -54,7 +54,7 @@ typedef enum
  */
 typedef enum
 {
-    WSEN_TEMP_REG_DEVICE_ID = 0x01, /* Device ID register */
+    WSEN_TEMP_REG_DEVICE_ID =  0x01, /* Device ID register */
     WSEN_TEMP_REG_HIGH_LIM =   0x02, /* Temperature high limit register */
     WSEN_TEMP_REG_LOW_LIM =    0x03, /* Temperature low limit register */
     WSEN_TEMP_REG_CTRL =       0x04, /* Control Register*/
@@ -74,7 +74,7 @@ typedef enum
  */
 typedef struct
 {
-    uint8_t one_shot : 1; /* Trigger a single measurement by setting this bit to 1; Bit automatically reset to 0*/
+    uint8_t one_shot        : 1; /* Trigger a single measurement by setting this bit to 1; Bit automatically reset to 0*/
     uint8_t reserved01      : 1; /* Must be set to 0 */
     uint8_t free_run        : 1; /* FREERUN : 1:Enable continuous mode 0:Disable continuous mode */
     uint8_t add_inc         : 1; /* IF_ADD_INC : Register address automatically incremented during a multiple byte access with I2C interface. Default value 1.( 0: disable; 1: enable) */
@@ -114,7 +114,7 @@ typedef struct
  */
 typedef struct
 {
-    uint8_t busy : 1; /* BUSY : Temperature conversion status.(0: data conversion complete; 1: data conversion in progress) */
+    uint8_t busy            : 1; /* BUSY : Temperature conversion status.(0: data conversion complete; 1: data conversion in progress) */
     uint8_t over_lim        : 1; /* OVER_THL :Temperature higher limit status. (0: temperature is below limit or disabled; 1: temperature exceeded high limit*/
     uint8_t under_lim       : 1; /* UNDER_TLL :Temperature lower limit status. (0: temperature is below limit or disabled; 1: temperature exceeded low limit*/
     uint8_t reserved05      : 5; /* Must be set to 0 */
@@ -130,7 +130,7 @@ typedef struct
  */
 typedef struct
 {
-    uint8_t reserved01 : 1; /* Must be set to 0 */
+    uint8_t reserved01      : 1; /* Must be set to 0 */
     uint8_t reset           : 1; /* SOFT_RESET : Reset the digital block by setting this bit to 1 */
     uint8_t reserved06      : 6; /* Must be set to 0 */
 } wsen_temp_reset_t;

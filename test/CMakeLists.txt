@@ -28,8 +28,17 @@ pico_set_program_url(test_mcp356x ${CMAKE_CURRENT_LIST_DIR})
 # test_wsen_temp
 add_executable(test_wsen_temp)
 target_sources(test_wsen_temp PUBLIC ${CMAKE_CURRENT_LIST_DIR}/test_wsen_temp.c)
-target_link_libraries(test_wsen_temp platform_rp2040_lib cy8c95xx_driver wsen_temp_driver pico_stdlib hardware_i2c hardware_spi hardware_pio)
+target_link_libraries(test_wsen_temp platform_rp2040_lib wsen_temp_driver pico_stdlib hardware_i2c hardware_spi hardware_pio)
 pico_enable_stdio_usb(test_wsen_temp 1)
 pico_enable_stdio_uart(test_wsen_temp 1)
 pico_add_extra_outputs(test_wsen_temp)
 pico_set_program_url(test_wsen_temp ${CMAKE_CURRENT_LIST_DIR})
+
+# test_bts71220
+add_executable(test_bts71220)
+target_sources(test_bts71220 PUBLIC ${CMAKE_CURRENT_LIST_DIR}/test_bts71220.c)
+target_link_libraries(test_bts71220 platform_rp2040_lib cy8c95xx_driver bts71220_driver pico_stdlib hardware_i2c hardware_spi hardware_pio)
+pico_enable_stdio_usb(test_bts71220 1)
+pico_enable_stdio_uart(test_bts71220 1)
+pico_add_extra_outputs(test_bts71220)
+pico_set_program_url(test_bts71220 ${CMAKE_CURRENT_LIST_DIR})

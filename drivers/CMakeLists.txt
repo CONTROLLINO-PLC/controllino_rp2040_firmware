@@ -17,3 +17,8 @@ target_include_directories(mcp356x_driver INTERFACE ${CMAKE_CURRENT_LIST_DIR}/in
 add_library(wsen_temp_driver INTERFACE)
 target_sources(wsen_temp_driver INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/wsen_temp.c)
 target_include_directories(wsen_temp_driver INTERFACE ${CMAKE_CURRENT_LIST_DIR}/include)
+
+# bts71220_driver
+add_library(bts71220_driver INTERFACE)
+target_sources(bts71220_driver INTERFACE ${CMAKE_CURRENT_LIST_DIR}/src/bts71220.c)
+target_include_directories(bts71220_driver INTERFACE ${CMAKE_CURRENT_LIST_DIR}/include)
