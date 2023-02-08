@@ -127,6 +127,7 @@ mcp356x_err_code_t mcp356x_generic_transfer(mcp356x_t* dev, uint8_t fcmd_addr, u
 {
     uint8_t tx_buf[len + 1];
     uint8_t rx_buf[len + 1];
+    mcp356x_err_code_t ret;
     memset(tx_buf, 0x00, sizeof(tx_buf));
     // Check arguments
     if (((mcp356x_check_reg_addr(fcmd_addr) != MCP356X_OK) &&
@@ -141,9 +142,10 @@ mcp356x_err_code_t mcp356x_generic_transfer(mcp356x_t* dev, uint8_t fcmd_addr, u
     platform_spi_set_config(dev->spi, dev->spi_speed, dev->spi_mode, dev->spi_bit_order);
     mcp356x_cs_select(dev);
     platform_sleep_us(600);
-    if (platform_spi_write_read(dev->spi, tx_buf, rx_buf, sizeof(rx_buf)) != MCP356X_OK)
-        return MCP356X_SPI_ERR;
+    ret = platform_spi_write_read(dev->spi, tx_buf, rx_buf, sizeof(rx_buf));
     mcp356x_cs_deselect(dev);
+    if (ret != MCP356X_OK)
+        return MCP356X_SPI_ERR;
     // Get status from first byte of received data
     // Pending analyce status byte
     dev->status = rx_buf[0];

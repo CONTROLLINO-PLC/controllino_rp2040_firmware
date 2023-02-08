@@ -125,6 +125,7 @@ ad56x4_err_code_t ad56x4_init(ad56x4_t* dev, ad56x4_cfg_t* cfg)
 ad56x4_err_code_t ad56x4_generic_write(ad56x4_t* dev, uint8_t cmd, uint8_t ch_addr, uint16_t data)
 {
     uint8_t tx_buf[3];
+    ad56x4_err_code_t ret;
     // Check arguments
     if (ad56x4_check_cmd(cmd) != AD56X4_OK)
         return AD56X4_ARG_ERR;
@@ -138,9 +139,10 @@ ad56x4_err_code_t ad56x4_generic_write(ad56x4_t* dev, uint8_t cmd, uint8_t ch_ad
     platform_spi_set_config(dev->spi, dev->spi_speed, dev->spi_mode, dev->spi_bit_order);
     ad56x4_cs_select(dev);
     platform_sleep_us(600);
-    if (platform_spi_write(dev->spi, tx_buf, sizeof(tx_buf)) != AD56X4_OK)
-        return AD56X4_SPI_ERR;
+    ret = platform_spi_write(dev->spi, tx_buf, sizeof(tx_buf));
     ad56x4_cs_deselect(dev);
+    if (ret != AD56X4_OK)
+        return AD56X4_SPI_ERR;
     return AD56X4_OK;
 }
  

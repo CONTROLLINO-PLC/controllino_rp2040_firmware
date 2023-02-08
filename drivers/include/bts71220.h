@@ -39,30 +39,36 @@ typedef enum
  * \ingroup bts71220
  */
 typedef enum {
-    BTS71220_REG_OUT =  0b0000000,
-    BTS71220_REG_RCS =  0b0001000,
-    BTS71220_REG_SRC =  0b0001001,
-    BTS71220_REG_OCR =  0b1000100,
-    BTS71220_REG_RCD =  0b1001100,
-    BTS71220_REG_KRC =  0b1010101,
-    BTS71220_REG_PCS =  0b1011101,
-    BTS71220_REG_HWCR = 0b1100110,
-    BTS71220_REG_ICS =  0b1101110,
-    BTS71220_REG_DCR =  0b1111111,
+    BTS71220_REG_OUT =          0b00000000,
+    BTS71220_REG_WRN_DIAG =     0b00000001,
+    BTS71220_REG_STD_DIAG =     0b00000010,
+    BTS71220_REG_ERR_DIAG =     0b00000011,
+    BTS71220_REG_RCS =          0b00001000,
+    BTS71220_REG_SRC =          0b00001001,
+    BTS71220_REG_OCR =          0b01000100,
+    BTS71220_REG_RCD =          0b01001100,
+    BTS71220_REG_KRC =          0b01010101,
+    BTS71220_REG_PCS =          0b01011101,
+    BTS71220_REG_HWCR =         0b01100110,
+    BTS71220_REG_ICS =          0b01101110,
+    BTS71220_REG_DCR =          0b01111111,
 } bts71220_reg_t;
  
 /**
  * \brief Bit masks
  * \ingroup bts71220
  */
-#define BTS71220_BIT7_MASK  0b10000000
-#define BTS71220_RB_MASK    0b01000000
-#define BTS71220_ADRR0_MASK 0b00110000
-#define BTS71220_ADRR1_MASK 0b00001111
-#define BTS71220_CH0_MASK   0b00000001
-#define BTS71220_CH1_MASK   0b00000010
-#define BTS71220_CH2_MASK   0b00000100
-#define BTS71220_CH3_MASK   0b00001000
+#define BTS71220_CH0_MASK       0b00000001
+#define BTS71220_CH1_MASK       0b00000010
+#define BTS71220_CH2_MASK       0b00000100
+#define BTS71220_CH3_MASK       0b00001000
+#define BTS71220_REG_CONT_MASK  0b00001111
+#define BTS71220_ADRR1_MASK     0b00001111
+#define BTS71220_ADRR0_MASK     0b00110000
+#define BTS71220_ERR_WARN_MASK  0b01000000
+#define BTS71220_RB_MASK        0b01000000
+#define BTS71220_WRITE_MASK     0b10000000
+#define BTS71220_DIAG_RES_MASK  0b11000000
  
 /**
  * \brief Standard diagnosis respose
@@ -100,11 +106,10 @@ typedef struct
  *       1 Overcurrent, Overtemperature or delta T detected
  */
 typedef bts71220_ch_reg_t bts71220_wrn_diag_t;
-
 typedef bts71220_ch_reg_t bts71220_err_diag_t;
 
 #define BTS71220_CH_NO_FAILURE      0b0
-#define BTS71220_CH_ERR_WARN        0b1 /* Warning:Overcurrent, Overtemperature or delta T detected, Error:Channel latched OFF*/
+#define BTS71220_CH_ERR_WARN        0b1 /* Warning:Overcurrent, Overtemperature or delta T detected, Error:Channel latched OFF */  
  
 /**
  * \brief Channel output register
@@ -222,17 +227,197 @@ typedef struct
     uint8_t bit4_7 : 4; /* Don't care */
 } bts71220_dcr_reg_t;
 
-#define BTS71220_DCR_MUX_IS_CH0     0b000
-#define BTS71220_DCR_MUX_IS_CH1     0b001
-#define BTS71220_DCR_MUX_IS_CH2     0b010
-#define BTS71220_DCR_MUX_IS_CH3     0b011
-#define BTS71220_DCR_MUX_IS_VERIF   0b101
-#define BTS71220_DCR_MUX_IS_Z       0b110
-#define BTS71220_DCR_MUX_IS_SLEEP_Z 0b111
+typedef enum {
+    BTS71220_DCR_MUX_IS_CH0 =       0b000,
+    BTS71220_DCR_MUX_IS_CH1 =       0b001,
+    BTS71220_DCR_MUX_IS_CH2 =       0b010,
+    BTS71220_DCR_MUX_IS_CH3 =       0b011,
+    BTS71220_DCR_MUX_IS_VERIF =     0b101,
+    BTS71220_DCR_MUX_IS_Z =         0b110,
+    BTS71220_DCR_MUX_IS_SLEEP_Z =   0b111
+} bts71220_sense_mux_t;
 
 #define BTS71220_DCR_MUX_SWR_WR_ALL  0b0 /* Default */
 #define BTS71220_DCR_MUX_SWR_WR_SOME 0b1 
+ 
+/**
+ * \brief External pins
+ * \ingroup bts71220
+ */
+#ifndef BTS71220_CS
+#define BTS71220_CS       -1
+#endif
+ 
+/**
+ * \brief Number of BTS71220 devices in daisy chain
+ * \ingroup bts71220
+ */
+#ifndef BTS71220_DAISY_CHAIN_SIZE
+#define BTS71220_DAISY_CHAIN_SIZE   2
+#endif
 
+/**
+ * \brief Initial config struct
+ * \ingroup bts71220
+ */
+typedef struct
+{
+    int mosi_pin;
+    int miso_pin;
+    int sck_pin;
+    int cs_pin;
+    uint spi_speed;
+    uint8_t spi_mode;
+    uint8_t spi_bit_order;
+    hw_spi_t* spi;
+    uint8_t dchain_size;
+} bts71220_cfg_t;
+ 
+/**
+ * \brief BTS71220 power controller instance
+ * \ingroup bts71220
+ */
+typedef struct
+{
+    int cs_pin;
+    uint spi_speed;
+    uint8_t spi_mode;
+    uint8_t spi_bit_order;
+    hw_spi_t* spi;
+    uint8_t dchain_size;
+} bts71220_t;
+ 
+/*!
+ * \brief Initializes default configuration
+ * \ingroup bts71220
+ *
+ * \param cfg Initial config struct
+ */
+void bts71220_set_default_cfg(bts71220_cfg_t* cfg);
+ 
+/*!
+ * \brief Initializes hardware according to configuration
+ * \ingroup bts71220
+ *
+ * \param dev Pointer to BTS71220 power controller struct
+ * \param cfg Initial config struct
+ * \return BTS71220_INIT_ERR : error
+ *         BTS71220_OK : successful
+ */
+bts71220_err_code_t bts71220_init(bts71220_t* dev, bts71220_cfg_t* cfg);
+ 
+/*!
+ * \brief Generic SPI data transfer
+ * \ingroup bts71220
+ *
+ * \param dev Pointer to BTS71220 power controller struct
+ * \param txdata Byte to send to device
+ * \param rxdata Pointer to receive response byte
+ * \param dchain_num Number of device in daisy chain starting from 0
+ * \return BTS71220_SPI_ERR : error in coms
+ *         BTS71220_ARG_ERR : error in arguments
+ *         BTS71220_OK : successful
+ */
+bts71220_err_code_t bts71220_generic_transfer(bts71220_t* dev, uint8_t txdata, uint8_t* rxdata, uint8_t dchain_num);
+ 
+/*!
+ * \brief Write to register
+ * \ingroup bts71220
+ *
+ * \param dev Pointer to BTS71220 power controller struct
+ * \param reg Register to write
+ * \param txdata Byte with contents of register
+ * \param dchain_num Number of device in daisy chain starting from 0
+ * \return BTS71220_SPI_ERR : error in coms
+ *         BTS71220_ARG_ERR : error in arguments
+ *         BTS71220_OK : successful
+ */
+bts71220_err_code_t bts71220_write_reg(bts71220_t* dev, bts71220_reg_t reg, uint8_t txdata, uint8_t dchain_num);
+ 
+/*!
+ * \brief Read from register
+ * \ingroup bts71220
+ *
+ * \param dev Pointer to BTS71220 power controller struct
+ * \param reg Register to read from
+ * \param rxdata Pointer to receive response byte with contents of register
+ * \param dchain_num Number of device in daisy chain starting from 0
+ * \return BTS71220_SPI_ERR : error in coms
+ *         BTS71220_ARG_ERR : error in arguments
+ *         BTS71220_OK : successful
+ */
+bts71220_err_code_t bts71220_read_reg(bts71220_t* dev, bts71220_reg_t reg, uint8_t* rxdata, uint8_t dchain_num);
+ 
+/*!
+ * \brief Read standard diagnosis
+ * \ingroup bts71220
+ *
+ * \param dev Pointer to BTS71220 power controller struct
+ * \param rxdata Pointer to receive response byte with contents of register
+ * \param dchain_num Number of device in daisy chain starting from 0
+ * \return BTS71220_SPI_ERR : error in coms
+ *         BTS71220_ARG_ERR : error in arguments
+ *         BTS71220_OK : successful
+ */
+bts71220_err_code_t bts71220_read_std_diag(bts71220_t* dev, uint8_t* rxdata, uint8_t dchain_num);
+ 
+/*!
+ * \brief Read warnings diagnosis
+ * \ingroup bts71220
+ *
+ * \param dev Pointer to BTS71220 power controller struct
+ * \param rxdata Pointer to receive response byte with contents of register
+ * \param dchain_num Number of device in daisy chain starting from 0
+ * \return BTS71220_SPI_ERR : error in coms
+ *         BTS71220_ARG_ERR : error in arguments
+ *         BTS71220_OK : successful
+ */
+bts71220_err_code_t bts71220_read_wrn_diag(bts71220_t* dev, uint8_t* rxdata, uint8_t dchain_num);
+ 
+/*!
+ * \brief Read error diagnosis
+ * \ingroup bts71220
+ *
+ * \param dev Pointer to BTS71220 power controller struct
+ * \param rxdata Pointer to receive response byte with contents of register
+ * \param dchain_num Number of device in daisy chain starting from 0
+ * \return BTS71220_SPI_ERR : error in coms
+ *         BTS71220_ARG_ERR : error in arguments
+ *         BTS71220_OK : successful
+ */
+bts71220_err_code_t bts71220_read_err_diag(bts71220_t* dev, uint8_t* rxdata, uint8_t dchain_num);
+ 
+/*!
+ * \brief Set current sense multiplexer
+ * \ingroup bts71220
+ *
+ * \param dev Pointer to BTS71220 power controller struct
+ * \param mux Current sense multiplexer configuration to set
+ * \param dchain_num Number of device in daisy chain starting from 0
+ * \return BTS71220_SPI_ERR : error in coms
+ *         BTS71220_ARG_ERR : error in arguments
+ *         BTS71220_OK : successful
+ */
+bts71220_err_code_t bts71220_set_sense_mux(bts71220_t* dev, bts71220_sense_mux_t mux, uint8_t dchain_num);
+ 
+/*!
+ * \brief Enable CS for start SPI coms
+ * \ingroup bts71220
+ *
+ * \param dev Pointer to BTS71220 power controller struct
+ * \note Should be implemented externally
+ */
+void bts71220_cs_select(bts71220_t* dev);
+ 
+/*!
+ * \brief Disable CS after SPI coms
+ * \ingroup bts71220
+ *
+ * \param dev Pointer to BTS71220 power controller struct
+ * \note Should be implemented externally
+ */
+void bts71220_cs_deselect(bts71220_t* dev);
+ 
 #ifdef __cplusplus
 }
 #endif
