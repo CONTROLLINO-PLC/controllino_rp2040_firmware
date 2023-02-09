@@ -17,33 +17,30 @@
 extern "C" {
 #endif
  
-#ifdef PLATFORM_RP2040
-#include "pico/stdlib.h"
-#include "hardware/i2c.h"
-#include "hardware/spi.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+ 
 /**
- * \brief RP2040 default I2C settings
+ * \brief Platform I2C settings
  * \ingroup platform
  */
-#define hw_i2c_t           i2c_inst_t
-#define PLATFORM_I2C_HW    i2c0
-#define PLATFORM_I2C_SPEED 100000
-#define PLATFORM_I2C_SDA   4
-#define PLATFORM_I2C_SCL   5
-
+typedef struct _hw_i2c_t* hw_i2c_t;
+extern hw_i2c_t PLATFORM_I2C_HW;
+extern const uint PLATFORM_I2C_SPEED;
+extern const int PLATFORM_I2C_SDA;
+extern const int PLATFORM_I2C_SCL;
+ 
 /**
- * \brief RP2040 default SPI settings
+ * \brief Platform SPI settings
  * \ingroup platform
  */
-#define hw_spi_t           spi_inst_t
-#define PLATFORM_SPI_HW    spi0
-#define PLATFORM_SPI_SPEED 1000000
-#define PLATFORM_SPI_MOSI  19
-#define PLATFORM_SPI_MISO  16
-#define PLATFORM_SPI_SCK   18
-
-#endif /* PLATFORM_RP2040 */
+typedef struct _hw_spi_t* hw_spi_t;
+extern hw_spi_t PLATFORM_SPI_HW;
+extern const uint PLATFORM_SPI_SPEED;
+extern const int PLATFORM_SPI_MOSI;
+extern const int PLATFORM_SPI_MISO;
+extern const int PLATFORM_SPI_SCK;
  
 /**
  * \brief Error codes
@@ -161,7 +158,7 @@ void platform_sleep_us(uint64_t us);
  * \return PLATFORM_I2C_INIT_ERR : error
  *         PLATFORM_OK : successful
  */
-int platform_i2c_init(hw_i2c_t* i2c_hw, uint speed, int sda_pin, int scl_pin);
+int platform_i2c_init(hw_i2c_t i2c_hw, uint speed, int sda_pin, int scl_pin);
  
 /*!
  * \brief Attempt to read specified number of bytes from address over I2C
@@ -174,7 +171,7 @@ int platform_i2c_init(hw_i2c_t* i2c_hw, uint speed, int sda_pin, int scl_pin);
  * \return PLATFORM_I2C_COM_ERR : error
  *         PLATFORM_OK : successful
  */
-int platform_i2c_read(hw_i2c_t* i2c_hw, uint8_t addr, uint8_t* rxdata, size_t len);
+int platform_i2c_read(hw_i2c_t i2c_hw, uint8_t addr, uint8_t* rxdata, size_t len);
  
 /*!
  * \brief Attempt to write specified number of bytes to address over I2C
@@ -187,7 +184,7 @@ int platform_i2c_read(hw_i2c_t* i2c_hw, uint8_t addr, uint8_t* rxdata, size_t le
  * \return PLATFORM_I2C_COM_ERR : error
  *         PLATFORM_OK : successful
  */
-int platform_i2c_write(hw_i2c_t* i2c_hw, uint8_t addr, const uint8_t* txdata, size_t len);
+int platform_i2c_write(hw_i2c_t i2c_hw, uint8_t addr, const uint8_t* txdata, size_t len);
  
 /*!
  * \brief Init SPI interface
@@ -200,7 +197,7 @@ int platform_i2c_write(hw_i2c_t* i2c_hw, uint8_t addr, const uint8_t* txdata, si
  * \return PLATFORM_SPI_INIT_ERR : error
  *         PLATFORM_OK : successful
  */
-int platform_spi_init(hw_spi_t* spi_hw, uint speed, int mosi_pin, int miso_pin, int sck_pin);
+int platform_spi_init(hw_spi_t spi_hw, uint speed, int mosi_pin, int miso_pin, int sck_pin);
  
 /**
  * \brief Change SPI settings
@@ -212,7 +209,7 @@ int platform_spi_init(hw_spi_t* spi_hw, uint speed, int mosi_pin, int miso_pin, 
  * \return PLATFORM_ARGUMENT_ERR : error
  *         PLATFORM_OK : successful
  */
-int platform_spi_set_config(hw_spi_t* spi_hw, uint speed, uint8_t mode, uint8_t bit_order);
+int platform_spi_set_config(hw_spi_t spi_hw, uint speed, uint8_t mode, uint8_t bit_order);
  
 /**
  * \brief Write specified number of bytes to an SPI device
@@ -223,7 +220,7 @@ int platform_spi_set_config(hw_spi_t* spi_hw, uint speed, uint8_t mode, uint8_t 
  * \return PLATFORM_SPI_COM_ERR : error
  *         PLATFORM_OK : successful
  */
-int platform_spi_write(hw_spi_t* spi_hw, uint8_t* txdata, size_t len);
+int platform_spi_write(hw_spi_t spi_hw, uint8_t* txdata, size_t len);
  
 /**
  * \brief Write and read specified number of bytes over SPI
@@ -235,7 +232,7 @@ int platform_spi_write(hw_spi_t* spi_hw, uint8_t* txdata, size_t len);
  * \return PLATFORM_SPI_COM_ERR : error
  *         PLATFORM_OK : successful
  */
-int platform_spi_write_read(hw_spi_t* spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len);
+int platform_spi_write_read(hw_spi_t spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len);
 
 #ifdef __cplusplus
 }

@@ -16,7 +16,6 @@
  * Based on MikroE DAC 7 Click driver (Copyright© 2020 MikroElektronika d.o.o.)
  */
  
-#include <stdio.h>
 #include "hw_platform.h" /* External harware interface library */
  
 #ifdef __cplusplus
@@ -29,7 +28,7 @@ extern "C" {
  */
 typedef enum 
 {
-    AD56X4_OK =         PLATFORM_OK,
+    AD56X4_OK =       PLATFORM_OK,
     AD56X4_ARG_ERR =  PLATFORM_ARGUMENT_ERR,
     AD56X4_INIT_ERR = PLATFORM_SPI_INIT_ERR,
     AD56X4_SPI_ERR =  PLATFORM_SPI_COM_ERR
@@ -114,7 +113,7 @@ typedef struct
     uint spi_speed;
     uint8_t spi_mode;
     uint8_t spi_bit_order;
-    hw_spi_t* spi;
+    hw_spi_t spi;
     uint16_t resolution;
 } ad56x4_cfg_t;
  
@@ -128,7 +127,7 @@ typedef struct
     uint spi_speed;
     uint8_t spi_mode;
     uint8_t spi_bit_order;
-    hw_spi_t* spi;
+    hw_spi_t spi;
     uint16_t resolution;
 } ad56x4_t;
  

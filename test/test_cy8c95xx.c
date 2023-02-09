@@ -1,5 +1,6 @@
 #include "cy8c95xx.h"
 #include "pico/binary_info.h"
+#include "pico/stdlib.h"
 
 static cy8c95xx_t cy8c9520;
 #define OUTPIN 15

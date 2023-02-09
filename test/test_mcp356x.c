@@ -1,5 +1,7 @@
 #include "cy8c95xx.h"
 #include "mcp356x.h"
+#include "pico/binary_info.h"
+#include "pico/stdlib.h"
 
 cy8c95xx_t cy8c9520;
 

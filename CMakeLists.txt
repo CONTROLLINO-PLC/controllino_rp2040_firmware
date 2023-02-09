@@ -18,11 +18,11 @@ add_compile_options(
     -Wno-maybe-uninitialized
 )
 
-add_definitions(
-    -DPLATFORM_RP2040 # RP2040 as compile platform
-)
+# add_definitions(
+#     -DPLATFORM_RP2040
+# )
 
-add_subdirectory(rp2040) # RP2040 hardware platform abstraction
+add_subdirectory(platform) # hardware platform abstraction
 add_subdirectory(drivers) # Diferent chip drivers
 add_subdirectory(test) # Test examples for each driver
 

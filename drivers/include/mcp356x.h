@@ -16,7 +16,6 @@
  * Based on MikroE ADC 9 Click driver (Copyright© 2020 MikroElektronika d.o.o.)
  */
  
-#include <stdio.h>
 #include "hw_platform.h" /* External harware interface library */
  
 #ifdef __cplusplus
@@ -344,7 +343,7 @@ typedef struct
     uint spi_speed;
     uint8_t spi_mode;
     uint8_t spi_bit_order;
-    hw_spi_t* spi;
+    hw_spi_t spi;
     int mclk_pin;
     int int_pin;
     uint8_t config_0_reg;
@@ -367,7 +366,7 @@ typedef struct
     uint spi_speed;
     uint8_t spi_mode;
     uint8_t spi_bit_order;
-    hw_spi_t* spi;
+    hw_spi_t spi;
     int mclk_pin;
     int int_pin;
     uint8_t status;

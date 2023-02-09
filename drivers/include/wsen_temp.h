@@ -16,7 +16,6 @@
  * Based on WE Sensor libraries (https://github.com/WurthElektronik/SensorLibrariesArduino )
  */
  
-#include <stdio.h>
 #include "hw_platform.h" /* External harware interface library */
  
 #ifdef __cplusplus
@@ -29,7 +28,7 @@ extern "C" {
  */
 typedef enum 
 {
-    WSEN_TEMP_OK =          PLATFORM_OK,
+    WSEN_TEMP_OK =        PLATFORM_OK,
     WSEN_TEMP_ARG_ERR =   PLATFORM_ARGUMENT_ERR,
     WSEN_TEMP_INIT_ERR =  PLATFORM_I2C_INIT_ERR,
     WSEN_TEMP_I2C_ERR =   PLATFORM_I2C_COM_ERR
@@ -153,7 +152,7 @@ typedef struct
     int scl_pin;
     int i2c_speed;
     uint8_t i2c_addr;
-    hw_i2c_t* i2c;
+    hw_i2c_t i2c;
     int int_pin;
 } wsen_temp_cfg_t;
  
@@ -164,7 +163,7 @@ typedef struct
 typedef struct
 {
     uint8_t i2c_addr;
-    hw_i2c_t* i2c;
+    hw_i2c_t i2c;
     int int_pin;
 } wsen_temp_t;
  

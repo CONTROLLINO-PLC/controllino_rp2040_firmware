@@ -15,7 +15,6 @@
  * Driver librarry to handle BTS71220-4ESA power controller
  */
  
-#include <stdio.h>
 #include "hw_platform.h" /* External harware interface library */
  
 #ifdef __cplusplus
@@ -269,7 +268,7 @@ typedef struct
     uint spi_speed;
     uint8_t spi_mode;
     uint8_t spi_bit_order;
-    hw_spi_t* spi;
+    hw_spi_t spi;
     uint8_t dchain_size;
 } bts71220_cfg_t;
  
@@ -283,7 +282,7 @@ typedef struct
     uint spi_speed;
     uint8_t spi_mode;
     uint8_t spi_bit_order;
-    hw_spi_t* spi;
+    hw_spi_t spi;
     uint8_t dchain_size;
 } bts71220_t;
  

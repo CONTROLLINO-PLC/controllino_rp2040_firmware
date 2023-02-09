@@ -16,7 +16,6 @@
  * Based on MikroE Expand 6 Click Driver (Copyright© 2020 MikroElektronika d.o.o.)
  */
  
-#include <stdio.h>
 #include "hw_platform.h" /* External harware interface library */
  
 #ifdef __cplusplus
@@ -258,7 +257,7 @@ typedef struct
     int scl_pin;
     uint i2c_speed;
     uint8_t i2c_addr;
-    hw_i2c_t* i2c;
+    hw_i2c_t i2c;
     int rst_pin;
     int int_pin;
 } cy8c95xx_cfg_t;
@@ -269,7 +268,7 @@ typedef struct
  */
 typedef struct 
 {
-    hw_i2c_t* i2c;
+    hw_i2c_t i2c;
     int rst_pin;
     int int_pin;
 } cy8c95xx_t;
