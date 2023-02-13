@@ -1,6 +1,6 @@
+#include <stdio.h>
+#include <pico/stdlib.h>
 #include "cy8c95xx.h"
-#include "pico/binary_info.h"
-#include "pico/stdlib.h"
 
 static cy8c95xx_t cy8c9520;
 #define OUTPIN 15
@@ -13,7 +13,7 @@ void expander_test_output(void)
     cy8c95xx_write_pin(&cy8c9520, OUTPIN, CY8C95XX_LOW);
     cy8c95xx_read_pin_out_lvl(&cy8c9520, OUTPIN, &pin_state);
     printf("Pin %u out level is %u!\r\n", OUTPIN, pin_state);
-    platform_sleep_ms(1000);
+    sleep_ms(1000);
     cy8c95xx_write_pin(&cy8c9520, OUTPIN, CY8C95XX_HIGH);
     cy8c95xx_read_pin_out_lvl(&cy8c9520, OUTPIN, &pin_state);
     printf("Pin %u out level is %u!\r\n", OUTPIN, pin_state);
@@ -48,7 +48,7 @@ int main() {
     while (1) {
         expander_test_output();
         expander_test_input();
-        platform_sleep_ms(1000);
+        sleep_ms(1000);
     }
     return 0;
 }

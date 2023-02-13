@@ -1,7 +1,7 @@
+#include <stdio.h>
+#include <pico/stdlib.h>
 #include "cy8c95xx.h"
 #include "ad56x4.h"
-#include "pico/binary_info.h"
-#include "pico/stdlib.h"
 
 cy8c95xx_t cy8c9520;
 
@@ -48,15 +48,15 @@ int main() {
     while (1)
     {
         ad56x4_set_ch_voltage(&ad5664, channel, 2000, NEO_AO_MAX_10V);
-        platform_sleep_ms(1000);
+        sleep_ms(1000);
         ad56x4_set_ch_voltage(&ad5664, channel, 5555, NEO_AO_MAX_10V);
-        platform_sleep_ms(1000);
+        sleep_ms(1000);
         ad56x4_set_ch_voltage(&ad5664, channel, 8000, NEO_AO_MAX_10V);
-        platform_sleep_ms(1000);
+        sleep_ms(1000);
         ad56x4_set_ch_voltage(&ad5664, channel, 10000, NEO_AO_MAX_10V);
-        platform_sleep_ms(1000);
+        sleep_ms(1000);
         ad56x4_set_ch_voltage(&ad5664, channel, 0, NEO_AO_MAX_10V);
-        platform_sleep_ms(1000);
+        sleep_ms(1000);
     }
     return 0;
 }

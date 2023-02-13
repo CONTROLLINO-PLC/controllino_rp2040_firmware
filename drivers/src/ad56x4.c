@@ -5,27 +5,28 @@
  */
  
 #include "ad56x4.h"
+#include "hw_platform.h" /* External harware interface library */
  
 /*!
  * \brief Check command bits
  *
  * \param cmd Comand to check
- * \return AD56X4_ARG_ERR : error
- *         AD56X4_OK : successful
+ * \return PLATFORM_ARGUMENT_ERR : error
+ *         PLATFORM_OK : successful
  */
 ad56x4_err_code_t ad56x4_check_cmd(uint8_t cmd)
 {
     if (cmd > AD56X4_CMD_SET_LDAC)
-        return AD56X4_ARG_ERR;
-    return AD56X4_OK;
+        return PLATFORM_ARGUMENT_ERR;
+    return PLATFORM_OK;
 }
  
 /**
  *\brief Check address bits
  *
  * \param addr Channel address to check
- * \return AD56X4_ARG_ERR : error
- *         AD56X4_OK : successful
+ * \return PLATFORM_ARGUMENT_ERR : error
+ *         PLATFORM_OK : successful
  */
 ad56x4_err_code_t ad56x4_check_addr(uint8_t addr)
 {
@@ -35,31 +36,31 @@ ad56x4_err_code_t ad56x4_check_addr(uint8_t addr)
         addr != AD56X4_ADDR_CH_D &&
         addr != AD56X4_ADDR_CH_ALL)
     {
-        return AD56X4_ARG_ERR;
+        return PLATFORM_ARGUMENT_ERR;
     }
-    return AD56X4_OK;
+    return PLATFORM_OK;
 }
  
 /**
  *\brief Check power mode
  *
  * \param pwr_mode Power mode to check
- * \return AD56X4_ARG_ERR : error
- *         AD56X4_OK : successful
+ * \return PLATFORM_ARGUMENT_ERR : error
+ *         PLATFORM_OK : successful
  */
 ad56x4_err_code_t ad56x4_check_pwr_mode(uint8_t pwr_mode)
 {
     if (pwr_mode > AD56X4_PWR_MODE_POWERDOWN_TRISTATE)
-        return AD56X4_ARG_ERR;
-    return AD56X4_OK;
+        return PLATFORM_ARGUMENT_ERR;
+    return PLATFORM_OK;
 }
  
 /**
  *\brief Check channel selection
  *
  * \param pwr_mode Channel selection to check
- * \return AD56X4_ARG_ERR : error
- *         AD56X4_OK : successful
+ * \return PLATFORM_ARGUMENT_ERR : error
+ *         PLATFORM_OK : successful
  */
 ad56x4_err_code_t ad56x4_check_ch_sel(uint8_t ch_sel)
 {
@@ -69,23 +70,23 @@ ad56x4_err_code_t ad56x4_check_ch_sel(uint8_t ch_sel)
         ch_sel != AD56X4_SELECT_CH_D &&
         ch_sel != AD56X4_SELECT_CH_ALL)
     {
-        return AD56X4_ARG_ERR;
+        return PLATFORM_ARGUMENT_ERR;
     }
-    return AD56X4_OK;
+    return PLATFORM_OK;
 }
  
 /**
  *\brief Check reset mode
  *
  * \param rst_mode Reset mode to check
- * \return AD56X4_ARG_ERR : error
- *         AD56X4_OK : successful
+ * \return PLATFORM_ARGUMENT_ERR : error
+ *         PLATFORM_OK : successful
  */
 ad56x4_err_code_t ad56x4_check_rst_mode(uint8_t rst_mode)
 {
     if (rst_mode > AD56X4_SW_RST_FULL)
-        return AD56X4_ARG_ERR;
-    return AD56X4_OK;
+        return PLATFORM_ARGUMENT_ERR;
+    return PLATFORM_OK;
 }
 
 /* Initializes default configuration */
@@ -105,8 +106,8 @@ void ad56x4_set_default_cfg(ad56x4_cfg_t* cfg)
 ad56x4_err_code_t ad56x4_init(ad56x4_t* dev, ad56x4_cfg_t* cfg)
 {
     // Init hardware SPI interface
-    if (platform_spi_init(cfg->spi, cfg->spi_speed, cfg->mosi_pin, cfg->miso_pin, cfg->sck_pin) != AD56X4_OK)
-        return AD56X4_INIT_ERR;
+    if (platform_spi_init(cfg->spi, cfg->spi_speed, cfg->mosi_pin, cfg->miso_pin, cfg->sck_pin) != PLATFORM_OK)
+        return PLATFORM_SPI_INIT_ERR;
     // Init hardware cs pin
     platform_gpio_init(cfg->cs_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_UP);
     // Set values from cfg
@@ -117,9 +118,9 @@ ad56x4_err_code_t ad56x4_init(ad56x4_t* dev, ad56x4_cfg_t* cfg)
     dev->spi = cfg->spi;
     dev->resolution = cfg->resolution;
     // Reset and set default internal settings
-    if (ad56x4_sw_reset(dev, AD56X4_SW_RST_FULL) != AD56X4_OK)
-        return AD56X4_INIT_ERR;
-    return AD56X4_OK;
+    if (ad56x4_sw_reset(dev, AD56X4_SW_RST_FULL) != PLATFORM_OK)
+        return PLATFORM_SPI_INIT_ERR;
+    return PLATFORM_OK;
 }
  
 ad56x4_err_code_t ad56x4_generic_write(ad56x4_t* dev, uint8_t cmd, uint8_t ch_addr, uint16_t data)
@@ -127,10 +128,10 @@ ad56x4_err_code_t ad56x4_generic_write(ad56x4_t* dev, uint8_t cmd, uint8_t ch_ad
     uint8_t tx_buf[3];
     ad56x4_err_code_t ret;
     // Check arguments
-    if (ad56x4_check_cmd(cmd) != AD56X4_OK)
-        return AD56X4_ARG_ERR;
-    if (ad56x4_check_addr(ch_addr) != AD56X4_OK)
-        return AD56X4_ARG_ERR;
+    if (ad56x4_check_cmd(cmd) != PLATFORM_OK)
+        return PLATFORM_ARGUMENT_ERR;
+    if (ad56x4_check_addr(ch_addr) != PLATFORM_OK)
+        return PLATFORM_ARGUMENT_ERR;
     // Prepare txdata
     tx_buf[0] = (cmd << 3) | ch_addr;
     tx_buf[1] = (uint8_t)((data >> 8) & 0xFF);
@@ -141,9 +142,9 @@ ad56x4_err_code_t ad56x4_generic_write(ad56x4_t* dev, uint8_t cmd, uint8_t ch_ad
     platform_sleep_us(600);
     ret = platform_spi_write(dev->spi, tx_buf, sizeof(tx_buf));
     ad56x4_cs_deselect(dev);
-    if (ret != AD56X4_OK)
-        return AD56X4_SPI_ERR;
-    return AD56X4_OK;
+    if (ret != PLATFORM_OK)
+        return PLATFORM_SPI_COM_ERR;
+    return PLATFORM_OK;
 }
  
 /* Write to input register n */
@@ -175,10 +176,10 @@ ad56x4_err_code_t ad56x4_set_pwr(ad56x4_t* dev, uint8_t pwr_mode, uint8_t ch_sel
 {
     uint16_t data;
     // Check arguments
-    if (ad56x4_check_pwr_mode(pwr_mode) != AD56X4_OK)
-        return AD56X4_ARG_ERR;
-    if (ad56x4_check_ch_sel(ch_sel) != AD56X4_OK)
-        return AD56X4_ARG_ERR;
+    if (ad56x4_check_pwr_mode(pwr_mode) != PLATFORM_OK)
+        return PLATFORM_ARGUMENT_ERR;
+    if (ad56x4_check_ch_sel(ch_sel) != PLATFORM_OK)
+        return PLATFORM_ARGUMENT_ERR;
     // Prepare txdata
     data = ((uint16_t)pwr_mode << 4) | (uint16_t)ch_sel;
     return ad56x4_generic_write(dev, AD56X4_CMD_POWER_UPDOWN, 0x00 /* don't care */, data);
@@ -188,8 +189,8 @@ ad56x4_err_code_t ad56x4_set_pwr(ad56x4_t* dev, uint8_t pwr_mode, uint8_t ch_sel
 ad56x4_err_code_t ad56x4_sw_reset(ad56x4_t* dev, uint8_t rst_mode)
 {
     // Check arguments
-    if (ad56x4_check_rst_mode(rst_mode) != AD56X4_OK)
-        return AD56X4_ARG_ERR;
+    if (ad56x4_check_rst_mode(rst_mode) != PLATFORM_OK)
+        return PLATFORM_ARGUMENT_ERR;
     return ad56x4_generic_write(dev, AD56X4_CMD_SW_RESET, 0x00 /* don't care */, (uint16_t)rst_mode);
 }
  
@@ -207,7 +208,7 @@ ad56x4_err_code_t ad56x4_set_ch_voltage(ad56x4_t* dev, uint8_t ch_addr, uint16_t
     float float_dac = ((float)vol_val / (float)vol_ref_max) * (float)dev->resolution;
     int txdata = (int)float_dac;
     ret = ad56x4_write_input_reg(dev, ch_addr, (uint16_t)txdata);
-    if (ret != AD56X4_OK) return ret;
+    if (ret != PLATFORM_OK) return ret;
     ret = ad56x4_update_dac_reg(dev, ch_addr);
     return ret;
 }

@@ -1,7 +1,7 @@
+#include <stdio.h>
+#include <pico/stdlib.h>
 #include "cy8c95xx.h"
 #include "mcp356x.h"
-#include "pico/binary_info.h"
-#include "pico/stdlib.h"
 
 cy8c95xx_t cy8c9520;
 
@@ -78,7 +78,7 @@ int main() {
     {
         printf("MCP3564 channel readings:\n");
         mcp356x_print_channel_readings();
-        platform_sleep_ms(500);
+        sleep_ms(500);
     }
     return 0;
 }

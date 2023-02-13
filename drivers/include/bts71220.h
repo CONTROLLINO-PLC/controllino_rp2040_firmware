@@ -15,7 +15,8 @@
  * Driver librarry to handle BTS71220-4ESA power controller
  */
  
-#include "hw_platform.h" /* External harware interface library */
+#include <stdint.h>
+#include <stddef.h>
  
 #ifdef __cplusplus
 extern "C" {
@@ -25,13 +26,7 @@ extern "C" {
  * \brief Error codes
  * \ingroup bts71220
  */
-typedef enum 
-{
-    BTS71220_OK =       PLATFORM_OK,
-    BTS71220_ARG_ERR =  PLATFORM_ARGUMENT_ERR,
-    BTS71220_INIT_ERR = PLATFORM_SPI_INIT_ERR,
-    BTS71220_SPI_ERR =  PLATFORM_SPI_COM_ERR
-} bts71220_err_code_t;
+typedef int bts71220_err_code_t;
  
 /**
  * \brief Register addresses  RB + ADDR0 + ADDR1
@@ -254,7 +249,12 @@ typedef enum {
 #ifndef BTS71220_DAISY_CHAIN_SIZE
 #define BTS71220_DAISY_CHAIN_SIZE   2
 #endif
-
+ 
+/**
+ * \brief External hardware SPI interface
+ */
+typedef struct _hw_spi_t* hw_spi_t;
+ 
 /**
  * \brief Initial config struct
  * \ingroup bts71220
@@ -265,7 +265,7 @@ typedef struct
     int miso_pin;
     int sck_pin;
     int cs_pin;
-    uint spi_speed;
+    unsigned int spi_speed;
     uint8_t spi_mode;
     uint8_t spi_bit_order;
     hw_spi_t spi;
@@ -279,7 +279,7 @@ typedef struct
 typedef struct
 {
     int cs_pin;
-    uint spi_speed;
+    unsigned int spi_speed;
     uint8_t spi_mode;
     uint8_t spi_bit_order;
     hw_spi_t spi;
@@ -300,8 +300,8 @@ void bts71220_set_default_cfg(bts71220_cfg_t* cfg);
  *
  * \param dev Pointer to BTS71220 power controller struct
  * \param cfg Initial config struct
- * \return BTS71220_INIT_ERR : error
- *         BTS71220_OK : successful
+ * \return PLATFORM_SPI_INIT_ERR : error
+ *         PLATFORM_OK : successful
  */
 bts71220_err_code_t bts71220_init(bts71220_t* dev, bts71220_cfg_t* cfg);
  
@@ -313,9 +313,9 @@ bts71220_err_code_t bts71220_init(bts71220_t* dev, bts71220_cfg_t* cfg);
  * \param txdata Byte to send to device
  * \param rxdata Pointer to receive response byte
  * \param dchain_num Number of device in daisy chain starting from 0
- * \return BTS71220_SPI_ERR : error in coms
- *         BTS71220_ARG_ERR : error in arguments
- *         BTS71220_OK : successful
+ * \return PLATFORM_SPI_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
  */
 bts71220_err_code_t bts71220_generic_transfer(bts71220_t* dev, uint8_t txdata, uint8_t* rxdata, uint8_t dchain_num);
  
@@ -327,9 +327,9 @@ bts71220_err_code_t bts71220_generic_transfer(bts71220_t* dev, uint8_t txdata, u
  * \param reg Register to write
  * \param txdata Byte with contents of register
  * \param dchain_num Number of device in daisy chain starting from 0
- * \return BTS71220_SPI_ERR : error in coms
- *         BTS71220_ARG_ERR : error in arguments
- *         BTS71220_OK : successful
+ * \return PLATFORM_SPI_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
  */
 bts71220_err_code_t bts71220_write_reg(bts71220_t* dev, bts71220_reg_t reg, uint8_t txdata, uint8_t dchain_num);
  
@@ -341,9 +341,9 @@ bts71220_err_code_t bts71220_write_reg(bts71220_t* dev, bts71220_reg_t reg, uint
  * \param reg Register to read from
  * \param rxdata Pointer to receive response byte with contents of register
  * \param dchain_num Number of device in daisy chain starting from 0
- * \return BTS71220_SPI_ERR : error in coms
- *         BTS71220_ARG_ERR : error in arguments
- *         BTS71220_OK : successful
+ * \return PLATFORM_SPI_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
  */
 bts71220_err_code_t bts71220_read_reg(bts71220_t* dev, bts71220_reg_t reg, uint8_t* rxdata, uint8_t dchain_num);
  
@@ -354,9 +354,9 @@ bts71220_err_code_t bts71220_read_reg(bts71220_t* dev, bts71220_reg_t reg, uint8
  * \param dev Pointer to BTS71220 power controller struct
  * \param rxdata Pointer to receive response byte with contents of register
  * \param dchain_num Number of device in daisy chain starting from 0
- * \return BTS71220_SPI_ERR : error in coms
- *         BTS71220_ARG_ERR : error in arguments
- *         BTS71220_OK : successful
+ * \return PLATFORM_SPI_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
  */
 bts71220_err_code_t bts71220_read_std_diag(bts71220_t* dev, uint8_t* rxdata, uint8_t dchain_num);
  
@@ -367,9 +367,9 @@ bts71220_err_code_t bts71220_read_std_diag(bts71220_t* dev, uint8_t* rxdata, uin
  * \param dev Pointer to BTS71220 power controller struct
  * \param rxdata Pointer to receive response byte with contents of register
  * \param dchain_num Number of device in daisy chain starting from 0
- * \return BTS71220_SPI_ERR : error in coms
- *         BTS71220_ARG_ERR : error in arguments
- *         BTS71220_OK : successful
+ * \return PLATFORM_SPI_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
  */
 bts71220_err_code_t bts71220_read_wrn_diag(bts71220_t* dev, uint8_t* rxdata, uint8_t dchain_num);
  
@@ -380,9 +380,9 @@ bts71220_err_code_t bts71220_read_wrn_diag(bts71220_t* dev, uint8_t* rxdata, uin
  * \param dev Pointer to BTS71220 power controller struct
  * \param rxdata Pointer to receive response byte with contents of register
  * \param dchain_num Number of device in daisy chain starting from 0
- * \return BTS71220_SPI_ERR : error in coms
- *         BTS71220_ARG_ERR : error in arguments
- *         BTS71220_OK : successful
+ * \return PLATFORM_SPI_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
  */
 bts71220_err_code_t bts71220_read_err_diag(bts71220_t* dev, uint8_t* rxdata, uint8_t dchain_num);
  
@@ -393,9 +393,9 @@ bts71220_err_code_t bts71220_read_err_diag(bts71220_t* dev, uint8_t* rxdata, uin
  * \param dev Pointer to BTS71220 power controller struct
  * \param mux Current sense multiplexer configuration to set
  * \param dchain_num Number of device in daisy chain starting from 0
- * \return BTS71220_SPI_ERR : error in coms
- *         BTS71220_ARG_ERR : error in arguments
- *         BTS71220_OK : successful
+ * \return PLATFORM_SPI_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
  */
 bts71220_err_code_t bts71220_set_sense_mux(bts71220_t* dev, bts71220_sense_mux_t mux, uint8_t dchain_num);
  

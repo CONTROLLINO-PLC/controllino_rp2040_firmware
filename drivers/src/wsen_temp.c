@@ -6,6 +6,7 @@
  
 #include "wsen_temp.h"
 #include "string.h"
+#include "hw_platform.h" /* External harware interface library */
  
 /* Initializes default configuration */
 void wsen_temp_set_default_cfg(wsen_temp_cfg_t* cfg)
@@ -22,8 +23,8 @@ void wsen_temp_set_default_cfg(wsen_temp_cfg_t* cfg)
 wsen_temp_err_code_t wsen_temp_init(wsen_temp_t* dev, wsen_temp_cfg_t* cfg)
 {
     // Init hardware I2C interface
-    if (platform_i2c_init(cfg->i2c, cfg->i2c_speed, cfg->sda_pin, cfg->scl_pin) != WSEN_TEMP_OK)
-        return WSEN_TEMP_INIT_ERR;
+    if (platform_i2c_init(cfg->i2c, cfg->i2c_speed, cfg->sda_pin, cfg->scl_pin) != PLATFORM_OK)
+        return PLATFORM_I2C_INIT_ERR;
     // Init hardware reset and wsen_temp_err_code_t pins 
     platform_gpio_init(cfg->int_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_DISABLED);
     // Set values from cfg
@@ -33,9 +34,9 @@ wsen_temp_err_code_t wsen_temp_init(wsen_temp_t* dev, wsen_temp_cfg_t* cfg)
     // Check coms
     uint8_t id;
     wsen_temp_err_code_t ret = wsen_temp_get_id(dev, &id);
-    if ((ret != WSEN_TEMP_OK) || id != WSEN_TEMP_DEVICE_ID_VALUE)
-        return WSEN_TEMP_INIT_ERR;
-    return WSEN_TEMP_OK;
+    if ((ret != PLATFORM_OK) || id != WSEN_TEMP_DEVICE_ID_VALUE)
+        return PLATFORM_I2C_INIT_ERR;
+    return PLATFORM_OK;
 }
  
 /* Writes data to register */
@@ -50,8 +51,8 @@ wsen_temp_err_code_t wsen_temp_generic_write(wsen_temp_t* dev, wsen_temp_reg_t r
 /* Reads data from register */
 wsen_temp_err_code_t wsen_temp_generic_read(wsen_temp_t* dev, wsen_temp_reg_t reg, uint8_t* rxdata, uint8_t rxlen)
 {
-    if (platform_i2c_write(dev->i2c, dev->i2c_addr, &reg, 1) != WSEN_TEMP_OK)
-        return WSEN_TEMP_I2C_ERR;
+    if (platform_i2c_write(dev->i2c, dev->i2c_addr, &reg, 1) != PLATFORM_OK)
+        return PLATFORM_I2C_COM_ERR;
     return platform_i2c_read(dev->i2c, dev->i2c_addr, rxdata, rxlen);
 }
  
@@ -67,15 +68,15 @@ wsen_temp_err_code_t wsen_temp_sw_rst(wsen_temp_t* dev) {
     wsen_temp_err_code_t ret;
     // Set 1
     ret = wsen_temp_generic_read(dev, WSEN_TEMP_REG_SOFT_RESET, (uint8_t*)&rst_reg, 1);
-    if (ret != WSEN_TEMP_OK)
+    if (ret != PLATFORM_OK)
         return ret;
     rst_reg.reset = 1;
     ret = wsen_temp_generic_write(dev, WSEN_TEMP_REG_SOFT_RESET, (uint8_t*)&rst_reg, 1);
-    if (ret != WSEN_TEMP_OK)
+    if (ret != PLATFORM_OK)
         return ret;
     // Set 0
     ret = wsen_temp_generic_read(dev, WSEN_TEMP_REG_SOFT_RESET, (uint8_t*)&rst_reg, 1);
-    if (ret != WSEN_TEMP_OK)
+    if (ret != PLATFORM_OK)
         return ret;
     rst_reg.reset = 0;
     return wsen_temp_generic_write(dev, WSEN_TEMP_REG_SOFT_RESET, (uint8_t*)&rst_reg, 1);
@@ -129,13 +130,13 @@ wsen_temp_err_code_t wsen_temp_get_raw(wsen_temp_t* dev, uint16_t* temp)
     uint8_t tmp[2];
     wsen_temp_err_code_t ret;
     ret = wsen_temp_generic_read(dev, WSEN_TEMP_REG_DATA_T_L, &tmp[0], 1);
-    if (ret != WSEN_TEMP_OK)
+    if (ret != PLATFORM_OK)
         return ret;
     ret = wsen_temp_generic_read(dev, WSEN_TEMP_REG_DATA_T_H, &tmp[1], 1);
-    if (ret != WSEN_TEMP_OK)
+    if (ret != PLATFORM_OK)
         return ret;
     *temp = (uint16_t)(tmp[1] << 8) | (uint16_t)tmp[0];
-    return WSEN_TEMP_OK;
+    return PLATFORM_OK;
 }
 
 /* Get temperature value in °C */
@@ -143,8 +144,8 @@ wsen_temp_err_code_t wsen_temp_get_celsius(wsen_temp_t* dev, float* temp)
 {
     uint16_t raw_temp;
     wsen_temp_err_code_t ret = wsen_temp_get_raw(dev, &raw_temp);
-    if (ret != WSEN_TEMP_OK)
+    if (ret != PLATFORM_OK)
         return ret;
     *temp = (float)raw_temp * 0.01F;
-    return WSEN_TEMP_OK;
+    return PLATFORM_OK;
 }

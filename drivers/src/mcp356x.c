@@ -6,47 +6,48 @@
  
 #include "mcp356x.h"
 #include "string.h"
- 
+#include "hw_platform.h" /* External harware interface library */
+
 /*!
   * \brief Check fast command
   *
   * \param fast_cmd Fast command to check
-  * \return MCP356X_ARG_ERR : error
-  *         MCP356X_OK : successful
+  * \return PLATFORM_ARGUMENT_ERR : error
+  *         PLATFORM_OK : successful
   */
 mcp356x_err_code_t mcp356x_check_fast_cmd(uint8_t fast_cmd)
 {
     if ((fast_cmd < MCP356X_FAST_CMD_ADC_CONV_START) || (fast_cmd > MCP356X_FAST_CMD_DEV_FULL_RESET))
-        return MCP356X_ARG_ERR;
-    return MCP356X_OK;
+        return PLATFORM_ARGUMENT_ERR;
+    return PLATFORM_OK;
 }
  
 /*!
  * \brief Check register address
  *
  * \param reg Register address to check
- * \return MCP356X_ARG_ERR : error
- *         MCP356X_OK : successful
+ * \return PLATFORM_ARGUMENT_ERR : error
+ *         PLATFORM_OK : successful
  */
 mcp356x_err_code_t mcp356x_check_reg_addr(uint8_t reg)
 {
     if (reg > MCP356X_REG_CRC_CFG)
-        return MCP356X_ARG_ERR;
-    return MCP356X_OK;
+        return PLATFORM_ARGUMENT_ERR;
+    return PLATFORM_OK;
 }
  
 /*!
  * \brief Check channel identifier
  *
  * \param ch_id Channel identifier to check
- * \return MCP356X_ARG_ERR : error
- *         MCP356X_OK : successful
+ * \return PLATFORM_ARGUMENT_ERR : error
+ *         PLATFORM_OK : successful
  */
 mcp356x_err_code_t mcp356x_check_ch_id(uint8_t ch_id)
 {
     if (ch_id > MCP356X_CH_OFFSET)
-        return MCP356X_ARG_ERR;
-    return MCP356X_OK;
+        return PLATFORM_ARGUMENT_ERR;
+    return PLATFORM_OK;
 }
  
 /* Initializes default configuration */
@@ -76,8 +77,8 @@ void mcp356x_set_default_cfg(mcp356x_cfg_t* cfg)
 mcp356x_err_code_t mcp356x_init(mcp356x_t* dev, mcp356x_cfg_t* cfg)
 {
     // Init hardware SPI interface
-    if (platform_spi_init(cfg->spi, cfg->spi_speed, cfg->mosi_pin, cfg->miso_pin, cfg->sck_pin) != MCP356X_OK)
-        return MCP356X_INIT_ERR;
+    if (platform_spi_init(cfg->spi, cfg->spi_speed, cfg->mosi_pin, cfg->miso_pin, cfg->sck_pin) != PLATFORM_OK)
+        return PLATFORM_SPI_INIT_ERR;
     // Init hardware cs, mclk and int pin
     platform_gpio_init(cfg->cs_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_UP);
     platform_gpio_init(cfg->mclk_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_DISABLED);
@@ -93,8 +94,8 @@ mcp356x_err_code_t mcp356x_init(mcp356x_t* dev, mcp356x_cfg_t* cfg)
     // Configure initial registers
     uint8_t txdata[12];
     memset(txdata, 0x00, sizeof(txdata));
-    if (mcp356x_write_fast_cmd(dev, MCP356X_FAST_CMD_DEV_FULL_RESET) != MCP356X_OK)
-        return MCP356X_INIT_ERR;
+    if (mcp356x_write_fast_cmd(dev, MCP356X_FAST_CMD_DEV_FULL_RESET) != PLATFORM_OK)
+        return PLATFORM_SPI_INIT_ERR;
     txdata[0] = cfg->config_0_reg;
     txdata[1] = cfg->config_1_reg;
     txdata[2] = cfg->config_2_reg;
@@ -111,9 +112,9 @@ mcp356x_err_code_t mcp356x_init(mcp356x_t* dev, mcp356x_cfg_t* cfg)
         txdata[10] = (uint8_t)((cfg->timer_reg >> 8) & 0xff);
         txdata[11] = (uint8_t)((cfg->timer_reg) & 0xff);
     }
-    if (mcp356x_iwrite(dev, MCP356X_REG_CFG_0, txdata, sizeof(txdata)) != MCP356X_OK)
-        return MCP356X_INIT_ERR;
-    return MCP356X_OK;
+    if (mcp356x_iwrite(dev, MCP356X_REG_CFG_0, txdata, sizeof(txdata)) != PLATFORM_OK)
+        return PLATFORM_SPI_INIT_ERR;
+    return PLATFORM_OK;
 }
  
 /* Check interrupt by reading int_pin level */
@@ -130,10 +131,10 @@ mcp356x_err_code_t mcp356x_generic_transfer(mcp356x_t* dev, uint8_t fcmd_addr, u
     mcp356x_err_code_t ret;
     memset(tx_buf, 0x00, sizeof(tx_buf));
     // Check arguments
-    if (((mcp356x_check_reg_addr(fcmd_addr) != MCP356X_OK) &&
-        (mcp356x_check_fast_cmd(fcmd_addr) != MCP356X_OK)) ||
+    if (((mcp356x_check_reg_addr(fcmd_addr) != PLATFORM_OK) &&
+        (mcp356x_check_fast_cmd(fcmd_addr) != PLATFORM_OK)) ||
         (r_w_cmd > MCP356X_CMD_INC_READ))
-        return MCP356X_ARG_ERR;
+        return PLATFORM_ARGUMENT_ERR;
     // Set first command byte
     tx_buf[0] = (((uint8_t)MCP356X_DEVICE_ADDR << 6) | (fcmd_addr << 2)) | r_w_cmd;
     // Copy data to transmit if necessary
@@ -144,15 +145,15 @@ mcp356x_err_code_t mcp356x_generic_transfer(mcp356x_t* dev, uint8_t fcmd_addr, u
     platform_sleep_us(600);
     ret = platform_spi_write_read(dev->spi, tx_buf, rx_buf, sizeof(rx_buf));
     mcp356x_cs_deselect(dev);
-    if (ret != MCP356X_OK)
-        return MCP356X_SPI_ERR;
+    if (ret != PLATFORM_OK)
+        return PLATFORM_SPI_COM_ERR;
     // Get status from first byte of received data
     // Pending analyce status byte
     dev->status = rx_buf[0];
     // Copy received data if necessary
     if (rxdata != NULL)
         memcpy(rxdata, &rx_buf[1], len);
-    return MCP356X_OK;
+    return PLATFORM_OK;
 }
  
 /* Write fast commands */
@@ -185,12 +186,12 @@ mcp356x_err_code_t mcp356x_read_adc_def(mcp356x_t* dev, uint32_t* adc_data, uint
     uint8_t rxdata[3];
     uint32_t temp;
     uint8_t ret = mcp356x_iread(dev, MCP356X_REG_ADC_DATA, rxdata, sizeof(rxdata));
-    if (ret != MCP356X_OK)
+    if (ret != PLATFORM_OK)
         return ret;
     temp = ((uint32_t)rxdata[0] << 16) | ((uint32_t)rxdata[1] << 8) | (uint32_t)rxdata[2];
     *adc_data = temp & 0x7FFFFF;
     *sgn = (uint8_t)((temp & 0x800000) >> 23) & 0x01;
-    return MCP356X_OK;
+    return PLATFORM_OK;
 }
  
 /* Read ADC data in left justified format */
@@ -199,12 +200,12 @@ mcp356x_err_code_t mcp356x_read_adc_left_just(mcp356x_t* dev, uint32_t* adc_data
     uint8_t rxdata[4];
     uint32_t temp;
     uint8_t ret = mcp356x_iread(dev, MCP356X_REG_ADC_DATA, rxdata, sizeof(rxdata));
-    if (ret != MCP356X_OK)
+    if (ret != PLATFORM_OK)
         return ret;
     temp = ((uint32_t)rxdata[0] << 16) | ((uint32_t)rxdata[1] << 8) | (uint32_t)rxdata[2];
     *adc_data = temp & 0x7FFFFF;
     *sgn = (uint8_t)((temp & 0x800000) >> 23) & 0x01;
-    return MCP356X_OK;
+    return PLATFORM_OK;
 }
  
 /* Read ADC data in extended format */
@@ -212,11 +213,11 @@ mcp356x_err_code_t mcp356x_read_adc_ext(mcp356x_t* dev, uint32_t* adc_data, uint
 {
     uint8_t rxdata[4];
     uint8_t ret = mcp356x_iread(dev, MCP356X_REG_ADC_DATA, rxdata, sizeof(rxdata));
-    if (ret != MCP356X_OK)
+    if (ret != PLATFORM_OK)
         return ret;
     *adc_data = ((uint32_t)rxdata[1] << 16) | ((uint32_t)rxdata[2] << 8) | (uint32_t)rxdata[3];
     *sgn = rxdata[0] & 0x01;
-    return MCP356X_OK;
+    return PLATFORM_OK;
 }
  
 /* Read ADC data in extended format including ch_id */
@@ -224,14 +225,14 @@ mcp356x_err_code_t mcp356x_read_adc_ch_ext(mcp356x_t* dev, uint32_t* adc_data, u
 {
     uint8_t rxdata[4];
     uint8_t ret = mcp356x_iread(dev, MCP356X_REG_ADC_DATA, rxdata, sizeof(rxdata));
-    if (ret != MCP356X_OK)
+    if (ret != PLATFORM_OK)
         return ret;
     *adc_data = ((uint32_t)rxdata[1] << 16) | ((uint32_t)rxdata[2] << 8) | (uint32_t)rxdata[3];
     *sgn = rxdata[0] & 0x0F;
     *ch_id = (rxdata[0] >> 4) & 0x0F;
-    if (mcp356x_check_ch_id(*ch_id) != MCP356X_OK)
-        return MCP356X_SPI_ERR;
-    return MCP356X_OK;
+    if (mcp356x_check_ch_id(*ch_id) != PLATFORM_OK)
+        return PLATFORM_SPI_COM_ERR;
+    return PLATFORM_OK;
 }
  
 /* Read current adc raw conversion data */
@@ -242,7 +243,7 @@ mcp356x_err_code_t mcp356x_read_raw_adc(mcp356x_t* dev, uint32_t* adc_data, uint
     uint8_t adc_data_format;
     uint8_t ch_id;
     ret = mcp356x_iread(dev, MCP356X_REG_CFG_3, &config_3_reg, 1);
-    if (ret != MCP356X_OK)
+    if (ret != PLATFORM_OK)
         return ret;
     adc_data_format = config_3_reg & 0x30;
     switch (adc_data_format)
@@ -276,13 +277,13 @@ mcp356x_err_code_t mcp356x_read_voltage(mcp356x_t* dev, uint32_t vol_ref_min, ui
     uint32_t max_resolution;
     // Check arguments
     if (vol_ref_min > vol_ref_max)
-        return MCP356X_ARG_ERR;
+        return PLATFORM_ARGUMENT_ERR;
     // Read ADC data format
     ret = mcp356x_read_raw_adc(dev, &adc_data, &sgn, &max_resolution);
-    if (ret != MCP356X_OK)
+    if (ret != PLATFORM_OK)
         return ret;
     // Calulate voltage
     *vol_val = (int)(((float)(vol_ref_max - vol_ref_min) * (float)adc_data) / (float)max_resolution);
-    return MCP356X_OK;
+    return PLATFORM_OK;
 }
 

@@ -8,24 +8,24 @@
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include "hardware/spi.h"
- 
+
 /* RP2040 default I2C settings */
 typedef struct i2c_inst_t _hw_i2c_t;
 hw_i2c_t PLATFORM_I2C_HW = (hw_i2c_t)   i2c0;
-const uint PLATFORM_I2C_SPEED =         100000;
+const unsigned int PLATFORM_I2C_SPEED =         100000;
 const int PLATFORM_I2C_SDA =            4;
 const int PLATFORM_I2C_SCL =            5;
  
 /* RP2040 default SPI settings */
 typedef struct spi_inst_t _hw_spi_t;
 hw_spi_t PLATFORM_SPI_HW = (hw_spi_t)   spi0;
-const uint PLATFORM_SPI_SPEED =         1000000;
+const unsigned int PLATFORM_SPI_SPEED = 1000000;
 const int PLATFORM_SPI_MOSI =           19;
 const int PLATFORM_SPI_MISO =           16;
 const int PLATFORM_SPI_SCK =            18;
 
 /* Init gpio pin */
-int platform_gpio_init(int pin, platform_gpio_dir_t dir, platform_gpio_pull_mod_t pull)
+platform_err_code_t platform_gpio_init(int pin, platform_gpio_dir_t dir, platform_gpio_pull_mod_t pull)
 {
     if (pin > -1) {
         gpio_init(pin);
@@ -67,7 +67,7 @@ void platform_sleep_us(uint64_t us)
 }
  
 /* Init I2C interface */
-int platform_i2c_init(hw_i2c_t i2c_hw, uint speed, int sda_pin, int scl_pin)
+platform_err_code_t platform_i2c_init(hw_i2c_t i2c_hw, unsigned int speed, int sda_pin, int scl_pin)
 {
     if ((i2c_hw != (hw_i2c_t)i2c0 && i2c_hw != (hw_i2c_t)i2c1) || (sda_pin < 0 && sda_pin > 31) || (scl_pin < 0 && scl_pin > 31))
         return PLATFORM_I2C_INIT_ERR;
@@ -78,7 +78,7 @@ int platform_i2c_init(hw_i2c_t i2c_hw, uint speed, int sda_pin, int scl_pin)
 }
  
 /* Attempt to read specified number of bytes from address over I2C */
-int platform_i2c_read(hw_i2c_t i2c_hw, uint8_t addr, uint8_t* rxdata, size_t len)
+platform_err_code_t platform_i2c_read(hw_i2c_t i2c_hw, uint8_t addr, uint8_t* rxdata, size_t len)
 {
     if (i2c_read_blocking((i2c_inst_t*)i2c_hw, addr, rxdata, len, false) != len)
         return PLATFORM_I2C_COM_ERR;
@@ -86,7 +86,7 @@ int platform_i2c_read(hw_i2c_t i2c_hw, uint8_t addr, uint8_t* rxdata, size_t len
 }
  
 /* Attempt to write specified number of bytes to address over I2C */
-int platform_i2c_write(hw_i2c_t i2c_hw, uint8_t addr, const uint8_t* txdata, size_t len)
+platform_err_code_t platform_i2c_write(hw_i2c_t i2c_hw, uint8_t addr, const uint8_t* txdata, size_t len)
 {
     if (i2c_write_blocking((i2c_inst_t*)i2c_hw, addr, txdata, len, false) != len)
         return PLATFORM_I2C_COM_ERR;
@@ -94,7 +94,7 @@ int platform_i2c_write(hw_i2c_t i2c_hw, uint8_t addr, const uint8_t* txdata, siz
 }
  
 /* Init SPI interface */
-int platform_spi_init(hw_spi_t spi_hw, uint speed, int mosi_pin, int miso_pin, int sck_pin)
+platform_err_code_t platform_spi_init(hw_spi_t spi_hw, unsigned int speed, int mosi_pin, int miso_pin, int sck_pin)
 {
     // Check arguments
     if ((spi_hw != (hw_spi_t)spi0 && spi_hw != (hw_spi_t)spi1))
@@ -111,7 +111,7 @@ int platform_spi_init(hw_spi_t spi_hw, uint speed, int mosi_pin, int miso_pin, i
 }
  
 /* Change SPI settings */
-int platform_spi_set_config(hw_spi_t spi_hw, uint speed, uint8_t mode, uint8_t bit_order)
+platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed, uint8_t mode, uint8_t bit_order)
 {
     spi_cpol_t cpol;
     spi_cpha_t cpha;
@@ -152,7 +152,7 @@ int platform_spi_set_config(hw_spi_t spi_hw, uint speed, uint8_t mode, uint8_t b
 }
  
 /* Write specified number of bytes to an SPI device */
-int platform_spi_write(hw_spi_t spi_hw, uint8_t* txdata, size_t len)
+platform_err_code_t platform_spi_write(hw_spi_t spi_hw, uint8_t* txdata, size_t len)
 {
     size_t ret;
     ret = spi_write_blocking((spi_inst_t*)spi_hw, txdata, len);
@@ -162,7 +162,7 @@ int platform_spi_write(hw_spi_t spi_hw, uint8_t* txdata, size_t len)
 }
 
 /* Write and read specified number of bytes over SPI */
-int platform_spi_write_read(hw_spi_t spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len)
+platform_err_code_t platform_spi_write_read(hw_spi_t spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len)
 {
     if (spi_write_read_blocking((spi_inst_t*)spi_hw, txdata, rxdata, len) != len)
         return PLATFORM_SPI_COM_ERR;

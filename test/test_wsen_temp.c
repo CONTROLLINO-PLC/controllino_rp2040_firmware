@@ -1,6 +1,6 @@
+#include <stdio.h>
+#include <pico/stdlib.h>
 #include "wsen_temp.h"
-#include "pico/binary_info.h"
-#include "pico/stdlib.h"
 
 static wsen_temp_t temp_sensor;
 
@@ -36,7 +36,7 @@ int main() {
     // Test tasks
     while (1) {
         temp_print();
-        platform_sleep_ms(1000);
+        sleep_ms(1000);
     }
     return 0;
 }
