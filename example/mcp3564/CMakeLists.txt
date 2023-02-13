@@ -2,7 +2,6 @@
 add_executable(example_mcp356x)
 target_sources(example_mcp356x PUBLIC 
     ${CMAKE_CURRENT_LIST_DIR}/main.c
-    ${CMAKE_CURRENT_LIST_DIR}/../../src/hw_rp2040.c
 )
 target_link_libraries(example_mcp356x neo_drivers pico_stdlib hardware_i2c hardware_spi hardware_pio)
 pico_enable_stdio_usb(example_mcp356x 1)

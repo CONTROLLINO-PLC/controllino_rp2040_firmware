@@ -12,7 +12,7 @@
 /* RP2040 default I2C settings */
 typedef struct i2c_inst_t _hw_i2c_t;
 hw_i2c_t PLATFORM_I2C_HW = (hw_i2c_t)   i2c0;
-const unsigned int PLATFORM_I2C_SPEED =         100000;
+const unsigned int PLATFORM_I2C_SPEED = 100000;
 const int PLATFORM_I2C_SDA =            4;
 const int PLATFORM_I2C_SCL =            5;
  
