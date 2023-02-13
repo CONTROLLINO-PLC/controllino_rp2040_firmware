@@ -17,7 +17,7 @@ void expander_test_output(void)
     cy8c95xx_write_pin(&cy8c9520, OUTPIN, CY8C95XX_HIGH);
     cy8c95xx_read_pin_out_lvl(&cy8c9520, OUTPIN, &pin_state);
     printf("Pin %u out level is %u!\r\n", OUTPIN, pin_state);
-    
+
 }
 
 /* Test port expander input */

@@ -49,7 +49,7 @@ void mcp356x_print_channel_readings(void)
     uint32_t vol_val;
     for (uint8_t i = 0x00; i < 0x08; i++)
     {
-        mux_reg = (i << 4)  | MCP356X_MUX_VIN_NEG_VREF_EXT_MINUS;
+        mux_reg = (i << 4) | MCP356X_MUX_VIN_NEG_VREF_EXT_MINUS;
         mcp356x_iwrite(&mcp3564, MCP356X_REG_MUX, &mux_reg, 1);
         mcp356x_read_voltage(&mcp3564, 0, 10938, &vol_val);
         printf("Channel%d mV %d\n", i, vol_val);

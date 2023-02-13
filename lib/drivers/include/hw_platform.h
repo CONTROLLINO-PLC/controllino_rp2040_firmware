@@ -232,7 +232,7 @@ platform_err_code_t platform_spi_write(hw_spi_t spi_hw, uint8_t* txdata, size_t 
  *         PLATFORM_OK : successful
  */
 platform_err_code_t platform_spi_write_read(hw_spi_t spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len);
-
+ 
 #ifdef __cplusplus
 }
 #endif

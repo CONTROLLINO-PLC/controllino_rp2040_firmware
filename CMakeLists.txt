@@ -22,7 +22,6 @@ add_compile_options(
 #     -DPLATFORM_RP2040
 # )
 
-add_subdirectory(platform) # hardware platform abstraction
-add_subdirectory(drivers) # Diferent chip drivers
-add_subdirectory(test) # Test examples for each driver
+add_subdirectory(lib) # Driver libraries
+add_subdirectory(example) # Examples for each driver
 
