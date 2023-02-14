@@ -1,6 +1,5 @@
-#ifndef PIO_UNIT_TESTING /* Avoid compiling when doing unit testing */
-
+#if defined(PICO_SDK_ENV) || defined(NATIVE_TEST_ENV)
 int main() {
+    return 0;
 }
-
-#endif /* PIO_UNIT_TESTING */
+#endif /* PICO_SDK_ENV*/

@@ -73,7 +73,7 @@ cy8c95xx_err_code_t cy8c95xx_generic_write(cy8c95xx_t* dev, cy8c95xx_reg_t reg, 
 /* Reads data from register */
 cy8c95xx_err_code_t cy8c95xx_generic_read(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t* rxdata, uint8_t rxlen)
 {
-    if (platform_i2c_write(dev->i2c, port_slave_addr, &reg, 1) != PLATFORM_OK)
+    if (platform_i2c_write(dev->i2c, port_slave_addr, (uint8_t*)&reg, 1) != PLATFORM_OK)
         return PLATFORM_I2C_COM_ERR;
     return platform_i2c_read(dev->i2c, port_slave_addr, rxdata, rxlen);
 }
@@ -101,7 +101,7 @@ cy8c95xx_err_code_t cy8c95xx_read_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8
 {
     cy8c95xx_reg_t reg_byte;
     uint8_t ret;
-    ret = cy8c95xx_read_byte(dev, reg, &reg_byte);
+    ret = cy8c95xx_read_byte(dev, reg, (uint8_t*)&reg_byte);
     if (ret != PLATFORM_OK)
         return ret;
     *state = (reg_byte >> bit_num) & 0x01;
@@ -113,7 +113,7 @@ cy8c95xx_err_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint
 {
     cy8c95xx_reg_t reg_byte;
     uint8_t ret;
-    ret = cy8c95xx_read_byte(dev, reg, &reg_byte);
+    ret = cy8c95xx_read_byte(dev, reg, (uint8_t*)&reg_byte);
     if (ret != PLATFORM_OK)
         return ret;
     reg_byte = val ? (reg_byte | (1 << bit_num)) : (reg_byte & ~(1 << bit_num));

@@ -51,7 +51,7 @@ wsen_temp_err_code_t wsen_temp_generic_write(wsen_temp_t* dev, wsen_temp_reg_t r
 /* Reads data from register */
 wsen_temp_err_code_t wsen_temp_generic_read(wsen_temp_t* dev, wsen_temp_reg_t reg, uint8_t* rxdata, uint8_t rxlen)
 {
-    if (platform_i2c_write(dev->i2c, dev->i2c_addr, &reg, 1) != PLATFORM_OK)
+    if (platform_i2c_write(dev->i2c, dev->i2c_addr, (uint8_t*)&reg, 1) != PLATFORM_OK)
         return PLATFORM_I2C_COM_ERR;
     return platform_i2c_read(dev->i2c, dev->i2c_addr, rxdata, rxlen);
 }
