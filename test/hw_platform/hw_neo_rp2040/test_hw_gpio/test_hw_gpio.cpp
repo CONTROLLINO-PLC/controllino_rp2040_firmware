@@ -11,6 +11,7 @@
  */
  
 #include <unity.h>
+#include "unity_test_runner.h"
 #include "hw_platform.h"
 
 int pin;
@@ -43,21 +44,3 @@ int runUnityTests(void)
     UNITY_END();
     return UNITY_END();
 }
-
-#if defined(NATIVE_TEST_ENV)
-int main(int argc, char** argv)
-{
-    return runUnityTests();
-}
-#endif
-
-#if defined(ARDUINO_PICO_ENV)
-#include "Arduino.h"
-void setup()
-{
-    while (!Serial);
-    runUnityTests();
-}
-void loop()
-{}
-#endif
