@@ -4,8 +4,8 @@ int main() {
     while (1);
     return 0;
 }
-#endif /* NATIVE_TEST_ENV*/
-
+#endif
+ 
 #if defined(ARDUINO_PICO_ENV)
 #include "Arduino.h"
 void setup() {

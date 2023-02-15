@@ -23,13 +23,13 @@ void tearDown(void)
     platform_gpio_init(pin, dir, pull);
 }
  
-void test_platform_gpio_init_return_ok()
+void test_platform_gpio_init_ok()
 {
     ret = platform_gpio_init(pin, dir, pull);
     TEST_ASSERT_EQUAL_INT(PLATFORM_OK, ret);
 }
  
-void test_platform_gpio_set_return_ok()
+void test_platform_gpio_set_ok()
 {
     dir = PLATFORM_GPIO_OUT;
     platform_gpio_init(pin, dir, pull);
@@ -37,7 +37,7 @@ void test_platform_gpio_set_return_ok()
     TEST_ASSERT_EQUAL_INT(PLATFORM_OK, ret);    
 }
  
-void test_platform_gpio_get_return_ok()
+void test_platform_gpio_get_ok()
 {
     bool val;
     ret = platform_gpio_get(pin, &val);
@@ -95,9 +95,9 @@ void test_platform_gpio_in_ignore_set()
 int runUnityTests(void)
 {
     UNITY_BEGIN();
-    RUN_TEST(test_platform_gpio_init_return_ok);
-    RUN_TEST(test_platform_gpio_set_return_ok);
-    RUN_TEST(test_platform_gpio_get_return_ok);
+    RUN_TEST(test_platform_gpio_init_ok);
+    RUN_TEST(test_platform_gpio_set_ok);
+    RUN_TEST(test_platform_gpio_get_ok);
     RUN_TEST(test_platform_gpio_pull_up_default_true);
     RUN_TEST(test_platform_gpio_pull_down_default_false);
     RUN_TEST(test_platform_gpio_pull_disabled_default_false);

@@ -7,7 +7,7 @@
 #include "hw_platform.h"
 #include "hardware/gpio.h"
 #include "hardware/i2c.h"
-
+ 
 /* RP2040 default I2C settings */
 typedef struct i2c_inst_t _hw_i2c_t;
 hw_i2c_t PLATFORM_I2C_HW = (hw_i2c_t)   i2c0;
@@ -18,11 +18,17 @@ const int PLATFORM_I2C_SCL =            5;
 /* Init I2C interface */
 platform_err_code_t platform_i2c_init(hw_i2c_t i2c_hw, unsigned int speed, int sda_pin, int scl_pin)
 {
-    if ((i2c_hw != (hw_i2c_t)i2c0 && i2c_hw != (hw_i2c_t)i2c1) || (sda_pin < 0 && sda_pin > 31) || (scl_pin < 0 && scl_pin > 31))
+    if ((i2c_hw != (hw_i2c_t)i2c0 && i2c_hw != (hw_i2c_t)i2c1) ||
+        (sda_pin < 0 || sda_pin > 29) ||
+        (scl_pin < 0 || scl_pin > 29) ||
+        (speed < 1000 || speed > 1000000))
+    {
         return PLATFORM_I2C_INIT_ERR;
+    }
     gpio_set_function(sda_pin, GPIO_FUNC_I2C);
     gpio_set_function(scl_pin, GPIO_FUNC_I2C);
-    i2c_init((i2c_inst_t*)i2c_hw, speed);
+    if (i2c_init((i2c_inst_t*)i2c_hw, speed) != speed)
+        return PLATFORM_I2C_INIT_ERR;
     return PLATFORM_OK;
 }
  

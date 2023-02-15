@@ -6,6 +6,15 @@
  
 #include "hw_platform.h"
  
+typedef struct
+{} i2c_inst_t;
+uint8_t dummy_for_pointer;
+typedef struct i2c_inst_t _hw_i2c_t;
+hw_i2c_t PLATFORM_I2C_HW = (hw_i2c_t)&dummy_for_pointer;
+const unsigned int PLATFORM_I2C_SPEED;
+const int PLATFORM_I2C_SDA;
+const int PLATFORM_I2C_SCL;
+ 
 /* Init I2C interface */
 platform_err_code_t platform_i2c_init(hw_i2c_t i2c_hw, unsigned int speed, int sda_pin, int scl_pin)
 {

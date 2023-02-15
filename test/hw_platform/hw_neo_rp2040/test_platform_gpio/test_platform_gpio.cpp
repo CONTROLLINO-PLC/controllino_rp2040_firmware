@@ -23,14 +23,14 @@ void tearDown(void)
     platform_gpio_init(pin, dir, pull);
 }
  
-void test_platform_gpio_init_pin_less_than_30()
+void test_platform_gpio_init_pin_greater_than_29_err()
 {
     pin = 30;
     ret = platform_gpio_init(pin, dir, pull);
     TEST_ASSERT_EQUAL_INT(PLATFORM_GPIO_INIT_ERR, ret);
 }
  
-void test_platform_gpio_set_pin_less_than_30()
+void test_platform_gpio_set_pin_greater_than_29_err()
 {
     pin = 30;
     dir = PLATFORM_GPIO_OUT;
@@ -39,7 +39,7 @@ void test_platform_gpio_set_pin_less_than_30()
     TEST_ASSERT_EQUAL_INT(PLATFORM_ARGUMENT_ERR, ret);
 }
  
-void test_platform_gpio_get_pin_less_than_30()
+void test_platform_gpio_get_pin_greater_than_29_err()
 {
     pin = 30;
     bool val;
@@ -51,9 +51,9 @@ void test_platform_gpio_get_pin_less_than_30()
 int runUnityTests(void)
 {
     UNITY_BEGIN();
-    RUN_TEST(test_platform_gpio_init_pin_less_than_30);
-    RUN_TEST(test_platform_gpio_set_pin_less_than_30);
-    RUN_TEST(test_platform_gpio_get_pin_less_than_30);
+    RUN_TEST(test_platform_gpio_init_pin_greater_than_29_err);
+    RUN_TEST(test_platform_gpio_set_pin_greater_than_29_err);
+    RUN_TEST(test_platform_gpio_get_pin_greater_than_29_err);
     UNITY_END();
     return UNITY_END();
 }
