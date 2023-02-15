@@ -1,15 +1,3 @@
-/*
- * Copyright (c) 2023 CONTROLLINO GmbH.
- *
- * SPDX-License-Identifier: MIT
- */
- 
-/**
- * \file test_hw_common_gpio.c
- *
- * Main harware abstraction layer tests
- */
- 
 #include <unity.h>
 #include "unity_test_runner.h"
 #include "hw_platform.h"
@@ -29,7 +17,11 @@ void setUp(void)
 }
  
 void tearDown(void)
-{}
+{
+    dir = PLATFORM_GPIO_IN;
+    pull = PLATFORM_GPIO_PULL_DOWN;
+    platform_gpio_init(pin, dir, pull);
+}
  
 void test_platform_gpio_init_return_ok()
 {

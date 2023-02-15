@@ -131,6 +131,14 @@ platform_err_code_t platform_gpio_set(int pin, bool value);
 platform_err_code_t platform_gpio_get(int pin, bool* value);
  
 /*!
+ * \brief Get system time microseconds
+ * \ingroup platform
+ *
+ * \return microseconds since system boot
+ */
+uint64_t platform_get_us(void);
+ 
+/*!
  * \brief Wait for specified milliseconds
  * \ingroup platform
  *
