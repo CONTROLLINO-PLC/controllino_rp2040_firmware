@@ -118,7 +118,7 @@ platform_err_code_t platform_gpio_init(int pin, platform_gpio_dir_t dir, platfor
  * \param pin pin number -1 for unused pins
  * \param value boolean true for HIGH level, false for LOW level
  */
-void platform_gpio_set(int pin, bool value);
+platform_err_code_t platform_gpio_set(int pin, bool value);
  
 /*!
  * \brief Get in gpio value
@@ -128,7 +128,7 @@ void platform_gpio_set(int pin, bool value);
  * \return true HIGH level
  *         false LOW level default if pin is -1
  */
-bool platform_gpio_get(int pin);
+platform_err_code_t platform_gpio_get(int pin, bool* value);
  
 /*!
  * \brief Wait for specified milliseconds

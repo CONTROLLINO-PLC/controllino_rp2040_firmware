@@ -120,7 +120,9 @@ mcp356x_err_code_t mcp356x_init(mcp356x_t* dev, mcp356x_cfg_t* cfg)
 /* Check interrupt by reading int_pin level */
 uint8_t mcp356x_check_int(mcp356x_t* dev)
 {
-    return platform_gpio_get(dev->int_pin) ? 1 : 0;
+    bool int_val = false;
+    platform_gpio_get(dev->int_pin, &int_val);
+    return int_val ? 1 : 0;
 }
  
 /* Generic SPI data transfer */

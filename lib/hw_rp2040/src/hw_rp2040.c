@@ -41,20 +41,27 @@ platform_err_code_t platform_gpio_init(int pin, platform_gpio_dir_t dir, platfor
 }
  
 /* Set out gpio value */
-void platform_gpio_set(int pin, bool value)
+platform_err_code_t platform_gpio_set(int pin, bool value)
 {
+    if (pin > 29) {
+        return PLATFORM_ARGUMENT_ERR;
+    }
     if (pin > -1) {
         gpio_put(pin, value ? 1 : 0);
     }
+    return PLATFORM_OK;
 }
  
 /* Get in gpio value */
-bool platform_gpio_get(int pin)
+platform_err_code_t platform_gpio_get(int pin, bool* value)
 {
-    if (pin > -1) {
-        return gpio_get(pin) ? true : false;
+    if (pin > 29) {
+        return PLATFORM_ARGUMENT_ERR;
     }
-    return false;
+    if (pin > -1) {
+        *value = gpio_get(pin) ? true : false;
+    }
+    return PLATFORM_OK;
 }
  
 /* Wait for specified milliseconds */

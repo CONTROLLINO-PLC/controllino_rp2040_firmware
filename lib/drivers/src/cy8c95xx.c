@@ -57,7 +57,9 @@ void cy8c95xx_reset(cy8c95xx_t* dev)
 /* Check interrupt by reading int_pin level */
 uint8_t cy8c95xx_check_int(cy8c95xx_t* dev)
 {
-    return platform_gpio_get(dev->int_pin) ? 1 : 0;
+    bool int_val = false;
+    platform_gpio_get(dev->int_pin, &int_val);
+    return int_val ? 1 : 0;
 }
  
 /* Writes data to register */
