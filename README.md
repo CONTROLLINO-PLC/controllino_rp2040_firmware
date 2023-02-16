@@ -1,6 +1,6 @@
 # Controllino NEO core firmware resources
 
-## [Hardware "C" drivers](lib/drivers/)
+## [Hardware "C" drivers](lib/drivers/include/)
 
 - CY8C95XX I2C I/O expander
 - AD56X4 DAC
