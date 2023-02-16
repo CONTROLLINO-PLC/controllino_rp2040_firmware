@@ -2,10 +2,10 @@
 #include "unity_test_runner.h"
 #include "hw_platform.h"
  
-int pin;
-platform_gpio_dir_t dir;
-platform_gpio_pull_mod_t pull;
-platform_err_code_t ret;
+static int pin;
+static platform_gpio_dir_t dir;
+static platform_gpio_pull_mod_t pull;
+static platform_err_code_t ret;
  
 void setUp(void)
 {
@@ -27,7 +27,7 @@ void test_platform_gpio_init_pin_greater_than_29_err()
 {
     pin = 30;
     ret = platform_gpio_init(pin, dir, pull);
-    TEST_ASSERT_EQUAL_INT(PLATFORM_GPIO_INIT_ERR, ret);
+    TEST_ASSERT_EQUAL(PLATFORM_GPIO_INIT_ERR, ret);
 }
  
 void test_platform_gpio_set_pin_greater_than_29_err()
@@ -36,7 +36,7 @@ void test_platform_gpio_set_pin_greater_than_29_err()
     dir = PLATFORM_GPIO_OUT;
     platform_gpio_init(pin, dir, pull);
     ret = platform_gpio_set(pin, true);
-    TEST_ASSERT_EQUAL_INT(PLATFORM_ARGUMENT_ERR, ret);
+    TEST_ASSERT_EQUAL(PLATFORM_ARGUMENT_ERR, ret);
 }
  
 void test_platform_gpio_get_pin_greater_than_29_err()
@@ -45,7 +45,7 @@ void test_platform_gpio_get_pin_greater_than_29_err()
     bool val;
     platform_gpio_init(pin, dir, pull);
     ret = platform_gpio_get(pin, &val);
-    TEST_ASSERT_EQUAL_INT(PLATFORM_ARGUMENT_ERR, ret);
+    TEST_ASSERT_EQUAL(PLATFORM_ARGUMENT_ERR, ret);
 }
  
 int runUnityTests(void)

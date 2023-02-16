@@ -2,35 +2,30 @@
 #include "unity_test_runner.h"
 #include "hw_platform.h"
  
-int pin;
-platform_gpio_dir_t dir;
-platform_gpio_pull_mod_t pull;
-platform_err_code_t ret;
-
+static int pin;
+static platform_gpio_dir_t dir;
+static platform_gpio_pull_mod_t pull;
+static platform_err_code_t ret;
+ 
 #ifndef TEST_GPIO
 #define TEST_GPIO 0
 #endif
-
+ 
 void setUp(void)
 {
     pin = TEST_GPIO;
     dir = PLATFORM_GPIO_IN;
     pull = PLATFORM_GPIO_PULL_DOWN;
     ret = PLATFORM_OK;
-    platform_gpio_init(pin, dir, pull);
+    ret = platform_gpio_init(pin, dir, pull);
 }
  
 void tearDown(void)
-{
-    dir = PLATFORM_GPIO_IN;
-    pull = PLATFORM_GPIO_PULL_DOWN;
-    platform_gpio_init(pin, dir, pull);
-}
+{}
  
 void test_platform_gpio_init_ok()
 {
-    ret = platform_gpio_init(pin, dir, pull);
-    TEST_ASSERT_EQUAL_INT(PLATFORM_OK, ret);
+    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
 }
  
 void test_platform_gpio_set_ok()
@@ -38,14 +33,14 @@ void test_platform_gpio_set_ok()
     dir = PLATFORM_GPIO_OUT;
     platform_gpio_init(pin, dir, pull);
     ret = platform_gpio_set(pin, true);
-    TEST_ASSERT_EQUAL_INT(PLATFORM_OK, ret);    
+    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);    
 }
  
 void test_platform_gpio_get_ok()
 {
     bool val;
     ret = platform_gpio_get(pin, &val);
-    TEST_ASSERT_EQUAL_INT(PLATFORM_OK, ret);
+    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
 }
  
 void test_platform_gpio_pull_up_default_true()

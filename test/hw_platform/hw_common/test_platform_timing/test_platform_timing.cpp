@@ -2,6 +2,9 @@
 #include "unity_test_runner.h"
 #include "hw_platform.h"
  
+static uint64_t initial_time_us;
+static uint64_t final_time_us;
+ 
 void setUp(void)
 {}
  
@@ -15,8 +18,6 @@ void test_platform_get_time_us(void)
  
 void test_platform_get_sleep_ms(void)
 {
-    uint64_t initial_time_us;
-    uint64_t final_time_us;
     initial_time_us = platform_get_us();
     platform_sleep_ms(1);
     final_time_us = platform_get_us();
@@ -27,8 +28,6 @@ void test_platform_get_sleep_ms(void)
  
 void test_platform_get_sleep_us(void)
 {
-    uint64_t initial_time_us;
-    uint64_t final_time_us;
     initial_time_us = platform_get_us();
     platform_sleep_us(500);
     final_time_us = platform_get_us();
