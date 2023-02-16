@@ -6,10 +6,14 @@ int pin;
 platform_gpio_dir_t dir;
 platform_gpio_pull_mod_t pull;
 platform_err_code_t ret;
- 
+
+#ifndef TEST_GPIO
+#define TEST_GPIO 0
+#endif
+
 void setUp(void)
 {
-    pin = 25;
+    pin = TEST_GPIO;
     dir = PLATFORM_GPIO_IN;
     pull = PLATFORM_GPIO_PULL_DOWN;
     ret = PLATFORM_OK;

@@ -20,16 +20,21 @@ const int PLATFORM_SPI_SCK =            18;
 platform_err_code_t platform_spi_init(hw_spi_t spi_hw, unsigned int speed, int mosi_pin, int miso_pin, int sck_pin)
 {
     // Check arguments
-    if ((spi_hw != (hw_spi_t)spi0 && spi_hw != (hw_spi_t)spi1))
-        return PLATFORM_I2C_INIT_ERR;
-    if ((mosi_pin < 0 && mosi_pin > 31) || (miso_pin < 0 && miso_pin > 31) || (sck_pin < 0 && sck_pin > 31))
-        return PLATFORM_I2C_INIT_ERR;
+    if ((spi_hw != (hw_spi_t)spi0 && spi_hw != (hw_spi_t)spi1) ||
+        (mosi_pin < 0 || mosi_pin > 29) ||
+        (miso_pin < 0 || miso_pin > 29) ||
+        (sck_pin < 0 || sck_pin > 29) ||
+        (speed < 1000 || speed > 2000000))
+    {
+        return PLATFORM_ARGUMENT_ERR;
+    }
     // Init SPI gpios
     gpio_set_function(mosi_pin, GPIO_FUNC_SPI);
     gpio_set_function(miso_pin, GPIO_FUNC_SPI);
     gpio_set_function(sck_pin, GPIO_FUNC_SPI);
     // Init interface
-    spi_init((spi_inst_t*)spi_hw, speed);
+    if (spi_init((spi_inst_t*)spi_hw, speed) != speed)
+        return PLATFORM_SPI_INIT_ERR;
     return PLATFORM_OK;
 }
  
@@ -40,10 +45,12 @@ platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed,
     spi_cpha_t cpha;
     spi_order_t order;
     // Check arguments
-    if ((mode != PLATFORM_SPI_MODE_0) && (mode != PLATFORM_SPI_MODE_1) && (mode != PLATFORM_SPI_MODE_2) && (mode != PLATFORM_SPI_MODE_3))
-        return PLATFORM_SPI_INIT_ERR;
-    if ((bit_order != PLATFORM_SPI_LSBFIRST) && (bit_order != PLATFORM_SPI_MSBFIRST))
-        return PLATFORM_SPI_INIT_ERR;
+    if ((mode != PLATFORM_SPI_MODE_0 && mode != PLATFORM_SPI_MODE_1 && mode != PLATFORM_SPI_MODE_2 && mode != PLATFORM_SPI_MODE_3) ||
+        (bit_order != PLATFORM_SPI_LSBFIRST && bit_order != PLATFORM_SPI_MSBFIRST) ||
+        (speed < 1000 || speed > 2000000))
+    {
+        return PLATFORM_ARGUMENT_ERR;
+    }
     // Set SPI settings
     switch (mode)
     {
@@ -69,7 +76,8 @@ platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed,
     else
         order = SPI_MSB_FIRST;
 
-    spi_set_baudrate((spi_inst_t*)spi_hw, speed);
+    if (spi_set_baudrate((spi_inst_t*)spi_hw, speed) != speed)
+        return PLATFORM_SPI_COM_ERR;
     spi_set_format((spi_inst_t*)spi_hw, 8, cpol, cpha, order);
     return PLATFORM_OK;
 }
@@ -83,7 +91,7 @@ platform_err_code_t platform_spi_write(hw_spi_t spi_hw, uint8_t* txdata, size_t 
         return PLATFORM_SPI_COM_ERR;
     return PLATFORM_OK;
 }
-
+ 
 /* Write and read specified number of bytes over SPI */
 platform_err_code_t platform_spi_write_read(hw_spi_t spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len)
 {

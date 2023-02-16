@@ -214,6 +214,7 @@ platform_err_code_t platform_spi_init(hw_spi_t spi_hw, unsigned int speed, int m
  * \param mode SPI mode (0, 1, 2, 3)
  * \param bit_order SPI bit order
  * \return PLATFORM_ARGUMENT_ERR : error
+ *         PLATFORM_SPI_COM_ERR : error
  *         PLATFORM_OK : successful
  */
 platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed, uint8_t mode, uint8_t bit_order);

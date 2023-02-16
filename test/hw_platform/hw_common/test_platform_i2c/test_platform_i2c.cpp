@@ -2,8 +2,8 @@
 #include "unity_test_runner.h"
 #include "hw_platform.h"
  
-#ifndef I2C_TEST_ADDR
-#define I2C_TEST_ADDR 0x00
+#ifndef TEST_I2C_ADDR
+#define TEST_I2C_ADDR 0x00
 #endif
  
 platform_err_code_t ret;
@@ -25,14 +25,14 @@ void test_platform_i2c_init_ok(void)
 void test_platform_i2c_write_test_addr_ok(void)
 {
     uint8_t dummy_txdata;
-    ret = platform_i2c_write(PLATFORM_I2C_HW, I2C_TEST_ADDR, &dummy_txdata, sizeof(dummy_txdata));
+    ret = platform_i2c_write(PLATFORM_I2C_HW, TEST_I2C_ADDR, &dummy_txdata, sizeof(dummy_txdata));
     TEST_ASSERT_EQUAL_INT(PLATFORM_OK, ret);
 }
  
 void test_platform_i2c_read_test_addr_ok(void)
 {
     uint8_t dummy_rxdata;
-    ret = platform_i2c_read(PLATFORM_I2C_HW, I2C_TEST_ADDR, &dummy_rxdata, sizeof(dummy_rxdata));
+    ret = platform_i2c_read(PLATFORM_I2C_HW, TEST_I2C_ADDR, &dummy_rxdata, sizeof(dummy_rxdata));
     TEST_ASSERT_EQUAL_INT(PLATFORM_OK, ret);
 }
  

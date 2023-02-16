@@ -6,6 +6,15 @@
  
 #include "hw_platform.h"
  
+typedef struct
+{} spi_inst_t;
+uint8_t dummy_for_pointer;
+hw_spi_t PLATFORM_SPI_HW = (hw_spi_t)&dummy_for_pointer;
+const unsigned int PLATFORM_SPI_SPEED;
+const int PLATFORM_SPI_MOSI;
+const int PLATFORM_SPI_MISO;
+const int PLATFORM_SPI_SCK;
+ 
 /* Init SPI interface */
 platform_err_code_t platform_spi_init(hw_spi_t spi_hw, unsigned int speed, int mosi_pin, int miso_pin, int sck_pin)
 {
@@ -15,6 +24,11 @@ platform_err_code_t platform_spi_init(hw_spi_t spi_hw, unsigned int speed, int m
 /* Change SPI settings */
 platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed, uint8_t mode, uint8_t bit_order)
 {
+    if ((mode != PLATFORM_SPI_MODE_0 && mode != PLATFORM_SPI_MODE_1 && mode != PLATFORM_SPI_MODE_2 && mode != PLATFORM_SPI_MODE_3) ||
+        (bit_order != PLATFORM_SPI_LSBFIRST && bit_order != PLATFORM_SPI_MSBFIRST))
+    {
+        return PLATFORM_ARGUMENT_ERR;
+    }
     return PLATFORM_OK;
 }
  

@@ -23,7 +23,7 @@ platform_err_code_t platform_i2c_init(hw_i2c_t i2c_hw, unsigned int speed, int s
         (scl_pin < 0 || scl_pin > 29) ||
         (speed < 1000 || speed > 1000000))
     {
-        return PLATFORM_I2C_INIT_ERR;
+        return PLATFORM_ARGUMENT_ERR;
     }
     gpio_set_function(sda_pin, GPIO_FUNC_I2C);
     gpio_set_function(scl_pin, GPIO_FUNC_I2C);

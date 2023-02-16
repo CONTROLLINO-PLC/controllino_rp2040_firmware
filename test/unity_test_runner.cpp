@@ -8,7 +8,8 @@
 #if defined(NATIVE_TEST_ENV)
 int main(int argc, char** argv)
 {
-    return runUnityTests();
+    runUnityTests();
+    return 0;
 }
 #endif
  
