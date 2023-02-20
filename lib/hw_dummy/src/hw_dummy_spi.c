@@ -5,7 +5,8 @@
  */
  
 #include "hw_platform.h"
- 
+#include "ad56x4.h"
+
 typedef struct
 {} spi_inst_t;
 uint8_t dummy_for_pointer;
@@ -35,7 +36,15 @@ platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed,
 /* Write specified number of bytes to an SPI device */
 platform_err_code_t platform_spi_write(hw_spi_t spi_hw, uint8_t* txdata, size_t len)
 {
-    return PLATFORM_OK;
+    // test_ad56x4_generic_write_ok
+    if (len == 3 &&
+        *txdata == (uint8_t)((AD56X4_CMD_SW_RESET << 3) | AD56X4_CH_DONT_CARE) &&
+        *(txdata + 1) == (uint8_t)((AD56X4_SW_RST_FULL >> 8) & 0xFF) &&
+        *(txdata + 2) == (uint8_t)(AD56X4_SW_RST_FULL & 0xFF))
+    {
+        return PLATFORM_OK;
+    }
+    return PLATFORM_SPI_COM_ERR;
 }
 
 /* Write and read specified number of bytes over SPI */

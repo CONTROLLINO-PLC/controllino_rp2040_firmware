@@ -33,7 +33,7 @@ void test_ad56x4_set_default_cfg()
     TEST_ASSERT_EQUAL(AD56X4_RESOLUTION, def_cfg.resolution);
 }
  
-void test_ad56x4_ad56x4_init_hw_ok()
+void test_ad56x4_init_hw_ok()
 {
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
 }
@@ -48,7 +48,7 @@ int runUnityTests(void)
 {
     UNITY_BEGIN();
     RUN_TEST(test_ad56x4_set_default_cfg);
-    RUN_TEST(test_ad56x4_ad56x4_init_hw_ok);
+    RUN_TEST(test_ad56x4_init_hw_ok);
     RUN_TEST(test_ad56x4_generic_write_ok);
     return UNITY_END();
 }
