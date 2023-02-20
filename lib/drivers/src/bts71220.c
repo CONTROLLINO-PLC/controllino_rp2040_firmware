@@ -8,6 +8,8 @@
 #include "string.h"
 #include "hw_platform.h" /* External harware interface library */
  
+static bts71220_err_code_t ret;
+ 
 /*!
   * \brief Check daisy chain value
   *
@@ -38,7 +40,7 @@ void bts71220_set_default_cfg(bts71220_cfg_t* cfg)
 }
  
 /* Initializes hardware according to configuration */
-bts71220_err_code_t bts71220_init(bts71220_t* dev, bts71220_cfg_t* cfg)
+bts71220_err_code_t bts71220_init_hw(bts71220_t* dev, bts71220_cfg_t* cfg)
 {
     // Check daisy chain size
     if (cfg->dchain_size < 1) return PLATFORM_SPI_INIT_ERR;
@@ -46,7 +48,8 @@ bts71220_err_code_t bts71220_init(bts71220_t* dev, bts71220_cfg_t* cfg)
     if (platform_spi_init(cfg->spi, cfg->spi_speed, cfg->mosi_pin, cfg->miso_pin, cfg->sck_pin) != PLATFORM_OK)
         return PLATFORM_SPI_INIT_ERR;
     // Init hardware cs pin
-    platform_gpio_init(cfg->cs_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_UP);
+    if (platform_gpio_init(cfg->cs_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_UP))
+        return PLATFORM_GPIO_INIT_ERR;
     // Set values from cfg
     dev->cs_pin = cfg->cs_pin;
     dev->spi_speed = cfg->spi_speed;
@@ -54,13 +57,15 @@ bts71220_err_code_t bts71220_init(bts71220_t* dev, bts71220_cfg_t* cfg)
     dev->spi_bit_order = cfg->spi_bit_order;
     dev->spi = cfg->spi;
     dev->dchain_size = cfg->dchain_size;
+    return PLATFORM_OK;
+}
+ 
+/* Test device coms and initialize internal registers */
+bts71220_err_code_t bts71220_init_dev(bts71220_t* dev)
+{
     // Check coms
     uint8_t res;
-    bts71220_err_code_t ret;
-    ret = bts71220_read_std_diag(dev, &res, 0);
-    if (ret != PLATFORM_OK)
-        return PLATFORM_SPI_INIT_ERR;
-    return PLATFORM_OK;
+    return bts71220_read_std_diag(dev, &res, 0);
 }
  
 /* Generic SPI data transfer */
@@ -68,7 +73,6 @@ bts71220_err_code_t bts71220_generic_transfer(bts71220_t* dev, uint8_t txdata, u
 {
     uint8_t tx_buf[dev->dchain_size];
     uint8_t rx_buf[dev->dchain_size];
-    bts71220_err_code_t ret;
     if (bts71220_check_dchain_num(dev, dchain_num) != PLATFORM_OK)
         return PLATFORM_ARGUMENT_ERR;
     memset(tx_buf, BTS71220_REG_STD_DIAG, sizeof(tx_buf));
@@ -113,7 +117,6 @@ bts71220_err_code_t bts71220_read_reg(bts71220_t* dev, bts71220_reg_t reg, uint8
 /* Read standard diagnosis */
 bts71220_err_code_t bts71220_read_std_diag(bts71220_t* dev, uint8_t* rxdata, uint8_t dchain_num)
 {
-    bts71220_err_code_t ret;
     ret = bts71220_read_reg(dev, BTS71220_REG_STD_DIAG, rxdata, dchain_num);
     if (ret != PLATFORM_OK)
         return ret;
@@ -125,7 +128,6 @@ bts71220_err_code_t bts71220_read_std_diag(bts71220_t* dev, uint8_t* rxdata, uin
 /* Read warnings diagnosis */
 bts71220_err_code_t bts71220_read_wrn_diag(bts71220_t* dev, uint8_t* rxdata, uint8_t dchain_num)
 {
-    bts71220_err_code_t ret;
     ret = bts71220_read_reg(dev, BTS71220_REG_WRN_DIAG, rxdata, dchain_num);
     if (ret != PLATFORM_OK)
         return ret;
@@ -137,7 +139,6 @@ bts71220_err_code_t bts71220_read_wrn_diag(bts71220_t* dev, uint8_t* rxdata, uin
 /* Read error diagnosis */
 bts71220_err_code_t bts71220_read_err_diag(bts71220_t* dev, uint8_t* rxdata, uint8_t dchain_num)
 {
-    bts71220_err_code_t ret;
     ret = bts71220_read_reg(dev, BTS71220_REG_ERR_DIAG, rxdata, dchain_num);
     if (ret != PLATFORM_OK)
         return ret;
@@ -150,7 +151,6 @@ bts71220_err_code_t bts71220_read_err_diag(bts71220_t* dev, uint8_t* rxdata, uin
 bts71220_err_code_t bts71220_set_sense_mux(bts71220_t* dev, bts71220_sense_mux_t mux, uint8_t dchain_num)
 {
     bts71220_dcr_reg_t dcr_reg;
-    bts71220_err_code_t ret;
     uint8_t txdata;
     ret = bts71220_read_reg(dev, BTS71220_REG_DCR, (uint8_t*)&dcr_reg, dchain_num);
     if (ret != PLATFORM_OK)

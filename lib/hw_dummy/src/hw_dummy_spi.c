@@ -4,9 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
  
+#include "string.h"
 #include "hw_platform.h"
 #include "ad56x4.h"
-
+#include "bts71220.h"
+ 
 typedef struct
 {} spi_inst_t;
 uint8_t dummy_for_pointer;
@@ -50,5 +52,12 @@ platform_err_code_t platform_spi_write(hw_spi_t spi_hw, uint8_t* txdata, size_t 
 /* Write and read specified number of bytes over SPI */
 platform_err_code_t platform_spi_write_read(hw_spi_t spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len)
 {
-    return PLATFORM_OK;
+    // test_bts71220_generic_transfer_ok
+    if (len == BTS71220_DAISY_CHAIN_SIZE &&
+        *(txdata + TEST_BTS71220_DAISY_CHAIN_NUMBER) == BTS71220_REG_STD_DIAG)
+    {
+        memset(rxdata, BTS71220_DIAG_RES_MASK, len);
+        return PLATFORM_OK;
+    }
+    return PLATFORM_SPI_COM_ERR;
 }

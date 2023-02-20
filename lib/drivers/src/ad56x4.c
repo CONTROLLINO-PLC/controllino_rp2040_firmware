@@ -7,6 +7,8 @@
 #include "ad56x4.h"
 #include "hw_platform.h" /* External harware interface library */
  
+static ad56x4_err_code_t ret;
+ 
 /* Initializes default configuration */
 void ad56x4_set_default_cfg(ad56x4_cfg_t* cfg)
 {
@@ -50,7 +52,6 @@ ad56x4_err_code_t ad56x4_init_dev(ad56x4_t* dev)
 ad56x4_err_code_t ad56x4_generic_write(ad56x4_t* dev, ad56x4_cmd_t cmd, ad56x4_ch_addr_t ch_addr, uint16_t data)
 {
     uint8_t tx_buf[3];
-    ad56x4_err_code_t ret;
     // Prepare txdata
     tx_buf[0] = (uint8_t)(cmd << 3) | ch_addr;
     tx_buf[1] = (uint8_t)((data >> 8) & 0xFF);
@@ -112,7 +113,6 @@ ad56x4_err_code_t ad56x4_set_ldev(ad56x4_t* dev, uint8_t ch_ldev_mode)
 /* Set the voltage values of the specified channel */
 ad56x4_err_code_t ad56x4_set_ch_voltage(ad56x4_t* dev, ad56x4_ch_addr_t ch_addr, uint16_t vol_val, uint16_t vol_ref_max)
 {
-    int ret;
     float float_dac = ((float)vol_val / (float)vol_ref_max) * (float)dev->resolution;
     int txdata = (int)float_dac;
     ret = ad56x4_write_input_reg(dev, ch_addr, (uint16_t)txdata);

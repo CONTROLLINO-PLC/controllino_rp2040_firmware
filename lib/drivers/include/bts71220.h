@@ -301,9 +301,20 @@ void bts71220_set_default_cfg(bts71220_cfg_t* cfg);
  * \param dev Pointer to BTS71220 power controller struct
  * \param cfg Initial config struct
  * \return PLATFORM_SPI_INIT_ERR : error
+ *         PLATFORM_GPIO_INIT_ERR : error
  *         PLATFORM_OK : successful
  */
-bts71220_err_code_t bts71220_init(bts71220_t* dev, bts71220_cfg_t* cfg);
+bts71220_err_code_t bts71220_init_hw(bts71220_t* dev, bts71220_cfg_t* cfg);
+ 
+/*!
+ * \brief Test device coms and initialize internal registers
+ * \ingroup bts71220
+ *
+ * \param dev Pointer to BTS71220 power controller struct
+ * \return PLATFORM_SPI_COM_ERR : error
+ *         PLATFORM_OK : successful
+ */
+bts71220_err_code_t bts71220_init_dev(bts71220_t* dev);
  
 /*!
  * \brief Generic SPI data transfer

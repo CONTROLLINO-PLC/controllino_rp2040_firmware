@@ -34,7 +34,7 @@ extern "C"
 }
 #endif /* extern "C" */
 
-#if defined(NATIVE_TEST_ENV)
+#ifdef NATIVE_TEST_ENV
 #include <stdio.h>
 void unityOutputStart(unsigned long baudrate) { }
 void unityOutputChar(unsigned int c) { putchar(c); }
@@ -42,7 +42,7 @@ void unityOutputFlush(void) { fflush(stdout); }
 void unityOutputComplete(void) { }
 #endif
 
-#if defined(ARDUINO_PICO_ENV)
+#ifdef ARDUINO_PICO_ENV
 #include <Arduino.h>
 void unityOutputStart(unsigned long baudrate) { Serial.begin(baudrate); }
 void unityOutputChar(unsigned int c) { Serial.write(c); }

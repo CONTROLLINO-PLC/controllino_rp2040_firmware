@@ -5,7 +5,7 @@
  */
 #include "unity_test_runner.h"
  
-#if defined(NATIVE_TEST_ENV)
+#ifdef NATIVE_TEST_ENV
 int main(int argc, char** argv)
 {
     runUnityTests();
@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 }
 #endif
  
-#if defined(ARDUINO_PICO_ENV)
+#ifdef ARDUINO_PICO_ENV
 #include "Arduino.h"
 void setup()
 {

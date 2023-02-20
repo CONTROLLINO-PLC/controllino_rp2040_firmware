@@ -1,17 +1,16 @@
 #include <unity.h>
 #include "unity_test_runner.h"
+#include "chip_select.h"
 #include "hw_platform.h"
 #include "ad56x4.h"
  
 static ad56x4_cfg_t cfg;
 static ad56x4_t dev;
 static ad56x4_err_code_t ret;
-
-void ad56x4_cs_select(ad56x4_t* dev) {}
-void ad56x4_cs_deselect(ad56x4_t* dev) {}
  
 void setUp(void)
 {
+    chip_select_init();
     ad56x4_set_default_cfg(&cfg);
     ret = ad56x4_init_hw(&dev, &cfg);
 }
