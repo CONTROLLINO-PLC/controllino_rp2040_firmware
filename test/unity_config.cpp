@@ -45,6 +45,7 @@ void unityOutputStart(unsigned long baudrate) { }
 void unityOutputChar(unsigned int c) { putchar(c); }
 void unityOutputFlush(void) { fflush(stdout); }
 void unityOutputComplete(void) { }
+int main(int argc, char** argv) { runUnityTests(); return 0; }
 #endif
 
 #ifdef ARDUINO_NEO_ENV
@@ -53,6 +54,8 @@ void unityOutputStart(unsigned long baudrate) { Serial.begin(baudrate); }
 void unityOutputChar(unsigned int c) { Serial.write(c); }
 void unityOutputFlush(void) { Serial.flush(); }
 void unityOutputComplete(void) { Serial.end(); }
+void setup() { while (!Serial); runUnityTests(); }
+void loop() {}
 #endif
 
     

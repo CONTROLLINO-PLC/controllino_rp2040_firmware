@@ -6,7 +6,6 @@
 #ifdef NATIVE_TEST_ENV
  
 #include "hw_platform.h"
-#include "test_config.h"
  
 typedef struct {
     int num;
