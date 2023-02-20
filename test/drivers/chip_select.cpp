@@ -23,7 +23,7 @@ cy8c95xx_t cy8c95xx;
  
 void chip_select_init(void)
 {
-#ifdef ARDUINO_PICO_ENV
+#ifdef ARDUINO_NEO_ENV
     cy8c95xx_cfg_t cfg;
     cy8c95xx_set_default_cfg(&cfg);
     cy8c95xx_init(&cy8c95xx, &cfg);
@@ -35,26 +35,26 @@ void chip_select_init(void)
 
 void ad56x4_cs_select(ad56x4_t* dev)
 {
-#ifdef ARDUINO_PICO_ENV
+#ifdef ARDUINO_NEO_ENV
     cy8c95xx_write_pin(&cy8c95xx, AD56X4_CS, CY8C95XX_LOW);
 #endif
 }
 
 void ad56x4_cs_deselect(ad56x4_t* dev)
 {
-#ifdef ARDUINO_PICO_ENV
+#ifdef ARDUINO_NEO_ENV
     cy8c95xx_write_pin(&cy8c95xx, AD56X4_CS, CY8C95XX_HIGH);
 #endif
 }
 
 void bts71220_cs_select(bts71220_t * dev) {
-#ifdef ARDUINO_PICO_ENV
+#ifdef ARDUINO_NEO_ENV
     cy8c95xx_write_pin(&cy8c95xx, BTS71220_CS, CY8C95XX_LOW);
 #endif
 }
 
 void bts71220_cs_deselect(bts71220_t * dev) {
-#ifdef ARDUINO_PICO_ENV
+#ifdef ARDUINO_NEO_ENV
     cy8c95xx_write_pin(&cy8c95xx, BTS71220_CS, CY8C95XX_HIGH);
 #endif
 }

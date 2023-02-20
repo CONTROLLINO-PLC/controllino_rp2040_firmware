@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
  
+#ifdef NATIVE_TEST_ENV
+ 
 #include "hw_platform.h"
  
 uint64_t dummy_time_us = 1;
@@ -25,3 +27,5 @@ void platform_sleep_us(uint64_t us)
 {
     dummy_time_us += us;
 }
+ 
+#endif

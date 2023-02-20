@@ -1,10 +1,6 @@
 #include <unity.h>
-#include "unity_test_runner.h"
+#include "test_config.h"
 #include "hw_platform.h"
- 
-#ifndef TEST_I2C_ADDR
-#define TEST_I2C_ADDR 0x00
-#endif
  
 static platform_err_code_t ret;
  

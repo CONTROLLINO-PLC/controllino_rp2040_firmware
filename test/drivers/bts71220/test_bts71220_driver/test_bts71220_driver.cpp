@@ -1,5 +1,5 @@
 #include <unity.h>
-#include "unity_test_runner.h"
+#include "test_config.h"
 #include "chip_select.h"
 #include "hw_platform.h"
 #include "bts71220.h"
@@ -36,7 +36,7 @@ void test_bts71220_bts71220_init_hw_ok()
 {
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
 }
-
+ 
 void test_bts71220_generic_transfer_ok()
 {
     uint8_t rxdata;
@@ -44,12 +44,21 @@ void test_bts71220_generic_transfer_ok()
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
     TEST_ASSERT_TRUE(rxdata & BTS71220_DIAG_RES_MASK);
 }
-
+ 
+void test_bts71220_read_wrn_diag_ok()
+{
+    uint8_t rxdata;
+    ret = bts71220_read_wrn_diag(&dev, &rxdata, TEST_BTS71220_DAISY_CHAIN_NUMBER);
+    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    TEST_ASSERT_TRUE(rxdata & BTS71220_DIAG_RES_MASK);
+}
+ 
 int runUnityTests(void)
 {
     UNITY_BEGIN();
     RUN_TEST(test_bts71220_set_default_cfg);
     RUN_TEST(test_bts71220_bts71220_init_hw_ok);
     RUN_TEST(test_bts71220_generic_transfer_ok);
+    RUN_TEST(test_bts71220_read_wrn_diag_ok);
     return UNITY_END();
 }

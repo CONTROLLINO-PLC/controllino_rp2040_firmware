@@ -1,9 +1,14 @@
 /**
+ * Copyright (c) 2023 CONTROLLINO GmbH.
+ *
+ * SPDX-License-Identifier: MIT
+ *
  * \file unitity_test_runner.cpp
  *
- * Execute test runner in the diferent environments
+ * Execute unit test in the diferent environments
+ * this avoid code duplication in the test files
  */
-#include "unity_test_runner.h"
+#include "test_config.h"
  
 #ifdef NATIVE_TEST_ENV
 int main(int argc, char** argv)
@@ -13,7 +18,7 @@ int main(int argc, char** argv)
 }
 #endif
  
-#ifdef ARDUINO_PICO_ENV
+#ifdef ARDUINO_NEO_ENV
 #include "Arduino.h"
 void setup()
 {

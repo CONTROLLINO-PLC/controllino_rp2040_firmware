@@ -1,5 +1,5 @@
 #include <unity.h>
-#include "unity_test_runner.h"
+#include "test_config.h"
 #include "hw_platform.h"
  
 #define PLATFORM_SPI_MODE_WRONG (PLATFORM_SPI_MODE_3 + 1)
@@ -39,15 +39,15 @@ void test_platform_spi_set_config_wrong_bit_order_err(void)
  
 void test_platform_spi_write_ok(void)
 {
-    uint8_t dummy_txdata;
+    uint8_t dummy_txdata = 0x00;
     ret = platform_spi_write(PLATFORM_SPI_HW, &dummy_txdata, sizeof(dummy_txdata));
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
 }
  
 void test_platform_spi_write_read_ok(void)
 {
-    uint8_t dummy_txdata;
-    uint8_t dummy_rxdata;
+    uint8_t dummy_txdata = 0x00;
+    uint8_t dummy_rxdata = 0x00;
     ret = platform_spi_write_read(PLATFORM_SPI_HW, &dummy_txdata, &dummy_rxdata, sizeof(dummy_rxdata));
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
 }

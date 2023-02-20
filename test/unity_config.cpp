@@ -1,4 +1,9 @@
-
+/**
+ * \file unity_config.cpp
+ *
+ * Implement unity test harness interface for the different eviroments
+ * Adapted from code provided by PlatformIO
+ */
 #include "unity_config.h"
 
 #if !defined(UNITY_WEAK_ATTRIBUTE) && !defined(UNITY_WEAK_PRAGMA)
@@ -42,7 +47,7 @@ void unityOutputFlush(void) { fflush(stdout); }
 void unityOutputComplete(void) { }
 #endif
 
-#ifdef ARDUINO_PICO_ENV
+#ifdef ARDUINO_NEO_ENV
 #include <Arduino.h>
 void unityOutputStart(unsigned long baudrate) { Serial.begin(baudrate); }
 void unityOutputChar(unsigned int c) { Serial.write(c); }

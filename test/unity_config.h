@@ -1,4 +1,9 @@
-
+/**
+ * \file unity_config.h
+ *
+ * Define unity test harness interface
+ * Provided by PlatformIO 
+ */
 #ifndef UNITY_CONFIG_H
 #define UNITY_CONFIG_H
 

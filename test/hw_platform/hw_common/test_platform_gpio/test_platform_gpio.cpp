@@ -1,15 +1,11 @@
 #include <unity.h>
-#include "unity_test_runner.h"
+#include "test_config.h"
 #include "hw_platform.h"
  
 static int pin;
 static platform_gpio_dir_t dir;
 static platform_gpio_pull_mod_t pull;
 static platform_err_code_t ret;
- 
-#ifndef TEST_GPIO
-#define TEST_GPIO 0
-#endif
  
 void setUp(void)
 {

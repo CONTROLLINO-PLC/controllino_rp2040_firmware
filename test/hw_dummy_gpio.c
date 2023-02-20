@@ -3,9 +3,11 @@
  *
  * SPDX-License-Identifier: MIT
  */
+#ifdef NATIVE_TEST_ENV
  
 #include "hw_platform.h"
-
+#include "test_config.h"
+ 
 typedef struct {
     int num;
     bool state;
@@ -51,3 +53,5 @@ platform_err_code_t platform_gpio_get(int pin, bool *value)
     }
     return PLATFORM_OK;
 }
+ 
+#endif

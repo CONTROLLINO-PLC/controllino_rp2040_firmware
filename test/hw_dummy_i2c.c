@@ -4,11 +4,14 @@
  * SPDX-License-Identifier: MIT
  */
  
+#ifdef NATIVE_TEST_ENV
+ 
 #include "hw_platform.h"
+#include "test_config.h"
  
 typedef struct
 {} i2c_inst_t;
-uint8_t dummy_for_pointer;
+static uint8_t dummy_for_pointer;
 typedef struct i2c_inst_t _hw_i2c_t;
 hw_i2c_t PLATFORM_I2C_HW = (hw_i2c_t)&dummy_for_pointer;
 const unsigned int PLATFORM_I2C_SPEED;
@@ -32,3 +35,5 @@ platform_err_code_t platform_i2c_write(hw_i2c_t i2c_hw, uint8_t addr, const uint
 {
     return PLATFORM_OK;
 }
+ 
+#endif

@@ -1,12 +1,11 @@
-
-#if defined(NATIVE_TEST_ENV)
+#ifdef NATIVE_TEST_ENV
 int main() {
     while (1);
     return 0;
 }
 #endif
  
-#if defined(ARDUINO_PICO_ENV)
+#ifdef ARDUINO_NEO_ENV
 #include "Arduino.h"
 void setup() {
 }

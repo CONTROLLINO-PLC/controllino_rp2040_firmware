@@ -1,5 +1,5 @@
 #include <unity.h>
-#include "unity_test_runner.h"
+#include "test_config.h"
 #include "hw_platform.h"
  
 static int pin;
