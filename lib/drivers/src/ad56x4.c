@@ -113,6 +113,8 @@ ad56x4_err_code_t ad56x4_set_ldev(ad56x4_t* dev, uint8_t ch_ldev_mode)
 /* Set the voltage values of the specified channel */
 ad56x4_err_code_t ad56x4_set_ch_voltage(ad56x4_t* dev, ad56x4_ch_addr_t ch_addr, uint16_t vol_val, uint16_t vol_ref_max)
 {
+    if (vol_val > vol_ref_max)
+        return PLATFORM_ARGUMENT_ERR;
     float float_dac = ((float)vol_val / (float)vol_ref_max) * (float)dev->resolution;
     int txdata = (int)float_dac;
     ret = ad56x4_write_input_reg(dev, ch_addr, (uint16_t)txdata);
