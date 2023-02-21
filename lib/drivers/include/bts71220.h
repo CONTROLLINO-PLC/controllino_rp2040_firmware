@@ -63,6 +63,7 @@ typedef enum {
 #define BTS71220_RB_MASK        0b01000000
 #define BTS71220_WRITE_MASK     0b10000000
 #define BTS71220_DIAG_RES_MASK  0b11000000
+#define BTS71220_OUT_RES_MASK   0b10011111
  
 /**
  * \brief Standard diagnosis respose

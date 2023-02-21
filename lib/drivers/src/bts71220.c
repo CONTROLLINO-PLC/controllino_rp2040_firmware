@@ -99,10 +99,17 @@ bts71220_err_code_t bts71220_generic_transfer(bts71220_t* dev, uint8_t txdata, u
 /* Write to register */
 bts71220_err_code_t bts71220_write_reg(bts71220_t* dev, bts71220_reg_t reg, uint8_t txdata, uint8_t dchain_num)
 {
+    if (reg == BTS71220_REG_WRN_DIAG ||
+        reg == BTS71220_REG_STD_DIAG ||
+        reg == BTS71220_REG_ERR_DIAG ||
+        reg == BTS71220_REG_RCS ||
+        reg == BTS71220_REG_SRC)
+    {
+        return PLATFORM_ARGUMENT_ERR;
+    }
     uint8_t rxdata;
-    // Pending to check write only registers
     txdata &= BTS71220_REG_CONT_MASK;
-    reg &= ((~BTS71220_REG_CONT_MASK) & 0xFF);
+    reg &= (~BTS71220_REG_CONT_MASK & 0xFF);
     txdata |= (reg | BTS71220_WRITE_MASK);
     return bts71220_generic_transfer(dev, txdata, &rxdata, dchain_num);
     // Pending to check response for diagnosis errors
@@ -131,7 +138,7 @@ bts71220_err_code_t bts71220_read_wrn_diag(bts71220_t* dev, uint8_t* rxdata, uin
     ret = bts71220_read_reg(dev, BTS71220_REG_WRN_DIAG, rxdata, dchain_num);
     if (ret != PLATFORM_OK)
         return ret;
-    if (!(*rxdata & BTS71220_RB_MASK))
+    if (!(*rxdata & (BTS71220_ERR_WARN_MASK | BTS71220_REG_CONT_MASK)))
         return PLATFORM_SPI_COM_ERR;
     return PLATFORM_OK;
 }
@@ -142,7 +149,7 @@ bts71220_err_code_t bts71220_read_err_diag(bts71220_t* dev, uint8_t* rxdata, uin
     ret = bts71220_read_reg(dev, BTS71220_REG_ERR_DIAG, rxdata, dchain_num);
     if (ret != PLATFORM_OK)
         return ret;
-    if (!(*rxdata & BTS71220_RB_MASK))
+    if (!(*rxdata & (BTS71220_ERR_WARN_MASK | BTS71220_REG_CONT_MASK)))
         return PLATFORM_SPI_COM_ERR;
     return PLATFORM_OK;
 }
