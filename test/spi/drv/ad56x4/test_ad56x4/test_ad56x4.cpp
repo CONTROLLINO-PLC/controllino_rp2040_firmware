@@ -11,7 +11,7 @@ static ad56x4_err_code_t ret;
 void setUp(void)
 {
     ad56x4_set_default_cfg(&cfg);
-    ret = ad56x4_init_hw(&dev, &cfg);
+    ret = ad56x4_init(&dev, &cfg);
 }
  
 void tearDown(void)
@@ -33,14 +33,8 @@ void test_ad56x4_set_default_cfg()
     TEST_ASSERT_EQUAL(AD56X4_RESOLUTION, def_cfg.resolution);
 }
  
-void test_ad56x4_init_hw_ok()
+void test_ad56x4_init_ok()
 {
-    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
-}
- 
-void test_ad56x4_init_dev_ok()
-{
-    ret = ad56x4_init_dev(&dev);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
 }
  
@@ -104,8 +98,7 @@ int runUnityTests(void)
 {
     UNITY_BEGIN();
     RUN_TEST(test_ad56x4_set_default_cfg);
-    RUN_TEST(test_ad56x4_init_hw_ok);
-    RUN_TEST(test_ad56x4_init_dev_ok);
+    RUN_TEST(test_ad56x4_init_ok);
     RUN_TEST(test_ad56x4_write_input_reg_ok);
     RUN_TEST(test_ad56x4_update_dac_reg_ok);
     RUN_TEST(test_ad56x4_write_input_reg_update_all_dac_ok);

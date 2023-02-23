@@ -40,7 +40,7 @@ void bts71220_set_default_cfg(bts71220_cfg_t* cfg)
 }
  
 /* Initializes hardware according to configuration */
-bts71220_err_code_t bts71220_init_hw(bts71220_t* dev, bts71220_cfg_t* cfg)
+bts71220_err_code_t bts71220_init(bts71220_t* dev, bts71220_cfg_t* cfg)
 {
     // Check daisy chain size
     if (cfg->dchain_size < 1) return PLATFORM_SPI_INIT_ERR;
@@ -48,7 +48,7 @@ bts71220_err_code_t bts71220_init_hw(bts71220_t* dev, bts71220_cfg_t* cfg)
     if (platform_spi_init(cfg->spi, cfg->spi_speed, cfg->mosi_pin, cfg->miso_pin, cfg->sck_pin) != PLATFORM_OK)
         return PLATFORM_SPI_INIT_ERR;
     // Init hardware cs pin
-    if (platform_gpio_init(cfg->cs_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_UP))
+    if (platform_gpio_init(cfg->cs_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_UP) != PLATFORM_OK)
         return PLATFORM_GPIO_INIT_ERR;
     // Set values from cfg
     dev->cs_pin = cfg->cs_pin;
@@ -57,12 +57,6 @@ bts71220_err_code_t bts71220_init_hw(bts71220_t* dev, bts71220_cfg_t* cfg)
     dev->spi_bit_order = cfg->spi_bit_order;
     dev->spi = cfg->spi;
     dev->dchain_size = cfg->dchain_size;
-    return PLATFORM_OK;
-}
- 
-/* Test device coms and initialize internal registers */
-bts71220_err_code_t bts71220_init_dev(bts71220_t* dev)
-{
     // Check coms
     uint8_t res;
     return bts71220_read_std_diag(dev, &res, 0);

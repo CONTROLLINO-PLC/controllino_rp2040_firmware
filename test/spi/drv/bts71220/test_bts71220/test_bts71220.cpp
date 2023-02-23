@@ -9,7 +9,7 @@ static bts71220_err_code_t ret;
 void setUp(void)
 {
     bts71220_set_default_cfg(&cfg);
-    ret = bts71220_init_hw(&dev, &cfg);
+    ret = bts71220_init(&dev, &cfg);
 }
  
 void tearDown(void)
@@ -29,14 +29,8 @@ void test_bts71220_set_default_cfg()
     TEST_ASSERT_EQUAL(BTS71220_DAISY_CHAIN_SIZE, def_cfg.dchain_size);
 }
  
-void test_bts71220_bts71220_init_hw_ok()
+void test_bts71220_init_ok()
 {
-    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
-}
- 
-void test_bts71220_init_dev_ok()
-{
-    ret = bts71220_init_dev(&dev); /* Implies testing bts71220_read_std_diag */
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
 }
  
@@ -95,8 +89,7 @@ int runUnityTests(void)
 {
     UNITY_BEGIN();
     RUN_TEST(test_bts71220_set_default_cfg);
-    RUN_TEST(test_bts71220_bts71220_init_hw_ok);
-    RUN_TEST(test_bts71220_init_dev_ok);
+    RUN_TEST(test_bts71220_init_ok);
     RUN_TEST(test_bts71220_write_read_out_reg_ok);
     RUN_TEST(test_bts71220_write_read_only_reg_err);
     RUN_TEST(test_bts71220_read_wrn_diag_ok);

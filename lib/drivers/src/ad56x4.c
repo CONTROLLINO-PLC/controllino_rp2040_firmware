@@ -24,13 +24,13 @@ void ad56x4_set_default_cfg(ad56x4_cfg_t* cfg)
 }
  
 /* Initializes hardware according to configuration */
-ad56x4_err_code_t ad56x4_init_hw(ad56x4_t* dev, ad56x4_cfg_t* cfg)
+ad56x4_err_code_t ad56x4_init(ad56x4_t* dev, ad56x4_cfg_t* cfg)
 {
     // Init hardware SPI interface
     if (platform_spi_init(cfg->spi, cfg->spi_speed, cfg->mosi_pin, cfg->miso_pin, cfg->sck_pin) != PLATFORM_OK)
         return PLATFORM_SPI_INIT_ERR;
     // Init hardware cs pin
-    if (platform_gpio_init(cfg->cs_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_UP))
+    if (platform_gpio_init(cfg->cs_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_UP) != PLATFORM_OK)
         return PLATFORM_GPIO_INIT_ERR;
     // Set values from cfg
     dev->cs_pin = cfg->cs_pin;
@@ -39,16 +39,10 @@ ad56x4_err_code_t ad56x4_init_hw(ad56x4_t* dev, ad56x4_cfg_t* cfg)
     dev->spi_bit_order = cfg->spi_bit_order;
     dev->spi = cfg->spi;
     dev->resolution = cfg->resolution;
-    return PLATFORM_OK;
-}
- 
-/* Test device coms and initialize internal registers */
-ad56x4_err_code_t ad56x4_init_dev(ad56x4_t* dev)
-{
     // Reset and set default internal settings
     return ad56x4_sw_reset(dev, AD56X4_SW_RST_FULL);
 }
-
+ 
 ad56x4_err_code_t ad56x4_generic_write(ad56x4_t* dev, ad56x4_cmd_t cmd, ad56x4_ch_addr_t ch_addr, uint16_t data)
 {
     uint8_t tx_buf[3];

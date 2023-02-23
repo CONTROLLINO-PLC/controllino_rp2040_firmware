@@ -164,19 +164,10 @@ void ad56x4_set_default_cfg(ad56x4_cfg_t* cfg);
  * \param cfg Initial config struct
  * \return PLATFORM_SPI_INIT_ERR : error
  *         PLATFORM_GPIO_INIT_ERR : error
+ *         PLATFORM_SPI_COM_ERR : error
  *         PLATFORM_OK : successful
  */
-ad56x4_err_code_t ad56x4_init_hw(ad56x4_t* dev, ad56x4_cfg_t* cfg);
- 
-/*!
- * \brief Test device coms and initialize internal registers
- * \ingroup ad56x4
- *
- * \param dev Pointer to AD56X4 DAC struct
- * \return PLATFORM_SPI_COM_ERR : error
- *         PLATFORM_OK : successful
- */
-ad56x4_err_code_t ad56x4_init_dev(ad56x4_t* dev);
+ad56x4_err_code_t ad56x4_init(ad56x4_t* dev, ad56x4_cfg_t* cfg);
  
 /*!
  * \brief Generic write data function.

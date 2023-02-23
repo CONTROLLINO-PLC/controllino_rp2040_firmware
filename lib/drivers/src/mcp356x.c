@@ -80,9 +80,10 @@ mcp356x_err_code_t mcp356x_init(mcp356x_t* dev, mcp356x_cfg_t* cfg)
     if (platform_spi_init(cfg->spi, cfg->spi_speed, cfg->mosi_pin, cfg->miso_pin, cfg->sck_pin) != PLATFORM_OK)
         return PLATFORM_SPI_INIT_ERR;
     // Init hardware cs, mclk and int pin
-    platform_gpio_init(cfg->cs_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_UP);
-    platform_gpio_init(cfg->mclk_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_DISABLED);
-    platform_gpio_init(cfg->int_pin, PLATFORM_GPIO_IN, PLATFORM_GPIO_PULL_DISABLED);
+    if (platform_gpio_init(cfg->cs_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_UP) != PLATFORM_OK ||
+        platform_gpio_init(cfg->mclk_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_DISABLED) != PLATFORM_OK ||
+        platform_gpio_init(cfg->int_pin, PLATFORM_GPIO_IN, PLATFORM_GPIO_PULL_DISABLED) != PLATFORM_OK)
+        return PLATFORM_GPIO_INIT_ERR;
     // Set values from cfg
     dev->cs_pin = cfg->cs_pin;
     dev->spi_speed = cfg->spi_speed;
@@ -112,9 +113,7 @@ mcp356x_err_code_t mcp356x_init(mcp356x_t* dev, mcp356x_cfg_t* cfg)
         txdata[10] = (uint8_t)((cfg->timer_reg >> 8) & 0xff);
         txdata[11] = (uint8_t)((cfg->timer_reg) & 0xff);
     }
-    if (mcp356x_iwrite(dev, MCP356X_REG_CFG_0, txdata, sizeof(txdata)) != PLATFORM_OK)
-        return PLATFORM_SPI_INIT_ERR;
-    return PLATFORM_OK;
+    return mcp356x_iwrite(dev, MCP356X_REG_CFG_0, txdata, sizeof(txdata));
 }
  
 /* Check interrupt by reading int_pin level */
