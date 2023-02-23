@@ -39,40 +39,44 @@ typedef int mcp356x_err_code_t;
  * \brief Fast commands CMD[5:2]
  * \ingroup mcp356x
  */
-#define MCP356X_FAST_CMD_ADC_CONV_START      0x0A
-#define MCP356X_FAST_CMD_ADC_STANDBY_MODE    0x0B
-#define MCP356X_FAST_CMD_ADC_SHUTDOWN_MODE   0x0C
-#define MCP356X_FAST_CMD_FULL_SHUTDOWN_MODE  0x0D
-#define MCP356X_FAST_CMD_DEV_FULL_RESET      0x0E
- 
+typedef enum {
+    MCP356X_FAST_CMD_ADC_CONV_START =       0x0A,
+    MCP356X_FAST_CMD_ADC_STANDBY_MODE =     0x0B,
+    MCP356X_FAST_CMD_ADC_SHUTDOWN_MODE =    0x0C,
+    MCP356X_FAST_CMD_FULL_SHUTDOWN_MODE =   0x0D,
+    MCP356X_FAST_CMD_DEV_FULL_RESET =       0x0E
+} mcp356x_fast_cmd_t;
+
 /**
  * \brief Write/read commands CMD[1:0]
  * \ingroup mcp356x
  */
-#define MCP356X_CMD_DONT_CARE                0x00
-#define MCP356X_CMD_STAT_READ                0x01
-#define MCP356X_CMD_INC_WRITE                0x02
-#define MCP356X_CMD_INC_READ                 0x03
+typedef enum {
+    MCP356X_CMD_DONT_CARE =                 0x00,
+    MCP356X_CMD_STAT_READ =                 0x01,
+    MCP356X_CMD_INC_WRITE =                 0x02,
+    MCP356X_CMD_INC_READ =                  0x03
+} mcp356x_rw_cmd_t;
  
 /**
  * \brief Internal register addresses CMD[5:2]
  * \ingroup mcp356x
  */
-#define MCP356X_REG_ADC_DATA                 0x00
-#define MCP356X_REG_CFG_0                    0x01
-#define MCP356X_REG_CFG_1                    0x02
-#define MCP356X_REG_CFG_2                    0x03
-#define MCP356X_REG_CFG_3                    0x04
-#define MCP356X_REG_IRQ                      0x05
-#define MCP356X_REG_MUX                      0x06
-#define MCP356X_REG_SCAN                     0x07
-#define MCP356X_REG_TIMER                    0x08
-#define MCP356X_REG_OFFSET_CAL               0x09
-#define MCP356X_REG_GAIN_CAL                 0x0A
-#define MCP356X_RSV_REG_W_A                  0x0B
-#define MCP356X_REG_LOCK                     0x0D
-#define MCP356X_RSV_REG                      0x0E
-#define MCP356X_REG_CRC_CFG                  0x0F
+typedef enum {
+    MCP356X_REG_ADC_DATA =                  0x00,
+    MCP356X_REG_CFG_0 =                     0x01,
+    MCP356X_REG_CFG_1 =                     0x02,
+    MCP356X_REG_CFG_2 =                     0x03,
+    MCP356X_REG_CFG_3 =                     0x04,
+    MCP356X_REG_IRQ =                       0x05,
+    MCP356X_REG_MUX =                       0x06,
+    MCP356X_REG_SCAN =                      0x07,
+    MCP356X_REG_TIMER =                     0x08,
+    MCP356X_REG_OFFSET_CAL =                0x09,
+    MCP356X_REG_GAIN_CAL =                  0x0A,
+    MCP356X_REG_LOCK =                      0x0D,
+    MCP356X_REG_CRC_CFG =                   0x0F,
+} mcp356x_reg_t;
  
 /**
  * \brief CONFIG0 Register
@@ -306,10 +310,39 @@ typedef int mcp356x_err_code_t;
 #define MCP356X_CH_CH0                       0x00
  
 /**
+ * \brief Bit masks
+ * \ingroup mcp356x
+ */
+#define MCP356X_VALID_STATUS_MASK           (uint8_t)((MCP356X_DEVICE_ADDR << 4) | ((~MCP356X_DEVICE_ADDR & 0x1) << 3))
+#define MCP356X_FCMD_ADDR_MASK              0x3C
+#define MCP356X_RW_CMD_MASK                 0x03
+#define MCP356X_CFG_3_DATA_FORMAT_MASK      0x30
+ 
+/**
  * \brief Calculation coefitient
  * \ingroup mcp356x
  */
 #define MCP356X_CALC_COEF                    8388608
+ 
+/**
+ * \brief Posible resolutions
+ * \ingroup mcp356x
+ */
+#define MCP356X_RES_23_BITS                 0x7FFFFF
+#define MCP356X_RES_24_BITS                 0xFFFFFF
+ 
+/**
+ * \brief Init values to set in configuration registers
+ * \ingroup mcp356x
+ */
+#define MCP356X_INIT_CFG_0_REG              (MCP356X_CFG_0_VREF_INT | MCP356X_CFG_0_CLK_INT_NO_OUT | MCP356X_CFG_0_CS_SEL_NONE | MCP356X_CFG_0_MODE_CONV)
+#define MCP356X_INIT_CFG_1_REG              (MCP356X_CFG_1_PRE_1 | MCP356X_CFG_1_OSR_4096)
+#define MCP356X_INIT_CFG_2_REG              (MCP356X_CFG_2_BOOST_X_1 | MCP356X_CFG_2_GAIN_X_2 | MCP356X_CFG_2_AZ_MUX_DIS | MCP356X_CFG_2_AZ_VREF_DIS)
+#define MCP356X_INIT_CFG_3_REG              (MCP356X_CFG_3_CONV_MODE_CONT | MCP356X_CFG_3_DATA_FORMAT_DEF | MCP356X_CFG_3_CRC_COM_DIS | MCP356X_CFG_3_CRC_GAIN_CAL_DIS)
+#define MCP356X_INIT_IRQ_REG                (MCP356X_IRQ_MODE_IRQ | MCP356X_IRQ_MODE_LOGIC_HIGH | MCP356X_IRQ_FASTCMD_EN | MCP356X_IRQ_STP_EN)
+#define MCP356X_INIT_MUX_REG                (MCP356X_MUX_VIN_POS_CH0 | MCP356X_MUX_VIN_NEG_VREF_EXT_MINUS) 
+#define MCP356X_INIT_SCAN_REG               MCP356X_SCAN_DLY_NO_DELAY
+#define MCP356X_INIT_TIMER_REG              MCP356X_TIMER_DLY_NO_DELAY 
  
 /**
  * \brief External pins
@@ -416,7 +449,13 @@ uint8_t mcp356x_check_int(mcp356x_t* dev);
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp356x_err_code_t mcp356x_generic_transfer(mcp356x_t* dev, uint8_t fcmd_addr, uint8_t r_w_cmd, uint8_t* txdata, uint8_t* rxdata, uint8_t len);
+mcp356x_err_code_t mcp356x_generic_transfer(
+    mcp356x_t* dev,
+    uint8_t fcmd_addr,
+    mcp356x_rw_cmd_t rw_cmd,
+    uint8_t* txdata,
+    uint8_t* rxdata,
+    uint8_t len);
  
 /*!
  * \brief Write fast commands
@@ -428,7 +467,7 @@ mcp356x_err_code_t mcp356x_generic_transfer(mcp356x_t* dev, uint8_t fcmd_addr, u
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp356x_err_code_t mcp356x_write_fast_cmd(mcp356x_t* dev, uint8_t fast_cmd);
+mcp356x_err_code_t mcp356x_write_fast_cmd(mcp356x_t* dev, mcp356x_fast_cmd_t fast_cmd);
  
 /*!
  * \brief Write incremental data to registers
@@ -442,7 +481,7 @@ mcp356x_err_code_t mcp356x_write_fast_cmd(mcp356x_t* dev, uint8_t fast_cmd);
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp356x_err_code_t mcp356x_iwrite(mcp356x_t* dev, uint8_t reg, uint8_t* txdata, uint8_t txlen);
+mcp356x_err_code_t mcp356x_iwrite(mcp356x_t* dev, mcp356x_reg_t reg, uint8_t* txdata, uint8_t txlen);
  
 /*!
  * \brief Read static register data
@@ -456,7 +495,7 @@ mcp356x_err_code_t mcp356x_iwrite(mcp356x_t* dev, uint8_t reg, uint8_t* txdata, 
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp356x_err_code_t mcp356x_sread(mcp356x_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen);
+mcp356x_err_code_t mcp356x_sread(mcp356x_t* dev, mcp356x_reg_t reg, uint8_t* rxdata, uint8_t rxlen);
  
 /*!
  * \brief Read incremental from registers
@@ -470,7 +509,7 @@ mcp356x_err_code_t mcp356x_sread(mcp356x_t* dev, uint8_t reg, uint8_t* rxdata, u
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp356x_err_code_t mcp356x_iread(mcp356x_t* dev, uint8_t reg, uint8_t* rxdata, uint8_t rxlen);
+mcp356x_err_code_t mcp356x_iread(mcp356x_t* dev, mcp356x_reg_t reg, uint8_t* rxdata, uint8_t rxlen);
  
 /*!
  * \brief Read ADC data in default format MCP356X_CFG_3_DATA_FORMAT_DEF

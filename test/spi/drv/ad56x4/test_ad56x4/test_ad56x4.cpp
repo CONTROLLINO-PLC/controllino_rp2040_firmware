@@ -3,7 +3,7 @@
 #include "ad56x4.h"
 #include "math.h"
 
-#define VOL_REF_MAX 10000 /* 10000 mV or 10 V*/
+#define AD56X4_TEST_VOL_REF_MAX 10000 /* 10000 mV or 10 V*/
 static ad56x4_cfg_t cfg;
 static ad56x4_t dev;
 static ad56x4_err_code_t ret;
@@ -83,14 +83,14 @@ void test_ad56x4_set_ldev_greater_than_0xF_ignored()
 void test_ad56x4_set_ch_voltage()
 {
     /* Should have same efect as test_ad56x4_write_input_reg_ok and then test_ad56x4_update_dac_reg_ok*/
-    uint16_t vol_val = round((float)TEST_AD56X4_DAC_DATA / (float)AD56X4_RESOLUTION * (float)VOL_REF_MAX);
-    ret = ad56x4_set_ch_voltage(&dev, AD56X4_CH_ADDR_D, vol_val, VOL_REF_MAX);
+    uint16_t vol_val = round((float)TEST_AD56X4_DAC_DATA / (float)AD56X4_RESOLUTION * (float)AD56X4_TEST_VOL_REF_MAX);
+    ret = ad56x4_set_ch_voltage(&dev, AD56X4_CH_ADDR_D, vol_val, AD56X4_TEST_VOL_REF_MAX);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
 }
  
 void test_ad56x4_set_ch_voltage_vol_val_greater_than_vol_ref_max_err()
 {
-    ret = ad56x4_set_ch_voltage(&dev, AD56X4_CH_ADDR_A, VOL_REF_MAX, VOL_REF_MAX / 2);
+    ret = ad56x4_set_ch_voltage(&dev, AD56X4_CH_ADDR_A, AD56X4_TEST_VOL_REF_MAX, AD56X4_TEST_VOL_REF_MAX / 2);
     TEST_ASSERT_EQUAL(PLATFORM_ARGUMENT_ERR, ret);
 }
  
