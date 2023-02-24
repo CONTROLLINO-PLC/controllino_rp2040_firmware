@@ -174,8 +174,8 @@ typedef enum
  */
 typedef enum 
 {
-    CY8C95XX_GPIO_IN =                      0x0,
-    CY8C95XX_GPIO_OUT =                     0x1
+    CY8C95XX_GPIO_OUT =                     0x0,
+    CY8C95XX_GPIO_IN =                      0x1
 } cy8c95xx_dir_mode_t;
  
 /**
@@ -446,7 +446,7 @@ cy8c95xx_err_code_t cy8c95xx_write_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t
 cy8c95xx_err_code_t cy8c95xx_read_eeprom(cy8c95xx_t *dev, uint16_t mem, uint8_t *rxdata, uint8_t rxlen);
  
 /*!
- * \brief Set pin especific configuration
+ * \brief Set pin mode settings
  * \ingroup cy8c95xx
  *
  * \param dev Pointer to CY8C95XX expander struct

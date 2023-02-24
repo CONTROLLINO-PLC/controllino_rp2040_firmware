@@ -1,4 +1,5 @@
-#include <unity.h>
+#ifdef NATIVE_TEST_ENV
+ 
 #include "hw_platform.h"
  
 platform_err_code_t dummy_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t len)
@@ -10,3 +11,5 @@ platform_err_code_t dummy_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t 
     }
     return PLATFORM_SPI_COM_ERR;
 }
+ 
+#endif

@@ -6,7 +6,6 @@
  
 #ifdef NATIVE_TEST_ENV
  
-#include <unity.h>
 #include "hw_platform.h"
  
 typedef struct
