@@ -1,6 +1,8 @@
 #include <unity.h>
 #include "hw_platform.h"
  
+#define TEST_NATIVE_GPIO                    25      /* Buildin LED */
+ 
 static int pin;
 static platform_gpio_dir_t dir;
 static platform_gpio_pull_mod_t pull;
@@ -8,7 +10,7 @@ static platform_err_code_t ret;
  
 void setUp(void)
 {
-    pin = TEST_GPIO;
+    pin = TEST_NATIVE_GPIO;
     dir = PLATFORM_GPIO_IN;
     pull = PLATFORM_GPIO_PULL_DOWN;
     ret = PLATFORM_OK;

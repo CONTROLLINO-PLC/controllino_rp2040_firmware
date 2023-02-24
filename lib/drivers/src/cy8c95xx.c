@@ -66,7 +66,6 @@ uint8_t cy8c95xx_check_int(cy8c95xx_t* dev)
 cy8c95xx_err_code_t cy8c95xx_generic_write(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t* txdata, uint8_t txlen)
 {
     uint8_t tx_buf[txlen + 1];
-    
     tx_buf[0] = reg;
     memcpy(&tx_buf[1], txdata, txlen);
     return platform_i2c_write(dev->i2c, port_slave_addr, tx_buf, sizeof(tx_buf));

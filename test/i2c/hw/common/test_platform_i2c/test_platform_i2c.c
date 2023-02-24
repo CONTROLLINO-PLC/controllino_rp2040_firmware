@@ -1,6 +1,8 @@
 #include <unity.h>
 #include "hw_platform.h"
  
+#define TEST_I2C_ADDR                       0x20    /* Most be the addr of one the i2c devices */
+ 
 static platform_err_code_t ret;
  
 void setUp(void)

@@ -41,7 +41,7 @@ platform_err_code_t platform_i2c_read(hw_i2c_t i2c_hw, uint8_t addr, uint8_t* rx
 }
  
 /* Attempt to write specified number of bytes to address over I2C */
-platform_err_code_t platform_i2c_write(hw_i2c_t i2c_hw, uint8_t addr, const uint8_t* txdata, size_t len)
+platform_err_code_t platform_i2c_write(hw_i2c_t i2c_hw, uint8_t addr, uint8_t* txdata, size_t len)
 {
     if (i2c_write_blocking((i2c_inst_t*)i2c_hw, addr, txdata, len, false) != len)
         return PLATFORM_I2C_COM_ERR;

@@ -1,6 +1,9 @@
-#include <unity.h>
+#ifdef NATIVE_TEST_ENV
+ 
 #include "hw_platform.h"
 #include "ad56x4.h"
+ 
+extern uint16_t TEST_AD56X4_DAC_DATA;
  
 static bool ad56x4_check(uint8_t* txdata, uint8_t* rxdata, ad56x4_cmd_t cmd, ad56x4_ch_addr_t ch_addr, uint16_t data)
 {
@@ -27,3 +30,5 @@ platform_err_code_t dummy_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t 
     }
     return PLATFORM_SPI_COM_ERR;
 }
+ 
+#endif

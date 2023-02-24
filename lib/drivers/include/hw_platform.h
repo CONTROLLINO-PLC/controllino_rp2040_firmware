@@ -191,7 +191,7 @@ platform_err_code_t platform_i2c_read(hw_i2c_t i2c_hw, uint8_t addr, uint8_t* rx
  * \return PLATFORM_I2C_COM_ERR : error
  *         PLATFORM_OK : successful
  */
-platform_err_code_t platform_i2c_write(hw_i2c_t i2c_hw, uint8_t addr, const uint8_t* txdata, size_t len);
+platform_err_code_t platform_i2c_write(hw_i2c_t i2c_hw, uint8_t addr, uint8_t* txdata, size_t len);
  
 /*!
  * \brief Init SPI interface

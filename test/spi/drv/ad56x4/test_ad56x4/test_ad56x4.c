@@ -2,12 +2,13 @@
 #include "hw_platform.h"
 #include "ad56x4.h"
 #include "math.h"
-
+ 
 #define AD56X4_TEST_VOL_REF_MAX 10000 /* 10000 mV or 10 V*/
+uint16_t TEST_AD56X4_DAC_DATA = 0x7FFF;
 static ad56x4_cfg_t cfg;
 static ad56x4_t dev;
 static ad56x4_err_code_t ret;
-
+ 
 void setUp(void)
 {
     ad56x4_set_default_cfg(&cfg);
@@ -30,6 +31,7 @@ void test_ad56x4_set_default_cfg()
     TEST_ASSERT_EQUAL(PLATFORM_SPI_SPEED, def_cfg.spi_speed);
     TEST_ASSERT_EQUAL(PLATFORM_SPI_MODE_1, def_cfg.spi_mode);
     TEST_ASSERT_EQUAL(PLATFORM_SPI_MSBFIRST, def_cfg.spi_bit_order);
+    TEST_ASSERT_EQUAL(PLATFORM_SPI_HW, def_cfg.spi);
     TEST_ASSERT_EQUAL(AD56X4_RESOLUTION, def_cfg.resolution);
 }
  

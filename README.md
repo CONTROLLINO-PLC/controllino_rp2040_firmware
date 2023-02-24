@@ -1,8 +1,9 @@
 # Controllino NEO core firmware resources
 
-## [Hardware "C" drivers](lib/drivers/include/)
+## Hardware drivers [lib/drivers/include/](lib/drivers/include/)
 
-- CY8C95XX I2C I/O expander
-- AD56X4 DAC
-- MCP356X ADC
+- AD56X4 dac
+- BTS71220-4ESA power out
+- CY8C95XX i2c i/o expander
+- MCP356X adc
 - 2521020222501 WE temp. sensor

@@ -1,4 +1,5 @@
-#include <unity.h>
+#ifdef NATIVE_TEST_ENV
+ 
 #include "hw_platform.h"
 #include "mcp356x.h"
  
@@ -29,3 +30,5 @@ platform_err_code_t dummy_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t 
     *rxdata = MCP356X_VALID_STATUS_MASK;
     return PLATFORM_OK;
 }
+ 
+#endif

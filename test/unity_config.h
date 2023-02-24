@@ -30,14 +30,7 @@ void unityOutputComplete();
 #define UNITY_OUTPUT_FLUSH()    unityOutputFlush()
 #define UNITY_OUTPUT_COMPLETE() unityOutputComplete()
  
-/* Defines used in tests*/
-#define TEST_GPIO                           25
-#define TEST_I2C_ADDR                       0x20
-#define TEST_BTS71220_DAISY_CHAIN_NUMBER    0
-#define TEST_AD56X4_DAC_DATA                0x7FFF
- 
-/* Run unity tests return int UNITY_END() */
-int runUnityTests(void);
+int runUnityTests(void); /* Run unity tests return int UNITY_END() */
  
 #ifdef __cplusplus
 }

@@ -18,10 +18,7 @@ const int PLATFORM_SPI_MOSI;
 const int PLATFORM_SPI_MISO;
 const int PLATFORM_SPI_SCK;
 
-/* Aditional chip select init routine to initialize external cs pins */
-extern void chip_select_init(void);
-
-/* Simulate and check spi transfer */
+/* Test double to simulate and check spi transfer */
 extern platform_err_code_t dummy_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t len);
 
 /* Init SPI interface */

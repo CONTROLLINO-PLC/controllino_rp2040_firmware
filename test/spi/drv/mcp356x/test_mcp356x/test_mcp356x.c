@@ -31,6 +31,7 @@ void test_mcp356x_set_default_cfg()
     TEST_ASSERT_EQUAL(PLATFORM_SPI_SPEED, def_cfg.spi_speed);
     TEST_ASSERT_EQUAL(PLATFORM_SPI_MODE_1, def_cfg.spi_mode);
     TEST_ASSERT_EQUAL(PLATFORM_SPI_MSBFIRST, def_cfg.spi_bit_order);
+    TEST_ASSERT_EQUAL(PLATFORM_SPI_HW, def_cfg.spi);
     TEST_ASSERT_EQUAL(MCP356X_MCLK, def_cfg.mclk_pin);
     TEST_ASSERT_EQUAL(MCP356X_INT, def_cfg.int_pin);
     TEST_ASSERT_EQUAL(MCP356X_INIT_CFG_0_REG, def_cfg.config_0_reg);

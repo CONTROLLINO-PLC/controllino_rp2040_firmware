@@ -50,11 +50,52 @@ int main(int argc, char** argv) { runUnityTests(); return 0; }
 
 #ifdef ARDUINO_NEO_ENV
 #include <Arduino.h>
-void unityOutputStart(unsigned long baudrate) { Serial.begin(baudrate); }
-void unityOutputChar(unsigned int c) { Serial.write(c); }
-void unityOutputFlush(void) { Serial.flush(); }
-void unityOutputComplete(void) { Serial.end(); }
-void setup() { while (!Serial); runUnityTests(); }
+void unityOutputStart(unsigned long baudrate)
+{
+#ifdef UNITY_OUTPUT_SERIAL1
+    Serial1.begin(baudrate);
+#else
+    Serial.begin(baudrate);
+#endif
+}
+ 
+void unityOutputChar(unsigned int c)
+{
+#ifdef UNITY_OUTPUT_SERIAL1
+    Serial1.write(c);
+#else
+    Serial.write(c);
+#endif
+}
+ 
+void unityOutputFlush(void)
+{
+#ifdef UNITY_OUTPUT_SERIAL1
+    Serial1.flush();
+#else
+    Serial.flush();
+#endif
+}
+ 
+void unityOutputComplete(void)
+{
+#ifdef UNITY_OUTPUT_SERIAL1
+    Serial1.end();
+#else
+    Serial.end();
+#endif
+}
+ 
+void setup()
+{
+#ifdef UNITY_OUTPUT_SERIAL1
+    delay(3000);
+#else
+    while (!Serial)
+#endif
+    runUnityTests();
+}
+ 
 void loop() {}
 #endif
 
