@@ -10,7 +10,7 @@ static uint8_t pull_up_reg_content = 0x00;
 static uint8_t in_reg_content = 0x00;
 static uint8_t reg;
  
-platform_err_code_t dummy_i2c_read(uint8_t addr, uint8_t* rxdata, size_t len)
+platform_err_code_t mock_i2c_read(uint8_t addr, uint8_t* rxdata, size_t len)
 {
     if (addr == (CY8C95XX_M_PORT_BASE_ADDR | TEST_CY8C95XX_ADDR))
     {
@@ -28,7 +28,7 @@ platform_err_code_t dummy_i2c_read(uint8_t addr, uint8_t* rxdata, size_t len)
     return PLATFORM_I2C_COM_ERR;
 }
  
-platform_err_code_t dummy_i2c_write(uint8_t addr, uint8_t* txdata, size_t len)
+platform_err_code_t mock_i2c_write(uint8_t addr, uint8_t* txdata, size_t len)
 {
     if (addr == (CY8C95XX_M_PORT_BASE_ADDR | TEST_CY8C95XX_ADDR))
     {

@@ -7,7 +7,7 @@ extern uint8_t TEST_BTS71220_DAISY_CHAIN_NUMBER;
 static uint8_t out_reg_content = 0x00;
 static uint8_t dcr_reg_content = 0x00;
  
-platform_err_code_t dummy_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t len)
+platform_err_code_t mock_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t len)
 {
     if (len == BTS71220_DAISY_CHAIN_SIZE)
     {

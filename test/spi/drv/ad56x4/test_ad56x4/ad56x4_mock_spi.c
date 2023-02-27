@@ -13,7 +13,7 @@ static bool ad56x4_check(uint8_t* txdata, uint8_t* rxdata, ad56x4_cmd_t cmd, ad5
         *(txdata + 2) == (uint8_t)(data & 0xFF);
 }
  
-platform_err_code_t dummy_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t len)
+platform_err_code_t mock_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t len)
 {
     if (len == 3)
     {

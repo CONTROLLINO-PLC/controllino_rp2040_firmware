@@ -18,7 +18,7 @@ const int PLATFORM_SPI_MISO;
 const int PLATFORM_SPI_SCK;
 
 /* Test double to simulate and check spi transfer */
-extern platform_err_code_t dummy_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t len);
+extern platform_err_code_t mock_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t len);
 
 /* Init SPI interface */
 platform_err_code_t platform_spi_init(hw_spi_t spi_hw, unsigned int speed, int mosi_pin, int miso_pin, int sck_pin)
@@ -47,7 +47,7 @@ platform_err_code_t platform_spi_write(hw_spi_t spi_hw, uint8_t* txdata, size_t 
 /* Write and read specified number of bytes over SPI */
 platform_err_code_t platform_spi_write_read(hw_spi_t spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len)
 {
-    return dummy_spi_transfer(txdata, rxdata, len);
+    return mock_spi_transfer(txdata, rxdata, len);
 }
  
 #endif

@@ -18,8 +18,8 @@ const int PLATFORM_I2C_SDA;
 const int PLATFORM_I2C_SCL;
 
 /* Test doubles to simulate and check i2c transfers */
-extern platform_err_code_t dummy_i2c_read(uint8_t addr, uint8_t* rxdata, size_t len);
-extern platform_err_code_t dummy_i2c_write(uint8_t addr, uint8_t* txdata, size_t len);
+extern platform_err_code_t mock_i2c_read(uint8_t addr, uint8_t* rxdata, size_t len);
+extern platform_err_code_t mock_i2c_write(uint8_t addr, uint8_t* txdata, size_t len);
 
 /* Init I2C interface */
 platform_err_code_t platform_i2c_init(hw_i2c_t i2c_hw, unsigned int speed, int sda_pin, int scl_pin)
@@ -30,13 +30,13 @@ platform_err_code_t platform_i2c_init(hw_i2c_t i2c_hw, unsigned int speed, int s
 /* Attempt to read specified number of bytes from address over I2C */
 platform_err_code_t platform_i2c_read(hw_i2c_t i2c_hw, uint8_t addr, uint8_t* rxdata, size_t len)
 {
-    return dummy_i2c_read(addr, rxdata, len);
+    return mock_i2c_read(addr, rxdata, len);
 }
  
 /* Attempt to write specified number of bytes to address over I2C */
 platform_err_code_t platform_i2c_write(hw_i2c_t i2c_hw, uint8_t addr, uint8_t* txdata, size_t len)
 {
-    return dummy_i2c_write(addr, txdata, len);
+    return mock_i2c_write(addr, txdata, len);
 }
  
 #endif
