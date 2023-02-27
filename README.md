@@ -7,3 +7,5 @@
 - CY8C95XX i2c i/o expander
 - MCP356X adc
 - 2521020222501 WE temp. sensor
+
+## Arduino-pico port [lib/arduino_pico_core/](lib/arduino_pico_core/)
