@@ -49,9 +49,9 @@ cy8c95xx_err_code_t cy8c95xx_init(cy8c95xx_t* dev, cy8c95xx_cfg_t* cfg)
 void cy8c95xx_reset(cy8c95xx_t* dev)
 {
     platform_gpio_set(dev->rst_pin, true);
-    platform_sleep_ms(1000);
+    platform_sleep_ms(100);
     platform_gpio_set(dev->rst_pin, false);
-    platform_sleep_ms(1000);
+    platform_sleep_ms(100);
 }
  
 /* Check interrupt by reading int_pin level */
@@ -117,7 +117,7 @@ cy8c95xx_err_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint
     ret = cy8c95xx_read_byte(dev, reg, &reg_byte);
     if (ret != PLATFORM_OK)
         return ret;
-    reg_byte = val ? (reg_byte | (1 << bit_num)) : (reg_byte & ~(1 << bit_num));
+    reg_byte = (val & 0x1)  ? (reg_byte | (1 << bit_num)) : (reg_byte & ~(1 << bit_num));
     return cy8c95xx_write_byte(dev, reg, reg_byte);
 }
  
@@ -145,7 +145,7 @@ cy8c95xx_err_code_t cy8c95xx_read_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t*
 /* Set pin mode settings */
 cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, int pin, cy8c95xx_dir_mode_t dir, cy8c95xx_drv_mode_t drv)
 {
-    if (pin < 0) return PLATFORM_ARGUMENT_ERR;
+    if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
     uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
     if (ret != PLATFORM_OK)
@@ -156,10 +156,10 @@ cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, int pin, cy8c95xx_dir_mod
     return cy8c95xx_write_bit(dev, (uint8_t)drv, (pin % 8), 1);
 }
  
-/* Set pin input inverted mode */
-cy8c95xx_err_code_t cy8c95xx_pin_inv_in(cy8c95xx_t* dev, int pin)
+/* Enable pin input inverted mode */
+cy8c95xx_err_code_t cy8c95xx_pin_en_inv_in(cy8c95xx_t* dev, int pin)
 {
-    if (pin < 0) return PLATFORM_ARGUMENT_ERR;
+    if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
     uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
     if (ret != PLATFORM_OK)
@@ -167,10 +167,21 @@ cy8c95xx_err_code_t cy8c95xx_pin_inv_in(cy8c95xx_t* dev, int pin)
     return cy8c95xx_write_bit(dev, CY8C95XX_REG_INV, (pin % 8), 1);
 }
  
+/* Disable pin input inverted mode */
+cy8c95xx_err_code_t cy8c95xx_pin_dis_inv_in(cy8c95xx_t* dev, int pin)
+{
+    if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
+    uint8_t ret;
+    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
+    if (ret != PLATFORM_OK)
+        return ret;
+    return cy8c95xx_write_bit(dev, CY8C95XX_REG_INV, (pin % 8), 0);
+}
+ 
 /* Get a single input pin logic level */
 cy8c95xx_err_code_t cy8c95xx_read_pin(cy8c95xx_t* dev, int pin, uint8_t* state)
 {
-    if (pin < 0) return PLATFORM_ARGUMENT_ERR;
+    if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
     return cy8c95xx_read_bit(dev, (CY8C95XX_REG_IN_PORT0 + (pin / 8)), (pin % 8), state);
 }
  
@@ -183,7 +194,7 @@ cy8c95xx_err_code_t cy8c95xx_read_port(cy8c95xx_t* dev, uint8_t port, uint8_t* p
 /* Get a single output pin logic level*/
 cy8c95xx_err_code_t cy8c95xx_read_pin_out_lvl(cy8c95xx_t* dev, int pin, uint8_t* state)
 {
-    if (pin < 0) return PLATFORM_ARGUMENT_ERR;
+    if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
     return cy8c95xx_read_bit(dev, (CY8C95XX_REG_OUT_PORT0 + (pin / 8)), (pin % 8), state);
 }
  
@@ -196,7 +207,7 @@ cy8c95xx_err_code_t cy8c95xx_read_port_out_lvl(cy8c95xx_t* dev, uint8_t port, ui
 /* Set a single output pin logic level */
 cy8c95xx_err_code_t cy8c95xx_write_pin(cy8c95xx_t* dev, int pin, uint8_t val)
 {
-    if (pin < 0) return PLATFORM_ARGUMENT_ERR;
+    if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
     return cy8c95xx_write_bit(dev, (CY8C95XX_REG_OUT_PORT0 + (pin / 8)), (pin % 8), val);
 }
  
@@ -206,15 +217,26 @@ cy8c95xx_err_code_t cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t p
     return cy8c95xx_write_byte(dev, (CY8C95XX_REG_OUT_PORT0 + port), port_val);
 }
  
-/* Enable or disable pwm output on pin */
-cy8c95xx_err_code_t cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, int pin, uint8_t pwm_en)
+/* Enable pwm output on pin */
+cy8c95xx_err_code_t cy8c95xx_en_pin_pwm(cy8c95xx_t* dev, int pin)
 {
-    if (pin < 0) return PLATFORM_ARGUMENT_ERR;
+    if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
     uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
     if (ret != PLATFORM_OK)
         return ret;
-    return cy8c95xx_write_bit(dev, CY8C95XX_REG_SEL_PWM_OUT, (pin % 8), pwm_en);
+    return cy8c95xx_write_bit(dev, CY8C95XX_REG_SEL_PWM_OUT, (pin % 8), 1);
+}
+ 
+/* Disable pwm output on pin */
+cy8c95xx_err_code_t cy8c95xx_dis_pin_pwm(cy8c95xx_t* dev, int pin)
+{
+    if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
+    uint8_t ret;
+    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
+    if (ret != PLATFORM_OK)
+        return ret;
+    return cy8c95xx_write_bit(dev, CY8C95XX_REG_SEL_PWM_OUT, (pin % 8), 0);
 }
  
 /* Configure pwm output */
@@ -242,7 +264,7 @@ cy8c95xx_err_code_t cy8c95xx_set_pwm_cfg(cy8c95xx_t* dev, cy8c95xx_pwm_cfg_t* pw
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PULSE_WIDTH_PWM, tx_buf[3]);
     if (ret != PLATFORM_OK)
         return ret;
-    return cy8c95xx_write_byte(dev, CY8C95XX_REG_DIVIDER, tx_buf[4]);
+    return cy8c95xx_write_byte(dev, CY8C95XX_REG_DIV_PWM, tx_buf[4]);
 }
  
 /* Configures EEPROM enable register */

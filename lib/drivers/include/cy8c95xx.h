@@ -88,7 +88,7 @@ typedef enum
     CY8C95XX_REG_CFG_PWM =                  0x29,
     CY8C95XX_REG_PERIOD_PWM =               0x2A,
     CY8C95XX_REG_PULSE_WIDTH_PWM =          0x2B,
-    CY8C95XX_REG_DIVIDER =                  0x2C,
+    CY8C95XX_REG_DIV_PWM =                  0x2C,
     CY8C95XX_REG_EEPROM =                   0x2D,
     CY8C95XX_REG_DEV_ID =                   0x2E,
     CY8C95XX_REG_WDT =                      0x2F,
@@ -99,22 +99,26 @@ typedef enum
  * \brief Select pwm output
  * \ingroup cy8c95xx
  */
-#define CY8C95XX_SEL_PWM_0                  0x00
-#define CY8C95XX_SEL_PWM_1                  0x01
-#define CY8C95XX_SEL_PWM_2                  0x02
-#define CY8C95XX_SEL_PWM_3                  0x03
- 
+typedef enum {
+    CY8C95XX_SEL_PWM_0 =                    0x00,
+    CY8C95XX_SEL_PWM_1 =                    0x01,
+    CY8C95XX_SEL_PWM_2 =                    0x02,
+    CY8C95XX_SEL_PWM_3 =                    0x03
+} cy8c95xx_sel_pwm_t;
+
 /**
  * \brief Clock source for pwm
  * \ingroup cy8c95xx
  */
-#define CY8C95XX_PWM_CLK_SRC_32_KHZ         0x00
-#define CY8C95XX_PWM_CLK_SRC_24_MHZ         0x01
-#define CY8C95XX_PWM_CLK_SRC_1_5_MHZ        0x02
-#define CY8C95XX_PWM_CLK_SRC_93_75_KHZ      0x03
-#define CY8C95XX_PWM_CLK_SRC_367_6_HZ       0x04
-#define CY8C95XX_PWM_CLK_SRC_PREV           0x05
- 
+typedef enum {
+    CY8C95XX_PWM_CLK_SRC_32_KHZ =           0x00,
+    CY8C95XX_PWM_CLK_SRC_24_MHZ =           0x01,
+    CY8C95XX_PWM_CLK_SRC_1_5_MHZ =          0x02,
+    CY8C95XX_PWM_CLK_SRC_93_75_KHZ =        0x03,
+    CY8C95XX_PWM_CLK_SRC_367_6_HZ =         0x04,
+    CY8C95XX_PWM_CLK_SRC_PREV =             0x05
+} cy8c95xx_clk_src_t;
+
 /**
  * \brief Available commands
  * \ingroup cy8c95xx
@@ -279,8 +283,8 @@ typedef struct
  */
 typedef struct
 {
-    uint8_t pwm_sel;
-    uint8_t clk_src;
+    cy8c95xx_sel_pwm_t pwm_sel;
+    cy8c95xx_clk_src_t clk_src;
     uint8_t period;
     uint8_t pulse_wid;
     uint8_t devider;
@@ -460,18 +464,28 @@ cy8c95xx_err_code_t cy8c95xx_read_eeprom(cy8c95xx_t *dev, uint16_t mem, uint8_t 
 cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, int pin, cy8c95xx_dir_mode_t dir, cy8c95xx_drv_mode_t drv);
  
 /*!
- * \brief Set pin input inverted mode
+ * \brief Enable pin input inverted mode
  * \ingroup cy8c95xx
  *
  * \param dev Pointer to CY8C95XX expander struct
  * \param pin Specific pin to configure
- * \param dir Pin input/output direction
- * \param drv Pin drver configuration
  * \return PLATFORM_I2C_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-cy8c95xx_err_code_t cy8c95xx_pin_inv_in(cy8c95xx_t* dev, int pin);
+cy8c95xx_err_code_t cy8c95xx_pin_en_inv_in(cy8c95xx_t* dev, int pin);
+ 
+/*!
+ * \brief Disable pin input inverted mode
+ * \ingroup cy8c95xx
+ *
+ * \param dev Pointer to CY8C95XX expander struct
+ * \param pin Specific pin to configure
+ * \return PLATFORM_I2C_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
+ */
+cy8c95xx_err_code_t cy8c95xx_pin_dis_inv_in(cy8c95xx_t* dev, int pin);
  
 /*!
  * \brief Get a single input pin logic level
@@ -551,17 +565,28 @@ cy8c95xx_err_code_t cy8c95xx_write_pin(cy8c95xx_t* dev, int pin, uint8_t val);
 cy8c95xx_err_code_t cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t port_val);
  
 /*!
- * \brief Enable or disable pwm output on pin
+ * \brief Enable pwm output on pin
  * \ingroup cy8c95xx
  *
  * \param dev Pointer to CY8C95XX expander struct
  * \param pin Specific pin to configure pwm
- * \param pwm_en Enables or disables pwm
  * \return PLATFORM_I2C_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-cy8c95xx_err_code_t cy8c95xx_sel_pwm_pin(cy8c95xx_t* dev, int pin, uint8_t pwm_en);
+cy8c95xx_err_code_t cy8c95xx_en_pin_pwm(cy8c95xx_t* dev, int pin);
+ 
+/*!
+ * \brief Disable pwm output on pin
+ * \ingroup cy8c95xx
+ *
+ * \param dev Pointer to CY8C95XX expander struct
+ * \param pin Specific pin to configure pwm
+ * \return PLATFORM_I2C_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
+ */
+cy8c95xx_err_code_t cy8c95xx_dis_pin_pwm(cy8c95xx_t* dev, int pin);
  
 /*!
  * \brief Configure pwm output

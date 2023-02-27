@@ -3,7 +3,7 @@
 #include "hw_platform.h"
 #include "bts71220.h"
  
-extern uint8_t TEST_BTS71220_DAISY_CHAIN_NUMBER;
+extern const uint8_t TEST_BTS71220_DAISY_CHAIN_NUMBER;
 static uint8_t out_reg_content = 0x00;
 static uint8_t dcr_reg_content = 0x00;
  

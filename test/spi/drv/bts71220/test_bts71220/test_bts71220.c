@@ -2,7 +2,7 @@
 #include "hw_platform.h"
 #include "bts71220.h"
 
-uint8_t TEST_BTS71220_DAISY_CHAIN_NUMBER = 0; /* Indicate only first BTS71220 will be used in tests*/
+const uint8_t TEST_BTS71220_DAISY_CHAIN_NUMBER = 0; /* Indicate only first BTS71220 will be used in tests*/
 static bts71220_cfg_t cfg;
 static bts71220_t dev;
 static bts71220_err_code_t ret;
@@ -36,18 +36,25 @@ void test_bts71220_init_ok()
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
 }
  
-void test_bts71220_write_read_out_reg_ok()
+void test_bts71220_read_reg_ok()
+{
+    uint8_t rxdata = 0xFF;
+    ret = bts71220_read_reg(&dev, BTS71220_REG_OUT, &rxdata, TEST_BTS71220_DAISY_CHAIN_NUMBER);
+    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    TEST_ASSERT_EQUAL(0x00, (rxdata & (~BTS71220_WRITE_MASK & 0xFF)));
+}
+ 
+void test_bts71220_write_reg_ok()
 {
     uint8_t txdata = 0x03;
     uint8_t rxdata = 0x00;
     ret = bts71220_write_reg(&dev, BTS71220_REG_OUT, txdata, TEST_BTS71220_DAISY_CHAIN_NUMBER);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
-    ret = bts71220_read_reg(&dev, BTS71220_REG_OUT, &rxdata, TEST_BTS71220_DAISY_CHAIN_NUMBER);
-    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    bts71220_read_reg(&dev, BTS71220_REG_OUT, &rxdata, TEST_BTS71220_DAISY_CHAIN_NUMBER);
     TEST_ASSERT_EQUAL(txdata, (rxdata & (~BTS71220_WRITE_MASK & 0xFF)));
 }
  
-void test_bts71220_write_read_only_reg_err()
+void test_bts71220_try_write_read_only_reg_err()
 {
     ret = bts71220_write_reg(&dev, BTS71220_REG_WRN_DIAG, 0x00, TEST_BTS71220_DAISY_CHAIN_NUMBER);
     TEST_ASSERT_EQUAL(PLATFORM_ARGUMENT_ERR, ret);
@@ -82,8 +89,7 @@ void test_bts71220_set_sense_mux_ok()
     bts71220_dcr_reg_t dcr_reg;
     ret = bts71220_set_sense_mux(&dev, BTS71220_DCR_MUX_IS_Z, TEST_BTS71220_DAISY_CHAIN_NUMBER);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
-    ret = bts71220_read_reg(&dev, BTS71220_REG_DCR, (uint8_t*)&dcr_reg, TEST_BTS71220_DAISY_CHAIN_NUMBER);
-    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    bts71220_read_reg(&dev, BTS71220_REG_DCR, (uint8_t*)&dcr_reg, TEST_BTS71220_DAISY_CHAIN_NUMBER);
     TEST_ASSERT_EQUAL(BTS71220_DCR_MUX_IS_Z, dcr_reg.mux);
 }
  
@@ -92,8 +98,9 @@ int runUnityTests(void)
     UNITY_BEGIN();
     RUN_TEST(test_bts71220_set_default_cfg);
     RUN_TEST(test_bts71220_init_ok);
-    RUN_TEST(test_bts71220_write_read_out_reg_ok);
-    RUN_TEST(test_bts71220_write_read_only_reg_err);
+    RUN_TEST(test_bts71220_read_reg_ok);
+    RUN_TEST(test_bts71220_write_reg_ok);
+    RUN_TEST(test_bts71220_try_write_read_only_reg_err);
     RUN_TEST(test_bts71220_read_wrn_diag_ok);
     RUN_TEST(test_bts71220_read_err_diag_ok);
     RUN_TEST(test_bts71220_set_sense_mux_ok);

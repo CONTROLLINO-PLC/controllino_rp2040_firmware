@@ -60,10 +60,19 @@ void test_mcp356x_sread_ok()
     uint8_t cfg2_val = 0x00;
     ret = mcp356x_sread(&dev, MCP356X_REG_CFG_2, &cfg2_val, 1); /* Read CFG_2 wrote in mcp356x_init() */
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
-    TEST_ASSERT_EQUAL(MCP356X_CFG_2_BOOST_X_1 | MCP356X_CFG_2_GAIN_X_2 | MCP356X_CFG_2_AZ_MUX_DIS | MCP356X_CFG_2_AZ_VREF_DIS, cfg2_val);
+    TEST_ASSERT_EQUAL(MCP356X_INIT_CFG_2_REG, cfg2_val);
 }
- 
-void test_mcp356x_i_write_read_ok()
+
+void test_mcp356x_iread_ok()
+{
+    uint8_t rxdata[2];
+    ret = mcp356x_iread(&dev, MCP356X_REG_CFG_2, rxdata, 2);
+    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    TEST_ASSERT_EQUAL(MCP356X_INIT_CFG_2_REG, rxdata[0]);
+    TEST_ASSERT_EQUAL(MCP356X_INIT_CFG_3_REG, rxdata[1]);
+}
+
+void test_mcp356x_iwrite_ok()
 {
     uint8_t txdata[2]; /* CFG_2 and CFG_3 */
     uint8_t rxdata[2];
@@ -71,8 +80,7 @@ void test_mcp356x_i_write_read_ok()
     txdata[1] = MCP356X_CFG_3_CONV_MODE_CONT | MCP356X_CFG_3_DATA_FORMAT_CH_ADC | MCP356X_CFG_3_CRC_COM_DIS | MCP356X_CFG_3_CRC_GAIN_CAL_DIS;
     ret = mcp356x_iwrite(&dev, MCP356X_REG_CFG_2, txdata, 2);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
-    ret = mcp356x_iread(&dev, MCP356X_REG_CFG_2, rxdata, 2);
-    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    mcp356x_iread(&dev, MCP356X_REG_CFG_2, rxdata, 2);
     TEST_ASSERT_EQUAL(txdata[0], rxdata[0]);
     TEST_ASSERT_EQUAL(txdata[1], rxdata[1]);
 }
@@ -84,29 +92,25 @@ void test_mcp356x_read_adc_format_ok()
     uint8_t sgn;
     uint8_t cfg3_val;
     cfg3_val = MCP356X_CFG_3_CONV_MODE_CONT | MCP356X_CFG_3_DATA_FORMAT_DEF | MCP356X_CFG_3_CRC_COM_DIS | MCP356X_CFG_3_CRC_GAIN_CAL_DIS;
-    ret = mcp356x_iwrite(&dev, MCP356X_REG_CFG_3, &cfg3_val, 1);
-    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    mcp356x_iwrite(&dev, MCP356X_REG_CFG_3, &cfg3_val, 1);
     ret = mcp356x_read_raw_adc(&dev, &adc_data, &sgn, &max_resolution);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
     TEST_ASSERT_EQUAL(MCP356X_RES_23_BITS, max_resolution);
     //
     cfg3_val = MCP356X_CFG_3_CONV_MODE_CONT | MCP356X_CFG_3_DATA_FORMAT_LEFT_JUST | MCP356X_CFG_3_CRC_COM_DIS | MCP356X_CFG_3_CRC_GAIN_CAL_DIS;
-    ret = mcp356x_iwrite(&dev, MCP356X_REG_CFG_3, &cfg3_val, 1);
-    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    mcp356x_iwrite(&dev, MCP356X_REG_CFG_3, &cfg3_val, 1);
     ret = mcp356x_read_raw_adc(&dev, &adc_data, &sgn, &max_resolution);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
     TEST_ASSERT_EQUAL(MCP356X_RES_23_BITS, max_resolution);
     //
     cfg3_val = MCP356X_CFG_3_CONV_MODE_CONT | MCP356X_CFG_3_DATA_FORMAT_EXT_ADC | MCP356X_CFG_3_CRC_COM_DIS | MCP356X_CFG_3_CRC_GAIN_CAL_DIS;
-    ret = mcp356x_iwrite(&dev, MCP356X_REG_CFG_3, &cfg3_val, 1);
-    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    mcp356x_iwrite(&dev, MCP356X_REG_CFG_3, &cfg3_val, 1);
     ret = mcp356x_read_raw_adc(&dev, &adc_data, &sgn, &max_resolution);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
     TEST_ASSERT_EQUAL(MCP356X_RES_24_BITS, max_resolution);
     //
     cfg3_val = MCP356X_CFG_3_CONV_MODE_CONT | MCP356X_CFG_3_DATA_FORMAT_CH_ADC | MCP356X_CFG_3_CRC_COM_DIS | MCP356X_CFG_3_CRC_GAIN_CAL_DIS;
-    ret = mcp356x_iwrite(&dev, MCP356X_REG_CFG_3, &cfg3_val, 1);
-    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    mcp356x_iwrite(&dev, MCP356X_REG_CFG_3, &cfg3_val, 1);
     ret = mcp356x_read_raw_adc(&dev, &adc_data, &sgn, &max_resolution);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
     TEST_ASSERT_EQUAL(MCP356X_RES_24_BITS, max_resolution);
@@ -134,7 +138,8 @@ int runUnityTests(void)
     RUN_TEST(test_mcp356x_init_ok);
     RUN_TEST(test_mcp356x_fast_cmd_ok);
     RUN_TEST(test_mcp356x_sread_ok);
-    RUN_TEST(test_mcp356x_i_write_read_ok);
+    RUN_TEST(test_mcp356x_iread_ok);
+    RUN_TEST(test_mcp356x_iwrite_ok);
     RUN_TEST(test_mcp356x_read_adc_format_ok);
     RUN_TEST(test_mcp356x_read_voltage_ok);
     RUN_TEST(test_mcp356x_read_voltage_ref_min_greater_than_ref_max_err);
