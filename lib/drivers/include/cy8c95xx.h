@@ -305,6 +305,8 @@ void cy8c95xx_set_default_cfg(cy8c95xx_cfg_t* cfg);
  * \param dev Pointer to CY8C95XX expander struct
  * \param cfg Initial config struct
  * \return PLATFORM_I2C_INIT_ERR : error
+ *         PLATFORM_GPIO_INIT_ERR : error
+ *         PLATFORM_I2C_COM_ERR : error
  *         PLATFORM_OK : successful
  */
 cy8c95xx_err_code_t cy8c95xx_init(cy8c95xx_t *dev, cy8c95xx_cfg_t *cfg);

@@ -154,6 +154,7 @@ typedef struct
     uint8_t i2c_addr;
     hw_i2c_t i2c;
     int int_pin;
+    wsen_temp_ctrl_t ctrl_reg;
 } wsen_temp_cfg_t;
  
 /**
@@ -182,6 +183,8 @@ void wsen_temp_set_default_cfg(wsen_temp_cfg_t* cfg);
  * \param dev Pointer to temp sensor struct
  * \param cfg Initial config struct
  * \return PLATFORM_I2C_INIT_ERR : error
+ *         PLATFORM_GPIO_INIT_ERR : error
+ *         PLATFORM_I2C_COM_ERR : error
  *         PLATFORM_OK : successful
  */
 wsen_temp_err_code_t wsen_temp_init(wsen_temp_t* dev, wsen_temp_cfg_t* cfg);
@@ -278,48 +281,48 @@ wsen_temp_err_code_t wsen_temp_get_status(wsen_temp_t* dev, wsen_temp_status_t* 
  * \ingroup wsen_temp
  *
  * \param dev Pointer to temp sensor struct
- * \param limit Limit to set
+ * \param celsius Limit to set in celsius degrees
  * \return PLATFORM_I2C_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-wsen_temp_err_code_t wsen_temp_set_high_lim(wsen_temp_t* dev, uint8_t limit);
+wsen_temp_err_code_t wsen_temp_set_high_lim(wsen_temp_t* dev, float celsius);
  
 /*!
  * \brief Get temperature high limit for interrupt
  * \ingroup wsen_temp
  *
  * \param dev Pointer to temp sensor struct
- * \param limit Pointer to receive current limit value
+ * \param celsius Pointer to receive current limit value in celsius degrees
  * \return PLATFORM_I2C_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-wsen_temp_err_code_t wsen_temp_get_high_lim(wsen_temp_t* dev, uint8_t* limit);
+wsen_temp_err_code_t wsen_temp_get_high_lim(wsen_temp_t* dev, float* celsius);
  
 /*!
  * \brief Set temperature low limit for interrupt
  * \ingroup wsen_temp
  *
  * \param dev Pointer to temp sensor struct
- * \param limit Limit to set
+ * \param celsius Limit to set in celsius degrees
  * \return PLATFORM_I2C_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-wsen_temp_err_code_t wsen_temp_set_low_lim(wsen_temp_t* dev, uint8_t limit);
+wsen_temp_err_code_t wsen_temp_set_low_lim(wsen_temp_t* dev, float celsius);
  
 /*!
  * \brief Get temperature low limit for interrupt
  * \ingroup wsen_temp
  *
  * \param dev Pointer to temp sensor struct
- * \param limit Pointer to receive current limit value
+ * \param celsius Pointer to receive current limit value in celsius degrees
  * \return PLATFORM_I2C_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-wsen_temp_err_code_t wsen_temp_get_low_lim(wsen_temp_t* dev, uint8_t* limit);
+wsen_temp_err_code_t wsen_temp_get_low_lim(wsen_temp_t* dev, float* celsius);
  
 /*!
  * \brief Get raw temperature digital value

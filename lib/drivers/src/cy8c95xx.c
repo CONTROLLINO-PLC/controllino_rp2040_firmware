@@ -31,8 +31,9 @@ cy8c95xx_err_code_t cy8c95xx_init(cy8c95xx_t* dev, cy8c95xx_cfg_t* cfg)
     if (platform_i2c_init(cfg->i2c, cfg->i2c_speed, cfg->sda_pin, cfg->scl_pin) != PLATFORM_OK)
         return PLATFORM_I2C_INIT_ERR;
     // Init hardware reset and int pins 
-    platform_gpio_init(cfg->rst_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_DISABLED);
-    platform_gpio_init(cfg->int_pin, PLATFORM_GPIO_IN, PLATFORM_GPIO_PULL_DISABLED);
+    if (platform_gpio_init(cfg->rst_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_DISABLED) != PLATFORM_OK ||
+        platform_gpio_init(cfg->int_pin, PLATFORM_GPIO_IN, PLATFORM_GPIO_PULL_DISABLED) != PLATFORM_OK)
+        return PLATFORM_GPIO_INIT_ERR;
     // Base addresses
     port_slave_addr = CY8C95XX_M_PORT_BASE_ADDR | cfg->i2c_addr;
     eeprom_slave_addr = CY8C95XX_EEPROM_BASE_ADDR | cfg->i2c_addr;

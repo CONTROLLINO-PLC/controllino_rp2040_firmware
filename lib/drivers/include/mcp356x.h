@@ -421,6 +421,7 @@ void mcp356x_set_default_cfg(mcp356x_cfg_t* cfg);
  * \param cfg Initial config struct
  * \return PLATFORM_SPI_INIT_ERR : error
  *         PLATFORM_GPIO_INIT_ERR : error
+ *         PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_OK : successful
  */
 mcp356x_err_code_t mcp356x_init(mcp356x_t* dev, mcp356x_cfg_t* cfg);
