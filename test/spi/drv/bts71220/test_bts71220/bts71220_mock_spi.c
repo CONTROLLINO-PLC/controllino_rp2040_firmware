@@ -1,4 +1,4 @@
-#ifdef NATIVE_TEST_ENV
+#ifdef NATIVE_ENV
  
 #include "hw_platform.h"
 #include "bts71220.h"

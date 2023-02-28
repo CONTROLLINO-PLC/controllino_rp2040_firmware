@@ -3,11 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
- 
-#include "neo_pin.h"
 #include "string.h"
-#include "hardware/i2c.h"
-#include "hardware/spi.h"
+#include "neo_pin.h"
  
 cy8c95xx_t neo_cy8c9520;
 mcp356x_t neo_mcp3564;

@@ -15,6 +15,7 @@
  */
  
 #include "Arduino.h"
+ 
 #include "cy8c95xx.h"
 #include "mcp356x.h"
 #include "ad56x4.h"
@@ -51,39 +52,5 @@ PinStatus digitalRead(ControllinoNeoPin pin);
 void digitalWrite(ControllinoNeoPin pin, PinStatus value);
 int analogRead(ControllinoNeoPin pin);
 void analogWrite(ControllinoNeoPin pin, int value);
- 
-/* Public instances of internal peripherals drivers */
-extern cy8c95xx_t neo_cy8c9520; 
-extern mcp356x_t neo_mcp3564;
-extern ad56x4_t neo_ad5664;
- 
-/* Neo core pins */
-extern ControllinoNeoPin  AI0;
-extern ControllinoNeoPin  AI1;
-extern ControllinoNeoPin  AI2;
-extern ControllinoNeoPin  AI3;
-extern ControllinoNeoPin  AI4;
-extern ControllinoNeoPin  AI5;
-extern ControllinoNeoPin  AI6;
-extern ControllinoNeoPin  AI9;
-
-extern ControllinoNeoPin  AO0;
-extern ControllinoNeoPin  AO1;
-extern ControllinoNeoPin  AO2;
-extern ControllinoNeoPin  AO3;
-
-extern ControllinoNeoPin  DI0;
-extern ControllinoNeoPin  DI1;
-extern ControllinoNeoPin  DI2;
-extern ControllinoNeoPin  DI3;
-
-extern ControllinoNeoPin  DO0;
-extern ControllinoNeoPin  DO1;
-extern ControllinoNeoPin  DO2;
-extern ControllinoNeoPin  DO3;
-extern ControllinoNeoPin  DO4;
-extern ControllinoNeoPin  DO5;
-extern ControllinoNeoPin  DO6;
-extern ControllinoNeoPin  DO7;
  
 #endif  // BTS71220_H

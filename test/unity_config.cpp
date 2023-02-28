@@ -39,7 +39,7 @@ extern "C"
 }
 #endif /* extern "C" */
 
-#ifdef NATIVE_TEST_ENV
+#ifdef NATIVE_ENV
 #include <stdio.h>
 void unityOutputStart(unsigned long baudrate) { }
 void unityOutputChar(unsigned int c) { putchar(c); }
@@ -48,7 +48,7 @@ void unityOutputComplete(void) { }
 int main(int argc, char** argv) { runUnityTests(); return 0; }
 #endif
 
-#ifdef ARDUINO_NEO_ENV
+#ifdef NEO_ENV
 #include <Arduino.h>
 void unityOutputStart(unsigned long baudrate)
 {

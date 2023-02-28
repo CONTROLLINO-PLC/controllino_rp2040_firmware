@@ -8,4 +8,7 @@
 - MCP356X adc
 - 2521020222501 WE temp. sensor
 
-## Arduino-pico port [lib/arduino_pico_core/](lib/arduino_pico_core/)
+## Arduino-pico port
+
+- Arduino pins API for NEO boards [lib/arduino_pico_neo_pin](lib/arduino_pico_neo_pin)
+- NEO core pin definitions [lib/arduino_pico_neo_core_pins](lib/arduino_pico_neo_core_pins)
