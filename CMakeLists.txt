@@ -23,5 +23,5 @@ add_compile_options(
 # )
 
 add_subdirectory(lib) # Driver libraries
-add_subdirectory(example) # Examples for each driver
+add_subdirectory(examples/pico_sdk) # Examples for each driver
 

@@ -22,7 +22,6 @@ void exp_init(void)
     cy8c95xx_cfg_t cfg;
     cy8c95xx_set_default_cfg(&cfg);
     cy8c95xx_init(&cy8c9520, &cfg);
-    cy8c95xx_reset(&cy8c9520);
     cy8c95xx_pin_mode(&cy8c9520, BTS71220_CS, CY8C95XX_GPIO_OUT, CY8C95XX_REG_PULL_UP);
 }
 
