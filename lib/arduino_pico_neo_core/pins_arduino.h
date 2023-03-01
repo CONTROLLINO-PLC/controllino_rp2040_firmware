@@ -1,38 +1,38 @@
 #pragma once
-
+ 
 /* Arduino pins API for NEO */
-#include "neo_pin.h"
-class ControllinoNeoPin;
-
+#include "neo_core_pin.h"
+ 
 /* NEO core I/O */
-extern ControllinoNeoPin    NEO_AI0;
-extern ControllinoNeoPin    NEO_AI1;
-extern ControllinoNeoPin    NEO_AI2;
-extern ControllinoNeoPin    NEO_AI3;
-extern ControllinoNeoPin    NEO_AI4;
-extern ControllinoNeoPin    NEO_AI5;
-extern ControllinoNeoPin    NEO_AI6;
-extern ControllinoNeoPin    NEO_AI9;
+class ControllinoNeoPin;
+extern ControllinoNeoPin    NEO_CORE_AI0;
+extern ControllinoNeoPin    NEO_CORE_AI1;
+extern ControllinoNeoPin    NEO_CORE_AI2;
+extern ControllinoNeoPin    NEO_CORE_AI3;
+extern ControllinoNeoPin    NEO_CORE_AI4;
+extern ControllinoNeoPin    NEO_CORE_AI5;
+extern ControllinoNeoPin    NEO_CORE_AI6;
+extern ControllinoNeoPin    NEO_CORE_AI9;
 
-extern ControllinoNeoPin    NEO_AO0;
-extern ControllinoNeoPin    NEO_AO1;
-extern ControllinoNeoPin    NEO_AO2;
-extern ControllinoNeoPin    NEO_AO3;
+extern ControllinoNeoPin    NEO_CORE_AO0;
+extern ControllinoNeoPin    NEO_CORE_AO1;
+extern ControllinoNeoPin    NEO_CORE_AO2;
+extern ControllinoNeoPin    NEO_CORE_AO3;
 
-extern ControllinoNeoPin    NEO_DI0;
-extern ControllinoNeoPin    NEO_DI1;
-extern ControllinoNeoPin    NEO_DI2;
-extern ControllinoNeoPin    NEO_DI3;
+extern ControllinoNeoPin    NEO_CORE_DI0;
+extern ControllinoNeoPin    NEO_CORE_DI1;
+extern ControllinoNeoPin    NEO_CORE_DI2;
+extern ControllinoNeoPin    NEO_CORE_DI3;
 
-extern ControllinoNeoPin    NEO_DO0;
-extern ControllinoNeoPin    NEO_DO1;
-extern ControllinoNeoPin    NEO_DO2;
-extern ControllinoNeoPin    NEO_DO3;
-extern ControllinoNeoPin    NEO_DO4;
-extern ControllinoNeoPin    NEO_DO5;
-extern ControllinoNeoPin    NEO_DO6;
-extern ControllinoNeoPin    NEO_DO7;
-
+extern ControllinoNeoPin    NEO_CORE_DO0;
+extern ControllinoNeoPin    NEO_CORE_DO1;
+extern ControllinoNeoPin    NEO_CORE_DO2;
+extern ControllinoNeoPin    NEO_CORE_DO3;
+extern ControllinoNeoPin    NEO_CORE_DO4;
+extern ControllinoNeoPin    NEO_CORE_DO5;
+extern ControllinoNeoPin    NEO_CORE_DO6;
+extern ControllinoNeoPin    NEO_CORE_DO7;
+ 
 /* LEDs */
 #define PIN_LED             (25u)
  
