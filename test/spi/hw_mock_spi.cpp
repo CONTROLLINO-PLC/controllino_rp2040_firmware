@@ -8,18 +8,16 @@
  
 #include "hw_platform.h"
  
-typedef struct
-{} spi_inst_t;
 static uint8_t dummy_for_pointer;
 hw_spi_t PLATFORM_SPI_HW = (hw_spi_t)&dummy_for_pointer;
-const unsigned int PLATFORM_SPI_SPEED;
-const int PLATFORM_SPI_MOSI;
-const int PLATFORM_SPI_MISO;
-const int PLATFORM_SPI_SCK;
-
+const unsigned int PLATFORM_SPI_SPEED = 0;
+const int PLATFORM_SPI_MOSI = 0;
+const int PLATFORM_SPI_MISO = 0;
+const int PLATFORM_SPI_SCK = 0;
+ 
 /* Test double to simulate and check spi transfer */
 extern platform_err_code_t mock_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t len);
-
+ 
 /* Init SPI interface */
 platform_err_code_t platform_spi_init(hw_spi_t spi_hw, unsigned int speed, int mosi_pin, int miso_pin, int sck_pin)
 {

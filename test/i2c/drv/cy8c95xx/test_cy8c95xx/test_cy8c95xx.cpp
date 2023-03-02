@@ -2,9 +2,9 @@
 #include "hw_platform.h"
 #include "cy8c95xx.h"
  
-const uint8_t TEST_CY8C95XX_GPIO = 0;
-const uint8_t TEST_CY8C95XX_PORT = 0;
-const uint8_t TEST_CY8C95XX_ADDR = CY8C95XX_DEV_ADDR_GND;
+uint8_t TEST_CY8C95XX_GPIO = 0;
+uint8_t TEST_CY8C95XX_PORT = 0;
+uint8_t TEST_CY8C95XX_ADDR = CY8C95XX_DEV_ADDR_GND;
 #define TEST_CY8C95XX_BIT 0
 static cy8c95xx_cfg_t cfg;
 static cy8c95xx_t dev;

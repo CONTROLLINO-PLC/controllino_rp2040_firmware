@@ -5,14 +5,22 @@
  */
 #include "string.h"
 #include "neo_core_pin.h"
- 
+
+ /* ControllinoNeoPin implementation */
+ControllinoNeoPin::ControllinoNeoPin(int pin, _pin_type_t type): _pin(pin), _type(type) { setMode(INPUT); };
+bool ControllinoNeoPin::operator== (ControllinoNeoPin const& other) const { return _pin == other._pin; };
+pin_size_t ControllinoNeoPin::getPin() { return _pin; };
+ControllinoNeoPin::_pin_type_t ControllinoNeoPin::getType() { return _type; };
+void ControllinoNeoPin::setMode(PinMode mode) { _mode = mode; };
+PinMode ControllinoNeoPin::getMode() { return _mode; };
+
 /* Arduino API functions compatible with CONTROLLINO NEO */
-void pinMode(ControllinoNeoPin pin, PinMode mode)
+void pinMode(ControllinoNeoPin* pin, PinMode mode)
 {
-  switch (pin.getType())
+  switch (pin->getType())
   {
   case ControllinoNeoPin::NATIVE_PIN:
-    pinMode(pin.getPin(), mode);
+    pinMode(pin->getPin(), mode);
     break;
   case ControllinoNeoPin::CY8C95XX_PIN: // cy8c95xx.h
     cy8c95xx_dir_mode_t dir;
@@ -36,37 +44,41 @@ void pinMode(ControllinoNeoPin pin, PinMode mode)
       drv = CY8C95XX_DRV_PULL_UP;
       break;
     }
-    cy8c95xx_pin_mode(neo_cy8c95xx, (int)pin.getPin(), dir, drv);
-    cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin.getPin()); // Disable PWM
+    cy8c95xx_pin_mode(neo_cy8c95xx, (int)pin->getPin(), dir, drv);
+    cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Disable PWM
     break;
-  default:
-    // Other pin types has fixed modes 
+  // Other pin types has fixed modes 
+  case ControllinoNeoPin::MCP356X_PIN:
+    mode = INPUT;
+    break;
+  case ControllinoNeoPin::AD56X4_PIN:
+    mode = OUTPUT;
     break;
   }
-  pin.setMode(mode);
+  pin->setMode(mode);
 }
  
-PinStatus digitalRead(ControllinoNeoPin pin)
+PinStatus digitalRead(ControllinoNeoPin* pin)
 {
   PinStatus pinStatus = LOW;
-  switch (pin.getType())
+  switch (pin->getType())
   {
   case ControllinoNeoPin::NATIVE_PIN:
-    pinStatus = digitalRead(pin.getPin());
+    pinStatus = digitalRead(pin->getPin());
     break;
   case ControllinoNeoPin::CY8C95XX_PIN: // cy8c95xx.h
     uint8_t pinState;
-    switch (pin.getMode())
+    switch (pin->getMode())
     {
     case OUTPUT:
     case OUTPUT_4MA:
     case OUTPUT_2MA:
     case OUTPUT_8MA:
     case OUTPUT_12MA:
-      cy8c95xx_read_pin_out_lvl(neo_cy8c95xx, (int)pin.getPin(), &pinState);
+      cy8c95xx_read_pin_out_lvl(neo_cy8c95xx, (int)pin->getPin(), &pinState);
       break;
     default:
-      cy8c95xx_read_pin(neo_cy8c95xx, (int)pin.getPin(), &pinState);
+      cy8c95xx_read_pin(neo_cy8c95xx, (int)pin->getPin(), &pinState);
       break;
     }
     pinStatus = pinState ? HIGH : LOW;
@@ -78,16 +90,16 @@ PinStatus digitalRead(ControllinoNeoPin pin)
   return pinStatus;
 }
  
-void digitalWrite(ControllinoNeoPin pin, PinStatus value)
+void digitalWrite(ControllinoNeoPin* pin, PinStatus value)
 {
-  switch (pin.getType())
+  switch (pin->getType())
   {
   case ControllinoNeoPin::NATIVE_PIN:
-    digitalWrite(pin.getPin(), value);
+    digitalWrite(pin->getPin(), value);
     break;
   case ControllinoNeoPin::CY8C95XX_PIN: // cy8c95xx.h
-    cy8c95xx_write_pin(neo_cy8c95xx, (int)pin.getPin(), (uint8_t)value);
-    cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin.getPin()); // Disable PWM
+    cy8c95xx_write_pin(neo_cy8c95xx, (int)pin->getPin(), (uint8_t)value);
+    cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Disable PWM
     break;
   default:
     // Other pin types are analog only
@@ -95,19 +107,19 @@ void digitalWrite(ControllinoNeoPin pin, PinStatus value)
   }
 }
  
-int analogRead(ControllinoNeoPin pin)
+int analogRead(ControllinoNeoPin* pin)
 {
   int adcValue = 0;
-  switch (pin.getType())
+  switch (pin->getType())
   {
   case ControllinoNeoPin::NATIVE_PIN:
-    adcValue = analogRead(pin.getPin());
+    adcValue = analogRead(pin->getPin());
     break;
   case ControllinoNeoPin::MCP356X_PIN: // mcp356x.h
     uint8_t txdata[7];
     memset(txdata, 0x00, sizeof(txdata));
     txdata[0] = MCP356X_MUX_VIN_NEG_VREF_EXT_MINUS;
-    switch (pin.getPin())
+    switch (pin->getPin())
     {
     case MCP356X_CH_CH1:
       txdata[0] |= MCP356X_MUX_VIN_POS_CH1;
@@ -143,12 +155,12 @@ int analogRead(ControllinoNeoPin pin)
   return adcValue;
 }
  
-void analogWrite(ControllinoNeoPin pin, int value)
+void analogWrite(ControllinoNeoPin* pin, int value)
 {
-  switch (pin.getType())
+  switch (pin->getType())
   {
   case ControllinoNeoPin::NATIVE_PIN:
-    analogWrite(pin.getPin(), value);
+    analogWrite(pin->getPin(), value);
     break;
   case ControllinoNeoPin::CY8C95XX_PIN: // cy8c95xx.h
     cy8c95xx_pwm_cfg_t pwmCfg;
@@ -157,7 +169,7 @@ void analogWrite(ControllinoNeoPin pin, int value)
     uint8_t pulseWid;
     pulseWid = (uint8_t)value & 0xFF; // 8 bit resolution
     if (pulseWid < 0xFF) {
-      switch (pin.getPin()) // CY8C95XX datasheet
+      switch (pin->getPin()) // CY8C95XX datasheet
       { 
       case CY8C95XX_GPIO_0:
       case CY8C95XX_GPIO_2:
@@ -193,16 +205,16 @@ void analogWrite(ControllinoNeoPin pin, int value)
       pwmCfg.period = 0xFF;
       pwmCfg.pulse_wid = pulseWid;
       cy8c95xx_set_pwm_cfg(neo_cy8c95xx, &pwmCfg, &dummyDutyCyc, &dummyFreq); // Set duty cycle to selected PWM
-      cy8c95xx_en_pin_pwm(neo_cy8c95xx, (int)pin.getPin()); // Enable pwm over output
+      cy8c95xx_en_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Enable pwm over output
     }
     else { // if pulseWid 0xFF just output HIGH
-      cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin.getPin()); // Disable pwm
+      cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Disable pwm
     }
-    cy8c95xx_write_pin(neo_cy8c95xx, (int)pin.getPin(), 1); // Enable output 
+    cy8c95xx_write_pin(neo_cy8c95xx, (int)pin->getPin(), 1); // Enable output 
     break;
   case ControllinoNeoPin::AD56X4_PIN: // ad56x4.h
-    ad56x4_write_input_reg(neo_ad56x4, (ad56x4_ch_addr_t)pin.getPin(), ((uint16_t)value & 0xFFFF)); // 16 bits resolution
-    ad56x4_update_dac_reg(neo_ad56x4, (ad56x4_ch_addr_t)pin.getPin());
+    ad56x4_write_input_reg(neo_ad56x4, (ad56x4_ch_addr_t)pin->getPin(), ((uint16_t)value & 0xFFFF)); // 16 bits resolution
+    ad56x4_update_dac_reg(neo_ad56x4, (ad56x4_ch_addr_t)pin->getPin());
     break;
   default:
     // Other pin types are analog only

@@ -8,19 +8,16 @@
  
 #include "hw_platform.h"
  
-typedef struct
-{} i2c_inst_t;
 static uint8_t dummy_for_pointer;
-typedef struct i2c_inst_t _hw_i2c_t;
 hw_i2c_t PLATFORM_I2C_HW = (hw_i2c_t)&dummy_for_pointer;
-const unsigned int PLATFORM_I2C_SPEED;
-const int PLATFORM_I2C_SDA;
-const int PLATFORM_I2C_SCL;
-
+const unsigned int PLATFORM_I2C_SPEED = 0;
+const int PLATFORM_I2C_SDA = 0;
+const int PLATFORM_I2C_SCL = 0;
+ 
 /* Test doubles to simulate and check i2c transfers */
 extern platform_err_code_t mock_i2c_read(uint8_t addr, uint8_t* rxdata, size_t len);
 extern platform_err_code_t mock_i2c_write(uint8_t addr, uint8_t* txdata, size_t len);
-
+ 
 /* Init I2C interface */
 platform_err_code_t platform_i2c_init(hw_i2c_t i2c_hw, unsigned int speed, int sda_pin, int scl_pin)
 {

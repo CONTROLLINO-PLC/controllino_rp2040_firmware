@@ -4,8 +4,8 @@
 #include "cy8c95xx.h"
 #include "string.h"
  
-extern const uint8_t TEST_CY8C95XX_GPIO;
-extern const uint8_t TEST_CY8C95XX_ADDR;
+extern uint8_t TEST_CY8C95XX_GPIO;
+extern uint8_t TEST_CY8C95XX_ADDR;
 static uint8_t reg_addr;
 static uint8_t port_dir_reg_content = 0x00;
 static uint8_t drv_reg_content = 0x00;

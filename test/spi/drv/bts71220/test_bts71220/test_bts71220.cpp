@@ -2,7 +2,7 @@
 #include "hw_platform.h"
 #include "bts71220.h"
 
-const uint8_t TEST_BTS71220_DAISY_CHAIN_NUMBER = 0; /* Indicate only first BTS71220 will be used in tests*/
+uint8_t TEST_BTS71220_DAISY_CHAIN_NUMBER = 0; /* Indicate only first BTS71220 will be used in tests*/
 static bts71220_cfg_t cfg;
 static bts71220_t dev;
 static bts71220_err_code_t ret;

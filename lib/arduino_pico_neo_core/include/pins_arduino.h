@@ -5,33 +5,33 @@
  
 /* NEO core I/O */
 class ControllinoNeoPin;
-extern ControllinoNeoPin    NEO_CORE_AI0;
-extern ControllinoNeoPin    NEO_CORE_AI1;
-extern ControllinoNeoPin    NEO_CORE_AI2;
-extern ControllinoNeoPin    NEO_CORE_AI3;
-extern ControllinoNeoPin    NEO_CORE_AI4;
-extern ControllinoNeoPin    NEO_CORE_AI5;
-extern ControllinoNeoPin    NEO_CORE_AI6;
-extern ControllinoNeoPin    NEO_CORE_AI9;
+extern ControllinoNeoPin*   NEO_CORE_AI0;
+extern ControllinoNeoPin*   NEO_CORE_AI1;
+extern ControllinoNeoPin*   NEO_CORE_AI2;
+extern ControllinoNeoPin*   NEO_CORE_AI3;
+extern ControllinoNeoPin*   NEO_CORE_AI4;
+extern ControllinoNeoPin*   NEO_CORE_AI5;
+extern ControllinoNeoPin*   NEO_CORE_AI6;
+extern ControllinoNeoPin*   NEO_CORE_AI9;
 
-extern ControllinoNeoPin    NEO_CORE_AO0;
-extern ControllinoNeoPin    NEO_CORE_AO1;
-extern ControllinoNeoPin    NEO_CORE_AO2;
-extern ControllinoNeoPin    NEO_CORE_AO3;
+extern ControllinoNeoPin*   NEO_CORE_AO0;
+extern ControllinoNeoPin*   NEO_CORE_AO1;
+extern ControllinoNeoPin*   NEO_CORE_AO2;
+extern ControllinoNeoPin*   NEO_CORE_AO3;
 
-extern ControllinoNeoPin    NEO_CORE_DI0;
-extern ControllinoNeoPin    NEO_CORE_DI1;
-extern ControllinoNeoPin    NEO_CORE_DI2;
-extern ControllinoNeoPin    NEO_CORE_DI3;
+extern ControllinoNeoPin*   NEO_CORE_DI0;
+extern ControllinoNeoPin*   NEO_CORE_DI1;
+extern ControllinoNeoPin*   NEO_CORE_DI2;
+extern ControllinoNeoPin*   NEO_CORE_DI3;
 
-extern ControllinoNeoPin    NEO_CORE_DO0;
-extern ControllinoNeoPin    NEO_CORE_DO1;
-extern ControllinoNeoPin    NEO_CORE_DO2;
-extern ControllinoNeoPin    NEO_CORE_DO3;
-extern ControllinoNeoPin    NEO_CORE_DO4;
-extern ControllinoNeoPin    NEO_CORE_DO5;
-extern ControllinoNeoPin    NEO_CORE_DO6;
-extern ControllinoNeoPin    NEO_CORE_DO7;
+extern ControllinoNeoPin*   NEO_CORE_DO0;
+extern ControllinoNeoPin*   NEO_CORE_DO1;
+extern ControllinoNeoPin*   NEO_CORE_DO2;
+extern ControllinoNeoPin*   NEO_CORE_DO3;
+extern ControllinoNeoPin*   NEO_CORE_DO4;
+extern ControllinoNeoPin*   NEO_CORE_DO5;
+extern ControllinoNeoPin*   NEO_CORE_DO6;
+extern ControllinoNeoPin*   NEO_CORE_DO7;
  
 /* LEDs */
 #define PIN_LED             (25u)
