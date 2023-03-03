@@ -40,3 +40,7 @@ extern "C" PinStatus digitalRead(pin_size_t ulPin);
 /* Analog API */
 extern "C" void analogWrite(pin_size_t pin, int val);
 extern "C" int analogRead(pin_size_t pin);
+
+void initVariant();
+
+#include "pins_arduino.h"	

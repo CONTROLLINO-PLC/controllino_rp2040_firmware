@@ -32,7 +32,6 @@ platform_err_code_t mock_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t l
             tx_dac_data = (*(txdata + 1) << 8) | *(txdata + 2);
         else if (ad56x4_check_update_dac_reg(txdata, rxdata))
             TEST_AD56X4_DAC_DATA = tx_dac_data;
-
         return PLATFORM_OK;
     }
     return PLATFORM_SPI_COM_ERR;

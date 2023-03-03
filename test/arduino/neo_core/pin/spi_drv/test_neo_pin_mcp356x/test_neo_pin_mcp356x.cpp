@@ -1,6 +1,5 @@
 #include <unity.h>
 #include "Arduino.h"
-#include "pins_arduino.h"
  
 void setUp(void)
 {}

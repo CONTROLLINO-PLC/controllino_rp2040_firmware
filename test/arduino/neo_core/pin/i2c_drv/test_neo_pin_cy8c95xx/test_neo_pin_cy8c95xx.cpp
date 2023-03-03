@@ -1,6 +1,5 @@
 #include <unity.h>
 #include "Arduino.h"
-#include "pins_arduino.h"
  
 uint8_t TEST_CY8C95XX_GPIO;
 uint8_t TEST_CY8C95XX_ADDR = CY8C95XX_DEV_ADDR_GND;

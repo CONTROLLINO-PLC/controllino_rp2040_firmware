@@ -27,24 +27,17 @@ extern ad56x4_t* neo_ad56x4;
 extern bts71220_t* neo_bts71220;
  
 /**
- * \brief Class to diferenciate CONTROLLINO NEO pins
+ * \brief Controllino Neo pin class
  */
 class ControllinoNeoPin{
 public:
-	typedef enum {
-		NATIVE_PIN,
-		CY8C95XX_PIN,
-		MCP356X_PIN,
-		AD56X4_PIN
-	} _pin_type_t;
-
-	ControllinoNeoPin(int pin, _pin_type_t type);
-	bool operator== (ControllinoNeoPin const& other) const;
-
-	pin_size_t getPin();
-	_pin_type_t getType();
-	void setMode(PinMode mode);
-	PinMode getMode();
+	typedef enum { CY8C95XX_PIN, MCP356X_PIN, AD56X4_PIN } _pin_type_t;
+	ControllinoNeoPin(int pin, _pin_type_t type): _pin(pin), _type(type) { setMode(INPUT); };
+	bool operator== (ControllinoNeoPin const& other) const { return _pin == other._pin; };
+	pin_size_t getPin() { return _pin; };
+	_pin_type_t getType() { return _type; };
+	void setMode(PinMode mode) { _mode = mode; };
+	PinMode getMode() { return _mode; };
 private:
 	pin_size_t _pin;
 	_pin_type_t _type;
@@ -52,7 +45,7 @@ private:
 };
  
 /**
- *\brief Arduino API functions for compatibility with CONTROLLINO NEO
+ *\brief Arduino API functions for compatibility with Controllino Neo
  */
 void pinMode(ControllinoNeoPin* pin, PinMode mode);
 PinStatus digitalRead(ControllinoNeoPin* pin);
