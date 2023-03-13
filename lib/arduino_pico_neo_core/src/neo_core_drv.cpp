@@ -40,6 +40,12 @@ void initVariant()
     cy8c95xx_cfg.int_pin = 15; // RP2040 GPIO 15
     cy8c95xx_init(neo_cy8c95xx, &cy8c95xx_cfg);
 
+    // cy8c95xx digital output pins to low level at the beginning
+    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_6, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_7, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_8, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_9, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+
     // ADC analog inputs
     mcp356x_cfg_t mcp356x_cfg;
     mcp356x_set_default_cfg(&mcp356x_cfg);
@@ -54,4 +60,6 @@ void initVariant()
     bts71220_cfg_t bts71220_cfg;
     bts71220_set_default_cfg(&bts71220_cfg);
     bts71220_init(neo_bts71220, &bts71220_cfg);
+
+    // Digital Oututs connected to 
 }

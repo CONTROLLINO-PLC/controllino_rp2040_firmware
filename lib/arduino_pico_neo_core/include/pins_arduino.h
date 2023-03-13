@@ -31,16 +31,14 @@
 #define SERIAL_HOWMANY      (3u)
 #define SPI_HOWMANY         (2u)
 #define WIRE_HOWMANY        (2u)
-
+ 
 /* RP2040 */
 #define PINS_COUNT          (30u)
 #define NUM_DIGITAL_PINS    (30u)
 #define NUM_ANALOG_INPUTS   (4u)
 #define NUM_ANALOG_OUTPUTS  (0u)
 #define ADC_RESOLUTION      (12u)
-
-#define LED_BUILTIN PIN_LED
-
+ 
 /* Exposed on pin header */
 static const uint8_t D0 =   (0u);
 static const uint8_t D1 =   (1u);
@@ -61,8 +59,19 @@ static const uint8_t SCK =  PIN_SPI0_SCK;
 
 static const uint8_t SDA = PIN_WIRE0_SDA;
 static const uint8_t SCL = PIN_WIRE0_SCL;
-
+ 
 /* NEO core I/O */
+#define CONTROLLINO_NEO_CORE
+
+#define LED_BUILTIN PIN_LED
+
+#define PIN_SPI_SS_ETHERNET_LIB PIN_SPI0_SS
+
+#define RS485_SERIAL_PORT    Serial1
+#define RS485_DEFAULT_RE_PIN 2u
+#define RS485_DEFAULT_DE_PIN 3u
+
+
 class ControllinoNeoPin;
 extern ControllinoNeoPin* NEO_CORE_AI0;
 extern ControllinoNeoPin* NEO_CORE_AI1;
@@ -88,11 +97,11 @@ static const uint8_t NEO_CORE_DI1 = (7u);
 static const uint8_t NEO_CORE_DI2 = (12u);
 static const uint8_t NEO_CORE_DI3 = (13u);
 
-static const uint8_t NEO_CORE_DO0 = (14u);
-static const uint8_t NEO_CORE_DO1 = (22u);
-static const uint8_t NEO_CORE_DO2 = (23u);
-static const uint8_t NEO_CORE_DO3 = (24u);
-
+static const uint8_t NEO_CORE_DO3 = (14u);
+static const uint8_t NEO_CORE_DO2 = (22u);
+static const uint8_t NEO_CORE_DO1 = (23u);
+static const uint8_t NEO_CORE_DO0 = (24u);
+ 
 /* Arduino pins API for NEO */
 #include "neo_core_pin.h"
 

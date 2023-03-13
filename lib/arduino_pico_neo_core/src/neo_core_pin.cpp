@@ -22,10 +22,10 @@ ControllinoNeoPin* NEO_CORE_AO1 = new ControllinoNeoPin(AD56X4_CH_ADDR_B, Contro
 ControllinoNeoPin* NEO_CORE_AO2 = new ControllinoNeoPin(AD56X4_CH_ADDR_C, ControllinoNeoPin::AD56X4_PIN);
 ControllinoNeoPin* NEO_CORE_AO3 = new ControllinoNeoPin(AD56X4_CH_ADDR_D, ControllinoNeoPin::AD56X4_PIN);
 
-ControllinoNeoPin* NEO_CORE_DO4 = new ControllinoNeoPin(CY8C95XX_GPIO_6, ControllinoNeoPin::CY8C95XX_PIN);
-ControllinoNeoPin* NEO_CORE_DO5 = new ControllinoNeoPin(CY8C95XX_GPIO_7, ControllinoNeoPin::CY8C95XX_PIN);
-ControllinoNeoPin* NEO_CORE_DO6 = new ControllinoNeoPin(CY8C95XX_GPIO_8, ControllinoNeoPin::CY8C95XX_PIN);
-ControllinoNeoPin* NEO_CORE_DO7 = new ControllinoNeoPin(CY8C95XX_GPIO_9, ControllinoNeoPin::CY8C95XX_PIN);
+ControllinoNeoPin* NEO_CORE_DO7 = new ControllinoNeoPin(CY8C95XX_GPIO_6, ControllinoNeoPin::CY8C95XX_PIN);
+ControllinoNeoPin* NEO_CORE_DO6 = new ControllinoNeoPin(CY8C95XX_GPIO_7, ControllinoNeoPin::CY8C95XX_PIN);
+ControllinoNeoPin* NEO_CORE_DO5 = new ControllinoNeoPin(CY8C95XX_GPIO_8, ControllinoNeoPin::CY8C95XX_PIN);
+ControllinoNeoPin* NEO_CORE_DO4 = new ControllinoNeoPin(CY8C95XX_GPIO_9, ControllinoNeoPin::CY8C95XX_PIN);
  
 void pinMode(ControllinoNeoPin* pin, PinMode mode)
 {
