@@ -27,7 +27,7 @@ platform_err_code_t mock_i2c_read(uint8_t addr, uint8_t* rxdata, size_t len)
         else if (reg_addr >= CY8C95XX_REG_PULL_UP && reg_addr <= CY8C95XX_REG_HIGH_Z)
             *rxdata = drv_reg_content;
         else if (reg_addr == CY8C95XX_REG_IN_PORT0)
-            *rxdata = inverted_input ? 0x00 : 0xFF;
+            *rxdata = inverted_input ? 0x00 : 0x3F;
         else if (reg_addr == CY8C95XX_REG_OUT_PORT0)
             *rxdata = out_port0_reg_content;
         else if (reg_addr == CY8C95XX_REG_SEL_PWM_OUT)

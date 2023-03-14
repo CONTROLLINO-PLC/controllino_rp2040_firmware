@@ -45,10 +45,12 @@ void pinMode(ControllinoNeoPin* pin, PinMode mode)
         case OUTPUT_2MA:
         case OUTPUT_8MA:
         case OUTPUT_12MA:
+            mode = OUTPUT;
             dir = CY8C95XX_GPIO_OUT;
             drv = CY8C95XX_DRV_STRONG;
             break;
         default:
+            mode = INPUT_PULLUP;
             dir = CY8C95XX_GPIO_IN;
             drv = CY8C95XX_DRV_PULL_UP;
             break;
@@ -101,8 +103,10 @@ void digitalWrite(ControllinoNeoPin* pin, PinStatus value)
     switch (pin->getType())
     {
     case ControllinoNeoPin::CY8C95XX_PIN: // cy8c95xx.h
-        cy8c95xx_write_pin(neo_cy8c95xx, (int)pin->getPin(), (uint8_t)value);
-        cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Disable PWM
+        if (pin->getMode() == OUTPUT) {
+            cy8c95xx_write_pin(neo_cy8c95xx, (int)pin->getPin(), (uint8_t)value);
+            cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Disable PWM
+        }
         break;
     default:
         // Other pin types are analog only
@@ -160,54 +164,56 @@ void analogWrite(ControllinoNeoPin* pin, int value)
     switch (pin->getType())
     {
     case ControllinoNeoPin::CY8C95XX_PIN: // cy8c95xx.h
-        cy8c95xx_pwm_cfg_t pwmCfg;
-        float dummyFreq;
-        float dummyDutyCyc;
-        uint8_t pulseWid;
-        pulseWid = (uint8_t)value & 0xFF; // 8 bit resolution
-        if (pulseWid < 0xFF) {
-            switch (pin->getPin()) // CY8C95XX datasheet
-            {
-            case CY8C95XX_GPIO_0:
-            case CY8C95XX_GPIO_2:
-            case CY8C95XX_GPIO_4:
-            case CY8C95XX_GPIO_6:
-            case CY8C95XX_GPIO_19:
-                pwmCfg.pwm_sel = CY8C95XX_SEL_PWM_3;
-                break;
-            case CY8C95XX_GPIO_1:
-            case CY8C95XX_GPIO_3:
-            case CY8C95XX_GPIO_5:
-            case CY8C95XX_GPIO_7:
-                pwmCfg.pwm_sel = CY8C95XX_SEL_PWM_1;
-                break;
-            case CY8C95XX_GPIO_8:
-            case CY8C95XX_GPIO_10:
-            case CY8C95XX_GPIO_12:
-            case CY8C95XX_GPIO_14:
-            case CY8C95XX_GPIO_16:
-                pwmCfg.pwm_sel = CY8C95XX_SEL_PWM_2;
-                break;
-            case CY8C95XX_GPIO_9:
-            case CY8C95XX_GPIO_11:
-            case CY8C95XX_GPIO_13:
-            case CY8C95XX_GPIO_15:
-            case CY8C95XX_GPIO_17:
-            case CY8C95XX_GPIO_18:
-                pwmCfg.pwm_sel = CY8C95XX_SEL_PWM_0;
-                break;
+        if (pin->getMode() == OUTPUT) {
+            cy8c95xx_pwm_cfg_t pwmCfg;
+            float dummyFreq;
+            float dummyDutyCyc;
+            uint8_t pulseWid;
+            pulseWid = (uint8_t)value & 0xFF; // 8 bit resolution
+            if (pulseWid < 0xFF) {
+                switch (pin->getPin()) // CY8C95XX datasheet
+                {
+                case CY8C95XX_GPIO_0:
+                case CY8C95XX_GPIO_2:
+                case CY8C95XX_GPIO_4:
+                case CY8C95XX_GPIO_6:
+                case CY8C95XX_GPIO_19:
+                    pwmCfg.pwm_sel = CY8C95XX_SEL_PWM_3;
+                    break;
+                case CY8C95XX_GPIO_1:
+                case CY8C95XX_GPIO_3:
+                case CY8C95XX_GPIO_5:
+                case CY8C95XX_GPIO_7:
+                    pwmCfg.pwm_sel = CY8C95XX_SEL_PWM_1;
+                    break;
+                case CY8C95XX_GPIO_8:
+                case CY8C95XX_GPIO_10:
+                case CY8C95XX_GPIO_12:
+                case CY8C95XX_GPIO_14:
+                case CY8C95XX_GPIO_16:
+                    pwmCfg.pwm_sel = CY8C95XX_SEL_PWM_2;
+                    break;
+                case CY8C95XX_GPIO_9:
+                case CY8C95XX_GPIO_11:
+                case CY8C95XX_GPIO_13:
+                case CY8C95XX_GPIO_15:
+                case CY8C95XX_GPIO_17:
+                case CY8C95XX_GPIO_18:
+                    pwmCfg.pwm_sel = CY8C95XX_SEL_PWM_0;
+                    break;
+                }
+                pwmCfg.clk_src = CY8C95XX_PWM_CLK_SRC_367_6_HZ;
+                pwmCfg.devider = 0x01;
+                pwmCfg.period = 0xFF;
+                pwmCfg.pulse_wid = pulseWid;
+                cy8c95xx_set_pwm_cfg(neo_cy8c95xx, &pwmCfg, &dummyDutyCyc, &dummyFreq); // Set duty cycle to selected PWM
+                cy8c95xx_en_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Enable pwm over output
             }
-            pwmCfg.clk_src = CY8C95XX_PWM_CLK_SRC_367_6_HZ;
-            pwmCfg.devider = 0x01;
-            pwmCfg.period = 0xFF;
-            pwmCfg.pulse_wid = pulseWid;
-            cy8c95xx_set_pwm_cfg(neo_cy8c95xx, &pwmCfg, &dummyDutyCyc, &dummyFreq); // Set duty cycle to selected PWM
-            cy8c95xx_en_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Enable pwm over output
+            else { // if pulseWid 0xFF just output HIGH
+                cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Disable pwm
+            }
+            cy8c95xx_write_pin(neo_cy8c95xx, (int)pin->getPin(), 1); // Enable output
         }
-        else { // if pulseWid 0xFF just output HIGH
-            cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Disable pwm
-        }
-        cy8c95xx_write_pin(neo_cy8c95xx, (int)pin->getPin(), 1); // Enable output 
         break;
     case ControllinoNeoPin::AD56X4_PIN: // ad56x4.h
         ad56x4_write_input_reg(neo_ad56x4, (ad56x4_ch_addr_t)pin->getPin(), ((uint16_t)value & 0xFFFF)); // 16 bits resolution

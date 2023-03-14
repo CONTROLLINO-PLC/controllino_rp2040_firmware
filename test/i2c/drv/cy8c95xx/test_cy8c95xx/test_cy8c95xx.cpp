@@ -3,7 +3,7 @@
 #include "cy8c95xx.h"
  
 uint8_t TEST_CY8C95XX_GPIO = 0;
-uint8_t TEST_CY8C95XX_PORT = 2;
+uint8_t TEST_CY8C95XX_PORT = 0;
 uint8_t TEST_CY8C95XX_ADDR = CY8C95XX_DEV_ADDR_GND;
 #define TEST_CY8C95XX_BIT 0
 static cy8c95xx_cfg_t cfg;
@@ -17,8 +17,7 @@ void setUp(void)
 }
  
 void tearDown(void)
-{
-}
+{}
  
 void test_cy8c95xx_set_default_cfg()
 {
@@ -184,7 +183,7 @@ void test_cy8c95xx_read_port_in_ok()
     uint8_t state = 0x00;
     ret = cy8c95xx_read_port(&dev, TEST_CY8C95XX_PORT, &state);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
-    TEST_ASSERT_EQUAL(0xFF, state);
+    TEST_ASSERT_EQUAL(0x3F, state);
 }
  
 void test_cy8c95xx_read_pin_out_lvl_ok()
@@ -221,15 +220,6 @@ void test_cy8c95xx_write_pin_ok()
     ret = cy8c95xx_write_pin(&dev, TEST_CY8C95XX_GPIO, 1);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
     cy8c95xx_read_pin_out_lvl(&dev, TEST_CY8C95XX_GPIO, &state);
-    TEST_ASSERT_EQUAL(1, state);
-}
- 
-void test_cy8c95xx_send_cmd_ok()
-{
-    uint8_t state = 0;
-    ret = cy8c95xx_send_cmd(&dev, CY8C95XX_RESTORE_DEFAULTS);
-    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
-    cy8c95xx_read_pin(&dev, TEST_CY8C95XX_GPIO, &state);
     TEST_ASSERT_EQUAL(1, state);
 }
  
@@ -313,6 +303,15 @@ void test_cy8c95xx_pin_arg_greater_than_59_err()
     TEST_ASSERT_EQUAL(PLATFORM_ARGUMENT_ERR, ret);
 }
  
+void test_cy8c95xx_send_cmd_ok()
+{
+    uint8_t state = 0;
+    ret = cy8c95xx_send_cmd(&dev, CY8C95XX_RESTORE_DEFAULTS);
+    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    cy8c95xx_read_pin(&dev, TEST_CY8C95XX_GPIO, &state);
+    TEST_ASSERT_EQUAL(1, state);
+}
+ 
 int runUnityTests(void)
 {
     UNITY_BEGIN();
@@ -326,14 +325,14 @@ int runUnityTests(void)
     RUN_TEST(test_cy8c95xx_pin_mode_ok);
     RUN_TEST(test_cy8c95xx_read_pin_in_ok);
     RUN_TEST(test_cy8c95xx_en_dis_pin_inv_in_ok);
-    // RUN_TEST(test_cy8c95xx_read_port_in_ok);
+    RUN_TEST(test_cy8c95xx_read_port_in_ok);
     RUN_TEST(test_cy8c95xx_read_pin_out_lvl_ok);
-    // RUN_TEST(test_cy8c95xx_read_port_out_lvl_ok);
+    RUN_TEST(test_cy8c95xx_read_port_out_lvl_ok);
     RUN_TEST(test_cy8c95xx_write_pin_ok);
-    // RUN_TEST(test_cy8c95xx_send_cmd_ok);
     RUN_TEST(test_cy8c95xx_en_dis_pin_pwm_ok);
     RUN_TEST(test_cy8c95xx_set_pwm_cfg_ok);
     RUN_TEST(test_cy8c95xx_pin_arg_less_than_0_err);
     RUN_TEST(test_cy8c95xx_pin_arg_greater_than_59_err);
+    RUN_TEST(test_cy8c95xx_send_cmd_ok);
     return UNITY_END();
 }

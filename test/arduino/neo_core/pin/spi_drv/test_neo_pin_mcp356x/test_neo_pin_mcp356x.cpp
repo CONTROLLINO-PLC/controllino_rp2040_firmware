@@ -46,8 +46,7 @@ void test_mcp356x_analogRead_ok()
     uint32_t dummyRes;
     mcp356x_read_raw_adc(neo_mcp356x, (uint32_t*)&adc_mcp356x, &dummySgn, &dummyRes);
     TEST_ASSERT_LESS_OR_EQUAL(TEST_MCP356X_ADC_READING_ERROR, abs(adcArduino - adc_mcp356x));
-#ifdef NATIVE_ENV
-    /* Only posible to read back with native env mock */
+#ifdef NATIVE_ENV /* Only posible to read back with native env mock */
     TEST_ASSERT_EQUAL(TEST_MCP356X_ADC_DATA, adcArduino);
 #endif
 }
