@@ -118,18 +118,20 @@ typedef enum {
     CY8C95XX_PWM_CLK_SRC_367_6_HZ =         0x04,
     CY8C95XX_PWM_CLK_SRC_PREV =             0x05
 } cy8c95xx_clk_src_t;
-
+ 
 /**
  * \brief Available commands
  * \ingroup cy8c95xx
  */
-#define CY8C95XX_STORE_POR_CFG_TO_EEPROM    0x01
-#define CY8C95XX_RESTORE_DEFAULTS           0x02
-#define CY8C95XX_WRITE_EEPROM_POR           0x03
-#define CY8C95XX_READ_EEPROM_POR            0x04
-#define CY8C95XX_WRITE_DEV_CFG              0x05
-#define CY8C95XX_READ_DEV_CFG               0x06
-#define CY8C95XX_RECFG_DEV_TO_POR           0x07
+typedef enum {
+    CY8C95XX_STORE_POR_CFG_TO_EEPROM =      0x01,
+    CY8C95XX_RESTORE_DEFAULTS =             0x02,
+    CY8C95XX_WRITE_EEPROM_POR =             0x03,
+    CY8C95XX_READ_EEPROM_POR =              0x04,
+    CY8C95XX_WRITE_DEV_CFG =                0x05,
+    CY8C95XX_READ_DEV_CFG =                 0x06,
+    CY8C95XX_RECFG_DEV_TO_POR =             0x07
+} cy8c95xx_cmd_t;
  
 /**
  * \brief Enable registers
@@ -413,7 +415,7 @@ cy8c95xx_err_code_t cy8c95xx_read_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8
 cy8c95xx_err_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t bit_num, uint8_t val);
  
 /*!
- * \brief Send EEPROM comand
+ * \brief Send command to CY8C95XX_REG_CMD
  * \ingroup cy8c95xx
  *
  * \param dev Pointer to CY8C95XX expander struct
@@ -422,7 +424,7 @@ cy8c95xx_err_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-cy8c95xx_err_code_t cy8c95xx_send_eeprom_cmd(cy8c95xx_t *dev, uint8_t cmd);
+cy8c95xx_err_code_t cy8c95xx_send_cmd(cy8c95xx_t* dev, cy8c95xx_cmd_t cmd);
  
 /*!
  * \brief Writes number of bytes into EEPROM

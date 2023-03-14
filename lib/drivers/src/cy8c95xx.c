@@ -92,10 +92,10 @@ cy8c95xx_err_code_t cy8c95xx_read_byte(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint
     return cy8c95xx_generic_read(dev, reg, rxdata, 1);
 }
  
-/* Send EEPROM comand */
-cy8c95xx_err_code_t cy8c95xx_send_eeprom_cmd(cy8c95xx_t* dev, uint8_t cmd)
+/* Send command to CY8C95XX_REG_CMD */
+cy8c95xx_err_code_t cy8c95xx_send_cmd(cy8c95xx_t* dev, cy8c95xx_cmd_t cmd)
 {
-    return cy8c95xx_generic_write(dev, CY8C95XX_REG_CMD, &cmd, 1);
+    return cy8c95xx_write_byte(dev, CY8C95XX_REG_CMD, cmd);
 }
  
 /* Read state of a single bit from register */

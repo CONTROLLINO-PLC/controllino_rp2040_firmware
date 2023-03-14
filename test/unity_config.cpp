@@ -49,7 +49,7 @@ int main(int argc, char** argv) { runUnityTests(); return 0; }
 #endif
 
 #ifdef NEO_ENV
-#include <Arduino.h>
+#include <SPI.h>
 void unityOutputStart(unsigned long baudrate)
 {
 #ifdef UNITY_OUTPUT_SERIAL1
