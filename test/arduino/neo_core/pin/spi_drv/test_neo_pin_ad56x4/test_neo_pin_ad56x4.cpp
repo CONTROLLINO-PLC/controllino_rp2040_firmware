@@ -19,7 +19,7 @@ void test_ad56x4_pin_definitions_ok()
     TEST_ASSERT_EQUAL(ControllinoNeoPin::AD56X4_PIN, NEO_CORE_AO0->getType());
 }
  
-void test_ad56x4_pinMode_always_output()
+void test_ad56x4_pin_pinMode_always_output()
 {
     TEST_ASSERT_EQUAL(OUTPUT, NEO_CORE_AO0->getMode());
     pinMode(NEO_CORE_AO0, INPUT);
@@ -38,7 +38,7 @@ void test_ad56x4_pinMode_always_output()
     TEST_ASSERT_EQUAL(OUTPUT, NEO_CORE_AO0->getMode());
 }
  
-void test_ad56x4_analogWrite_ok()
+void test_ad56x4_pin_analogWrite_ok()
 {
     analogWrite(NEO_CORE_AO0, TEST_AD56X4_WRITE_DAC_DATA);
 #ifdef NATIVE_ENV /* Only posible to read back with native env mock */
@@ -46,27 +46,34 @@ void test_ad56x4_analogWrite_ok()
 #endif
 }
  
-void test_analogRead_does_nothing()
+void test_ad56x4_pin_analogRead_does_nothing()
 {
     int res = analogRead(NEO_CORE_AO0);
     TEST_ASSERT_EQUAL(0, res);
 }
  
-void test_digitalWrite_digitalRead_does_nothing()
+void test_ad56x4_pin_digitalWrite_digitalRead_does_nothing()
 {
     digitalWrite(NEO_CORE_AO0, HIGH);
     int res = digitalRead(NEO_CORE_AO0);
     TEST_ASSERT_EQUAL(0, res);
 }
  
+void test_ad56x4_pin_digitalThreshold_does_nothing()
+{
+    setDigitalThreshold(NEO_CORE_AO0, 0);
+    TEST_ASSERT_EQUAL(~0U, getDigitalThreshold(NEO_CORE_AO0));
+}
+ 
 int runUnityTests(void)
 {
     UNITY_BEGIN();
     RUN_TEST(test_ad56x4_pin_definitions_ok);
-    RUN_TEST(test_ad56x4_pinMode_always_output);
-    RUN_TEST(test_ad56x4_analogWrite_ok);
-    RUN_TEST(test_analogRead_does_nothing);
-    RUN_TEST(test_digitalWrite_digitalRead_does_nothing);
+    RUN_TEST(test_ad56x4_pin_pinMode_always_output);
+    RUN_TEST(test_ad56x4_pin_analogWrite_ok);
+    RUN_TEST(test_ad56x4_pin_analogRead_does_nothing);
+    RUN_TEST(test_ad56x4_pin_digitalWrite_digitalRead_does_nothing);
+    RUN_TEST(test_ad56x4_pin_digitalThreshold_does_nothing);
     UNITY_END();
     return UNITY_END();
 }

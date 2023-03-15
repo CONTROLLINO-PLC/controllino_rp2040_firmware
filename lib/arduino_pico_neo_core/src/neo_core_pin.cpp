@@ -91,8 +91,11 @@ PinStatus digitalRead(ControllinoNeoPin* pin)
         }
         pinStatus = pinState ? HIGH : LOW;
         break;
+    case ControllinoNeoPin::MCP356X_PIN:
+        pinStatus = (analogRead(pin) >= pin->_getDigitalThreshold()) ? HIGH : LOW;
+        break;
     default:
-        // Other pin types are analog only
+        // In other pins digitalRead does not make sense
         break;
     }
     return pinStatus;
@@ -223,4 +226,24 @@ void analogWrite(ControllinoNeoPin* pin, int value)
         // Other pin types are analog only
         break;
     }
+}
+ 
+/* Set the digital threshold to implement a digital input with an analog input only pin */
+void setDigitalThreshold(ControllinoNeoPin* pin, uint32_t threshold)
+{
+    switch (pin->getType())
+    {
+    case ControllinoNeoPin::MCP356X_PIN:
+        pin->_setDigitalThreshold(threshold);
+        break;
+    default:
+        // Other pin types are not analog inputs
+        break;
+    }
+}
+ 
+/* Get current digital threshold */
+uint32_t getDigitalThreshold(ControllinoNeoPin* pin)
+{
+    return pin->_getDigitalThreshold();
 }

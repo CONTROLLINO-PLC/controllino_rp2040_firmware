@@ -14,7 +14,9 @@ void setUp(void)
 }
  
 void tearDown(void)
-{}
+{
+    bts71220_write_reg(&dev, BTS71220_REG_OUT, 0x00, TEST_BTS71220_DAISY_CHAIN_NUMBER);
+}
  
 void test_bts71220_set_default_cfg()
 {

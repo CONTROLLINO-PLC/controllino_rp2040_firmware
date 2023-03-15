@@ -2,7 +2,7 @@
 #include "Arduino.h"
  
 #define TEST_MCP356X_ADC_READING_ERROR 100
-uint32_t TEST_MCP356X_ADC_DATA = 0x7FFFFF;
+uint32_t TEST_MCP356X_ADC_DATA = 0x3FFFFF;
  
 void setUp(void)
 {
@@ -11,7 +11,9 @@ void setUp(void)
 }
  
 void tearDown(void)
-{}
+{
+    setDigitalThreshold(NEO_CORE_AI0, ~0U);
+}
  
 void test_mcp356x_pin_definitions_ok()
 {
@@ -19,7 +21,7 @@ void test_mcp356x_pin_definitions_ok()
     TEST_ASSERT_EQUAL(ControllinoNeoPin::MCP356X_PIN, NEO_CORE_AI0->getType());
 }
  
-void test_mcp356x_pinMode_always_input()
+void test_mcp356x_pin_pinMode_always_input()
 {
     TEST_ASSERT_EQUAL(INPUT, NEO_CORE_AI0->getMode());
     pinMode(NEO_CORE_AI0, OUTPUT);
@@ -38,7 +40,7 @@ void test_mcp356x_pinMode_always_input()
     TEST_ASSERT_EQUAL(INPUT, NEO_CORE_AI0->getMode());
 }
  
-void test_mcp356x_analogRead_ok()
+void test_mcp356x_pin_analogRead_ok()
 {
     int adcArduino = analogRead(NEO_CORE_AI0);
     int adc_mcp356x;
@@ -51,27 +53,49 @@ void test_mcp356x_analogRead_ok()
 #endif
 }
  
-void test_analogWrite_does_nothing()
+void test_mcp356x_pin_analogWrite_does_nothing()
 {
     /* Just test if compiles */
     analogWrite(NEO_CORE_AI0, 0);
 }
  
-void test_digitalWrite_digitalRead_does_nothing()
+void test_mcp356x_pin_digitalWrite_does_nothing()
 {
+    /* Just test if compiles */
     digitalWrite(NEO_CORE_AI0, HIGH);
-    int res = digitalRead(NEO_CORE_AI0);
-    TEST_ASSERT_EQUAL(0, res);
 }
  
+void test_ad56x4_pin_get_set_digitalThreshold()
+{
+    TEST_ASSERT_EQUAL(~0U, getDigitalThreshold(NEO_CORE_AI0));
+    setDigitalThreshold(NEO_CORE_AI0, TEST_MCP356X_ADC_DATA);
+    TEST_ASSERT_EQUAL(TEST_MCP356X_ADC_DATA, getDigitalThreshold(NEO_CORE_AI0));
+}
+
+void test_ad56x4_digitalRead_with_digitalThreshold()
+{
+    TEST_ASSERT_EQUAL(LOW, digitalRead(NEO_CORE_AI0));
+#ifdef NATIVE_ENV /* Equal case can only be tested in native enviroment */
+    setDigitalThreshold(NEO_CORE_AI0, TEST_MCP356X_ADC_DATA);
+    TEST_ASSERT_EQUAL(HIGH, digitalRead(NEO_CORE_AI0));
+#endif
+    setDigitalThreshold(NEO_CORE_AI0, analogRead(NEO_CORE_AI0) + 255);
+    TEST_ASSERT_EQUAL(LOW, digitalRead(NEO_CORE_AI0));
+    //
+    setDigitalThreshold(NEO_CORE_AI0, analogRead(NEO_CORE_AI0) - 255);
+    TEST_ASSERT_EQUAL(HIGH, digitalRead(NEO_CORE_AI0));
+}
+
 int runUnityTests(void)
 {
     UNITY_BEGIN();
     RUN_TEST(test_mcp356x_pin_definitions_ok);
-    RUN_TEST(test_mcp356x_pinMode_always_input);
-    RUN_TEST(test_mcp356x_analogRead_ok);
-    RUN_TEST(test_analogWrite_does_nothing);
-    RUN_TEST(test_digitalWrite_digitalRead_does_nothing);
+    RUN_TEST(test_mcp356x_pin_pinMode_always_input);
+    RUN_TEST(test_mcp356x_pin_analogRead_ok);
+    RUN_TEST(test_mcp356x_pin_analogWrite_does_nothing);
+    RUN_TEST(test_mcp356x_pin_digitalWrite_does_nothing);
+    RUN_TEST(test_ad56x4_pin_get_set_digitalThreshold);
+    RUN_TEST(test_ad56x4_digitalRead_with_digitalThreshold);
     UNITY_END();
     return UNITY_END();
 }
