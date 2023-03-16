@@ -92,15 +92,15 @@ extern ControllinoNeoPin* NEO_CORE_DO5;
 extern ControllinoNeoPin* NEO_CORE_DO6;
 extern ControllinoNeoPin* NEO_CORE_DO7;
 
-static const uint8_t NEO_CORE_DI0 = (6u);
-static const uint8_t NEO_CORE_DI1 = (7u);
-static const uint8_t NEO_CORE_DI2 = (12u);
-static const uint8_t NEO_CORE_DI3 = (13u);
+extern ControllinoNeoPin* NEO_CORE_DI0;
+extern ControllinoNeoPin* NEO_CORE_DI1;
+extern ControllinoNeoPin* NEO_CORE_DI2;
+extern ControllinoNeoPin* NEO_CORE_DI3;
 
-static const uint8_t NEO_CORE_DO3 = (14u);
-static const uint8_t NEO_CORE_DO2 = (22u);
-static const uint8_t NEO_CORE_DO1 = (23u);
-static const uint8_t NEO_CORE_DO0 = (24u);
+extern ControllinoNeoPin* NEO_CORE_DO3;
+extern ControllinoNeoPin* NEO_CORE_DO2;
+extern ControllinoNeoPin* NEO_CORE_DO1;
+extern ControllinoNeoPin* NEO_CORE_DO0;
  
 /* Arduino pins API for NEO */
 #include "neo_core_pin.h"

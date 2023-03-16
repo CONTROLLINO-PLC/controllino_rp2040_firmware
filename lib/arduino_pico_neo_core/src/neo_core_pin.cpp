@@ -6,7 +6,7 @@
  
 #include "string.h"
 #include "neo_core_pin.h"
- 
+
 /* Neo Core pins definitions */
 ControllinoNeoPin* NEO_CORE_AI0 = new ControllinoNeoPin(MCP356X_CH_CH0, ControllinoNeoPin::MCP356X_PIN);
 ControllinoNeoPin* NEO_CORE_AI1 = new ControllinoNeoPin(MCP356X_CH_CH1, ControllinoNeoPin::MCP356X_PIN);
@@ -22,15 +22,29 @@ ControllinoNeoPin* NEO_CORE_AO1 = new ControllinoNeoPin(AD56X4_CH_ADDR_B, Contro
 ControllinoNeoPin* NEO_CORE_AO2 = new ControllinoNeoPin(AD56X4_CH_ADDR_C, ControllinoNeoPin::AD56X4_PIN);
 ControllinoNeoPin* NEO_CORE_AO3 = new ControllinoNeoPin(AD56X4_CH_ADDR_D, ControllinoNeoPin::AD56X4_PIN);
 
-ControllinoNeoPin* NEO_CORE_DO7 = new ControllinoNeoPin(CY8C95XX_GPIO_6, ControllinoNeoPin::CY8C95XX_PIN);
-ControllinoNeoPin* NEO_CORE_DO6 = new ControllinoNeoPin(CY8C95XX_GPIO_7, ControllinoNeoPin::CY8C95XX_PIN);
-ControllinoNeoPin* NEO_CORE_DO5 = new ControllinoNeoPin(CY8C95XX_GPIO_8, ControllinoNeoPin::CY8C95XX_PIN);
+ControllinoNeoPin* NEO_CORE_DI0 = new ControllinoNeoPin(6U, ControllinoNeoPin::NATIVE_PIN);
+ControllinoNeoPin* NEO_CORE_DI1 = new ControllinoNeoPin(7U, ControllinoNeoPin::NATIVE_PIN);
+ControllinoNeoPin* NEO_CORE_DI2 = new ControllinoNeoPin(12U, ControllinoNeoPin::NATIVE_PIN);
+ControllinoNeoPin* NEO_CORE_DI3 = new ControllinoNeoPin(13U, ControllinoNeoPin::NATIVE_PIN);
+
+ControllinoNeoPin* NEO_CORE_DO0 = new ControllinoNeoPin(24U, ControllinoNeoPin::NATIVE_PIN);
+ControllinoNeoPin* NEO_CORE_DO1 = new ControllinoNeoPin(23U, ControllinoNeoPin::NATIVE_PIN);
+ControllinoNeoPin* NEO_CORE_DO2 = new ControllinoNeoPin(22U, ControllinoNeoPin::NATIVE_PIN);
+ControllinoNeoPin* NEO_CORE_DO3 = new ControllinoNeoPin(14U, ControllinoNeoPin::NATIVE_PIN);
+
 ControllinoNeoPin* NEO_CORE_DO4 = new ControllinoNeoPin(CY8C95XX_GPIO_9, ControllinoNeoPin::CY8C95XX_PIN);
+ControllinoNeoPin* NEO_CORE_DO5 = new ControllinoNeoPin(CY8C95XX_GPIO_8, ControllinoNeoPin::CY8C95XX_PIN);
+ControllinoNeoPin* NEO_CORE_DO6 = new ControllinoNeoPin(CY8C95XX_GPIO_7, ControllinoNeoPin::CY8C95XX_PIN);
+ControllinoNeoPin* NEO_CORE_DO7 = new ControllinoNeoPin(CY8C95XX_GPIO_6, ControllinoNeoPin::CY8C95XX_PIN);
  
 void pinMode(ControllinoNeoPin* pin, PinMode mode)
 {
     switch (pin->getType())
     {
+    case ControllinoNeoPin::NATIVE_PIN:
+        gpio_set_input_hysteresis_enabled(pin->getPin(), false);
+        pinMode(pin->getPin(), mode);
+        break;
     case ControllinoNeoPin::CY8C95XX_PIN: // cy8c95xx.h
         cy8c95xx_dir_mode_t dir;
         cy8c95xx_drv_mode_t drv;
@@ -55,6 +69,7 @@ void pinMode(ControllinoNeoPin* pin, PinMode mode)
             drv = CY8C95XX_DRV_PULL_UP;
             break;
         }
+        cy8c95xx_write_pin(neo_cy8c95xx, (int)pin->getPin(), 0); // Set output to LOW
         cy8c95xx_pin_mode(neo_cy8c95xx, (int)pin->getPin(), dir, drv);
         cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Disable PWM
         break;
@@ -74,6 +89,9 @@ PinStatus digitalRead(ControllinoNeoPin* pin)
     PinStatus pinStatus = LOW;
     switch (pin->getType())
     {
+    case ControllinoNeoPin::NATIVE_PIN:
+        pinStatus = digitalRead(pin->getPin());
+        break;
     case ControllinoNeoPin::CY8C95XX_PIN: // cy8c95xx.h
         uint8_t pinState;
         switch (pin->getMode())
@@ -105,6 +123,9 @@ void digitalWrite(ControllinoNeoPin* pin, PinStatus value)
 {
     switch (pin->getType())
     {
+    case ControllinoNeoPin::NATIVE_PIN:
+        digitalWrite(pin->getPin(), value);
+        break;
     case ControllinoNeoPin::CY8C95XX_PIN: // cy8c95xx.h
         if (pin->getMode() == OUTPUT) {
             cy8c95xx_write_pin(neo_cy8c95xx, (int)pin->getPin(), (uint8_t)value);
@@ -122,6 +143,9 @@ int analogRead(ControllinoNeoPin* pin)
     int adcValue = 0;
     switch (pin->getType())
     {
+    case ControllinoNeoPin::NATIVE_PIN:
+        adcValue = analogRead(pin->getPin());
+        break;
     case ControllinoNeoPin::MCP356X_PIN: // mcp356x.h
         uint8_t txdata[7];
         memset(txdata, 0x00, sizeof(txdata));
@@ -166,6 +190,9 @@ void analogWrite(ControllinoNeoPin* pin, int value)
 {
     switch (pin->getType())
     {
+    case ControllinoNeoPin::NATIVE_PIN:
+        analogWrite(pin->getPin(), value);
+        break;
     case ControllinoNeoPin::CY8C95XX_PIN: // cy8c95xx.h
         if (pin->getMode() == OUTPUT) {
             cy8c95xx_pwm_cfg_t pwmCfg;

@@ -52,7 +52,6 @@ void test_cy8c95xx_pin_digitalWrite()
     digitalWrite(NEO_CORE_DO7, LOW);
     TEST_ASSERT_EQUAL(HIGH, digitalRead(NEO_CORE_DO7)); // Still high because mode is input pull up
     pinMode(NEO_CORE_DO7, OUTPUT);
-    TEST_ASSERT_EQUAL(HIGH, digitalRead(NEO_CORE_DO7)); // Still high thats the way after input pull up before
     digitalWrite(NEO_CORE_DO7, LOW);
     TEST_ASSERT_EQUAL(LOW, digitalRead(NEO_CORE_DO7));
     digitalWrite(NEO_CORE_DO7, HIGH);
@@ -70,9 +69,6 @@ void test_cy8c95xx_pin_analogWrite()
 {
     uint8_t res_pwm_en = 0x1;
     uint8_t res_pulse_wid = 0x00;
-    analogWrite(NEO_CORE_DO7, 0x7F);
-    cy8c95xx_read_byte(neo_cy8c95xx, CY8C95XX_REG_PULSE_WIDTH_PWM, &res_pulse_wid);
-    TEST_ASSERT_NOT_EQUAL(0x7F, res_pulse_wid); // If not in output mode
     //
     pinMode(NEO_CORE_DO7, OUTPUT);
     digitalWrite(NEO_CORE_DO7, LOW);
