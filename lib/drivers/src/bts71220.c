@@ -57,9 +57,13 @@ bts71220_err_code_t bts71220_init(bts71220_t* dev, bts71220_cfg_t* cfg)
     dev->spi_bit_order = cfg->spi_bit_order;
     dev->spi = cfg->spi;
     dev->dchain_size = cfg->dchain_size;
-    // Check coms
-    uint8_t res;
-    return bts71220_read_std_diag(dev, &res, 0);
+    // Set initial configs
+    for (size_t i = 0; i < BTS71220_DAISY_CHAIN_SIZE; i++)
+    {
+        if (bts71220_set_sense_mux(dev, BTS71220_DCR_MUX_IS_SLEEP_Z, i) != PLATFORM_OK)
+            return PLATFORM_SPI_COM_ERR;
+    }
+    return PLATFORM_OK;
 }
  
 /* Generic SPI data transfer */

@@ -94,7 +94,14 @@ void test_bts71220_set_sense_mux_ok()
     bts71220_read_reg(&dev, BTS71220_REG_DCR, (uint8_t*)&dcr_reg, TEST_BTS71220_DAISY_CHAIN_NUMBER);
     TEST_ASSERT_EQUAL(BTS71220_DCR_MUX_IS_Z, dcr_reg.mux);
 }
- 
+
+void test_bts71220_mux_sleep_mode_after_init()
+{
+    bts71220_dcr_reg_t dcr_reg;
+    bts71220_read_reg(&dev, BTS71220_REG_DCR, (uint8_t*)&dcr_reg, TEST_BTS71220_DAISY_CHAIN_NUMBER);
+    TEST_ASSERT_EQUAL(BTS71220_DCR_MUX_IS_SLEEP_Z, dcr_reg.mux);
+}
+
 int runUnityTests(void)
 {
     UNITY_BEGIN();
@@ -106,5 +113,6 @@ int runUnityTests(void)
     RUN_TEST(test_bts71220_read_wrn_diag_ok);
     RUN_TEST(test_bts71220_read_err_diag_ok);
     RUN_TEST(test_bts71220_set_sense_mux_ok);
+    RUN_TEST(test_bts71220_mux_sleep_mode_after_init);
     return UNITY_END();
 }
