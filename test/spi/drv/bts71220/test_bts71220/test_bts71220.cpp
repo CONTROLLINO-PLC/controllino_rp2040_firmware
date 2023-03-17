@@ -1,7 +1,7 @@
 #include <unity.h>
 #include "hw_platform.h"
 #include "bts71220.h"
-
+ 
 uint8_t TEST_BTS71220_DAISY_CHAIN_NUMBER = 0; /* Indicate only first BTS71220 will be used in tests*/
 static bts71220_cfg_t cfg;
 static bts71220_t dev;

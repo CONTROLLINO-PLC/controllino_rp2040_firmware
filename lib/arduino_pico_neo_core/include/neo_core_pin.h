@@ -40,14 +40,14 @@ public:
 
 	bool operator== (ControllinoNeoPin const& other) const { return _pin == other._pin; };
 
-	pin_size_t getPin() { return _pin; };
-	_pin_type_t getType() { return _type; };
+	pin_size_t getPin(void) { return _pin; };
+	_pin_type_t getType(void) { return _type; };
 
 	void setMode(PinMode mode) { _mode = mode; };
-	PinMode getMode() { return _mode; };
+	PinMode getMode(void) { return _mode; };
 
 	void _setDigitalThreshold(uint32_t threshold) { _digitalThreshold = threshold; };
-	uint32_t _getDigitalThreshold() { return _digitalThreshold; };
+	uint32_t _getDigitalThreshold(void) { return _digitalThreshold; };
 private:
 	pin_size_t _pin;
 	_pin_type_t _type;

@@ -1,8 +1,8 @@
 #ifdef NATIVE_ENV
-
+ 
 #include "hw_platform.h"
 #include "bts71220.h"
-
+ 
 static uint8_t out_reg_content[BTS71220_DAISY_CHAIN_SIZE];
 static uint8_t dcr_reg_content[BTS71220_DAISY_CHAIN_SIZE];
 
@@ -40,5 +40,5 @@ platform_err_code_t mock_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t l
     }
     return PLATFORM_SPI_COM_ERR;
 }
-
+ 
 #endif
