@@ -8,7 +8,7 @@
 #define NEO_CORE_PIN_H
  
 /**
- * \file neo_pins.h
+ * \file neo_core_pin.h
  *
  * Arduino pins API for NEO core
  * Based on https://github.com/arduino/ArduinoCore-mbed/tree/master/variants/NANO_RP2040_CONNECT
@@ -66,14 +66,9 @@ int analogRead(ControllinoNeoPin* pin);
 void analogWrite(ControllinoNeoPin* pin, int value);
  
 /**
- *\brief Set the digital threshold to implement a digital input with an analog input only pin 
+ *\brief Digital threshold API to implement a digital input with an analog input only pin 
  */
 void setDigitalThreshold(ControllinoNeoPin* pin, uint32_t threshold);
- 
-/**
- *\brief Get current digital threshold
- * 
- */
 uint32_t getDigitalThreshold(ControllinoNeoPin* pin);
-
-#endif  // BTS71220_H
+ 
+#endif  // NEO_CORE_PIN_H
