@@ -54,30 +54,30 @@ void disableCurrentSenseDO(void)
 /* Measure current in previously selected digital output */
 int readCurrentSenseDO()
 {
-    int current = 0;
+    float current = 0;
     if (_DO < 9)
     {
         switch (_DO)
         {
         case 0:
         case 3:
-            current = analogRead(NEO_CURRENT_SENSE_DO0_DO3_AI_PIN) * BTS71220_CURRENT_SENSE_CONVERSION_CH0_OR_CH3;
+            current = ((float)analogRead(NEO_CURRENT_SENSE_DO0_DO3_AI_PIN)) * BTS71220_CURRENT_SENSE_CONVERSION_CH0_OR_CH3;
             break;
         case 1:
         case 2:
-            current = analogRead(NEO_CURRENT_SENSE_DO0_DO3_AI_PIN) * BTS71220_CURRENT_SENSE_CONVERSION_CH1_OR_CH2;
+            current = ((float)analogRead(NEO_CURRENT_SENSE_DO0_DO3_AI_PIN)) * BTS71220_CURRENT_SENSE_CONVERSION_CH1_OR_CH2;
             break;
         case 4:
         case 7:
-            current = analogRead(NEO_CURRENT_SENSE_DO4_DO7_AI_PIN) * BTS71220_CURRENT_SENSE_CONVERSION_CH0_OR_CH3;
+            current = ((float)analogRead(NEO_CURRENT_SENSE_DO4_DO7_AI_PIN)) * BTS71220_CURRENT_SENSE_CONVERSION_CH0_OR_CH3;
             break;
         case 5:
         case 6:
-            current = analogRead(NEO_CURRENT_SENSE_DO4_DO7_AI_PIN) * BTS71220_CURRENT_SENSE_CONVERSION_CH1_OR_CH2;
+            current = ((float)analogRead(NEO_CURRENT_SENSE_DO4_DO7_AI_PIN)) * BTS71220_CURRENT_SENSE_CONVERSION_CH1_OR_CH2;
             break;
         default:
             break;
         }
     }
-    return current;
+    return (int)current;
 }

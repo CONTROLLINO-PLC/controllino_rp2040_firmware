@@ -1,4 +1,7 @@
 #include <SPI.h>
+#include "neo_core_diag.h"
+
+bts71220_dcr_reg_t dcr_reg;
 
 void setup() {
   Serial1.begin(115200);
@@ -6,32 +9,34 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
   Serial1.println("Initializing..");
-  pinMode(NEO_CORE_AI0, INPUT);
-  setDigitalThreshold(NEO_CORE_AI0, 0x7FFFFF);
-
-  pinMode(NEO_CORE_DI0, INPUT);
-
   pinMode(NEO_CORE_DO0, OUTPUT);
+  pinMode(NEO_CORE_DO1, OUTPUT);
   pinMode(NEO_CORE_DO4, OUTPUT);
   pinMode(NEO_CORE_DO5, OUTPUT);
-  pinMode(NEO_CORE_DO6, OUTPUT);
-  pinMode(NEO_CORE_DO7, OUTPUT);
+  digitalWrite(NEO_CORE_DO0, HIGH);
+  digitalWrite(NEO_CORE_DO1, HIGH);
+  digitalWrite(NEO_CORE_DO4, HIGH);
+  digitalWrite(NEO_CORE_DO5, HIGH);
 }
 
 void loop(void) {
   delay(500);
-  uint8_t pwm = map(analogRead(NEO_CORE_AI0), 0, 0x7FFFFF, 0, 0xFF);
-  Serial1.print("analogWrite: ");
-  Serial1.print(pwm);
-  Serial1.print("\t hysteresis: ");
-  Serial1.print(gpio_is_input_hysteresis_enabled(NEO_CORE_DI0->getPin()) ? "TRUE" : "FALSE");
-  Serial1.print(" state: ");
-  Serial1.println(digitalRead(NEO_CORE_DI0) ? "TRUE" : "FALSE");
-  analogWrite(NEO_CORE_DO0, pwm);
-  // analogWrite(NEO_CORE_DO4, pwm);
-  // analogWrite(NEO_CORE_DO5, pwm);
-  // analogWrite(NEO_CORE_DO6, pwm);
-  // analogWrite(NEO_CORE_DO7, pwm);
-
-  digitalWrite(NEO_CORE_DO5, digitalRead(NEO_CORE_DI0) ? HIGH : LOW);
+  Serial1.print("Power: ");
+  Serial1.print(analogRead(29U));
+  enableCurrentSenseDO(0);
+  Serial1.print("\tDO0 I: ");
+  Serial1.print(readCurrentSenseDO());
+  Serial1.print(" mA");
+  enableCurrentSenseDO(1);
+  Serial1.print("\tDO1 I: ");
+  Serial1.print(readCurrentSenseDO());
+  Serial1.print(" mA");
+  enableCurrentSenseDO(4);
+  Serial1.print("\tDO4 I: ");
+  Serial1.print(readCurrentSenseDO());
+  Serial1.print(" mA");
+  enableCurrentSenseDO(5);
+  Serial1.print("\tDO5 I: ");
+  Serial1.print(readCurrentSenseDO());
+  Serial1.println(" mA");
 }

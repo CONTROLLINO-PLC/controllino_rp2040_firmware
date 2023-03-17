@@ -47,11 +47,6 @@ static const uint8_t D9 =   (9u);
 static const uint8_t D10 =  (10u);
 static const uint8_t D11 =  (11u);
 
-static const uint8_t A0 =   (26u);
-static const uint8_t A1 =   (27u);
-static const uint8_t A2 =   (28u);
-static const uint8_t A3 =   (29u);
-
 static const uint8_t SS = PIN_SPI0_SS;
 static const uint8_t MOSI = PIN_SPI0_MOSI;
 static const uint8_t MISO = PIN_SPI0_MISO;

@@ -19,8 +19,8 @@
  *\brief Digital output current sense
  * 
  */
-#define BTS71220_CURRENT_SENSE_CONVERSION_CH0_OR_CH3    (1340 / 104) /* 1340 mA for 104 on the RP2040 AI */
-#define BTS71220_CURRENT_SENSE_CONVERSION_CH1_OR_CH2    (1340 / 252)
+#define BTS71220_CURRENT_SENSE_CONVERSION_CH0_OR_CH3    (float)(1330.0F / 104.0F) /* 1340 mA for 104 on the RP2040 AI */
+#define BTS71220_CURRENT_SENSE_CONVERSION_CH1_OR_CH2    (float)(1340.0F / 252.0F)
 #define NEO_CURRENT_SENSE_DO0_DO3_AI_PIN                (26U)
 #define NEO_CURRENT_SENSE_DO4_DO7_AI_PIN                (27U)
 
