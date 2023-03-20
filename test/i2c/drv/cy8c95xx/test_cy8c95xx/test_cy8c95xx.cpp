@@ -3,15 +3,15 @@
 #include "cy8c95xx.h"
  
 uint8_t TEST_CY8C95XX_GPIO = 0;
-uint8_t TEST_CY8C95XX_PORT = 0;
 uint8_t TEST_CY8C95XX_ADDR = CY8C95XX_DEV_ADDR_GND;
+#define TEST_CY8C95XX_PORT 0
 #define TEST_CY8C95XX_BIT 0
-static cy8c95xx_cfg_t cfg;
 static cy8c95xx_t dev;
 static cy8c95xx_err_code_t ret;
  
 void setUp(void)
 {
+    cy8c95xx_cfg_t cfg;
     cy8c95xx_set_default_cfg(&cfg);
     ret = cy8c95xx_init(&dev, &cfg);
 }
@@ -39,10 +39,10 @@ void test_cy8c95xx_init_ok()
  
 void test_cy8c95xx_read_byte_ok()
 {
-    uint8_t byte;
-    ret = cy8c95xx_read_byte(&dev, CY8C95XX_REG_OUT_PORT0, &byte);
+    uint8_t byte = 0xFF;
+    ret = cy8c95xx_read_byte(&dev, CY8C95XX_REG_IN_PORT0, &byte);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
-    TEST_ASSERT_EQUAL(0xFF, byte);
+    TEST_ASSERT_EQUAL(0x3F, byte);
 }
  
 void test_cy8c95xx_write_byte_ok()
@@ -158,7 +158,7 @@ void test_cy8c95xx_pin_mode_ok()
  
 void test_cy8c95xx_read_pin_in_ok()
 {
-    uint8_t state = 0;
+    uint8_t state = 1;
     ret = cy8c95xx_read_pin(&dev, TEST_CY8C95XX_GPIO, &state);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
     TEST_ASSERT_EQUAL(1, state);
@@ -307,6 +307,8 @@ void test_cy8c95xx_send_cmd_ok()
 {
     uint8_t state = 0;
     ret = cy8c95xx_send_cmd(&dev, CY8C95XX_RESTORE_DEFAULTS);
+    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    ret = cy8c95xx_send_cmd(&dev, CY8C95XX_RECFG_DEV_TO_POR);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
     cy8c95xx_read_pin(&dev, TEST_CY8C95XX_GPIO, &state);
     TEST_ASSERT_EQUAL(1, state);

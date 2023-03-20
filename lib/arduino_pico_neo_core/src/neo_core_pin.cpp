@@ -50,18 +50,15 @@ void pinMode(ControllinoNeoPin* pin, PinMode mode)
         cy8c95xx_drv_mode_t drv;
         switch (mode)
         {
-        case INPUT_PULLDOWN:
-            dir = CY8C95XX_GPIO_IN;
-            drv = CY8C95XX_DRV_PULL_DOWN;
-            break;
         case OUTPUT:
-        case OUTPUT_4MA:
         case OUTPUT_2MA:
+        case OUTPUT_4MA:
         case OUTPUT_8MA:
         case OUTPUT_12MA:
             mode = OUTPUT;
-            dir = CY8C95XX_GPIO_OUT;
-            drv = CY8C95XX_DRV_STRONG;
+        case INPUT_PULLDOWN:
+            dir = CY8C95XX_GPIO_IN;
+            drv = CY8C95XX_DRV_PULL_DOWN;
             break;
         default:
             mode = INPUT_PULLUP;
@@ -128,6 +125,19 @@ void digitalWrite(ControllinoNeoPin* pin, PinStatus value)
         break;
     case ControllinoNeoPin::CY8C95XX_PIN: // cy8c95xx.h
         if (pin->getMode() == OUTPUT) {
+            cy8c95xx_dir_mode_t dir;
+            cy8c95xx_drv_mode_t drv;
+            if (value == HIGH)
+            {
+                dir = CY8C95XX_GPIO_OUT;
+                drv = CY8C95XX_DRV_STRONG;
+            }
+            else
+            {
+                dir = CY8C95XX_GPIO_IN;
+                drv = CY8C95XX_DRV_PULL_DOWN;
+            }
+            cy8c95xx_pin_mode(neo_cy8c95xx, (int)pin->getPin(), dir, drv);
             cy8c95xx_write_pin(neo_cy8c95xx, (int)pin->getPin(), (uint8_t)value);
             cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Disable PWM
         }

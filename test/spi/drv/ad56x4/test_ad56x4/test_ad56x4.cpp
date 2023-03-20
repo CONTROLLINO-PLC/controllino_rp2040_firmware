@@ -5,12 +5,12 @@
  
 #define AD56X4_TEST_VOL_REF_MAX 10000 /* 10000 mV or 10 V*/
 uint16_t TEST_AD56X4_DAC_DATA = 0x7FFF;
-static ad56x4_cfg_t cfg;
 static ad56x4_t dev;
 static ad56x4_err_code_t ret;
  
 void setUp(void)
 {
+    ad56x4_cfg_t cfg;
     ad56x4_set_default_cfg(&cfg);
     ret = ad56x4_init(&dev, &cfg);
 }

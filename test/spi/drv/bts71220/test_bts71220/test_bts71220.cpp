@@ -2,12 +2,12 @@
 #include "hw_platform.h"
 #include "bts71220.h"
  
-static bts71220_cfg_t cfg;
 static bts71220_t dev;
 static bts71220_err_code_t ret;
  
 void setUp(void)
 {
+    bts71220_cfg_t cfg;
     bts71220_set_default_cfg(&cfg);
     ret = bts71220_init(&dev, &cfg);
 }

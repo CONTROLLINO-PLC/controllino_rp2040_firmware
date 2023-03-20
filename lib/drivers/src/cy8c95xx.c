@@ -11,7 +11,8 @@
 /* Utility structures for addres management */
 static uint8_t port_slave_addr;
 static uint8_t eeprom_slave_addr;
- 
+static platform_err_code_t ret;
+
 /* Initializes default configuration */
 void cy8c95xx_set_default_cfg(cy8c95xx_cfg_t* cfg)
 {
@@ -102,7 +103,6 @@ cy8c95xx_err_code_t cy8c95xx_send_cmd(cy8c95xx_t* dev, cy8c95xx_cmd_t cmd)
 cy8c95xx_err_code_t cy8c95xx_read_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t bit_num, uint8_t* state)
 {
     uint8_t reg_byte;
-    uint8_t ret;
     ret = cy8c95xx_read_byte(dev, reg, &reg_byte);
     if (ret != PLATFORM_OK)
         return ret;
@@ -114,7 +114,6 @@ cy8c95xx_err_code_t cy8c95xx_read_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8
 cy8c95xx_err_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t bit_num, uint8_t val)
 {
     uint8_t reg_byte;
-    uint8_t ret;
     ret = cy8c95xx_read_byte(dev, reg, &reg_byte);
     if (ret != PLATFORM_OK)
         return ret;
@@ -147,7 +146,6 @@ cy8c95xx_err_code_t cy8c95xx_read_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t*
 cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, int pin, cy8c95xx_dir_mode_t dir, cy8c95xx_drv_mode_t drv)
 {
     if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
-    uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
     if (ret != PLATFORM_OK)
         return ret;
@@ -161,7 +159,6 @@ cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, int pin, cy8c95xx_dir_mod
 cy8c95xx_err_code_t cy8c95xx_pin_en_inv_in(cy8c95xx_t* dev, int pin)
 {
     if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
-    uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
     if (ret != PLATFORM_OK)
         return ret;
@@ -172,7 +169,6 @@ cy8c95xx_err_code_t cy8c95xx_pin_en_inv_in(cy8c95xx_t* dev, int pin)
 cy8c95xx_err_code_t cy8c95xx_pin_dis_inv_in(cy8c95xx_t* dev, int pin)
 {
     if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
-    uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
     if (ret != PLATFORM_OK)
         return ret;
@@ -222,7 +218,6 @@ cy8c95xx_err_code_t cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t p
 cy8c95xx_err_code_t cy8c95xx_en_pin_pwm(cy8c95xx_t* dev, int pin)
 {
     if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
-    uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
     if (ret != PLATFORM_OK)
         return ret;
@@ -233,7 +228,6 @@ cy8c95xx_err_code_t cy8c95xx_en_pin_pwm(cy8c95xx_t* dev, int pin)
 cy8c95xx_err_code_t cy8c95xx_dis_pin_pwm(cy8c95xx_t* dev, int pin)
 {
     if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
-    uint8_t ret;
     ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
     if (ret != PLATFORM_OK)
         return ret;
@@ -244,7 +238,6 @@ cy8c95xx_err_code_t cy8c95xx_dis_pin_pwm(cy8c95xx_t* dev, int pin)
 cy8c95xx_err_code_t cy8c95xx_set_pwm_cfg(cy8c95xx_t* dev, cy8c95xx_pwm_cfg_t* pwm_cfg, float* duty_cyc, float* freq)
 {
     uint8_t tx_buf[5];
-    uint8_t ret;
     tx_buf[0] = pwm_cfg->pwm_sel;
     tx_buf[1] = pwm_cfg->clk_src;
     tx_buf[2] = pwm_cfg->period;

@@ -14,7 +14,7 @@ bts71220_t* neo_bts71220;
 #define NEO_AI_CS      CY8C95XX_GPIO_14
 void mcp356x_cs_select(mcp356x_t* dac) { cy8c95xx_write_pin(neo_cy8c95xx, NEO_AI_CS, 0); }
 void mcp356x_cs_deselect(mcp356x_t* dac) { cy8c95xx_write_pin(neo_cy8c95xx, NEO_AI_CS, 1); }
-
+ 
 #define NEO_AO_CS      CY8C95XX_GPIO_15
 void ad56x4_cs_select(ad56x4_t* dac) {
     cy8c95xx_write_pin(neo_cy8c95xx, NEO_AO_CS, 0);
@@ -22,7 +22,7 @@ void ad56x4_cs_select(ad56x4_t* dac) {
 void ad56x4_cs_deselect(ad56x4_t* dac) {
     cy8c95xx_write_pin(neo_cy8c95xx, NEO_AO_CS, 1);
 }
-
+ 
 #define NEO_DO_CS      CY8C95XX_GPIO_12
 void bts71220_cs_select(bts71220_t* dev) { cy8c95xx_write_pin(neo_cy8c95xx, NEO_DO_CS, 0); }
 void bts71220_cs_deselect(bts71220_t* dac) { cy8c95xx_write_pin(neo_cy8c95xx, NEO_DO_CS, 1); }
@@ -41,12 +41,14 @@ void initVariant()
     cy8c95xx_init(neo_cy8c95xx, &cy8c95xx_cfg);
 
     // Digital output pins to low level at the beginning
-    // cy8c95xx_send_cmd(neo_cy8c95xx, CY8C95XX_RESTORE_DEFAULTS);
-    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_6, CY8C95XX_GPIO_IN, CY8C95XX_DRV_HIGH_Z);
-    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_7, CY8C95XX_GPIO_IN, CY8C95XX_DRV_HIGH_Z);
-    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_8, CY8C95XX_GPIO_IN, CY8C95XX_DRV_HIGH_Z);
-    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_9, CY8C95XX_GPIO_IN, CY8C95XX_DRV_HIGH_Z);
-    // cy8c95xx_send_cmd(neo_cy8c95xx, CY8C95XX_STORE_POR_CFG_TO_EEPROM);
+    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_6, 0);
+    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_7, 0);
+    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_8, 0);
+    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_9, 0);
+    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_6, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_7, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_8, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_9, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
 
     // ADC analog inputs
     mcp356x_cfg_t mcp356x_cfg;

@@ -2,7 +2,6 @@
 #include "hw_platform.h"
 #include "mcp356x.h"
  
-static mcp356x_cfg_t cfg;
 static mcp356x_t dev;
 static mcp356x_err_code_t ret;
  
@@ -11,6 +10,7 @@ static mcp356x_err_code_t ret;
  
 void setUp(void)
 {
+    mcp356x_cfg_t cfg;
     mcp356x_set_default_cfg(&cfg);
     ret = mcp356x_init(&dev, &cfg);
 }

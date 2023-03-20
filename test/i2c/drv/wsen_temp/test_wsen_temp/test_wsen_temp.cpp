@@ -2,7 +2,6 @@
 #include "hw_platform.h"
 #include "wsen_temp.h"
  
-static wsen_temp_cfg_t cfg;
 static wsen_temp_t dev;
 static wsen_temp_err_code_t ret;
  
@@ -12,6 +11,7 @@ static wsen_temp_err_code_t ret;
  
 void setUp(void)
 {
+    wsen_temp_cfg_t cfg;
     wsen_temp_set_default_cfg(&cfg);
     ret = wsen_temp_init(&dev, &cfg);
 }
