@@ -99,5 +99,8 @@ extern ControllinoNeoPin* NEO_CORE_DO0;
  
 /* Arduino pins API for NEO */
 #include "neo_core_pin.h"
+ 
+/* NEO core internal diagnosys API */
+#include "neo_core_diag.h"
 
 

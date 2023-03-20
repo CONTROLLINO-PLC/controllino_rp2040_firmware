@@ -1,5 +1,4 @@
 #include <SPI.h>
-#include "neo_core_diag.h"
 
 bts71220_dcr_reg_t dcr_reg;
 
@@ -22,7 +21,8 @@ void setup() {
 void loop(void) {
   delay(500);
   Serial1.print("Power: ");
-  Serial1.print(analogRead(29U));
+  Serial1.print(readVoltageSuply());
+  Serial1.print(" mV");
   enableCurrentSenseDO(0);
   Serial1.print("\tDO0 I: ");
   Serial1.print(readCurrentSenseDO());

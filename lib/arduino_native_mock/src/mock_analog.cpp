@@ -2,4 +2,4 @@
  
 void analogWrite(pin_size_t pin, int val) {}
  
-int analogRead(pin_size_t pin) { return 0; }
+int analogRead(pin_size_t pin) { return 1; }

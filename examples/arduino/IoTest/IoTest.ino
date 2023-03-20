@@ -8,17 +8,33 @@ void setup() {
   Serial1.println("Initializing..");
   pinMode(NEO_CORE_DI0, INPUT);
   pinMode(NEO_CORE_AI0, INPUT);
-  pinMode(NEO_CORE_DO0, OUTPUT);
-  pinMode(NEO_CORE_DO4, OUTPUT);
-  pinMode(NEO_CORE_AO0, OUTPUT);
-  analogWrite(NEO_CORE_AO0, 0);
-  digitalWrite(NEO_CORE_DO0, HIGH);
-  digitalWrite(NEO_CORE_DO4, HIGH);
+  setDigitalThreshold(NEO_CORE_AI0, 0x3FFFFF);
 
+  pinMode(NEO_CORE_DO0, OUTPUT);
+  pinMode(NEO_CORE_DO1, OUTPUT);
+  pinMode(NEO_CORE_DO4, OUTPUT);
+  pinMode(NEO_CORE_DO5, OUTPUT);
+  
+  pinMode(NEO_CORE_AO0, OUTPUT);
+  analogWrite(NEO_CORE_AO0, 0x7FFF); /* 5V */
 }
 
 void loop(void) {
-  Serial1.print("NEO_CORE_AI0 state:");
-  Serial1.println(analogRead(NEO_CORE_AI0));
-  delay(1000);
+  Serial1.print("NEO_CORE_DI0 state:");
+  Serial1.print(digitalRead(NEO_CORE_DI0) ? "HIGH" : "LOW");
+  Serial1.print("      NEO_CORE_AI0 ADC:");
+  Serial1.print(analogRead(NEO_CORE_AI0));
+  Serial1.print(" DIGITAL:");
+  Serial1.print(digitalRead(NEO_CORE_AI0) ? "HIGH" : "LOW");
+
+  digitalWrite(NEO_CORE_DO0, digitalRead(NEO_CORE_DI0));
+  digitalWrite(NEO_CORE_DO4, digitalRead(NEO_CORE_AI0));
+  
+  uint8_t pwm = map(analogRead(NEO_CORE_AI0), 0, 0x7FFFFF, 0, 0xFF);
+  Serial1.print("      PWM:");
+  Serial1.println(pwm);
+  analogWrite(NEO_CORE_DO1, pwm);
+  analogWrite(NEO_CORE_DO5, pwm);
+
+  delay(500);
 }
