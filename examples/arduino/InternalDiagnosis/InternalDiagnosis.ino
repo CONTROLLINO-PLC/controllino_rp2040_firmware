@@ -38,5 +38,11 @@ void loop(void) {
   enableCurrentSenseDO(5);
   Serial1.print("\tDO5 I: ");
   Serial1.print(readCurrentSenseDO());
-  Serial1.println(" mA");
+  Serial1.print(" mA");
+  Serial1.print("\tTemperature Board: ");
+  Serial1.print(readBoardTemperature(), 2);
+  Serial1.print(" °C");
+  Serial1.print(" RP2040: ");
+  Serial1.print(analogReadTemp(3.3F), 2);
+  Serial1.println(" °C");
 }

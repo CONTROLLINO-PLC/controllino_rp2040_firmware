@@ -6,7 +6,9 @@ uint16_t TEST_AD56X4_DAC_DATA = 0x0000;
  
 void setUp(void)
 {
+#ifdef NATIVE_ENV
     initVariant();
+#endif
     pinMode(NEO_CORE_AO0, OUTPUT);
 }
  

@@ -5,7 +5,9 @@ uint8_t TEST_BTS71220_CURRENT_SENSE_REF_ADC = 181;
  
 void setUp(void)
 {
+#ifdef NATIVE_ENV
     initVariant();
+#endif
 }
  
 void tearDown(void)

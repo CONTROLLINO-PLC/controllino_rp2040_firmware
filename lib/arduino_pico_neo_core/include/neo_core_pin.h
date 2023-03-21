@@ -20,11 +20,13 @@
 #include "mcp356x.h"
 #include "ad56x4.h"
 #include "bts71220.h"
- 
+#include "wsen_temp.h"
+
 extern cy8c95xx_t* neo_cy8c95xx;
 extern mcp356x_t* neo_mcp356x;
 extern ad56x4_t* neo_ad56x4;
 extern bts71220_t* neo_bts71220;
+extern wsen_temp_t* neo_wsen_temp;
  
 /**
  * \brief Controllino Neo pin class

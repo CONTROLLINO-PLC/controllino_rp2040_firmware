@@ -6,7 +6,9 @@ uint8_t TEST_CY8C95XX_ADDR = CY8C95XX_DEV_ADDR_GND;
  
 void setUp(void)
 {
+#ifdef NATIVE_ENV
     initVariant();
+#endif
     pinMode(NEO_CORE_DI0, INPUT);
 }
  

@@ -6,7 +6,9 @@ uint32_t TEST_MCP356X_ADC_DATA = 0x3FFFFF;
  
 void setUp(void)
 {
+#ifdef NATIVE_ENV
     initVariant();
+#endif
     pinMode(NEO_CORE_AI0, INPUT);
 }
  

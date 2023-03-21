@@ -10,6 +10,7 @@ cy8c95xx_t* neo_cy8c95xx;
 mcp356x_t* neo_mcp356x;
 ad56x4_t* neo_ad56x4;
 bts71220_t* neo_bts71220;
+wsen_temp_t* neo_wsen_temp;
  
 #define NEO_AI_CS      CY8C95XX_GPIO_14
 void mcp356x_cs_select(mcp356x_t* dac) { cy8c95xx_write_pin(neo_cy8c95xx, NEO_AI_CS, 0); }
@@ -33,13 +34,19 @@ void initVariant()
     neo_mcp356x = (mcp356x_t*)malloc(sizeof(mcp356x_t));
     neo_ad56x4 = (ad56x4_t*)malloc(sizeof(ad56x4_t));
     neo_bts71220 = (bts71220_t*)malloc(sizeof(bts71220_t));
+    neo_wsen_temp = (wsen_temp_t*)malloc(sizeof(wsen_temp_t));
 
+    // WSEN temperature sensor
+    wsen_temp_cfg_t wsen_temp_cfg;
+    wsen_temp_set_default_cfg(&wsen_temp_cfg);
+    wsen_temp_init(neo_wsen_temp, &wsen_temp_cfg);
+    
     // Port expander 
     cy8c95xx_cfg_t cy8c95xx_cfg;
     cy8c95xx_set_default_cfg(&cy8c95xx_cfg);
     cy8c95xx_cfg.int_pin = 15; // RP2040 GPIO 15
     cy8c95xx_init(neo_cy8c95xx, &cy8c95xx_cfg);
-
+    
     // Digital output pins to low level at the beginning
     cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_6, 0);
     cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_7, 0);
@@ -49,17 +56,17 @@ void initVariant()
     cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_7, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
     cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_8, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
     cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_9, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
-
+    
     // ADC analog inputs
     mcp356x_cfg_t mcp356x_cfg;
     mcp356x_set_default_cfg(&mcp356x_cfg);
     mcp356x_init(neo_mcp356x, &mcp356x_cfg);
-
+    
     // DAC analog output
     ad56x4_cfg_t ad56x4_cfg;
     ad56x4_set_default_cfg(&ad56x4_cfg);
     ad56x4_init(neo_ad56x4, &ad56x4_cfg);
-
+    
     // Digital outputs controller
     bts71220_cfg_t bts71220_cfg;
     bts71220_set_default_cfg(&bts71220_cfg);
