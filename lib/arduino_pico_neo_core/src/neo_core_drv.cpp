@@ -44,7 +44,6 @@ void initVariant()
     // Port expander 
     cy8c95xx_cfg_t cy8c95xx_cfg;
     cy8c95xx_set_default_cfg(&cy8c95xx_cfg);
-    cy8c95xx_cfg.int_pin = 15; // RP2040 GPIO 15
     cy8c95xx_init(neo_cy8c95xx, &cy8c95xx_cfg);
     
     // Digital output pins to low level at the beginning

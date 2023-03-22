@@ -15,7 +15,7 @@ ControllinoNeoPin* NEO_CORE_AI3 = new ControllinoNeoPin(MCP356X_CH_CH3, Controll
 ControllinoNeoPin* NEO_CORE_AI4 = new ControllinoNeoPin(MCP356X_CH_CH4, ControllinoNeoPin::MCP356X_PIN);
 ControllinoNeoPin* NEO_CORE_AI5 = new ControllinoNeoPin(MCP356X_CH_CH5, ControllinoNeoPin::MCP356X_PIN);
 ControllinoNeoPin* NEO_CORE_AI6 = new ControllinoNeoPin(MCP356X_CH_CH6, ControllinoNeoPin::MCP356X_PIN);
-ControllinoNeoPin* NEO_CORE_AI9 = new ControllinoNeoPin(MCP356X_CH_CH7, ControllinoNeoPin::MCP356X_PIN);
+ControllinoNeoPin* NEO_CORE_AI7 = new ControllinoNeoPin(MCP356X_CH_CH7, ControllinoNeoPin::MCP356X_PIN);
 
 ControllinoNeoPin* NEO_CORE_AO0 = new ControllinoNeoPin(AD56X4_CH_ADDR_A, ControllinoNeoPin::AD56X4_PIN);
 ControllinoNeoPin* NEO_CORE_AO1 = new ControllinoNeoPin(AD56X4_CH_ADDR_B, ControllinoNeoPin::AD56X4_PIN);

@@ -75,7 +75,7 @@ extern ControllinoNeoPin* NEO_CORE_AI3;
 extern ControllinoNeoPin* NEO_CORE_AI4;
 extern ControllinoNeoPin* NEO_CORE_AI5;
 extern ControllinoNeoPin* NEO_CORE_AI6;
-extern ControllinoNeoPin* NEO_CORE_AI9;
+extern ControllinoNeoPin* NEO_CORE_AI7;
 
 extern ControllinoNeoPin* NEO_CORE_AO0;
 extern ControllinoNeoPin* NEO_CORE_AO1;

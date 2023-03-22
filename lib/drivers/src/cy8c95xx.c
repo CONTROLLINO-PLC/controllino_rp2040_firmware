@@ -117,7 +117,7 @@ cy8c95xx_err_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint
     ret = cy8c95xx_read_byte(dev, reg, &reg_byte);
     if (ret != PLATFORM_OK)
         return ret;
-    reg_byte = (val & 0x1)  ? (reg_byte | (1 << bit_num)) : (reg_byte & ~(1 << bit_num));
+    reg_byte = (val & 0x1) ? (reg_byte | (uint8_t)(1 << bit_num)) : (reg_byte & (uint8_t)~(1 << bit_num));
     return cy8c95xx_write_byte(dev, reg, reg_byte);
 }
  
