@@ -33,19 +33,17 @@ typedef enum {
     OUTPUT_12MA = 0x7,
 } PinMode;
  
-/* Digital API */
+/* Pin API */
 extern "C" void pinMode(pin_size_t ulPin, PinMode ulMode);
 extern "C" void digitalWrite(pin_size_t ulPin, PinStatus ulVal);
 extern "C" PinStatus digitalRead(pin_size_t ulPin);
- 
-/* Analog API */
 extern "C" void analogWrite(pin_size_t pin, int val);
 extern "C" int analogRead(pin_size_t pin);
- 
-/* GPIO API */
+
+/* RP2040 GPIO API */
 extern "C" void gpio_set_input_hysteresis_enabled(uint gpio, bool enabled);
 extern "C" bool gpio_is_input_hysteresis_enabled(uint gpio);
- 
+
 /* Arduino-pico API */
 void initVariant();
  

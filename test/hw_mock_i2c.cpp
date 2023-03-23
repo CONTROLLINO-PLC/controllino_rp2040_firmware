@@ -15,9 +15,18 @@ const int PLATFORM_I2C_SDA = 0;
 const int PLATFORM_I2C_SCL = 0;
  
 /* Test doubles to simulate and check i2c transfers */
-extern platform_err_code_t mock_i2c_read(uint8_t addr, uint8_t* rxdata, size_t len);
-extern platform_err_code_t mock_i2c_write(uint8_t addr, uint8_t* txdata, size_t len);
- 
+extern platform_err_code_t mock_i2c_read(uint8_t addr, uint8_t* rxdata, size_t len) __attribute__((weak));
+platform_err_code_t mock_i2c_read(uint8_t addr, uint8_t* rxdata, size_t len)
+{
+    return PLATFORM_OK;
+}
+
+extern platform_err_code_t mock_i2c_write(uint8_t addr, uint8_t* txdata, size_t len) __attribute__((weak));
+platform_err_code_t mock_i2c_write(uint8_t addr, uint8_t* txdata, size_t len)
+{
+    return PLATFORM_OK;
+}
+
 /* Init I2C interface */
 platform_err_code_t platform_i2c_init(hw_i2c_t i2c_hw, unsigned int speed, int sda_pin, int scl_pin)
 {

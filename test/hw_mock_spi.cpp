@@ -16,8 +16,17 @@ const int PLATFORM_SPI_MISO = 0;
 const int PLATFORM_SPI_SCK = 0;
  
 /* Test double to simulate and check spi transfer */
-extern platform_err_code_t mock_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t len);
- 
+extern platform_err_code_t mock_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t len) __attribute__((weak));
+platform_err_code_t mock_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t len)
+{
+    if (len == 1)
+    {
+        if (*txdata == 0x00)
+            return PLATFORM_OK;
+    }
+    return PLATFORM_SPI_COM_ERR;
+}
+
 /* Init SPI interface */
 platform_err_code_t platform_spi_init(hw_spi_t spi_hw, unsigned int speed, int mosi_pin, int miso_pin, int sck_pin)
 {
