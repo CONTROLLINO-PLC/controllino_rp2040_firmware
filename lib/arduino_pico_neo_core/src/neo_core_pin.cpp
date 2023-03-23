@@ -36,13 +36,19 @@ ControllinoNeoPin* NEO_CORE_DO4 = new ControllinoNeoPin(CY8C95XX_GPIO_9, Control
 ControllinoNeoPin* NEO_CORE_DO5 = new ControllinoNeoPin(CY8C95XX_GPIO_8, ControllinoNeoPin::CY8C95XX_PIN);
 ControllinoNeoPin* NEO_CORE_DO6 = new ControllinoNeoPin(CY8C95XX_GPIO_7, ControllinoNeoPin::CY8C95XX_PIN);
 ControllinoNeoPin* NEO_CORE_DO7 = new ControllinoNeoPin(CY8C95XX_GPIO_6, ControllinoNeoPin::CY8C95XX_PIN);
- 
+
+/* Modify native pinMode to include gpio_set_input_hysteresis_enabled */
+extern "C" void __pinMode(pin_size_t pin, PinMode mode);
+extern "C" void pinMode(pin_size_t pin, PinMode mode) {
+    gpio_set_input_hysteresis_enabled(pin, false);
+    __pinMode(pin, mode);
+}
+
 void pinMode(ControllinoNeoPin* pin, PinMode mode)
 {
     switch (pin->getType())
     {
     case ControllinoNeoPin::NATIVE_PIN:
-        gpio_set_input_hysteresis_enabled(pin->getPin(), false);
         pinMode(pin->getPin(), mode);
         break;
     case ControllinoNeoPin::CY8C95XX_PIN: // cy8c95xx.h
