@@ -58,6 +58,7 @@ bts71220_err_code_t bts71220_init(bts71220_t* dev, bts71220_cfg_t* cfg)
     dev->spi = cfg->spi;
     dev->dchain_size = cfg->dchain_size;
     // Set initial configs
+    bts71220_cs_deselect(dev);
     for (size_t i = 0; i < BTS71220_DAISY_CHAIN_SIZE; i++)
     {
         if (bts71220_set_sense_mux(dev, BTS71220_DCR_MUX_IS_SLEEP_Z, i) != PLATFORM_OK)
@@ -78,14 +79,12 @@ bts71220_err_code_t bts71220_generic_transfer(bts71220_t* dev, uint8_t txdata, u
     platform_spi_set_config(dev->spi, dev->spi_speed, dev->spi_mode, dev->spi_bit_order);
     // First transfer only optains previos response
     bts71220_cs_select(dev);
-    platform_sleep_us(600);
     ret = platform_spi_write_read(dev->spi, tx_buf, rx_buf, sizeof(rx_buf));
     bts71220_cs_deselect(dev);
     if (ret != PLATFORM_OK)
         return PLATFORM_SPI_COM_ERR;
     // Second transfer obtains first transfer response
     bts71220_cs_select(dev);
-    platform_sleep_us(600);
     ret = platform_spi_write_read(dev->spi, tx_buf, rx_buf, sizeof(rx_buf));
     bts71220_cs_deselect(dev);
     if (ret != PLATFORM_OK)

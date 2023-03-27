@@ -23,8 +23,6 @@
 #include <SPI.h>
 #include <SD.h>
 
-ControllinoNeoPin* NEO_CS_SD = new ControllinoNeoPin(CY8C95XX_GPIO_13, ControllinoNeoPin::CY8C95XX_PIN);
-
 // set up variables using the SD utility library functions:
 Sd2Card card;
 SdVolume volume;
@@ -35,7 +33,7 @@ SdFile root;
 // Adafruit SD shields and modules: pin 10
 // Sparkfun SD shield: pin 8
 // MKRZero SD: SDCARD_SS_PIN
-const int chipSelect = 4;
+const int chipSelect = SDCARD_SS_PIN;
 
 void setup() {
   // Open serial communications and wait for port to open:
@@ -44,8 +42,6 @@ void setup() {
   while (!Serial1) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
-  pinMode(NEO_CS_SD, OUTPUT);
-  digitalWrite(NEO_CS_SD, HIGH);
 
   Serial1.print("\nInitializing SD card...");
 

@@ -33,7 +33,7 @@ extern wsen_temp_t* neo_wsen_temp;
  */
 class ControllinoNeoPin{
 public:
-	typedef enum { CY8C95XX_PIN, MCP356X_PIN, AD56X4_PIN, NATIVE_PIN } _pin_type_t;
+	typedef enum { CY8C95XX_PIN, MCP356X_PIN, AD56X4_PIN, RP2040_PIN } _pin_type_t;
 	ControllinoNeoPin(int pin, _pin_type_t type): _pin(pin), _type(type)
 	{
 		setMode(INPUT);

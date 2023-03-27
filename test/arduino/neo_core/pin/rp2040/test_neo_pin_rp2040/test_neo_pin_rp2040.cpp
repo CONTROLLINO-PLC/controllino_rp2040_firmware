@@ -18,7 +18,7 @@ void tearDown(void)
 void test_native_pin_definitions_ok()
 {
     TEST_ASSERT_EQUAL(6U, NEO_CORE_DI0->getPin());
-    TEST_ASSERT_EQUAL(ControllinoNeoPin::NATIVE_PIN, NEO_CORE_DI0->getType());
+    TEST_ASSERT_EQUAL(ControllinoNeoPin::RP2040_PIN, NEO_CORE_DI0->getType());
 }
  
 void test_native_pin_input_hysteresis_disable_after_pinMode()

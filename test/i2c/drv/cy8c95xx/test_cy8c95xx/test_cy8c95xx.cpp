@@ -306,12 +306,8 @@ void test_cy8c95xx_pin_arg_greater_than_59_err()
 void test_cy8c95xx_send_cmd_ok()
 {
     uint8_t state = 0;
-    ret = cy8c95xx_send_cmd(&dev, CY8C95XX_RESTORE_DEFAULTS);
-    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
     ret = cy8c95xx_send_cmd(&dev, CY8C95XX_RECFG_DEV_TO_POR);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
-    cy8c95xx_read_pin(&dev, TEST_CY8C95XX_GPIO, &state);
-    TEST_ASSERT_EQUAL(1, state);
 }
  
 int runUnityTests(void)

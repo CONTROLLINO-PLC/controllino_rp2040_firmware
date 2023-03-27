@@ -32,7 +32,10 @@ typedef enum {
     OUTPUT_8MA = 0x6,
     OUTPUT_12MA = 0x7,
 } PinMode;
- 
+
+/* Delay API */
+extern "C" void delayMicroseconds(unsigned int us);
+
 /* Pin API */
 extern "C" void pinMode(pin_size_t ulPin, PinMode ulMode);
 extern "C" void digitalWrite(pin_size_t ulPin, PinStatus ulVal);

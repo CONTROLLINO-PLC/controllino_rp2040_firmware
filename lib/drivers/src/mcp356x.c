@@ -65,6 +65,7 @@ mcp356x_err_code_t mcp356x_init(mcp356x_t* dev, mcp356x_cfg_t* cfg)
     dev->mclk_pin = cfg->mclk_pin;
     dev->int_pin = cfg->int_pin;
     // Configure initial registers
+    mcp356x_cs_deselect(dev);
     uint8_t txdata[12];
     memset(txdata, 0x00, sizeof(txdata));
     if (mcp356x_write_fast_cmd(dev, MCP356X_FAST_CMD_DEV_FULL_RESET) != PLATFORM_OK)
@@ -110,7 +111,6 @@ mcp356x_err_code_t mcp356x_generic_transfer(mcp356x_t* dev, uint8_t fcmd_addr, m
         memcpy(&tx_buf[1], txdata, len);
     platform_spi_set_config(dev->spi, dev->spi_speed, dev->spi_mode, dev->spi_bit_order);
     mcp356x_cs_select(dev);
-    platform_sleep_us(600);
     ret = platform_spi_write_read(dev->spi, tx_buf, rx_buf, sizeof(rx_buf));
     mcp356x_cs_deselect(dev);
     if (ret != PLATFORM_OK || !(rx_buf[0] & MCP356X_VALID_STATUS_MASK))

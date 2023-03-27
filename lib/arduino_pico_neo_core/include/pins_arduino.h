@@ -55,6 +55,12 @@ static const uint8_t SCK =  PIN_SPI0_SCK;
 static const uint8_t SDA = PIN_WIRE0_SDA;
 static const uint8_t SCL = PIN_WIRE0_SCL;
  
+/* Neccesary due to compilation but these pins has especific internal functions */
+static const uint8_t A0 = (26u);
+static const uint8_t A1 = (27u);
+static const uint8_t A2 = (28u);
+static const uint8_t A3 = (29u);
+ 
 /* NEO core I/O */
 #define CONTROLLINO_NEO_CORE
 
@@ -65,7 +71,6 @@ static const uint8_t SCL = PIN_WIRE0_SCL;
 #define RS485_SERIAL_PORT    Serial1
 #define RS485_DEFAULT_RE_PIN 2u
 #define RS485_DEFAULT_DE_PIN 3u
-
 
 class ControllinoNeoPin;
 extern ControllinoNeoPin* NEO_CORE_AI0;
@@ -96,6 +101,9 @@ extern ControllinoNeoPin* NEO_CORE_DO3;
 extern ControllinoNeoPin* NEO_CORE_DO2;
 extern ControllinoNeoPin* NEO_CORE_DO1;
 extern ControllinoNeoPin* NEO_CORE_DO0;
+ 
+/* Pins from 100 for other function pins not connected to the rp2040 */
+#define SDCARD_SS_PIN     (100u)
  
 /* Arduino pins API for NEO */
 #include "neo_core_pin.h"
