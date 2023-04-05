@@ -50,6 +50,7 @@ int main(int argc, char** argv) { runUnityTests(); return 0; }
 
 #ifdef NEO_ENV
 #include <SPI.h>
+#include <Wire.h>
 void unityOutputStart(unsigned long baudrate)
 {
 #ifdef UNITY_OUTPUT_SERIAL1

@@ -38,7 +38,7 @@ platform_err_code_t platform_gpio_init(int pin, platform_gpio_dir_t dir, platfor
 /* Set out gpio value */
 platform_err_code_t platform_gpio_set(int pin, bool value)
 {
-    if (pin > -1 && mock_pin.dir == PLATFORM_GPIO_OUT) {
+    if (pin > -1) {
         mock_pin.state = value;
     }
     return PLATFORM_OK;

@@ -1,4 +1,5 @@
 #include <SPI.h>
+#include <Wire.h>
 
 bts71220_dcr_reg_t dcr_reg;
 

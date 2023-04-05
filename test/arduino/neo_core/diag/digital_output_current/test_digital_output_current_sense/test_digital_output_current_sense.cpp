@@ -1,7 +1,7 @@
 #include <unity.h>
 #include "Arduino.h"
  
-uint8_t TEST_ANALOG_READ_ADC = 181;
+uint8_t TEST_ANALOG_READ_ADC = 160;
  
 void setUp(void)
 {

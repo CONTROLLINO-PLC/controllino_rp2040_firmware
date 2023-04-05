@@ -34,7 +34,7 @@ platform_err_code_t platform_spi_init(hw_spi_t spi_hw, unsigned int speed, int m
 }
  
 /* Change SPI settings */
-platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed, uint8_t mode, uint8_t bit_order)
+platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed, platform_spi_mode_t mode, platform_spi_bit_order_t bit_order)
 {
     if ((mode != PLATFORM_SPI_MODE_0 && mode != PLATFORM_SPI_MODE_1 && mode != PLATFORM_SPI_MODE_2 && mode != PLATFORM_SPI_MODE_3) ||
         (bit_order != PLATFORM_SPI_LSBFIRST && bit_order != PLATFORM_SPI_MSBFIRST))

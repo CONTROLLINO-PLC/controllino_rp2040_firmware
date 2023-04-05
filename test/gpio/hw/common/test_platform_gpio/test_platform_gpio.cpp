@@ -80,12 +80,12 @@ void test_platform_gpio_out_set_get()
     TEST_ASSERT_FALSE(val);
 }
  
-void test_platform_gpio_in_ignore_set()
+void test_platform_gpio_set_even_when_dir_in()
 {
     bool val;
     platform_gpio_set(pin, true);
     platform_gpio_get(pin, &val);
-    TEST_ASSERT_FALSE(val);
+    TEST_ASSERT_TRUE(val);
 }
  
 int runUnityTests(void)
@@ -98,6 +98,6 @@ int runUnityTests(void)
     RUN_TEST(test_platform_gpio_pull_down_default_false);
     RUN_TEST(test_platform_gpio_pull_disabled_default_false);
     RUN_TEST(test_platform_gpio_out_set_get);
-    RUN_TEST(test_platform_gpio_in_ignore_set);
+    RUN_TEST(test_platform_gpio_set_even_when_dir_in);
     return UNITY_END();
 }

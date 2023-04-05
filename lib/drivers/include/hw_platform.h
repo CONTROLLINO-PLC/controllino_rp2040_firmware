@@ -13,10 +13,6 @@
  * External hardware interface library
  */
  
-#ifdef __cplusplus
-extern "C" {
-#endif
- 
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
@@ -98,6 +94,10 @@ typedef enum
     PLATFORM_SPI_LSBFIRST =         0x0,
     PLATFORM_SPI_MSBFIRST =         0x1
 } platform_spi_bit_order_t;
+ 
+#ifdef __cplusplus
+extern "C" {
+#endif
  
 /*!
  * \brief Initialize and config gpio pin
@@ -217,7 +217,7 @@ platform_err_code_t platform_spi_init(hw_spi_t spi_hw, unsigned int speed, int m
  *         PLATFORM_SPI_COM_ERR : error
  *         PLATFORM_OK : successful
  */
-platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed, uint8_t mode, uint8_t bit_order);
+platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed, platform_spi_mode_t mode, platform_spi_bit_order_t bit_order);
  
 /**
  * \brief Write specified number of bytes to an SPI device
