@@ -30,6 +30,7 @@ platform_err_code_t platform_gpio_set(int pin, bool value)
         return PLATFORM_ARGUMENT_ERR;
     }
     if (pin > -1) {
+        gpio_set_dir(pin, GPIO_OUT);
         gpio_put(pin, value ? 1 : 0);
     }
     return PLATFORM_OK;

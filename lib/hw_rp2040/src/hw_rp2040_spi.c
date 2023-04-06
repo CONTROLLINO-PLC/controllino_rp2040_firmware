@@ -8,13 +8,12 @@
 #include "hardware/gpio.h"
 #include "hardware/spi.h"
  
-/* RP2040 default SPI settings */
 typedef struct spi_inst_t _hw_spi_t;
 hw_spi_t PLATFORM_SPI_HW = (hw_spi_t)   spi0;
 const unsigned int PLATFORM_SPI_SPEED = 1000000;
 const int PLATFORM_SPI_MOSI =           19;
 const int PLATFORM_SPI_MISO =           16;
-const int PLATFORM_SPI_SCK =            18;
+const int PLATFORM_SPI_SCK = 18;
  
 /* Init SPI interface */
 platform_err_code_t platform_spi_init(hw_spi_t spi_hw, unsigned int speed, int mosi_pin, int miso_pin, int sck_pin)
@@ -33,6 +32,7 @@ platform_err_code_t platform_spi_init(hw_spi_t spi_hw, unsigned int speed, int m
     gpio_set_function(miso_pin, GPIO_FUNC_SPI);
     gpio_set_function(sck_pin, GPIO_FUNC_SPI);
     // Init interface
+    spi_deinit((spi_inst_t*)spi_hw);
     if (spi_init((spi_inst_t*)spi_hw, speed) != speed)
         return PLATFORM_SPI_INIT_ERR;
     return PLATFORM_OK;
@@ -75,8 +75,8 @@ platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed,
         order = SPI_LSB_FIRST;
     else
         order = SPI_MSB_FIRST;
-
-    if (spi_set_baudrate((spi_inst_t*)spi_hw, speed) != speed)
+    spi_deinit((spi_inst_t*)spi_hw);
+    if (spi_init((spi_inst_t*)spi_hw, speed) != speed)
         return PLATFORM_SPI_COM_ERR;
     spi_set_format((spi_inst_t*)spi_hw, 8, cpol, cpha, order);
     return PLATFORM_OK;
