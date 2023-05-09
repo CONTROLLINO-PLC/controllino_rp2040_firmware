@@ -14,27 +14,27 @@ bts71220_t* neo_bts71220;
 wsen_temp_t* neo_wsen_temp;
 
 // CS management 
-void mcp356x_cs_select(mcp356x_t* dac) {
+void mcp356x_cs_select(int cs_pin) {
     cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_14, 0);
     delayMicroseconds(600);
 }
-void mcp356x_cs_deselect(mcp356x_t* dac) {
+void mcp356x_cs_deselect(int cs_pin) {
     cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_14, 1);
 }
 
-void ad56x4_cs_select(ad56x4_t* dac) {
+void ad56x4_cs_select(int cs_pin) {
     cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_15, 0);
     delayMicroseconds(600);
 }
-void ad56x4_cs_deselect(ad56x4_t* dac) {
+void ad56x4_cs_deselect(int cs_pin) {
     cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_15, 1);
 }
 
-void bts71220_cs_select(bts71220_t* dev) {
+void bts71220_cs_select(int cs_pin) {
     cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_12, 0);
     delayMicroseconds(600);
 }
-void bts71220_cs_deselect(bts71220_t* dac) {
+void bts71220_cs_deselect(int cs_pin) {
     cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_12, 1);
 }
 

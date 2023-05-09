@@ -20,7 +20,7 @@ static void cs_init(void)
 }
 
  
-void mcp356x_cs_select(mcp356x_t* dev)
+void mcp356x_cs_select(int cs_pin)
 {
 #ifdef NEO_ENV
     cs_init();
@@ -29,7 +29,7 @@ void mcp356x_cs_select(mcp356x_t* dev)
 #endif
 }
  
-void mcp356x_cs_deselect(mcp356x_t* dev)
+void mcp356x_cs_deselect(int cs_pin)
 {
 #ifdef NEO_ENV
     cs_init();

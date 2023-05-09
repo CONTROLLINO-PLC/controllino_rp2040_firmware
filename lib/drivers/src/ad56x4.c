@@ -40,7 +40,7 @@ ad56x4_err_code_t ad56x4_init(ad56x4_t* dev, ad56x4_cfg_t* cfg)
     dev->spi = cfg->spi;
     dev->resolution = cfg->resolution;
     // Reset and set default internal settings
-    ad56x4_cs_deselect(dev);
+    ad56x4_cs_deselect(dev->cs_pin);
     return ad56x4_sw_reset(dev, AD56X4_SW_RST_FULL);
 }
  
@@ -53,9 +53,7 @@ ad56x4_err_code_t ad56x4_generic_write(ad56x4_t* dev, ad56x4_cmd_t cmd, ad56x4_c
     tx_buf[2] = (uint8_t)(data & 0xFF);
     // Set ad56x4 SPI settings and attempt to transmit data
     platform_spi_set_config(dev->spi, dev->spi_speed, dev->spi_mode, dev->spi_bit_order);
-    ad56x4_cs_select(dev);
-    ret = platform_spi_write(dev->spi, tx_buf, sizeof(tx_buf));
-    ad56x4_cs_deselect(dev);
+    ret = platform_spi_write(dev->spi, &ad56x4_cs_select, &ad56x4_cs_deselect, dev->cs_pin, tx_buf, sizeof(tx_buf));
     if (ret != PLATFORM_OK)
         return PLATFORM_SPI_COM_ERR;
     return PLATFORM_OK;

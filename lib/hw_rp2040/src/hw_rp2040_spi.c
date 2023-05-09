@@ -83,19 +83,25 @@ platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed,
 }
  
 /* Write specified number of bytes to an SPI device */
-platform_err_code_t platform_spi_write(hw_spi_t spi_hw, uint8_t* txdata, size_t len)
+platform_err_code_t platform_spi_write(hw_spi_t spi_hw, void(*cs_select)(int), void(*cs_deselect)(int), int cs_pin, uint8_t* txdata, size_t len)
 {
     size_t ret;
+    (*cs_select)(cs_pin);
     ret = spi_write_blocking((spi_inst_t*)spi_hw, txdata, len);
+    (*cs_deselect)(cs_pin);
     if (ret != len)
         return PLATFORM_SPI_COM_ERR;
     return PLATFORM_OK;
 }
  
 /* Write and read specified number of bytes over SPI */
-platform_err_code_t platform_spi_write_read(hw_spi_t spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len)
+platform_err_code_t platform_spi_write_read(hw_spi_t spi_hw, void(*cs_select)(int), void(*cs_deselect)(int), int cs_pin, uint8_t* txdata, uint8_t* rxdata, size_t len)
 {
-    if (spi_write_read_blocking((spi_inst_t*)spi_hw, txdata, rxdata, len) != len)
+    size_t ret;
+    (*cs_select)(cs_pin);
+    ret = spi_write_read_blocking((spi_inst_t*)spi_hw, txdata, rxdata, len);
+    (*cs_deselect)(cs_pin);
+    if (ret != len)
         return PLATFORM_SPI_COM_ERR;
     return PLATFORM_OK;
 }

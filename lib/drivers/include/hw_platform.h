@@ -223,24 +223,30 @@ platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed,
  * \brief Write specified number of bytes to an SPI device
  * 
  * \param spi_hw Pointer to SPI interface
+ * \param cs_select Pointer to chip select pin handler to select the chip
+ * \param cs_deselect Pointer to chip select pin handler to deselect the chip
+ * \param cs_pin Chip select pin
  * \param txdata Pointer to data to send
  * \param len Length of data in bytes to send
  * \return PLATFORM_SPI_COM_ERR : error
  *         PLATFORM_OK : successful
  */
-platform_err_code_t platform_spi_write(hw_spi_t spi_hw, uint8_t* txdata, size_t len);
+platform_err_code_t platform_spi_write(hw_spi_t spi_hw, void(*cs_select)(int), void(*cs_deselect)(int), int cs_pin,  uint8_t* txdata, size_t len);
  
 /**
  * \brief Write and read specified number of bytes over SPI
  *
  * \param spi_hw Pointer to SPI interface
+ * \param cs_select Pointer to chip select pin handler to select the chip
+ * \param cs_deselect Pointer to chip select pin handler to deselect the chip
+ * \param cs_pin Chip select pin
  * \param txdata Pointer to data to send
  * \param rxdata Pointer to data to receive
  * \param len Length of data in bytes to send
  * \return PLATFORM_SPI_COM_ERR : error
  *         PLATFORM_OK : successful
  */
-platform_err_code_t platform_spi_write_read(hw_spi_t spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len);
+platform_err_code_t platform_spi_write_read(hw_spi_t spi_hw, void(*cs_select)(int), void(*cs_deselect)(int), int cs_pin, uint8_t* txdata, uint8_t* rxdata, size_t len);
  
 #ifdef __cplusplus
 }

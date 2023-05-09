@@ -20,7 +20,7 @@ static void cs_init(void)
 }
 
  
-void bts71220_cs_select(bts71220_t* dev)
+void bts71220_cs_select(int cs_pin)
 {
 #ifdef NEO_ENV
     cs_init();
@@ -29,7 +29,7 @@ void bts71220_cs_select(bts71220_t* dev)
 #endif
 }
  
-void bts71220_cs_deselect(bts71220_t* dev)
+void bts71220_cs_deselect(int cs_pin)
 {
 #ifdef NEO_ENV
     cs_init();

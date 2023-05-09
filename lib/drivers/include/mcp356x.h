@@ -597,19 +597,19 @@ mcp356x_err_code_t mcp356x_read_voltage(mcp356x_t* dev, uint32_t vol_ref_min, ui
  * \brief Enable CS for start SPI coms
  * \ingroup mcp356x
  *
- * \param dev Pointer MCP356X ADC struct
+ * \param cs_pin Chip select pin
  * \note Should be implemented externally
  */
-void mcp356x_cs_select(mcp356x_t* dev);
+void mcp356x_cs_select(int cs_pin);
 
 /*!
  * \brief Disable CS after SPI coms
  * \ingroup mcp356x
  *
- * \param dev Pointer MCP356X ADC struct
+ * \param cs_pin Chip select pin
  * \note Should be implemented externally
  */
-void mcp356x_cs_deselect(mcp356x_t* dev);
+void mcp356x_cs_deselect(int cs_pin);
 
 #ifdef __cplusplus
 }

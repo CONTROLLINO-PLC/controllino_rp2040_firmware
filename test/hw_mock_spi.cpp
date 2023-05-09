@@ -45,16 +45,20 @@ platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed,
 }
  
 /* Write specified number of bytes to an SPI device */
-platform_err_code_t platform_spi_write(hw_spi_t spi_hw, uint8_t* txdata, size_t len)
+platform_err_code_t platform_spi_write(hw_spi_t spi_hw, void(*cs_select)(int), void(*cs_deselect)(int), int cs_pin, uint8_t* txdata, size_t len)
 {
     uint8_t dummy_rxdata[len];
-    return platform_spi_write_read(spi_hw, txdata, dummy_rxdata, len);
+    return platform_spi_write_read(spi_hw, cs_select, cs_deselect, cs_pin, txdata, dummy_rxdata, len);
 }
-
+ 
 /* Write and read specified number of bytes over SPI */
-platform_err_code_t platform_spi_write_read(hw_spi_t spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len)
+platform_err_code_t platform_spi_write_read(hw_spi_t spi_hw, void(*cs_select)(int), void(*cs_deselect)(int), int cs_pin, uint8_t* txdata, uint8_t* rxdata, size_t len)
 {
-    return mock_spi_transfer(txdata, rxdata, len);
+    platform_err_code_t res;
+    (*cs_select)(cs_pin);
+    res = mock_spi_transfer(txdata, rxdata, len);
+    (*cs_deselect)(cs_pin);
+    return res;
 }
  
 #endif

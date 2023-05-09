@@ -42,9 +42,8 @@ cy8c95xx_err_code_t cy8c95xx_init(cy8c95xx_t* dev, cy8c95xx_cfg_t* cfg)
     dev->i2c = cfg->i2c;
     dev->rst_pin = cfg->rst_pin;
     dev->int_pin = cfg->int_pin;
-    // Check coms
-    uint8_t rxdata;
-    return platform_i2c_read(dev->i2c, port_slave_addr, &rxdata, 1);
+    // Check coms and reset registers
+    return cy8c95xx_send_cmd(dev, CY8C95XX_RECFG_DEV_TO_POR);
 }
  
 /* Reset port expander using rst_pin */

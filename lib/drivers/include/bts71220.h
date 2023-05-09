@@ -406,19 +406,19 @@ bts71220_err_code_t bts71220_set_sense_mux(bts71220_t* dev, bts71220_sense_mux_t
  * \brief Enable CS for start SPI coms
  * \ingroup bts71220
  *
- * \param dev Pointer to BTS71220 power controller struct
+ * \param cs_pin Chip select pin
  * \note Should be implemented externally
  */
-void bts71220_cs_select(bts71220_t* dev);
+void bts71220_cs_select(int cs_pin);
  
 /*!
  * \brief Disable CS after SPI coms
  * \ingroup bts71220
  *
- * \param dev Pointer to BTS71220 power controller struct
+ * \param cs_pin Chip select pin
  * \note Should be implemented externally
  */
-void bts71220_cs_deselect(bts71220_t* dev);
+void bts71220_cs_deselect(int cs_pin);
  
 #ifdef __cplusplus
 }

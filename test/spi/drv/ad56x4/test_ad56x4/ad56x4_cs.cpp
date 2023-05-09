@@ -18,7 +18,7 @@ static void cs_init(void)
 #endif
 }
  
-void ad56x4_cs_select(ad56x4_t* dev)
+void ad56x4_cs_select(int cs_pin)
 {
 #ifdef NEO_ENV
     cs_init();
@@ -27,7 +27,7 @@ void ad56x4_cs_select(ad56x4_t* dev)
 #endif
 }
  
-void ad56x4_cs_deselect(ad56x4_t* dev)
+void ad56x4_cs_deselect(int cs_pin)
 {
 #ifdef NEO_ENV
     cs_init();

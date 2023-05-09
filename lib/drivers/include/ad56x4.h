@@ -289,19 +289,19 @@ ad56x4_err_code_t ad56x4_set_ch_voltage(ad56x4_t* dev, ad56x4_ch_addr_t ch_addr,
  * \brief Enable CS for start SPI coms
  * \ingroup ad56x4
  *
- * \param dev Pointer to AD56X4 DAC struct
+ * \param cs_pin Chip select pin
  * \note Should be implemented externally
  */
-void ad56x4_cs_select(ad56x4_t* dev);
+void ad56x4_cs_select(int cs_pin);
  
 /*!
  * \brief Disable CS after SPI coms
  * \ingroup ad56x4
  *
- * \param dev Pointer to AD56X4 DAC struct
+ * \param dev cs_pin Chip select pin
  * \note Should be implemented externally
  */
-void ad56x4_cs_deselect(ad56x4_t* dev);
+void ad56x4_cs_deselect(int cs_pin);
  
 #ifdef __cplusplus
 }
