@@ -21,12 +21,6 @@
 #include "ad56x4.h"
 #include "bts71220.h"
 #include "wsen_temp.h"
-
-extern cy8c95xx_t* neo_cy8c95xx;
-extern mcp356x_t* neo_mcp356x;
-extern ad56x4_t* neo_ad56x4;
-extern bts71220_t* neo_bts71220;
-extern wsen_temp_t* neo_wsen_temp;
  
 /**
  * \brief Controllino Neo pin class
@@ -56,11 +50,18 @@ private:
 	PinMode _mode;
 	uint32_t _digitalThreshold;
 };
- 
+
 /**
- *\brief Arduino API functions for compatibility with Controllino Neo
+ *\brief Get the ControllinoNeoPin* from integer pin definition
+ * 
+ * \param pin Integer pin definition
+ * \return ControllinoNeoPin* or nullptr
  */
- 
+ControllinoNeoPin* getControllinoNeoPin(int pin);
+
+/**
+ *\brief Similar to Arduino API functions for compatibility with ControllinoNeoPin*
+ */
 void pinMode(ControllinoNeoPin* pin, PinMode mode);
 PinStatus digitalRead(ControllinoNeoPin* pin);
 void digitalWrite(ControllinoNeoPin* pin, PinStatus value);
@@ -72,5 +73,48 @@ void analogWrite(ControllinoNeoPin* pin, int value);
  */
 void setDigitalThreshold(ControllinoNeoPin* pin, uint32_t threshold);
 uint32_t getDigitalThreshold(ControllinoNeoPin* pin);
+void setDigitalThreshold(pin_size_t pin, uint32_t threshold); // From integer pin definition
+uint32_t getDigitalThreshold(pin_size_t pin); // From integer pin definition
+ 
+/**
+ * \brief User can access peripherals interfaces
+ */
+extern cy8c95xx_t* neo_cy8c95xx;
+extern mcp356x_t* neo_mcp356x;
+extern ad56x4_t* neo_ad56x4;
+extern bts71220_t* neo_bts71220;
+extern wsen_temp_t* neo_wsen_temp;
+ 
+/**
+ * \brief User can access the pin definitions for ControllinoNeoPin API
+ */
+extern ControllinoNeoPin* _NEO_CORE_AI0;
+extern ControllinoNeoPin* _NEO_CORE_AI1;
+extern ControllinoNeoPin* _NEO_CORE_AI2;
+extern ControllinoNeoPin* _NEO_CORE_AI3;
+extern ControllinoNeoPin* _NEO_CORE_AI4;
+extern ControllinoNeoPin* _NEO_CORE_AI5;
+extern ControllinoNeoPin* _NEO_CORE_AI6;
+extern ControllinoNeoPin* _NEO_CORE_AI7;
+
+extern ControllinoNeoPin* _NEO_CORE_AO0;
+extern ControllinoNeoPin* _NEO_CORE_AO1;
+extern ControllinoNeoPin* _NEO_CORE_AO2;
+extern ControllinoNeoPin* _NEO_CORE_AO3;
+
+extern ControllinoNeoPin* _NEO_CORE_DO4;
+extern ControllinoNeoPin* _NEO_CORE_DO5;
+extern ControllinoNeoPin* _NEO_CORE_DO6;
+extern ControllinoNeoPin* _NEO_CORE_DO7;
+
+extern ControllinoNeoPin* _NEO_CORE_DI0;
+extern ControllinoNeoPin* _NEO_CORE_DI1;
+extern ControllinoNeoPin* _NEO_CORE_DI2;
+extern ControllinoNeoPin* _NEO_CORE_DI3;
+
+extern ControllinoNeoPin* _NEO_CORE_DO0;
+extern ControllinoNeoPin* _NEO_CORE_DO1;
+extern ControllinoNeoPin* _NEO_CORE_DO2;
+extern ControllinoNeoPin* _NEO_CORE_DO3;
  
 #endif  // NEO_CORE_PIN_H

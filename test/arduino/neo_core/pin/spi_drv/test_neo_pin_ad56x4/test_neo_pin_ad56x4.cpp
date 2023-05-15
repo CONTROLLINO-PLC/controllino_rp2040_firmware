@@ -17,27 +17,27 @@ void tearDown(void)
  
 void test_ad56x4_pin_definitions_ok()
 {
-    TEST_ASSERT_EQUAL(AD56X4_CH_ADDR_A, NEO_CORE_AO0->getPin());
-    TEST_ASSERT_EQUAL(ControllinoNeoPin::AD56X4_PIN, NEO_CORE_AO0->getType());
+    TEST_ASSERT_EQUAL(AD56X4_CH_ADDR_A, _NEO_CORE_AO0->getPin());
+    TEST_ASSERT_EQUAL(ControllinoNeoPin::AD56X4_PIN, _NEO_CORE_AO0->getType());
 }
  
 void test_ad56x4_pin_pinMode_always_output()
 {
-    TEST_ASSERT_EQUAL(OUTPUT, NEO_CORE_AO0->getMode());
+    TEST_ASSERT_EQUAL(OUTPUT, _NEO_CORE_AO0->getMode());
     pinMode(NEO_CORE_AO0, INPUT);
-    TEST_ASSERT_EQUAL(OUTPUT, NEO_CORE_AO0->getMode());
+    TEST_ASSERT_EQUAL(OUTPUT, _NEO_CORE_AO0->getMode());
     pinMode(NEO_CORE_AO0, INPUT_PULLUP);
-    TEST_ASSERT_EQUAL(OUTPUT, NEO_CORE_AO0->getMode());
+    TEST_ASSERT_EQUAL(OUTPUT, _NEO_CORE_AO0->getMode());
     pinMode(NEO_CORE_AO0, INPUT_PULLDOWN);
-    TEST_ASSERT_EQUAL(OUTPUT, NEO_CORE_AO0->getMode());
+    TEST_ASSERT_EQUAL(OUTPUT, _NEO_CORE_AO0->getMode());
     pinMode(NEO_CORE_AO0, OUTPUT_2MA);
-    TEST_ASSERT_EQUAL(OUTPUT, NEO_CORE_AO0->getMode());
+    TEST_ASSERT_EQUAL(OUTPUT, _NEO_CORE_AO0->getMode());
     pinMode(NEO_CORE_AO0, OUTPUT_4MA);
-    TEST_ASSERT_EQUAL(OUTPUT, NEO_CORE_AO0->getMode());
+    TEST_ASSERT_EQUAL(OUTPUT, _NEO_CORE_AO0->getMode());
     pinMode(NEO_CORE_AO0, OUTPUT_8MA);
-    TEST_ASSERT_EQUAL(OUTPUT, NEO_CORE_AO0->getMode());
+    TEST_ASSERT_EQUAL(OUTPUT, _NEO_CORE_AO0->getMode());
     pinMode(NEO_CORE_AO0, OUTPUT_12MA);
-    TEST_ASSERT_EQUAL(OUTPUT, NEO_CORE_AO0->getMode());
+    TEST_ASSERT_EQUAL(OUTPUT, _NEO_CORE_AO0->getMode());
 }
  
 void test_ad56x4_pin_analogWrite_ok()

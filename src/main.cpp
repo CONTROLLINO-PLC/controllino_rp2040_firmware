@@ -6,7 +6,7 @@ int main() {
 #endif
  
 #ifdef NEO_ENV
-#include "Arduino.h"
+#include <SPI.h>
 void setup() {}
 void loop() {}
 #endif

@@ -19,27 +19,27 @@ void tearDown(void)
  
 void test_mcp356x_pin_definitions_ok()
 {
-    TEST_ASSERT_EQUAL(MCP356X_CH_CH0, NEO_CORE_AI0->getPin());
-    TEST_ASSERT_EQUAL(ControllinoNeoPin::MCP356X_PIN, NEO_CORE_AI0->getType());
+    TEST_ASSERT_EQUAL(MCP356X_CH_CH0, _NEO_CORE_AI0->getPin());
+    TEST_ASSERT_EQUAL(ControllinoNeoPin::MCP356X_PIN, _NEO_CORE_AI0->getType());
 }
  
 void test_mcp356x_pin_pinMode_always_input()
 {
-    TEST_ASSERT_EQUAL(INPUT, NEO_CORE_AI0->getMode());
+    TEST_ASSERT_EQUAL(INPUT, _NEO_CORE_AI0->getMode());
     pinMode(NEO_CORE_AI0, OUTPUT);
-    TEST_ASSERT_EQUAL(INPUT, NEO_CORE_AI0->getMode());
+    TEST_ASSERT_EQUAL(INPUT, _NEO_CORE_AI0->getMode());
     pinMode(NEO_CORE_AI0, INPUT_PULLUP);
-    TEST_ASSERT_EQUAL(INPUT, NEO_CORE_AI0->getMode());
+    TEST_ASSERT_EQUAL(INPUT, _NEO_CORE_AI0->getMode());
     pinMode(NEO_CORE_AI0, INPUT_PULLDOWN);
-    TEST_ASSERT_EQUAL(INPUT, NEO_CORE_AI0->getMode());
+    TEST_ASSERT_EQUAL(INPUT, _NEO_CORE_AI0->getMode());
     pinMode(NEO_CORE_AI0, OUTPUT_2MA);
-    TEST_ASSERT_EQUAL(INPUT, NEO_CORE_AI0->getMode());
+    TEST_ASSERT_EQUAL(INPUT, _NEO_CORE_AI0->getMode());
     pinMode(NEO_CORE_AI0, OUTPUT_4MA);
-    TEST_ASSERT_EQUAL(INPUT, NEO_CORE_AI0->getMode());
+    TEST_ASSERT_EQUAL(INPUT, _NEO_CORE_AI0->getMode());
     pinMode(NEO_CORE_AI0, OUTPUT_8MA);
-    TEST_ASSERT_EQUAL(INPUT, NEO_CORE_AI0->getMode());
+    TEST_ASSERT_EQUAL(INPUT, _NEO_CORE_AI0->getMode());
     pinMode(NEO_CORE_AI0, OUTPUT_12MA);
-    TEST_ASSERT_EQUAL(INPUT, NEO_CORE_AI0->getMode());
+    TEST_ASSERT_EQUAL(INPUT, _NEO_CORE_AI0->getMode());
 }
  
 void test_mcp356x_pin_analogRead_ok()

@@ -6,6 +6,8 @@ uint8_t TEST_CY8C95XX_GPIO = 0;
 uint8_t TEST_CY8C95XX_ADDR = CY8C95XX_DEV_ADDR_GND;
 #define TEST_CY8C95XX_PORT 0
 #define TEST_CY8C95XX_BIT 0
+#define TEST_REG_OUT_PORT_DEFAULT_VALUE 0x3F
+#define TEST_REG_IN_PORT_DEFAULT_VALUE 0x3F
 static cy8c95xx_t dev;
 static cy8c95xx_err_code_t ret;
  
@@ -42,7 +44,7 @@ void test_cy8c95xx_read_byte_ok()
     uint8_t byte = 0xFF;
     ret = cy8c95xx_read_byte(&dev, CY8C95XX_REG_IN_PORT0, &byte);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
-    TEST_ASSERT_EQUAL(0x3F, byte);
+    TEST_ASSERT_EQUAL(TEST_REG_IN_PORT_DEFAULT_VALUE, byte);
 }
  
 void test_cy8c95xx_write_byte_ok()
@@ -56,6 +58,10 @@ void test_cy8c95xx_write_byte_ok()
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
     cy8c95xx_read_byte(&dev, CY8C95XX_REG_OUT_PORT0, &byte);
     TEST_ASSERT_EQUAL(0xFF, byte);
+    ret = cy8c95xx_write_byte(&dev, CY8C95XX_REG_OUT_PORT0, TEST_REG_OUT_PORT_DEFAULT_VALUE);
+    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    cy8c95xx_read_byte(&dev, CY8C95XX_REG_OUT_PORT0, &byte);
+    TEST_ASSERT_EQUAL(TEST_REG_OUT_PORT_DEFAULT_VALUE, byte);
 }
  
 void test_cy8c95xx_read_bit_ok()
@@ -81,7 +87,7 @@ void test_cy8c95xx_write_bit_ok()
     TEST_ASSERT_EQUAL(1, bit);
     //
     cy8c95xx_read_byte(&dev, CY8C95XX_REG_OUT_PORT0, &byte);
-    TEST_ASSERT_EQUAL(0xFF, byte);
+    TEST_ASSERT_EQUAL(TEST_REG_OUT_PORT_DEFAULT_VALUE, byte);
 }
  
 void test_cy8c95xx_write_bit_val_grater_than_1_ok()
@@ -99,7 +105,7 @@ void test_cy8c95xx_write_bit_val_grater_than_1_ok()
     TEST_ASSERT_EQUAL(1, bit);
     //
     cy8c95xx_read_byte(&dev, CY8C95XX_REG_OUT_PORT0, &byte);
-    TEST_ASSERT_EQUAL(0xFF, byte);
+    TEST_ASSERT_EQUAL(TEST_REG_OUT_PORT_DEFAULT_VALUE, byte);
 }
  
 void test_cy8c95xx_pin_mode_ok()
@@ -183,7 +189,7 @@ void test_cy8c95xx_read_port_in_ok()
     uint8_t state = 0x00;
     ret = cy8c95xx_read_port(&dev, TEST_CY8C95XX_PORT, &state);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
-    TEST_ASSERT_EQUAL(0x3F, state);
+    TEST_ASSERT_EQUAL(TEST_REG_IN_PORT_DEFAULT_VALUE, state);
 }
  
 void test_cy8c95xx_read_pin_out_lvl_ok()
@@ -199,7 +205,7 @@ void test_cy8c95xx_read_port_out_lvl_ok()
     uint8_t state = 0x00;
     ret = cy8c95xx_read_port_out_lvl(&dev, TEST_CY8C95XX_PORT, &state);
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
-    TEST_ASSERT_EQUAL(0xFF, state);
+    TEST_ASSERT_EQUAL(TEST_REG_OUT_PORT_DEFAULT_VALUE, state);
 }
  
 void test_cy8c95xx_write_pin_ok()
