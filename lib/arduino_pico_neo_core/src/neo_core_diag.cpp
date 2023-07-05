@@ -16,28 +16,28 @@ void enableCurrentSenseDO(uint8_t DO)
     switch (DO)
     {
     case 0:
-        bts71220_set_sense_mux(neo_bts71220, BTS71220_DCR_MUX_IS_CH3, 1);
-        break;
-    case 1:
-        bts71220_set_sense_mux(neo_bts71220, BTS71220_DCR_MUX_IS_CH2, 1);
-        break;
-    case 2:
-        bts71220_set_sense_mux(neo_bts71220, BTS71220_DCR_MUX_IS_CH1, 1);
-        break;
-    case 3:
-        bts71220_set_sense_mux(neo_bts71220, BTS71220_DCR_MUX_IS_CH0, 1);
-        break;
-    case 4:
         bts71220_set_sense_mux(neo_bts71220, BTS71220_DCR_MUX_IS_CH3, 0);
         break;
-    case 5:
+    case 1:
         bts71220_set_sense_mux(neo_bts71220, BTS71220_DCR_MUX_IS_CH2, 0);
         break;
-    case 6:
+    case 2:
         bts71220_set_sense_mux(neo_bts71220, BTS71220_DCR_MUX_IS_CH1, 0);
         break;
-    case 7:
+    case 3:
         bts71220_set_sense_mux(neo_bts71220, BTS71220_DCR_MUX_IS_CH0, 0);
+        break;
+    case 4:
+        bts71220_set_sense_mux(neo_bts71220, BTS71220_DCR_MUX_IS_CH3, 1);
+        break;
+    case 5:
+        bts71220_set_sense_mux(neo_bts71220, BTS71220_DCR_MUX_IS_CH2, 1);
+        break;
+    case 6:
+        bts71220_set_sense_mux(neo_bts71220, BTS71220_DCR_MUX_IS_CH1, 1);
+        break;
+    case 7:
+        bts71220_set_sense_mux(neo_bts71220, BTS71220_DCR_MUX_IS_CH0, 1);
         break;
     default:
         break;
