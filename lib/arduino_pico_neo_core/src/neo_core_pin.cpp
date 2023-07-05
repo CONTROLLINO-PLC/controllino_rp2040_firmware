@@ -6,7 +6,15 @@
 
 #include "string.h"
 #include "neo_core_pin.h"
- 
+#include "hw_platform.h"
+
+// Micro Internal defines
+// #define _MCP356X_SS_PIN     (3u)
+#define _MCP356X_SS_PIN     (14u)
+#define _AD56X4_SS_PIN      (2u)
+#define _SDCARD_SS_PIN      (20u)
+#define _ETHERNET_SS_PIN    PIN_SPI0_SS
+
 /* Peripherals interfaces */
 cy8c95xx_t* neo_cy8c95xx;
 mcp356x_t* neo_mcp356x;
@@ -20,58 +28,64 @@ Note: This function will be called on every boot before setup()
 */
 void initVariant()
 {
-    neo_cy8c95xx = (cy8c95xx_t*)malloc(sizeof(cy8c95xx_t));
-    neo_mcp356x = (mcp356x_t*)malloc(sizeof(mcp356x_t));
-    neo_ad56x4 = (ad56x4_t*)malloc(sizeof(ad56x4_t));
-    neo_bts71220 = (bts71220_t*)malloc(sizeof(bts71220_t));
-    neo_wsen_temp = (wsen_temp_t*)malloc(sizeof(wsen_temp_t));
     // WSEN temperature sensor
+    neo_wsen_temp = (wsen_temp_t*)malloc(sizeof(wsen_temp_t));
     wsen_temp_cfg_t wsen_temp_cfg;
     wsen_temp_set_default_cfg(&wsen_temp_cfg);
     wsen_temp_init(neo_wsen_temp, &wsen_temp_cfg);
+    
     // Port expander 
-    cy8c95xx_cfg_t cy8c95xx_cfg;
-    cy8c95xx_set_default_cfg(&cy8c95xx_cfg);
-    cy8c95xx_init(neo_cy8c95xx, &cy8c95xx_cfg);
+    // neo_cy8c95xx = (cy8c95xx_t*)malloc(sizeof(cy8c95xx_t));
+    // cy8c95xx_cfg_t cy8c95xx_cfg;
+    // cy8c95xx_set_default_cfg(&cy8c95xx_cfg);
+    // cy8c95xx_init(neo_cy8c95xx, &cy8c95xx_cfg);
+    
     // Digital output pins to low level at the beginning
-    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_6, 0);
-    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_7, 0);
-    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_8, 0);
-    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_9, 0);
-    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_6, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
-    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_7, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
-    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_8, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
-    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_9, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+    // cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_6, 0);
+    // cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_7, 0);
+    // cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_8, 0);
+    // cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_9, 0);
+    // cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_6, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+    // cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_7, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+    // cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_8, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+    // cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_9, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+
     // cy8c95xx_send_cmd(neo_cy8c95xx, CY8C95XX_STORE_POR_CFG_TO_EEPROM);
+    
     // ADC analog inputs
+    neo_mcp356x = (mcp356x_t*)malloc(sizeof(mcp356x_t));
+    pinMode(_MCP356X_SS_PIN, OUTPUT);
     mcp356x_cfg_t mcp356x_cfg;
     mcp356x_set_default_cfg(&mcp356x_cfg);
     mcp356x_init(neo_mcp356x, &mcp356x_cfg);
+    
     // DAC analog output
-    ad56x4_cfg_t ad56x4_cfg;
-    ad56x4_set_default_cfg(&ad56x4_cfg);
-    ad56x4_init(neo_ad56x4, &ad56x4_cfg);
+    // neo_ad56x4 = (ad56x4_t*)malloc(sizeof(ad56x4_t));
+    // pinMode(_AD56X4_SS_PIN, OUTPUT);
+    // ad56x4_cfg_t ad56x4_cfg;
+    // ad56x4_set_default_cfg(&ad56x4_cfg);
+    // ad56x4_init(neo_ad56x4, &ad56x4_cfg);
+    
     // Digital outputs controller
-    bts71220_cfg_t bts71220_cfg;
-    bts71220_set_default_cfg(&bts71220_cfg);
-    bts71220_init(neo_bts71220, &bts71220_cfg);
+    // neo_bts71220 = (bts71220_t*)malloc(sizeof(bts71220_t));
+    // bts71220_cfg_t bts71220_cfg;
+    // bts71220_set_default_cfg(&bts71220_cfg);
+    // bts71220_init(neo_bts71220, &bts71220_cfg);
 }
  
 /* SPI chip select management */
 void mcp356x_cs_select(int cs_pin) {
-    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_14, 0);
-    delayMicroseconds(600);
+    digitalWrite(_MCP356X_SS_PIN, LOW);
 }
 void mcp356x_cs_deselect(int cs_pin) {
-    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_14, 1);
+    digitalWrite(_MCP356X_SS_PIN, HIGH);
 }
 
 void ad56x4_cs_select(int cs_pin) {
-    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_15, 0);
-    delayMicroseconds(600);
+    digitalWrite(_AD56X4_SS_PIN, LOW);
 }
 void ad56x4_cs_deselect(int cs_pin) {
-    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_15, 1);
+    digitalWrite(_AD56X4_SS_PIN, HIGH);
 }
 
 void bts71220_cs_select(int cs_pin) {
@@ -80,14 +94,6 @@ void bts71220_cs_select(int cs_pin) {
 }
 void bts71220_cs_deselect(int cs_pin) {
     cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_12, 1);
-}
-
-void sd_card_cs_select(void) {
-    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_13, 0);
-    delayMicroseconds(600);
-}
-void sd_card_cs_deselect(void) {
-    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_13, 1);
 }
  
 /* Pin definitions for ControllinoNeoPin API */
@@ -105,10 +111,15 @@ ControllinoNeoPin* _NEO_CORE_AO1 = new ControllinoNeoPin(AD56X4_CH_ADDR_B, Contr
 ControllinoNeoPin* _NEO_CORE_AO2 = new ControllinoNeoPin(AD56X4_CH_ADDR_C, ControllinoNeoPin::AD56X4_PIN);
 ControllinoNeoPin* _NEO_CORE_AO3 = new ControllinoNeoPin(AD56X4_CH_ADDR_D, ControllinoNeoPin::AD56X4_PIN);
 
-ControllinoNeoPin* _NEO_CORE_DO4 = new ControllinoNeoPin(CY8C95XX_GPIO_9, ControllinoNeoPin::CY8C95XX_PIN);
-ControllinoNeoPin* _NEO_CORE_DO5 = new ControllinoNeoPin(CY8C95XX_GPIO_8, ControllinoNeoPin::CY8C95XX_PIN);
-ControllinoNeoPin* _NEO_CORE_DO6 = new ControllinoNeoPin(CY8C95XX_GPIO_7, ControllinoNeoPin::CY8C95XX_PIN);
-ControllinoNeoPin* _NEO_CORE_DO7 = new ControllinoNeoPin(CY8C95XX_GPIO_6, ControllinoNeoPin::CY8C95XX_PIN);
+// ControllinoNeoPin* _NEO_CORE_DO4 = new ControllinoNeoPin(CY8C95XX_GPIO_9, ControllinoNeoPin::CY8C95XX_PIN);
+// ControllinoNeoPin* _NEO_CORE_DO5 = new ControllinoNeoPin(CY8C95XX_GPIO_8, ControllinoNeoPin::CY8C95XX_PIN);
+// ControllinoNeoPin* _NEO_CORE_DO6 = new ControllinoNeoPin(CY8C95XX_GPIO_7, ControllinoNeoPin::CY8C95XX_PIN);
+// ControllinoNeoPin* _NEO_CORE_DO7 = new ControllinoNeoPin(CY8C95XX_GPIO_6, ControllinoNeoPin::CY8C95XX_PIN);
+
+ControllinoNeoPin* _NEO_CORE_DO4 = new ControllinoNeoPin(_NEO_CORE_DO4_RP2040_GPIO, ControllinoNeoPin::RP2040_PIN);
+ControllinoNeoPin* _NEO_CORE_DO5 = new ControllinoNeoPin(_NEO_CORE_DO5_RP2040_GPIO, ControllinoNeoPin::RP2040_PIN);
+ControllinoNeoPin* _NEO_CORE_DO6 = new ControllinoNeoPin(_NEO_CORE_DO6_RP2040_GPIO, ControllinoNeoPin::RP2040_PIN);
+ControllinoNeoPin* _NEO_CORE_DO7 = new ControllinoNeoPin(_NEO_CORE_DO7_RP2040_GPIO, ControllinoNeoPin::RP2040_PIN);
 
 ControllinoNeoPin* _NEO_CORE_DI0 = new ControllinoNeoPin(_NEO_CORE_DI0_RP2040_GPIO, ControllinoNeoPin::RP2040_PIN);
 ControllinoNeoPin* _NEO_CORE_DI1 = new ControllinoNeoPin(_NEO_CORE_DI1_RP2040_GPIO, ControllinoNeoPin::RP2040_PIN);
@@ -279,34 +290,33 @@ int analogRead(ControllinoNeoPin* pin)
         adcValue = analogRead(pin->getPin());
         break;
     case ControllinoNeoPin::MCP356X_PIN: // mcp356x.h
-        uint8_t txdata[7];
-        memset(txdata, 0x00, sizeof(txdata));
-        txdata[0] = MCP356X_MUX_VIN_NEG_VREF_EXT_MINUS;
+        uint8_t txdata;
+        txdata = MCP356X_MUX_VIN_NEG_VREF_EXT_MINUS;
         switch (pin->getPin())
         {
         case MCP356X_CH_CH1:
-            txdata[0] |= MCP356X_MUX_VIN_POS_CH1;
+            txdata |= MCP356X_MUX_VIN_POS_CH1;
             break;
         case MCP356X_CH_CH2:
-            txdata[0] |= MCP356X_MUX_VIN_POS_CH2;
+            txdata |= MCP356X_MUX_VIN_POS_CH2;
             break;
         case MCP356X_CH_CH3:
-            txdata[0] |= MCP356X_MUX_VIN_POS_CH4;
+            txdata |= MCP356X_MUX_VIN_POS_CH4;
             break;
         case MCP356X_CH_CH5:
-            txdata[0] |= MCP356X_MUX_VIN_POS_CH5;
+            txdata |= MCP356X_MUX_VIN_POS_CH5;
             break;
         case MCP356X_CH_CH6:
-            txdata[0] |= MCP356X_MUX_VIN_POS_CH6;
+            txdata |= MCP356X_MUX_VIN_POS_CH6;
             break;
         case MCP356X_CH_CH7:
-            txdata[0] |= MCP356X_MUX_VIN_POS_CH7;
+            txdata |= MCP356X_MUX_VIN_POS_CH7;
             break;
         default:
-            txdata[0] |= MCP356X_MUX_VIN_POS_CH0;
+            txdata |= MCP356X_MUX_VIN_POS_CH0;
             break;
         }
-        mcp356x_iwrite(neo_mcp356x, MCP356X_REG_MUX, txdata, sizeof(txdata));
+        mcp356x_iwrite(neo_mcp356x, MCP356X_REG_MUX, &txdata, 1);
         uint8_t dummySgn;
         uint32_t dummyRes;
         mcp356x_read_raw_adc(neo_mcp356x, (uint32_t*)&adcValue, &dummySgn, &dummyRes);
@@ -430,8 +440,10 @@ void digitalWrite(pin_size_t pin, PinStatus val) {
         __digitalWrite(pin, val);
     }
     else if (pin == SDCARD_SS_PIN) {
-        if (val) sd_card_cs_deselect();
-        else sd_card_cs_select();
+        __digitalWrite(_SDCARD_SS_PIN, val);
+    }
+    else if (pin == PIN_SPI_SS_ETHERNET_LIB) {
+        __digitalWrite(_ETHERNET_SS_PIN, val);
     }
     else if (getControllinoNeoPin(pin) != nullptr) {
         digitalWrite(getControllinoNeoPin(pin), val);

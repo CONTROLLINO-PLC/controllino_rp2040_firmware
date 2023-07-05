@@ -67,14 +67,14 @@ void test_mcp356x_pin_digitalWrite_does_nothing()
     digitalWrite(NEO_CORE_AI0, HIGH);
 }
  
-void test_ad56x4_pin_get_set_digitalThreshold()
+void test_mcp356x_pin_get_set_digitalThreshold()
 {
     TEST_ASSERT_EQUAL(~0U, getDigitalThreshold(NEO_CORE_AI0));
     setDigitalThreshold(NEO_CORE_AI0, TEST_MCP356X_ADC_DATA);
     TEST_ASSERT_EQUAL(TEST_MCP356X_ADC_DATA, getDigitalThreshold(NEO_CORE_AI0));
 }
 
-void test_ad56x4_digitalRead_with_digitalThreshold()
+void test_mcp356x_digitalRead_with_digitalThreshold()
 {
     TEST_ASSERT_EQUAL(LOW, digitalRead(NEO_CORE_AI0));
 #ifdef NATIVE_ENV /* Equal case can only be tested in native enviroment */
@@ -96,8 +96,8 @@ int runUnityTests(void)
     RUN_TEST(test_mcp356x_pin_analogRead_ok);
     RUN_TEST(test_mcp356x_pin_analogWrite_does_nothing);
     RUN_TEST(test_mcp356x_pin_digitalWrite_does_nothing);
-    RUN_TEST(test_ad56x4_pin_get_set_digitalThreshold);
-    RUN_TEST(test_ad56x4_digitalRead_with_digitalThreshold);
+    RUN_TEST(test_mcp356x_pin_get_set_digitalThreshold);
+    RUN_TEST(test_mcp356x_digitalRead_with_digitalThreshold);
     UNITY_END();
     return UNITY_END();
 }

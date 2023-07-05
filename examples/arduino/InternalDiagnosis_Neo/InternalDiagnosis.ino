@@ -1,4 +1,5 @@
 #include "Arduino.h"
+#include "SPI.h"
 
 void setup() {
   // Open serial communications and wait for port to open:

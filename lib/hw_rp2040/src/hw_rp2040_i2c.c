@@ -26,6 +26,8 @@ platform_err_code_t platform_i2c_init(hw_i2c_t i2c_hw, unsigned int speed, int s
     }
     gpio_set_function(sda_pin, GPIO_FUNC_I2C);
     gpio_set_function(scl_pin, GPIO_FUNC_I2C);
+    gpio_pull_up(sda_pin);
+    gpio_pull_up(scl_pin);
     i2c_deinit((i2c_inst_t*)i2c_hw);
     if (i2c_init((i2c_inst_t*)i2c_hw, speed) != speed)
         return PLATFORM_I2C_INIT_ERR;
