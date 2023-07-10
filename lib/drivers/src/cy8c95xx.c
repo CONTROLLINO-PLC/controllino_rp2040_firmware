@@ -12,7 +12,7 @@
 static uint8_t port_slave_addr;
 static uint8_t eeprom_slave_addr;
 static platform_err_code_t ret;
-
+ 
 /* Initializes default configuration */
 void cy8c95xx_set_default_cfg(cy8c95xx_cfg_t* cfg)
 {

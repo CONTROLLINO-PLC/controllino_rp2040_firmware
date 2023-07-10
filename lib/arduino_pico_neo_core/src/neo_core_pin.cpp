@@ -8,7 +8,7 @@
 #include "neo_core_pin.h"
 #include "hw_platform.h"
 
- // Micro Internal defines
+// Micro Internal defines
 #define _MCP356X_SS_PIN     (3u)
 #define _AD56X4_SS_PIN      (2u)
 #define _SDCARD_SS_PIN      (20u)
@@ -20,7 +20,7 @@ mcp356x_t* neo_mcp356x;
 ad56x4_t* neo_ad56x4;
 bts71220_t* neo_bts71220;
 wsen_temp_t* neo_wsen_temp;
-
+ 
 /*
 Arduino-pico variant initialization
 Note: This function will be called on every boot before setup()
@@ -32,13 +32,13 @@ void initVariant()
     wsen_temp_cfg_t wsen_temp_cfg;
     wsen_temp_set_default_cfg(&wsen_temp_cfg);
     wsen_temp_init(neo_wsen_temp, &wsen_temp_cfg);
-
+    
     // Port expander 
     neo_cy8c95xx = (cy8c95xx_t*)malloc(sizeof(cy8c95xx_t));
     cy8c95xx_cfg_t cy8c95xx_cfg;
     cy8c95xx_set_default_cfg(&cy8c95xx_cfg);
     cy8c95xx_init(neo_cy8c95xx, &cy8c95xx_cfg);
-
+    
     // Digital output pins to low level at the beginning
     cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_6, 0);
     cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_7, 0);
@@ -49,6 +49,12 @@ void initVariant()
     cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_8, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
     cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_9, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
 
+    // RS485 RE and DE pins initialization
+    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_14, 1); // RE
+    cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_15, 0); // DE
+    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_14, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_UP);
+    cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_15, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+
     // cy8c95xx_send_cmd(neo_cy8c95xx, CY8C95XX_STORE_POR_CFG_TO_EEPROM);
 
     // ADC analog inputs
@@ -57,21 +63,21 @@ void initVariant()
     mcp356x_cfg_t mcp356x_cfg;
     mcp356x_set_default_cfg(&mcp356x_cfg);
     mcp356x_init(neo_mcp356x, &mcp356x_cfg);
-
+    
     // DAC analog output
     neo_ad56x4 = (ad56x4_t*)malloc(sizeof(ad56x4_t));
     pinMode(_AD56X4_SS_PIN, OUTPUT);
     ad56x4_cfg_t ad56x4_cfg;
     ad56x4_set_default_cfg(&ad56x4_cfg);
     ad56x4_init(neo_ad56x4, &ad56x4_cfg);
-
+    
     // Digital outputs controller
     neo_bts71220 = (bts71220_t*)malloc(sizeof(bts71220_t));
     bts71220_cfg_t bts71220_cfg;
     bts71220_set_default_cfg(&bts71220_cfg);
     bts71220_init(neo_bts71220, &bts71220_cfg);
 }
-
+ 
 /* SPI chip select management */
 void mcp356x_cs_select(int cs_pin) {
     digitalWrite(_MCP356X_SS_PIN, LOW);
@@ -94,7 +100,7 @@ void bts71220_cs_select(int cs_pin) {
 void bts71220_cs_deselect(int cs_pin) {
     cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_12, 1);
 }
-
+ 
 /* Pin definitions for ControllinoNeoPin API */
 ControllinoNeoPin* _NEO_CORE_AI0 = new ControllinoNeoPin(MCP356X_CH_CH0, ControllinoNeoPin::MCP356X_PIN);
 ControllinoNeoPin* _NEO_CORE_AI1 = new ControllinoNeoPin(MCP356X_CH_CH1, ControllinoNeoPin::MCP356X_PIN);
@@ -124,6 +130,9 @@ ControllinoNeoPin* _NEO_CORE_DO0 = new ControllinoNeoPin(_NEO_CORE_DO0_RP2040_GP
 ControllinoNeoPin* _NEO_CORE_DO1 = new ControllinoNeoPin(_NEO_CORE_DO1_RP2040_GPIO, ControllinoNeoPin::RP2040_PIN);
 ControllinoNeoPin* _NEO_CORE_DO2 = new ControllinoNeoPin(_NEO_CORE_DO2_RP2040_GPIO, ControllinoNeoPin::RP2040_PIN);
 ControllinoNeoPin* _NEO_CORE_DO3 = new ControllinoNeoPin(_NEO_CORE_DO3_RP2040_GPIO, ControllinoNeoPin::RP2040_PIN);
+
+ControllinoNeoPin* _NEO_RE_PIN = new ControllinoNeoPin(CY8C95XX_GPIO_14, ControllinoNeoPin::CY8C95XX_PIN);
+ControllinoNeoPin* _NEO_DE_PIN = new ControllinoNeoPin(CY8C95XX_GPIO_15, ControllinoNeoPin::CY8C95XX_PIN);
 
 /* Returns ControllinoNeoPin API pin or nullptr */
 ControllinoNeoPin* getControllinoNeoPin(int pin)
@@ -162,19 +171,19 @@ ControllinoNeoPin* getControllinoNeoPin(int pin)
     }
     return nullptr;
 }
-
+ 
 /* ControllinoNeoPin API */
 void setDigitalThreshold(pin_size_t pin, uint32_t threshold) {
     if (getControllinoNeoPin(pin) != nullptr)
         setDigitalThreshold(getControllinoNeoPin(pin), threshold);
 }
-
+ 
 uint32_t getDigitalThreshold(pin_size_t pin) {
     if (getControllinoNeoPin(pin) != nullptr)
         return getDigitalThreshold(getControllinoNeoPin(pin));
     return 0;
 }
-
+ 
 void pinMode(ControllinoNeoPin* pin, PinMode mode)
 {
     switch (pin->getType())
@@ -216,7 +225,7 @@ void pinMode(ControllinoNeoPin* pin, PinMode mode)
     }
     pin->setMode(mode);
 }
-
+ 
 PinStatus digitalRead(ControllinoNeoPin* pin)
 {
     PinStatus pinStatus = LOW;
@@ -251,7 +260,7 @@ PinStatus digitalRead(ControllinoNeoPin* pin)
     }
     return pinStatus;
 }
-
+ 
 void digitalWrite(ControllinoNeoPin* pin, PinStatus value)
 {
     switch (pin->getType())
@@ -274,7 +283,7 @@ void digitalWrite(ControllinoNeoPin* pin, PinStatus value)
         break;
     }
 }
-
+ 
 int analogRead(ControllinoNeoPin* pin)
 {
     int adcValue = 0;
@@ -285,6 +294,8 @@ int analogRead(ControllinoNeoPin* pin)
         break;
     case ControllinoNeoPin::MCP356X_PIN: // mcp356x.h
         uint8_t txdata;
+        uint8_t dummySgn;
+        uint32_t dummyRes;
         txdata = MCP356X_MUX_VIN_NEG_VREF_EXT_MINUS;
         switch (pin->getPin())
         {
@@ -311,8 +322,7 @@ int analogRead(ControllinoNeoPin* pin)
             break;
         }
         mcp356x_iwrite(neo_mcp356x, MCP356X_REG_MUX, &txdata, 1);
-        uint8_t dummySgn;
-        uint32_t dummyRes;
+        delayMicroseconds(500); // Give time to update the adc conversion adjustment for Over sample rate of 256
         mcp356x_read_raw_adc(neo_mcp356x, (uint32_t*)&adcValue, &dummySgn, &dummyRes);
         break;
     default:
@@ -321,7 +331,7 @@ int analogRead(ControllinoNeoPin* pin)
     }
     return adcValue;
 }
-
+ 
 void analogWrite(ControllinoNeoPin* pin, int value)
 {
     switch (pin->getType())
@@ -390,7 +400,7 @@ void analogWrite(ControllinoNeoPin* pin, int value)
         break;
     }
 }
-
+ 
 /* Set the digital threshold to implement a digital input with an analog input only pin */
 void setDigitalThreshold(ControllinoNeoPin* pin, uint32_t threshold)
 {
@@ -404,18 +414,18 @@ void setDigitalThreshold(ControllinoNeoPin* pin, uint32_t threshold)
         break;
     }
 }
-
+ 
 /* Get current digital threshold */
 uint32_t getDigitalThreshold(ControllinoNeoPin* pin)
 {
     return pin->_getDigitalThreshold();
 }
-
-/* Trick arduino API to handle NEO pins */
+ 
+/* Trick arduino API to handle NEO pins */ 
 extern "C" void __pinMode(pin_size_t pin, PinMode mode);
 extern "C" void __digitalWrite(pin_size_t pin, PinStatus val);
 extern "C" PinStatus __digitalRead(pin_size_t pin);
-
+ 
 void pinMode(pin_size_t pin, PinMode mode) {
     if (pin < 32) { // Call Arduino API because is an RP2040 pin
         gpio_set_input_hysteresis_enabled(pin, false); // Disable input histerisys
@@ -427,12 +437,12 @@ void pinMode(pin_size_t pin, PinMode mode) {
     else if (pin == PIN_SPI_SS_ETHERNET_LIB) {
         __pinMode(_ETHERNET_SS_PIN, mode);
     }
-    // else if (pin == RS485_DEFAULT_RE_PIN) {
-    //     cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_14, CY8C95XX_GPIO_OUT, CY8C95XX_DRV_STRONG);
-    // }
-    // else if (pin == RS485_DEFAULT_DE_PIN) {
-    //     cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_14, CY8C95XX_GPIO_OUT, CY8C95XX_DRV_PULL_DOWN);
-    // }
+    else if (pin == RS485_DEFAULT_RE_PIN) {
+        pinMode(_NEO_RE_PIN, mode);
+    }
+    else if (pin == RS485_DEFAULT_DE_PIN) {
+        pinMode(_NEO_DE_PIN, mode);
+    }
     else if (getControllinoNeoPin(pin) != nullptr) {
         pinMode(getControllinoNeoPin(pin), mode);
     }
@@ -440,7 +450,7 @@ void pinMode(pin_size_t pin, PinMode mode) {
         asm volatile("nop");
     }
 }
-
+ 
 void digitalWrite(pin_size_t pin, PinStatus val) {
     if (pin < 32) {
         __digitalWrite(pin, val);
@@ -452,30 +462,16 @@ void digitalWrite(pin_size_t pin, PinStatus val) {
         __digitalWrite(_ETHERNET_SS_PIN, val);
     }
     else if (pin == RS485_DEFAULT_RE_PIN) {
-        if (val == HIGH) {
-            cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_14, 1);
-            cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_14, CY8C95XX_GPIO_OUT, CY8C95XX_DRV_PULL_UP);
-        }
-        else {
-            cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_14, 0);
-            cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_14, CY8C95XX_GPIO_OUT, CY8C95XX_DRV_STRONG);
-        }
+        digitalWrite(_NEO_RE_PIN, val);
     }
     else if (pin == RS485_DEFAULT_DE_PIN) {
-        if (val == HIGH) {
-            cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_15, 1);
-            cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_15, CY8C95XX_GPIO_OUT, CY8C95XX_DRV_STRONG);
-        }
-        else {
-            cy8c95xx_write_pin(neo_cy8c95xx, CY8C95XX_GPIO_15, 0);
-            cy8c95xx_pin_mode(neo_cy8c95xx, CY8C95XX_GPIO_15, CY8C95XX_GPIO_OUT, CY8C95XX_DRV_PULL_DOWN);
-        }
+        digitalWrite(_NEO_DE_PIN, val);
     }
     else if (getControllinoNeoPin(pin) != nullptr) {
         digitalWrite(getControllinoNeoPin(pin), val);
     }
 }
-
+ 
 PinStatus digitalRead(pin_size_t pin) {
     if (pin < 32) {
         return __digitalRead(pin);
@@ -485,9 +481,9 @@ PinStatus digitalRead(pin_size_t pin) {
     }
     return LOW;
 }
-
+ 
 #ifndef NATIVE_ENV // Avoid the folowing part on native testing
-
+ 
 /* Modifications of wiring_analog.cpp on arduino-pico  */
 #include <CoreMutex.h>
 #include <hardware/gpio.h>
@@ -668,5 +664,5 @@ extern "C" void analogReadResolution(int bits) {
         _readBits = bits;
     }
 }
-
+ 
 #endif // #ifndef NATIVE_ENV

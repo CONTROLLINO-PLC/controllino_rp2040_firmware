@@ -17,12 +17,12 @@ void exp_init(void)
     cy8c95xx_pin_mode(&cy8c9520, MCP3564_CS, CY8C95XX_GPIO_OUT, CY8C95XX_REG_PULL_UP);
 }
 
-void mcp356x_cs_select(mcp356x_t* dac)
+void mcp356x_cs_select(int cs_pin)
 {
     cy8c95xx_write_pin(&cy8c9520, MCP3564_CS, CY8C95XX_LOW);
 }
 
-void mcp356x_cs_deselect(mcp356x_t* dac)
+void mcp356x_cs_deselect(int cs_pin)
 {
     cy8c95xx_write_pin(&cy8c9520, MCP3564_CS, CY8C95XX_HIGH);
 }

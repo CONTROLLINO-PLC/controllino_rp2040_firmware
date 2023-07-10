@@ -81,21 +81,39 @@ static const uint8_t A3 =           (29u);
 #define LED_BUILTIN                 PIN_LED
  
 /* For Arduino RS485 library */
+#ifndef RS485_SERIAL_PORT
 #define RS485_SERIAL_PORT           Serial1
+#endif
+#ifndef RS485_DEFAULT_TX_PIN
 #define RS485_DEFAULT_TX_PIN        PIN_SERIAL1_TX
+#endif
+#ifndef RS485_DEFAULT_RE_PIN
 #define RS485_DEFAULT_RE_PIN        (42u)
+#endif
+#ifndef RS485_DEFAULT_DE_PIN
 #define RS485_DEFAULT_DE_PIN        (43u)
+#endif
 
 /* For Arduino SD library */
+#ifndef SDCARD_SS_PIN
 #define SDCARD_SS_PIN               (40u)
+#endif
 
 /* For Arduino ETHERNET library */
+#ifndef PIN_SPI_SS_ETHERNET_LIB
 #define PIN_SPI_SS_ETHERNET_LIB     (41u)
+#endif
 
 /* For Arduino CAN library */
+#ifndef MCP2515_DEFAULT_SPI
 #define MCP2515_DEFAULT_SPI         SPI
+#endif
+#ifndef MCP2515_DEFAULT_CS_PIN
 #define MCP2515_DEFAULT_CS_PIN      (15u)
+#endif
+#ifndef MCP2515_DEFAULT_INT_PIN
 #define MCP2515_DEFAULT_INT_PIN     (21u)
+#endif
 
 /* Analog inputs connected to MCP356X 24 bits ADC */
 static const uint8_t NEO_CORE_AI0 = (50u);

@@ -1,12 +1,13 @@
 #include "Arduino.h"
 #include "SPI.h"
+#include "Wire.h"
 
 void setup() {
   // Open serial communications and wait for port to open:
-  Serial.begin(115200);
-  while (!Serial); // Wait for serial port to connect. Needed for native USB port only
+  Serial1.begin(115200);
+  while (!Serial1); // Wait for serial port to connect. Needed for native USB port only
   
-  Serial.println("Initializing..");
+  Serial1.println("Initializing..");
 
   // Activate digital outputs for current measurement
   pinMode(NEO_CORE_DO0, OUTPUT); 
@@ -20,30 +21,30 @@ void setup() {
 }
 
 void loop(void) {
-  Serial.print("Power: ");
-  Serial.print(readVoltageSuply()); // Board power suply
-  Serial.print(" mV");
+  Serial1.print("Power: ");
+  Serial1.print(readVoltageSuply()); // Board power suply
+  Serial1.print(" mV");
   enableCurrentSenseDO(0); // Enable current measurement on digital output 0 (NEO_CORE_DO0)
-  Serial.print("\tDO0 I: ");
-  Serial.print(readCurrentSenseDO()); // Read current on digital output 0 (NEO_CORE_DO0)
-  Serial.print(" mA");
+  Serial1.print("\tDO0 I: ");
+  Serial1.print(readCurrentSenseDO()); // Read current on digital output 0 (NEO_CORE_DO0)
+  Serial1.print(" mA");
   enableCurrentSenseDO(1);
-  Serial.print("\tDO1 I: ");
-  Serial.print(readCurrentSenseDO());
-  Serial.print(" mA");
+  Serial1.print("\tDO1 I: ");
+  Serial1.print(readCurrentSenseDO());
+  Serial1.print(" mA");
   enableCurrentSenseDO(4);
-  Serial.print("\tDO4 I: ");
-  Serial.print(readCurrentSenseDO());
-  Serial.print(" mA");
+  Serial1.print("\tDO4 I: ");
+  Serial1.print(readCurrentSenseDO());
+  Serial1.print(" mA");
   enableCurrentSenseDO(5);
-  Serial.print("\tDO5 I: ");
-  Serial.print(readCurrentSenseDO());
-  Serial.print(" mA");
-  Serial.print("\tTemperature Board: ");
-  Serial.print(readBoardTemperature(), 2); // Board Temperature
-  Serial.print(" °C");
-  Serial.print(" RP2040: ");
-  Serial.print(analogReadTemp(3.3F), 2); // Main RP2040 internal temperature measurement
-  Serial.println(" °C");
+  Serial1.print("\tDO5 I: ");
+  Serial1.print(readCurrentSenseDO());
+  Serial1.print(" mA");
+  Serial1.print("\tTemperature Board: ");
+  Serial1.print(readBoardTemperature(), 2); // Board Temperature
+  Serial1.print(" °C");
+  Serial1.print(" RP2040: ");
+  Serial1.print(analogReadTemp(3.3F), 2); // Main RP2040 internal temperature measurement
+  Serial1.println(" °C");
   delay(500);
 }

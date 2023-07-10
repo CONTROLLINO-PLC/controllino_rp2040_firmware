@@ -2,7 +2,7 @@
 #include "mcp356x.h"
 #include "hw_platform.h"
 
-#define _MCP356X_CS (14u)
+#define _MCP356X_CS (3u)
  
 static void cs_init(void)
 {
