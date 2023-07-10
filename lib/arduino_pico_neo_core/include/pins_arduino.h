@@ -5,14 +5,14 @@
  * code to perform their function. Using an integer definition
  * offers better compatibillity with Arduino API.
  */
-
+ 
 #pragma once
-
+ 
 #ifndef CONTROLLINO_NEO_CORE
 #define CONTROLLINO_NEO_CORE
 #endif
-
- /* RP2040 */
+ 
+/* RP2040 */
 #define SERIAL_HOWMANY              (3u)
 #define SPI_HOWMANY                 (2u)
 #define WIRE_HOWMANY                (2u)
@@ -21,36 +21,84 @@
 #define NUM_ANALOG_INPUTS           (4u)
 #define NUM_ANALOG_OUTPUTS          (0u)
 #define ADC_RESOLUTION              (12u)
-
+ 
 /* Serial = USB */
  
 /* Serial 1 */
+#ifndef PIN_SERIAL1_TX
 #define PIN_SERIAL1_TX              (0u)
+#endif
+#ifndef PIN_SERIAL1_RX
 #define PIN_SERIAL1_RX              (1u)
+#endif
  
 /* Serial 2 */
+#ifndef PIN_SERIAL2_TX
 #define PIN_SERIAL2_TX              (8u)
+#endif
+#ifndef PIN_SERIAL2_RX
 #define PIN_SERIAL2_RX              (9u)
+#endif
  
+/* SPI */
+#ifndef __SPI0_DEVICE
+#define __SPI0_DEVICE spi0
+#endif
+#ifndef __SPI1_DEVICE
+#define __SPI1_DEVICE spi1
+
 /* SPI 0 */
+#endif
+#ifndef PIN_SPI0_MISO
 #define PIN_SPI0_MISO               (16u)
+#endif
+#ifndef PIN_SPI0_MOSI
 #define PIN_SPI0_MOSI               (19u)
+#endif
+#ifndef PIN_SPI0_SCK
 #define PIN_SPI0_SCK                (18u)
+#endif
+#ifndef PIN_SPI0_SS
 #define PIN_SPI0_SS                 (17u)
- 
+#endif
+
 /* SPI 1 */
+#ifndef PIN_SPI1_MISO
 #define PIN_SPI1_MISO               (8u)
+#endif
+#ifndef PIN_SPI1_MOSI
 #define PIN_SPI1_MOSI               (11u)
+#endif
+#ifndef PIN_SPI1_SCK
 #define PIN_SPI1_SCK                (10u)
+#endif
+#ifndef PIN_SPI1_SS
 #define PIN_SPI1_SS                 (9u)
+#endif
+ 
+/* Wire(I2C) */
+#ifndef __WIRE0_DEVICE
+#define __WIRE0_DEVICE i2c0
+#endif
+#ifndef __WIRE1_DEVICE
+#define __WIRE1_DEVICE i2c1
+#endif
 
 /* Wire(I2C) 0 */
+#ifndef PIN_WIRE0_SDA
 #define PIN_WIRE0_SDA               (4u)
+#endif
+#ifndef PIN_WIRE0_SCL
 #define PIN_WIRE0_SCL               (5u)
- 
+#endif
+
 /* Wire(I2C) 1 */
+#ifndef PIN_WIRE1_SDA
 #define PIN_WIRE1_SDA               (10u)
+#endif
+#ifndef PIN_WIRE1_SCL
 #define PIN_WIRE1_SCL               (11u)
+#endif
  
 /* Default SPI pins */
 static const uint8_t SS =           PIN_SPI0_SS;
@@ -77,8 +125,12 @@ static const uint8_t A2 =           (28u);
 static const uint8_t A3 =           (29u);
  
 /* Build in LED */
+#ifndef LED_BUILTIN
 #define PIN_LED                     (25u)
+#endif
+#ifndef LED_BUILTIN
 #define LED_BUILTIN                 PIN_LED
+#endif
  
 /* For Arduino RS485 library */
 #ifndef RS485_SERIAL_PORT
@@ -93,17 +145,17 @@ static const uint8_t A3 =           (29u);
 #ifndef RS485_DEFAULT_DE_PIN
 #define RS485_DEFAULT_DE_PIN        (43u)
 #endif
-
+ 
 /* For Arduino SD library */
 #ifndef SDCARD_SS_PIN
 #define SDCARD_SS_PIN               (40u)
 #endif
-
+ 
 /* For Arduino ETHERNET library */
 #ifndef PIN_SPI_SS_ETHERNET_LIB
 #define PIN_SPI_SS_ETHERNET_LIB     (41u)
 #endif
-
+ 
 /* For Arduino CAN library */
 #ifndef MCP2515_DEFAULT_SPI
 #define MCP2515_DEFAULT_SPI         SPI
@@ -114,7 +166,7 @@ static const uint8_t A3 =           (29u);
 #ifndef MCP2515_DEFAULT_INT_PIN
 #define MCP2515_DEFAULT_INT_PIN     (21u)
 #endif
-
+ 
 /* Analog inputs connected to MCP356X 24 bits ADC */
 static const uint8_t NEO_CORE_AI0 = (50u);
 static const uint8_t NEO_CORE_AI1 = (51u);
@@ -149,7 +201,7 @@ static const uint8_t _NEO_CORE_DI0_RP2040_GPIO = (6u);
 static const uint8_t _NEO_CORE_DI1_RP2040_GPIO = (7u);
 static const uint8_t _NEO_CORE_DI2_RP2040_GPIO = (12u);
 static const uint8_t _NEO_CORE_DI3_RP2040_GPIO = (13u);
-
+ 
 /*
 Digital outputs connected to RP2040 and drived by
 BTS71220 high side output controller
@@ -162,8 +214,7 @@ static const uint8_t _NEO_CORE_DO0_RP2040_GPIO = (24u);
 static const uint8_t _NEO_CORE_DO1_RP2040_GPIO = (23u);
 static const uint8_t _NEO_CORE_DO2_RP2040_GPIO = (22u);
 static const uint8_t _NEO_CORE_DO3_RP2040_GPIO = (14u);
-
-
+ 
 /* ControllinoNeoPin API */
 #include "neo_core_pin.h"
  
