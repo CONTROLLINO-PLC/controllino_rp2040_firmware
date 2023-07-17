@@ -8,7 +8,7 @@ static cy8c95xx_t cy8c95xx;
 
 static void cs_init(void)
 {
-#ifdef NEO_ENV
+#ifdef CONTROLLINO_NEO
     static uint8_t cs_initialized = 0;
     if (!cs_initialized) {
         cy8c95xx_cfg_t cfg;
@@ -22,7 +22,7 @@ static void cs_init(void)
  
 void bts71220_cs_select(int cs_pin)
 {
-#ifdef NEO_ENV
+#ifdef CONTROLLINO_NEO
     cs_init();
     cy8c95xx_write_pin(&cy8c95xx, _BTS71220_CS, CY8C95XX_LOW);
     platform_sleep_us(600);
@@ -31,7 +31,7 @@ void bts71220_cs_select(int cs_pin)
  
 void bts71220_cs_deselect(int cs_pin)
 {
-#ifdef NEO_ENV
+#ifdef CONTROLLINO_NEO
     cs_init();
     cy8c95xx_write_pin(&cy8c95xx, _BTS71220_CS, CY8C95XX_HIGH);
 #endif

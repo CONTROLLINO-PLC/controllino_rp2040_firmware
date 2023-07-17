@@ -11,6 +11,8 @@
  * \defgroup platform
  *
  * External hardware interface library
+ *
+ * \author Pedro Marquez @pmmarquez, CONTROLLINO Firmware Team
  */
  
 #include <stdint.h>

@@ -14,6 +14,8 @@
  *
  * Driver librarry to handle MCP356X ADC.
  * Based on MikroE ADC 9 Click driver (Copyright© 2020 MikroElektronika d.o.o.)
+ *
+ * \author Pedro Marquez @pmmarquez, CONTROLLINO Firmware Team
  */
  
 #include <stdint.h>

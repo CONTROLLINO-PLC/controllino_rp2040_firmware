@@ -13,6 +13,8 @@
  * \defgroup bts71220
  *
  * Driver librarry to handle BTS71220-4ESA power controller
+ *
+ * \author Pedro Marquez @pmmarquez, CONTROLLINO Firmware Team
  */
  
 #include <stdint.h>

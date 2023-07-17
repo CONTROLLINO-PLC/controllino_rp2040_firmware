@@ -48,7 +48,7 @@ void unityOutputComplete(void) { }
 int main(int argc, char** argv) { runUnityTests(); return 0; }
 #endif
 
-#ifdef NEO_ENV
+#ifdef CONTROLLINO_NEO
 #include <SPI.h>
 #include <Wire.h>
 void unityOutputStart(unsigned long baudrate)

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
  
-#include "neo_core_diag.h"
+#include "controllino_diag.h"
  
 static uint8_t _DO = 9; /* Selected DO for current sennsing */
  

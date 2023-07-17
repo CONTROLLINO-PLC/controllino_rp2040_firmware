@@ -1,13 +1,25 @@
+/*
+ * Copyright (c) 2023 CONTROLLINO GmbH.
+ *
+ * SPDX-License-Identifier: MIT
+ */
+ 
+#pragma once
+ 
 /**
+ * \file pins_arduino.h
+ *
+ * Based on arduino-pico generic pins_arduino.h
+ *
  * CONTROLLINO NEO I/O
  * Note: All pins with value >= 32 are of course not directly connected
  * to the RP2040 and they required to be translated in the source
  * code to perform their function. Using an integer definition
  * offers better compatibillity with Arduino API.
+ *
+ * \author Pedro Marquez @pmmarquez, CONTROLLINO Firmware Team
  */
- 
-#pragma once
- 
+
 #ifndef CONTROLLINO_NEO_CORE
 #define CONTROLLINO_NEO_CORE
 #endif
@@ -148,12 +160,12 @@ static const uint8_t A3 =           (29u);
  
 /* For Arduino SD library */
 #ifndef SDCARD_SS_PIN
-#define SDCARD_SS_PIN               (40u)
+#define SDCARD_SS_PIN               (20u)
 #endif
  
 /* For Arduino ETHERNET library */
 #ifndef PIN_SPI_SS_ETHERNET_LIB
-#define PIN_SPI_SS_ETHERNET_LIB     (41u)
+#define PIN_SPI_SS_ETHERNET_LIB     (17u)
 #endif
  
 /* For Arduino CAN library */
@@ -166,59 +178,59 @@ static const uint8_t A3 =           (29u);
 #ifndef MCP2515_DEFAULT_INT_PIN
 #define MCP2515_DEFAULT_INT_PIN     (21u)
 #endif
- 
+
+/* Other pins used on internal components */
+#ifndef _MCP356X_CS_PIN
+#define _MCP356X_CS_PIN             (3u)
+#endif
+#ifndef _AD56X4_CS_PIN
+#define _AD56X4_CS_PIN              (2u)
+#endif
+
 /* Analog inputs connected to MCP356X 24 bits ADC */
-static const uint8_t NEO_CORE_AI0 = (50u);
-static const uint8_t NEO_CORE_AI1 = (51u);
-static const uint8_t NEO_CORE_AI2 = (52u);
-static const uint8_t NEO_CORE_AI3 = (53u);
-static const uint8_t NEO_CORE_AI4 = (54u);
-static const uint8_t NEO_CORE_AI5 = (55u);
-static const uint8_t NEO_CORE_AI6 = (56u);
-static const uint8_t NEO_CORE_AI7 = (57u);
+static const uint8_t CONTROLLINO_NEO_AI0 = (50u);
+static const uint8_t CONTROLLINO_NEO_AI1 = (51u);
+static const uint8_t CONTROLLINO_NEO_AI2 = (52u);
+static const uint8_t CONTROLLINO_NEO_AI3 = (53u);
+static const uint8_t CONTROLLINO_NEO_AI4 = (54u);
+static const uint8_t CONTROLLINO_NEO_AI5 = (55u);
+static const uint8_t CONTROLLINO_NEO_AI6 = (56u);
+static const uint8_t CONTROLLINO_NEO_AI7 = (57u);
  
 /* Analog outputs connected to AD56X4 16 bits DAC */
-static const uint8_t NEO_CORE_AO0 = (60u);
-static const uint8_t NEO_CORE_AO1 = (61u);
-static const uint8_t NEO_CORE_AO2 = (62u);
-static const uint8_t NEO_CORE_AO3 = (63u);
+static const uint8_t CONTROLLINO_NEO_AO0 = (60u);
+static const uint8_t CONTROLLINO_NEO_AO1 = (61u);
+static const uint8_t CONTROLLINO_NEO_AO2 = (62u);
+static const uint8_t CONTROLLINO_NEO_AO3 = (63u);
  
 /*
 Digital outputs connected to CY8C95XX and drived by
 BTS71220 high side output controller
 */
-static const uint8_t NEO_CORE_DO4 = (70u);
-static const uint8_t NEO_CORE_DO5 = (71u);
-static const uint8_t NEO_CORE_DO6 = (72u);
-static const uint8_t NEO_CORE_DO7 = (73u);
+static const uint8_t CONTROLLINO_NEO_DO4 = (70u);
+static const uint8_t CONTROLLINO_NEO_DO5 = (71u);
+static const uint8_t CONTROLLINO_NEO_DO6 = (72u);
+static const uint8_t CONTROLLINO_NEO_DO7 = (73u);
  
 /* Digital inputs connected to RP2040 */
-static const uint8_t NEO_CORE_DI0 = (80u);
-static const uint8_t NEO_CORE_DI1 = (81u);
-static const uint8_t NEO_CORE_DI2 = (82u);
-static const uint8_t NEO_CORE_DI3 = (83u);
-static const uint8_t _NEO_CORE_DI0_RP2040_GPIO = (6u);
-static const uint8_t _NEO_CORE_DI1_RP2040_GPIO = (7u);
-static const uint8_t _NEO_CORE_DI2_RP2040_GPIO = (12u);
-static const uint8_t _NEO_CORE_DI3_RP2040_GPIO = (13u);
+static const uint8_t CONTROLLINO_NEO_DI0 = (6u);
+static const uint8_t CONTROLLINO_NEO_DI1 = (7u);
+static const uint8_t CONTROLLINO_NEO_DI2 = (12u);
+static const uint8_t CONTROLLINO_NEO_DI3 = (13u);
  
 /*
 Digital outputs connected to RP2040 and drived by
 BTS71220 high side output controller
 */
-static const uint8_t NEO_CORE_DO0 = (90u);
-static const uint8_t NEO_CORE_DO1 = (91u);
-static const uint8_t NEO_CORE_DO2 = (92u);
-static const uint8_t NEO_CORE_DO3 = (93u);
-static const uint8_t _NEO_CORE_DO0_RP2040_GPIO = (24u);
-static const uint8_t _NEO_CORE_DO1_RP2040_GPIO = (23u);
-static const uint8_t _NEO_CORE_DO2_RP2040_GPIO = (22u);
-static const uint8_t _NEO_CORE_DO3_RP2040_GPIO = (14u);
+static const uint8_t CONTROLLINO_NEO_DO0 = (24u);
+static const uint8_t CONTROLLINO_NEO_DO1 = (23u);
+static const uint8_t CONTROLLINO_NEO_DO2 = (22u);
+static const uint8_t CONTROLLINO_NEO_DO3 = (14u);
  
-/* ControllinoNeoPin API */
-#include "neo_core_pin.h"
+/* ControllinoRp2040Pin API */
+#include "controllino_driver.h"
  
 /* NEO core internal diagnosys API */
-#include "neo_core_diag.h"
+#include "controllino_diag.h"
 
 

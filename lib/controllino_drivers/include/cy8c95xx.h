@@ -14,6 +14,8 @@
  *
  * Driver librarry to handle cy8c95xx port expander.
  * Based on MikroE Expand 6 Click Driver (Copyright© 2020 MikroElektronika d.o.o.)
+ *
+ * \author Pedro Marquez @pmmarquez , CONTROLLINO Firmware Team
  */
  
 #include <stdint.h>

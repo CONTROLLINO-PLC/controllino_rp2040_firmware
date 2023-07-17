@@ -4,13 +4,15 @@
  * SPDX-License-Identifier: MIT
  */
  
-#ifndef NEO_CORE_DIAG_H
-#define NEO_CORE_DIAG_H
+#ifndef CONTROLLINO_DIAG_H
+#define CONTROLLINO_DIAG_H
  
 /**
- * \file neo_core_diag.h
+ * \file controllino_diag.h
  *
- * NEO core internal diagnosys API
+ * Controllino Neo internal diagnosys API
+ *
+ * \author Pedro Marquez @pmmarquez, CONTROLLINO Firmware Team
  */
  
 #include "Arduino.h"

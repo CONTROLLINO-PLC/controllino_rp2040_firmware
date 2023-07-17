@@ -10,14 +10,14 @@ void setup() {
   Serial1.println("Initializing..");
 
   // Activate digital outputs for current measurement
-  pinMode(NEO_CORE_DO0, OUTPUT); 
-  pinMode(NEO_CORE_DO1, OUTPUT);
-  pinMode(NEO_CORE_DO4, OUTPUT);
-  pinMode(NEO_CORE_DO5, OUTPUT);
-  digitalWrite(NEO_CORE_DO0, HIGH);
-  digitalWrite(NEO_CORE_DO1, HIGH);
-  digitalWrite(NEO_CORE_DO4, HIGH);
-  digitalWrite(NEO_CORE_DO5, HIGH);
+  pinMode(CONTROLLINO_NEO_DO0, OUTPUT);
+  pinMode(CONTROLLINO_NEO_DO1, OUTPUT);
+  pinMode(CONTROLLINO_NEO_DO4, OUTPUT);
+  pinMode(CONTROLLINO_NEO_DO5, OUTPUT);
+  digitalWrite(CONTROLLINO_NEO_DO0, HIGH);
+  digitalWrite(CONTROLLINO_NEO_DO1, HIGH);
+  digitalWrite(CONTROLLINO_NEO_DO4, HIGH);
+  digitalWrite(CONTROLLINO_NEO_DO5, HIGH);
 }
 
 void loop(void) {

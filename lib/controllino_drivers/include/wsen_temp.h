@@ -14,6 +14,8 @@
  *
  * Driver librarry to handle 2521020222501 temperature sensor.
  * Based on WE Sensor libraries (https://github.com/WurthElektronik/SensorLibrariesArduino )
+ *
+ * \author Pedro Marquez @pmmarquez, CONTROLLINO Firmware Team
  */
  
 #include <stdint.h>
