@@ -29,13 +29,13 @@
  * 
  * \return Measured power suply voltage in millivolts
  */
-int readVoltageSuply(void);
-
+extern int readVoltageSuply(void);
+ 
 /**
  *\brief Measure current board temperature using WSEN temperature sensor
  *
  * \return Measured temperature in °C
  */
-float readBoardTemperature(void);
-
+extern float readBoardTemperature(void);
+ 
 #endif  // NEO_CORE_DIAG_H

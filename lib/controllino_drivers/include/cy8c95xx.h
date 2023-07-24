@@ -32,7 +32,7 @@ extern "C" {
 typedef int cy8c95xx_err_code_t;
  
 /**
- * \brief Base addresses for comunications
+ * \brief Base addresses for comunications depending on A0 pin
  * \ingroup cy8c95xx
  */
 #define CY8C95XX_M_PORT_BASE_ADDR            0x20

@@ -3,21 +3,10 @@
  *
  * SPDX-License-Identifier: MIT
  */
-
-#include "controllino_driver.h"
+ 
+#include "controllino_wiring.h"
  
 /* Controllino RP2040 digital API */
-extern "C" void setDigitalThreshold(pin_size_t pin, uint32_t threshold) {
-    if (getControllinoRp2040Pin(pin) != nullptr)
-        setDigitalThreshold(getControllinoRp2040Pin(pin), threshold);
-}
-
-extern "C" uint32_t getDigitalThreshold(pin_size_t pin) {
-    if (getControllinoRp2040Pin(pin) != nullptr)
-        return getDigitalThreshold(getControllinoRp2040Pin(pin));
-    return 0;
-}
-
 void pinMode(ControllinoRp2040Pin* pin, PinMode mode)
 {
     switch (pin->getType())
@@ -131,6 +120,11 @@ void setDigitalThreshold(ControllinoRp2040Pin* pin, uint32_t threshold)
         break;
     }
 }
+
+void setDigitalThreshold(pin_size_t pin, uint32_t threshold) {
+    if (getControllinoRp2040Pin(pin) != nullptr)
+        setDigitalThreshold(getControllinoRp2040Pin(pin), threshold);
+}
  
 /* Get current digital threshold */
 uint32_t getDigitalThreshold(ControllinoRp2040Pin* pin)
@@ -138,6 +132,12 @@ uint32_t getDigitalThreshold(ControllinoRp2040Pin* pin)
     return pin->_getDigitalThreshold();
 }
 
+uint32_t getDigitalThreshold(pin_size_t pin) {
+    if (getControllinoRp2040Pin(pin) != nullptr)
+        return getDigitalThreshold(getControllinoRp2040Pin(pin));
+    return 0;
+}
+ 
 /* Trick arduino API to handle NEO pins */ 
 extern "C" void __pinMode(pin_size_t pin, PinMode mode);
 extern "C" void __digitalWrite(pin_size_t pin, PinStatus val);

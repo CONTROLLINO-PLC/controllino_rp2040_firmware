@@ -5,7 +5,7 @@
  */
 
 #ifndef NATIVE_ENV // Avoid the folowing part on native testing
-#include "controllino_driver.h"
+#include "controllino_wiring.h"
  
 #include <CoreMutex.h>
 #include <hardware/gpio.h>

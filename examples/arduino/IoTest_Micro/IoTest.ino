@@ -1,12 +1,6 @@
 
 #include "Arduino.h"
 #include "SPI.h"
-#include "hw_platform.h"
-
-uint8_t txdata;
-uint8_t rxdata;
-uint32_t adc_data;
-uint8_t sgn;
 
 void setup() {
   // Open serial communications and wait for port to open:

@@ -49,5 +49,3 @@ extern "C" bool gpio_is_input_hysteresis_enabled(uint gpio);
 
 /* Arduino-pico API */
 void initVariant();
- 
-#include "pins_arduino.h"	

@@ -48,7 +48,7 @@ void unityOutputComplete(void) { }
 int main(int argc, char** argv) { runUnityTests(); return 0; }
 #endif
 
-#ifdef CONTROLLINO_NEO
+#if defined(CONTROLLINO_NEO) || defined(CONTROLLINO_MICRO)
 #include <SPI.h>
 #include <Wire.h>
 void unityOutputStart(unsigned long baudrate)
@@ -90,10 +90,11 @@ void unityOutputComplete(void)
 void setup()
 {
 #ifdef UNITY_OUTPUT_SERIAL1
-    delay(3000);
+    while (!Serial1)
 #else
     while (!Serial)
 #endif
+    delay(3000);
     runUnityTests();
 }
  

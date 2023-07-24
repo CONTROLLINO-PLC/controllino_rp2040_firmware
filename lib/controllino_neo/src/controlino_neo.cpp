@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include "controllino_driver.h"
+#include "controllino_wiring.h"
 
 /* Peripherals interfaces */
 cy8c95xx_t* neo_cy8c95xx;
@@ -12,7 +12,8 @@ mcp356x_t* neo_mcp356x;
 ad56x4_t* neo_ad56x4;
 bts71220_t* neo_bts71220;
 wsen_temp_t* neo_wsen_temp;
- 
+adg728_t* neo_adg728;
+
 /**
  * Arduino-pico variant initialization
  * Note: This function will be called on every boot before setup()

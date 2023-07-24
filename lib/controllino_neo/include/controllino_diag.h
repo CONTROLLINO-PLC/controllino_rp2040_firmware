@@ -31,20 +31,20 @@
  * 
  * \param DO Digital output to select for current sense (0-7)
  */
-void enableCurrentSenseDO(uint8_t DO);
+extern void enableCurrentSenseDO(uint8_t DO);
  
 /**
  *\brief Disable current sense for digital output
  *
  */
-void disableCurrentSenseDO(void);
+extern void disableCurrentSenseDO(void);
  
 /**
  *\brief Measure current in previously selected digital output
  * 
  * \return Measured current in milliamps
  */
-int readCurrentSenseDO(void);
+extern int readCurrentSenseDO(void);
  
 /**
  *\brief Power supply monitor
@@ -58,13 +58,13 @@ int readCurrentSenseDO(void);
  * 
  * \return Measured power suply voltage in millivolts
  */
-int readVoltageSuply(void);
-
+extern int readVoltageSuply(void);
+ 
 /**
  *\brief Measure current board temperature using WSEN temperature sensor
  *
  * \return Measured temperature in °C
  */
-float readBoardTemperature(void);
-
+extern float readBoardTemperature(void);
+ 
 #endif  // NEO_CORE_DIAG_H

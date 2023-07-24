@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include "controllino_driver.h"
+#include "controllino_wiring.h"
 
 /* Peripherals interfaces */
 cy8c95xx_t* neo_cy8c95xx;
@@ -12,7 +12,8 @@ mcp356x_t* neo_mcp356x;
 ad56x4_t* neo_ad56x4;
 bts71220_t* neo_bts71220;
 wsen_temp_t* neo_wsen_temp;
- 
+adg728_t* neo_adg728;
+
 /**
  * Arduino-pico variant initialization
  * Note: This function will be called on every boot before setup()
@@ -24,6 +25,12 @@ void initVariant()
     wsen_temp_cfg_t wsen_temp_cfg;
     wsen_temp_set_default_cfg(&wsen_temp_cfg);
     wsen_temp_init(neo_wsen_temp, &wsen_temp_cfg);
+
+    // // Analog multiplexer
+    // neo_adg728 = (adg728_t*)malloc(sizeof(adg728_t));
+    // adg728_cfg_t adg728_cfg;
+    // adg728_set_default_cfg(&adg728_cfg);
+    // adg728_init(neo_adg728, &adg728_cfg);
 
     // Port expander 
     // neo_cy8c95xx = (cy8c95xx_t*)malloc(sizeof(cy8c95xx_t));

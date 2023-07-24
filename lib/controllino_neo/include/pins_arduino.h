@@ -19,7 +19,7 @@
  *
  * \author Pedro Marquez @pmmarquez, CONTROLLINO Firmware Team
  */
-
+ 
 #ifndef CONTROLLINO_NEO_CORE
 #define CONTROLLINO_NEO_CORE
 #endif
@@ -58,7 +58,7 @@
 #endif
 #ifndef __SPI1_DEVICE
 #define __SPI1_DEVICE spi1
-
+ 
 /* SPI 0 */
 #endif
 #ifndef PIN_SPI0_MISO
@@ -73,7 +73,7 @@
 #ifndef PIN_SPI0_SS
 #define PIN_SPI0_SS                 (17u)
 #endif
-
+ 
 /* SPI 1 */
 #ifndef PIN_SPI1_MISO
 #define PIN_SPI1_MISO               (8u)
@@ -95,7 +95,7 @@
 #ifndef __WIRE1_DEVICE
 #define __WIRE1_DEVICE i2c1
 #endif
-
+ 
 /* Wire(I2C) 0 */
 #ifndef PIN_WIRE0_SDA
 #define PIN_WIRE0_SDA               (4u)
@@ -103,7 +103,7 @@
 #ifndef PIN_WIRE0_SCL
 #define PIN_WIRE0_SCL               (5u)
 #endif
-
+ 
 /* Wire(I2C) 1 */
 #ifndef PIN_WIRE1_SDA
 #define PIN_WIRE1_SDA               (10u)
@@ -178,7 +178,7 @@ static const uint8_t A3 =           (29u);
 #ifndef MCP2515_DEFAULT_INT_PIN
 #define MCP2515_DEFAULT_INT_PIN     (21u)
 #endif
-
+ 
 /* Other pins used on internal components */
 #ifndef _MCP356X_CS_PIN
 #define _MCP356X_CS_PIN             (3u)
@@ -186,7 +186,7 @@ static const uint8_t A3 =           (29u);
 #ifndef _AD56X4_CS_PIN
 #define _AD56X4_CS_PIN              (2u)
 #endif
-
+ 
 /* Analog inputs connected to MCP356X 24 bits ADC */
 static const uint8_t CONTROLLINO_NEO_AI0 = (50u);
 static const uint8_t CONTROLLINO_NEO_AI1 = (51u);
@@ -228,7 +228,7 @@ static const uint8_t CONTROLLINO_NEO_DO2 = (22u);
 static const uint8_t CONTROLLINO_NEO_DO3 = (14u);
  
 /* ControllinoRp2040Pin API */
-#include "controllino_driver.h"
+#include "controllino_wiring.h"
  
 /* NEO core internal diagnosys API */
 #include "controllino_diag.h"

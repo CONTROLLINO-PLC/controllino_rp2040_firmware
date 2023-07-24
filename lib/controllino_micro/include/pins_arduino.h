@@ -58,7 +58,7 @@
 #endif
 #ifndef __SPI1_DEVICE
 #define __SPI1_DEVICE spi1
-
+ 
 /* SPI 0 */
 #endif
 #ifndef PIN_SPI0_MISO
@@ -73,7 +73,7 @@
 #ifndef PIN_SPI0_SS
 #define PIN_SPI0_SS                 (17u)
 #endif
-
+ 
 /* SPI 1 */
 #ifndef PIN_SPI1_MISO
 #define PIN_SPI1_MISO               (12u)
@@ -95,7 +95,7 @@
 #ifndef __WIRE1_DEVICE
 #define __WIRE1_DEVICE i2c1
 #endif
-
+ 
 /* Wire(I2C) 0 */
 #ifndef PIN_WIRE0_SDA
 #define PIN_WIRE0_SDA               (4u)
@@ -103,7 +103,7 @@
 #ifndef PIN_WIRE0_SCL
 #define PIN_WIRE0_SCL               (5u)
 #endif
-
+ 
 /* Wire(I2C) 1 */
 #ifndef PIN_WIRE1_SDA
 #define PIN_WIRE1_SDA               (10u)
@@ -169,12 +169,12 @@ static const uint8_t A3 =           (29u);
 #ifndef MCP2515_DEFAULT_INT_PIN
 #define MCP2515_DEFAULT_INT_PIN     (15u)
 #endif
-
+ 
 /* Other pins used on internal components */
 #ifndef _MCP356X_CS_PIN
 #define _MCP356X_CS_PIN             (14u)
 #endif
-
+ 
 /* Analog inputs connected to MCP356X 24 bits ADC */
 static const uint8_t CONTROLLINO_MICRO_AI0 = (50u);
 static const uint8_t CONTROLLINO_MICRO_AI1 = (51u);
@@ -198,9 +198,9 @@ static const uint8_t CONTROLLINO_MICRO_DO4 = (24u);
 static const uint8_t CONTROLLINO_MICRO_DO5 = (26u);
 static const uint8_t CONTROLLINO_MICRO_DO6 = (27u);
 static const uint8_t CONTROLLINO_MICRO_DO7 = (28u);
-
+ 
 /* ControllinoRp2040Pin API */
-#include "controllino_driver.h"
+#include "controllino_wiring.h"
  
 /* Micro internal diagnosys API */
 #include "controllino_diag.h"
