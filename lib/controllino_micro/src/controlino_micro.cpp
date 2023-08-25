@@ -26,18 +26,17 @@ void initVariant()
     wsen_temp_set_default_cfg(&wsen_temp_cfg);
     wsen_temp_init(neo_wsen_temp, &wsen_temp_cfg);
 
-    // // Analog multiplexer
-    // neo_adg728 = (adg728_t*)malloc(sizeof(adg728_t));
-    // adg728_cfg_t adg728_cfg;
-    // adg728_set_default_cfg(&adg728_cfg);
-    // adg728_init(neo_adg728, &adg728_cfg);
+    // Analog multiplexer
+    neo_adg728 = (adg728_t*)malloc(sizeof(adg728_t));
+    adg728_cfg_t adg728_cfg;
+    adg728_set_default_cfg(&adg728_cfg);
+    adg728_init(neo_adg728, &adg728_cfg);
 
     // Port expander 
-    // neo_cy8c95xx = (cy8c95xx_t*)malloc(sizeof(cy8c95xx_t));
-    // cy8c95xx_cfg_t cy8c95xx_cfg;
-    // cy8c95xx_set_default_cfg(&cy8c95xx_cfg);
-    // cy8c95xx_init(neo_cy8c95xx, &cy8c95xx_cfg);
-    // cy8c95xx_send_cmd(neo_cy8c95xx, CY8C95XX_STORE_POR_CFG_TO_EEPROM);
+    neo_cy8c95xx = (cy8c95xx_t*)malloc(sizeof(cy8c95xx_t));
+    cy8c95xx_cfg_t cy8c95xx_cfg;
+    cy8c95xx_set_default_cfg(&cy8c95xx_cfg);
+    cy8c95xx_init(neo_cy8c95xx, &cy8c95xx_cfg);
 
     // ADC analog inputs
     neo_mcp356x = (mcp356x_t*)malloc(sizeof(mcp356x_t));
@@ -45,6 +44,9 @@ void initVariant()
     mcp356x_cfg_t mcp356x_cfg;
     mcp356x_set_default_cfg(&mcp356x_cfg);
     mcp356x_init(neo_mcp356x, &mcp356x_cfg);
+
+    // Set default resolution for RP2040 ADC to 12 bits
+    analogReadResolution(12);
 }
  
 /* SPI chip select management */
@@ -68,7 +70,7 @@ ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI2 = new ControllinoRp2040Pin(MCP356X_
 ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI3 = new ControllinoRp2040Pin(MCP356X_CH_CH3, ControllinoRp2040Pin::MCP356X_PIN);
 ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI4 = new ControllinoRp2040Pin(MCP356X_CH_CH4, ControllinoRp2040Pin::MCP356X_PIN);
 ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI5 = new ControllinoRp2040Pin(MCP356X_CH_CH5, ControllinoRp2040Pin::MCP356X_PIN);
- 
+
 /* Returns ControllinoRp2040Pin API pin or nullptr */
 ControllinoRp2040Pin* getControllinoRp2040Pin(int pin)
 {

@@ -34,14 +34,22 @@
 #define NUM_ANALOG_OUTPUTS          (0u)
 #define ADC_RESOLUTION              (12u)
  
+/* Serial(UART) */
+#ifndef __SERIAL1_DEVICE
+#define __SERIAL1_DEVICE uart0
+#endif
+#ifndef __SERIAL2_DEVICE
+#define __SERIAL2_DEVICE uart1
+#endif
+ 
 /* Serial = USB */
  
 /* Serial 1 */
 #ifndef PIN_SERIAL1_TX
-#define PIN_SERIAL1_TX              (12u)
+#define PIN_SERIAL1_TX              (0u)
 #endif
 #ifndef PIN_SERIAL1_RX
-#define PIN_SERIAL1_RX              (13u)
+#define PIN_SERIAL1_RX              (1u)
 #endif
  
 /* Serial 2 */
@@ -76,7 +84,7 @@
  
 /* SPI 1 */
 #ifndef PIN_SPI1_MISO
-#define PIN_SPI1_MISO               (12u)
+#define PIN_SPI1_MISO               (8u)
 #endif
 #ifndef PIN_SPI1_MOSI
 #define PIN_SPI1_MOSI               (11u)
@@ -85,31 +93,31 @@
 #define PIN_SPI1_SCK                (10u)
 #endif
 #ifndef PIN_SPI1_SS
-#define PIN_SPI1_SS                 (13u)
+#define PIN_SPI1_SS                 (9u)
 #endif
  
 /* Wire(I2C) */
 #ifndef __WIRE0_DEVICE
-#define __WIRE0_DEVICE i2c0
+#define __WIRE0_DEVICE i2c1
 #endif
 #ifndef __WIRE1_DEVICE
-#define __WIRE1_DEVICE i2c1
+#define __WIRE1_DEVICE i2c0
 #endif
  
 /* Wire(I2C) 0 */
 #ifndef PIN_WIRE0_SDA
-#define PIN_WIRE0_SDA               (4u)
+#define PIN_WIRE0_SDA               (2u)
 #endif
 #ifndef PIN_WIRE0_SCL
-#define PIN_WIRE0_SCL               (5u)
+#define PIN_WIRE0_SCL               (3u)
 #endif
  
 /* Wire(I2C) 1 */
 #ifndef PIN_WIRE1_SDA
-#define PIN_WIRE1_SDA               (10u)
+#define PIN_WIRE1_SDA               (0u)
 #endif
 #ifndef PIN_WIRE1_SCL
-#define PIN_WIRE1_SCL               (11u)
+#define PIN_WIRE1_SCL               (1u)
 #endif
  
 /* Default SPI pins */
@@ -142,10 +150,10 @@ static const uint8_t A3 =           (29u);
  
 /* For Arduino RS485 library */
 #ifndef RS485_SERIAL_PORT
-#define RS485_SERIAL_PORT           Serial1
+#define RS485_SERIAL_PORT           Serial2
 #endif
 #ifndef RS485_DEFAULT_TX_PIN
-#define RS485_DEFAULT_TX_PIN        PIN_SERIAL1_TX
+#define RS485_DEFAULT_TX_PIN        PIN_SERIAL2_TX
 #endif
 #ifndef RS485_DEFAULT_RE_PIN
 #define RS485_DEFAULT_RE_PIN        (10u)
@@ -164,15 +172,24 @@ static const uint8_t A3 =           (29u);
 #define MCP2515_DEFAULT_SPI         SPI1
 #endif
 #ifndef MCP2515_DEFAULT_CS_PIN
-#define MCP2515_DEFAULT_CS_PIN      (13u)
+#define MCP2515_DEFAULT_CS_PIN      (9u)
 #endif
 #ifndef MCP2515_DEFAULT_INT_PIN
-#define MCP2515_DEFAULT_INT_PIN     (15u)
+#define MCP2515_DEFAULT_INT_PIN     (12u)
 #endif
  
 /* Other pins used on internal components */
+#ifndef _CY8C95XX_INT_PIN
+#define _CY8C95XX_INT_PIN           (4u)
+#endif
+#ifndef _MCP356X_INT_PIN
+#define _MCP356X_INT_PIN            (13u)
+#endif   
 #ifndef _MCP356X_CS_PIN
 #define _MCP356X_CS_PIN             (14u)
+#endif
+#ifndef _W5500_INT_PIN
+#define _W5500_INT_PIN              (15u)
 #endif
  
 /* Analog inputs connected to MCP356X 24 bits ADC */
@@ -184,20 +201,20 @@ static const uint8_t CONTROLLINO_MICRO_AI4 = (54u);
 static const uint8_t CONTROLLINO_MICRO_AI5 = (55u);
  
 /* Digital inputs connected to RP2040 */
-static const uint8_t CONTROLLINO_MICRO_DI0 = (0u);
-static const uint8_t CONTROLLINO_MICRO_DI1 = (1u);
-static const uint8_t CONTROLLINO_MICRO_DI2 = (2u);
-static const uint8_t CONTROLLINO_MICRO_DI3 = (3u);
+static const uint8_t CONTROLLINO_MICRO_DI0 = (26u);
+static const uint8_t CONTROLLINO_MICRO_DI1 = (27u);
+static const uint8_t CONTROLLINO_MICRO_DI2 = (28u);
+static const uint8_t CONTROLLINO_MICRO_DI3 = (29u);
  
 /* Digital outputs connected to RP2040 */
-static const uint8_t CONTROLLINO_MICRO_DO0 = (20u);
-static const uint8_t CONTROLLINO_MICRO_DO1 = (21u);
-static const uint8_t CONTROLLINO_MICRO_DO2 = (22u);
-static const uint8_t CONTROLLINO_MICRO_DO3 = (23u);
-static const uint8_t CONTROLLINO_MICRO_DO4 = (24u);
-static const uint8_t CONTROLLINO_MICRO_DO5 = (26u);
-static const uint8_t CONTROLLINO_MICRO_DO6 = (27u);
-static const uint8_t CONTROLLINO_MICRO_DO7 = (28u);
+static const uint8_t CONTROLLINO_MICRO_DO0 = (5u);
+static const uint8_t CONTROLLINO_MICRO_DO1 = (6u);
+static const uint8_t CONTROLLINO_MICRO_DO2 = (7u);
+static const uint8_t CONTROLLINO_MICRO_DO3 = (20u);
+static const uint8_t CONTROLLINO_MICRO_DO4 = (21u);
+static const uint8_t CONTROLLINO_MICRO_DO5 = (22u);
+static const uint8_t CONTROLLINO_MICRO_DO6 = (23u);
+static const uint8_t CONTROLLINO_MICRO_DO7 = (24u);
  
 /* ControllinoRp2040Pin API */
 #include "controllino_wiring.h"

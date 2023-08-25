@@ -53,7 +53,7 @@ int analogRead(ControllinoRp2040Pin* pin)
             break;
         }
         mcp356x_iwrite(neo_mcp356x, MCP356X_REG_MUX, &txdata, 1);
-        delayMicroseconds(500); // Give time to update the adc conversion adjustment for Over sample rate of 256
+        delayMicroseconds(500); // Give time to update the adc conversion (adjustment for Over sample rate of 256)
         mcp356x_read_raw_adc(neo_mcp356x, (uint32_t*)&adcValue, &dummySgn, &dummyRes);
         break;
     default:

@@ -21,8 +21,7 @@
  *\brief Power supply monitor
  *
  */
-#define NEO_POWER_SUPLY_CONVERSION_RATIO                    (float)(24000.0F / 505.0F) /* 24000 mV(24 V) for 505 on the RP2040 ADC */
-#define NEO_POWER_SUPLY_AI_PIN                              (29U)
+#define POWER_SUPLY_CONVERSION_RATIO                    (float)(24000.0F / 7362700.0F) /* 24000 mV(24 V) for 7362700 on the ADC */
  
 /**
  *\brief Measure current power suply voltage

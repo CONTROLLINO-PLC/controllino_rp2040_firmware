@@ -9,10 +9,10 @@
 #include "hardware/i2c.h"
  
 typedef struct i2c_inst_t _hw_i2c_t;
-hw_i2c_t PLATFORM_I2C_HW = (hw_i2c_t)   i2c0;
+hw_i2c_t PLATFORM_I2C_HW = (hw_i2c_t)   i2c1;
 const unsigned int PLATFORM_I2C_SPEED = 100000;
-const int PLATFORM_I2C_SDA =            4;
-const int PLATFORM_I2C_SCL =            5;
+const int PLATFORM_I2C_SDA =            2;
+const int PLATFORM_I2C_SCL =            3;
  
 /* Init I2C interface */
 platform_err_code_t platform_i2c_init(hw_i2c_t i2c_hw, unsigned int speed, int sda_pin, int scl_pin)

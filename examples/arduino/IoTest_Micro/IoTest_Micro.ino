@@ -9,7 +9,8 @@ void setup() {
   delay(3000);
 
   Serial.println("Initializing..");
-  pinMode(CONTROLLINO_MICRO_DI0, INPUT); // Digital only input 0-10V LOW > 10V HIGH 
+  pinMode(CONTROLLINO_MICRO_DI0, INPUT); // Digital only input 0-11V LOW > 11V HIGH
+  pinMode(CONTROLLINO_MICRO_DI1, INPUT); // Digital only input 0-11V LOW > 11V HIGH
   pinMode(CONTROLLINO_MICRO_AI0, INPUT); // Analog input 23 bit resolution at default gain 0-24V
   pinMode(CONTROLLINO_MICRO_AI1, INPUT); // Analog input 23 bit resolution at default gain 0-24V
   setDigitalThreshold(CONTROLLINO_MICRO_AI0, 0x3FFFFF); // Digital therhold for analog input arround 12 V
@@ -23,6 +24,8 @@ void setup() {
 void loop(void) {
   Serial.print("CONTROLLINO_MICRO_DI0 state:");
   Serial.print(digitalRead(CONTROLLINO_MICRO_DI0) ? "HIGH" : "LOW");
+  Serial.print("      CONTROLLINO_MICRO_DI1 ADC:");
+  Serial.print(analogRead(CONTROLLINO_MICRO_DI1));
   Serial.print("      CONTROLLINO_MICRO_AI0 ADC:");
   Serial.print(analogRead(CONTROLLINO_MICRO_AI0));
   Serial.print(" DIGITAL:");

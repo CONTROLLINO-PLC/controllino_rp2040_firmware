@@ -6,10 +6,13 @@
  
 #include "controllino_diag.h"
 
+ /* Power monitoring is connected to MCP356X_CH_CH6 */
+ControllinoRp2040Pin* POWER_SUPLY_AI_PIN = new ControllinoRp2040Pin(MCP356X_CH_CH6, ControllinoRp2040Pin::MCP356X_PIN);
+
 /* Measure current power suply voltage in millivolts */
 int readVoltageSuply(void)
 {
-    float mV = ((float)analogRead(NEO_POWER_SUPLY_AI_PIN)) * NEO_POWER_SUPLY_CONVERSION_RATIO;
+    float mV = ((float)analogRead(POWER_SUPLY_AI_PIN)) * POWER_SUPLY_CONVERSION_RATIO;
     return (int)mV;
 }
  
