@@ -5,8 +5,8 @@
 
 void setup() {
   Serial.begin(115200);
-  while (!Serial);
-  delay(3000);
+  // while (!Serial);
+  // delay(3000);
 
   Serial.println("CAN Sender");
 

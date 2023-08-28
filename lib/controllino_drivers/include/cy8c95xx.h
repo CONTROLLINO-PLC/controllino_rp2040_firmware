@@ -417,6 +417,18 @@ cy8c95xx_err_code_t cy8c95xx_read_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8
 cy8c95xx_err_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint8_t bit_num, uint8_t val);
  
 /*!
+ * \brief Separated select port function to optimize coms
+ * \ingroup cy8c95xx
+ *
+ * \param dev Pointer to CY8C95XX expander struct
+ * \param port_num port to select
+ * \return PLATFORM_I2C_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
+ */
+cy8c95xx_err_code_t cy8c95xx_select_port(cy8c95xx_t* dev, uint8_t port_num);
+ 
+/*!
  * \brief Send command to CY8C95XX_REG_CMD
  * \ingroup cy8c95xx
  *
@@ -571,13 +583,37 @@ cy8c95xx_err_code_t cy8c95xx_write_pin(cy8c95xx_t* dev, int pin, uint8_t val);
 cy8c95xx_err_code_t cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t port_val);
  
 /*!
+ * \brief Enable interrupt on pin with Interrupt Mask Port Register
+ * \ingroup cy8c95xx
+ *
+ * \param dev Pointer to CY8C95XX expander struct
+ * \param pin Specific pin to enable interrupt
+ * \return PLATFORM_I2C_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
+ */
+cy8c95xx_err_code_t cy8c95xx_en_pin_int(cy8c95xx_t* dev, int pin);
+ 
+/*!
+ * \brief Disable interrupt on pin with Interrupt Mask Port Register
+ * \ingroup cy8c95xx
+ *
+ * \param dev Pointer to CY8C95XX expander struct
+ * \param pin Specific pin to disable interrupt
+ * \return PLATFORM_I2C_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
+ */
+cy8c95xx_err_code_t cy8c95xx_dis_pin_int(cy8c95xx_t* dev, int pin);
+ 
+/*!
  * \brief Enable pwm output on pin
  * \ingroup cy8c95xx
  *
  * \param dev Pointer to CY8C95XX expander struct
- * \param pin Specific pin to configure pwm
+ * \param pin Specific pin to enable pwm
  * \return PLATFORM_I2C_COM_ERR : error in coms
- *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_ARGUMENT_ERR : error in arguments   
  *         PLATFORM_OK : successful
  */
 cy8c95xx_err_code_t cy8c95xx_en_pin_pwm(cy8c95xx_t* dev, int pin);
@@ -587,7 +623,7 @@ cy8c95xx_err_code_t cy8c95xx_en_pin_pwm(cy8c95xx_t* dev, int pin);
  * \ingroup cy8c95xx
  *
  * \param dev Pointer to CY8C95XX expander struct
- * \param pin Specific pin to configure pwm
+ * \param pin Specific pin to disable pwm
  * \return PLATFORM_I2C_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful

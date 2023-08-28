@@ -5,14 +5,29 @@
  */
 
 #include "controllino_wiring.h"
+#include "controllino_diag.h"
 
 /* Peripherals interfaces */
-cy8c95xx_t* neo_cy8c95xx;
-mcp356x_t* neo_mcp356x;
-ad56x4_t* neo_ad56x4;
-bts71220_t* neo_bts71220;
-wsen_temp_t* neo_wsen_temp;
-adg728_t* neo_adg728;
+cy8c95xx_t* dev_cy8c95xx;
+mcp356x_t* dev_mcp356x;
+ad56x4_t* dev_ad56x4;
+bts71220_t* dev_bts71220;
+wsen_temp_t* dev_wsen_temp;
+adg728_t* dev_adg728;
+
+/* Other pins used on internal components */
+#ifndef _CY8C95XX_INT_PIN
+#define _CY8C95XX_INT_PIN           (4u)
+#endif
+#ifndef _MCP356X_INT_PIN
+#define _MCP356X_INT_PIN            (13u)
+#endif   
+#ifndef _MCP356X_CS_PIN
+#define _MCP356X_CS_PIN             (14u)
+#endif
+#ifndef _W5500_INT_PIN
+#define _W5500_INT_PIN              (15u)
+#endif
 
 /**
  * Arduino-pico variant initialization
@@ -21,29 +36,29 @@ adg728_t* neo_adg728;
 void initVariant()
 {
     // WSEN temperature sensor
-    neo_wsen_temp = (wsen_temp_t*)malloc(sizeof(wsen_temp_t));
+    dev_wsen_temp = (wsen_temp_t*)malloc(sizeof(wsen_temp_t));
     wsen_temp_cfg_t wsen_temp_cfg;
     wsen_temp_set_default_cfg(&wsen_temp_cfg);
-    wsen_temp_init(neo_wsen_temp, &wsen_temp_cfg);
+    wsen_temp_init(dev_wsen_temp, &wsen_temp_cfg);
 
     // Analog multiplexer
-    neo_adg728 = (adg728_t*)malloc(sizeof(adg728_t));
+    dev_adg728 = (adg728_t*)malloc(sizeof(adg728_t));
     adg728_cfg_t adg728_cfg;
     adg728_set_default_cfg(&adg728_cfg);
-    adg728_init(neo_adg728, &adg728_cfg);
+    adg728_init(dev_adg728, &adg728_cfg);
 
     // Port expander 
-    neo_cy8c95xx = (cy8c95xx_t*)malloc(sizeof(cy8c95xx_t));
+    dev_cy8c95xx = (cy8c95xx_t*)malloc(sizeof(cy8c95xx_t));
     cy8c95xx_cfg_t cy8c95xx_cfg;
     cy8c95xx_set_default_cfg(&cy8c95xx_cfg);
-    cy8c95xx_init(neo_cy8c95xx, &cy8c95xx_cfg);
+    cy8c95xx_init(dev_cy8c95xx, &cy8c95xx_cfg);
 
     // ADC analog inputs
-    neo_mcp356x = (mcp356x_t*)malloc(sizeof(mcp356x_t));
+    dev_mcp356x = (mcp356x_t*)malloc(sizeof(mcp356x_t));
     pinMode(_MCP356X_CS_PIN, OUTPUT);
     mcp356x_cfg_t mcp356x_cfg;
     mcp356x_set_default_cfg(&mcp356x_cfg);
-    mcp356x_init(neo_mcp356x, &mcp356x_cfg);
+    mcp356x_init(dev_mcp356x, &mcp356x_cfg);
 
     // Set default resolution for RP2040 ADC to 12 bits
     analogReadResolution(12);
@@ -56,7 +71,7 @@ void mcp356x_cs_select(int cs_pin) {
 void mcp356x_cs_deselect(int cs_pin) {
     digitalWrite(_MCP356X_CS_PIN, HIGH);
 }
-
+ 
 /* These are not used but need to be defined */
 void ad56x4_cs_select(int cs_pin) {}
 void ad56x4_cs_deselect(int cs_pin) {}
@@ -70,7 +85,7 @@ ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI2 = new ControllinoRp2040Pin(MCP356X_
 ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI3 = new ControllinoRp2040Pin(MCP356X_CH_CH3, ControllinoRp2040Pin::MCP356X_PIN);
 ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI4 = new ControllinoRp2040Pin(MCP356X_CH_CH4, ControllinoRp2040Pin::MCP356X_PIN);
 ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI5 = new ControllinoRp2040Pin(MCP356X_CH_CH5, ControllinoRp2040Pin::MCP356X_PIN);
-
+ 
 /* Returns ControllinoRp2040Pin API pin or nullptr */
 ControllinoRp2040Pin* getControllinoRp2040Pin(int pin)
 {
@@ -86,4 +101,190 @@ ControllinoRp2040Pin* getControllinoRp2040Pin(int pin)
     default: break;
     }
     return nullptr;
+}
+ 
+/* Measure power suply voltage in millivolts */
+#define POWER_SUPLY_CONVERSION_RATIO (float)(24000.0F / 7362700.0F) /* 24000 mV(24 V) for 7362700 on the ADC */
+ControllinoRp2040Pin* POWER_SUPLY_AI_PIN = new ControllinoRp2040Pin(MCP356X_CH_CH6, ControllinoRp2040Pin::MCP356X_PIN); /* Power monitoring is connected to MCP356X_CH_CH6 */
+int readVoltageSuply(void)
+{
+    float mV = ((float)analogRead(POWER_SUPLY_AI_PIN)) * POWER_SUPLY_CONVERSION_RATIO;
+    return (int)mV;
+}
+ 
+/* Measure current board temperature in °C using WSEN temperature sensor */
+float readBoardTemperature(void)
+{
+    float celsius = 0;
+    wsen_temp_get_celsius(dev_wsen_temp, &celsius);
+    return celsius;
+}
+
+/* Posible interrupt sources from port expander represented by their GPIO */
+#define _CY8C95XX_INT_TEMP_SENSOR   CY8C95XX_GPIO_4
+#define _CY8C95XX_INT_NFAULT_DO0    CY8C95XX_GPIO_8
+#define _CY8C95XX_INT_NFAULT_DO1    CY8C95XX_GPIO_9
+#define _CY8C95XX_INT_NFAULT_DO2    CY8C95XX_GPIO_10
+#define _CY8C95XX_INT_NFAULT_DO3    CY8C95XX_GPIO_11
+#define _CY8C95XX_INT_NFAULT_DO4    CY8C95XX_GPIO_12
+#define _CY8C95XX_INT_NFAULT_DO5    CY8C95XX_GPIO_13
+#define _CY8C95XX_INT_NFAULT_DO6    CY8C95XX_GPIO_14
+#define _CY8C95XX_INT_NFAULT_DO7    CY8C95XX_GPIO_15
+
+/* Callbacks definition */
+void (*_CY8C95XX_INT_TEMP_SENSOR_cb)(void) = nullptr;
+void (*_CY8C95XX_INT_NFAULT_DO0_cb)(void) = nullptr;
+void (*_CY8C95XX_INT_NFAULT_DO1_cb)(void) = nullptr;
+void (*_CY8C95XX_INT_NFAULT_DO2_cb)(void) = nullptr;
+void (*_CY8C95XX_INT_NFAULT_DO3_cb)(void) = nullptr;
+void (*_CY8C95XX_INT_NFAULT_DO4_cb)(void) = nullptr;
+void (*_CY8C95XX_INT_NFAULT_DO5_cb)(void) = nullptr;
+void (*_CY8C95XX_INT_NFAULT_DO6_cb)(void) = nullptr;
+void (*_CY8C95XX_INT_NFAULT_DO7_cb)(void) = nullptr;
+
+/* Interrupt handler to find source of interrupt and call user cb */
+void _CY8C95XX_INT_PIN_int_handler(void)
+{
+    // Disable interrupts to avoid reentrancy
+    noInterrupts();
+
+    // Read interrupt status from port expander to find source and clear interrupts
+    uint8_t rxdata[2];
+    cy8c95xx_generic_read(dev_cy8c95xx, CY8C95XX_REG_INT_STAT_PORT0, &rxdata[0], 2);
+
+    // Check if interrupt is from temperature sensor
+    if (rxdata[0]) {
+        if (((rxdata[0] >> (_CY8C95XX_INT_TEMP_SENSOR % 8)) & 0x01) && _CY8C95XX_INT_TEMP_SENSOR_cb) {
+            // Read status to clear temperature sensor interrupt
+            wsen_temp_status_t temp_status;
+            wsen_temp_get_status(dev_wsen_temp, &temp_status);
+            (*_CY8C95XX_INT_TEMP_SENSOR_cb)();
+        }
+    }
+
+    // Check if interrupt is from digital output overcurrent
+    if (rxdata[1]) {
+        if (((rxdata[1] >> (_CY8C95XX_INT_NFAULT_DO0 % 8)) & 0x01) && _CY8C95XX_INT_NFAULT_DO0_cb) {
+            (*_CY8C95XX_INT_NFAULT_DO0_cb)();
+        }
+        if (((rxdata[1] >> (_CY8C95XX_INT_NFAULT_DO1 % 8)) & 0x01) && _CY8C95XX_INT_NFAULT_DO1_cb) {
+            (*_CY8C95XX_INT_NFAULT_DO1_cb)();
+        }
+        if (((rxdata[1] >> (_CY8C95XX_INT_NFAULT_DO2 % 8)) & 0x01) && _CY8C95XX_INT_NFAULT_DO2_cb) {
+            (*_CY8C95XX_INT_NFAULT_DO2_cb)();
+        }
+        if (((rxdata[1] >> (_CY8C95XX_INT_NFAULT_DO3 % 8)) & 0x01) && _CY8C95XX_INT_NFAULT_DO3_cb) {
+            (*_CY8C95XX_INT_NFAULT_DO3_cb)();
+        }
+        if (((rxdata[1] >> (_CY8C95XX_INT_NFAULT_DO4 % 8)) & 0x01) && _CY8C95XX_INT_NFAULT_DO4_cb) {
+            (*_CY8C95XX_INT_NFAULT_DO4_cb)();
+        }
+        if (((rxdata[1] >> (_CY8C95XX_INT_NFAULT_DO5 % 8)) & 0x01) && _CY8C95XX_INT_NFAULT_DO5_cb) {
+            (*_CY8C95XX_INT_NFAULT_DO5_cb)();
+        }
+        if (((rxdata[1] >> (_CY8C95XX_INT_NFAULT_DO6 % 8)) & 0x01) && _CY8C95XX_INT_NFAULT_DO6_cb) {
+            (*_CY8C95XX_INT_NFAULT_DO6_cb)();
+        }
+        if (((rxdata[1] >> (_CY8C95XX_INT_NFAULT_DO7 % 8)) & 0x01) && _CY8C95XX_INT_NFAULT_DO7_cb) {
+            (*_CY8C95XX_INT_NFAULT_DO7_cb)();
+        }
+    }
+
+    // Reenable interrupts
+    interrupts();
+}
+ 
+/* Enable port expander interrupt on pin _CY8C95XX_INT_PIN */
+void _en_CY8C95XX_INT_PIN_int(void)
+{
+    pinMode(_CY8C95XX_INT_PIN, INPUT);
+    attachInterrupt(_CY8C95XX_INT_PIN, &_CY8C95XX_INT_PIN_int_handler, RISING);
+}
+ 
+/* Enable temperature sensor interrupt */
+void enTempSensorInt(float lowLim, float highLim, void(*cb)(void))
+{
+    if ((lowLim < -39.68F) ||
+        (highLim < -39.68F) ||
+        (lowLim > 122.88F) ||
+        (highLim > 122.88F) ||
+        (lowLim > highLim)) return; // Invalid limits
+    
+    // Set callback and enable interrupt
+    _CY8C95XX_INT_TEMP_SENSOR_cb = cb;
+    cy8c95xx_en_pin_int(dev_cy8c95xx, _CY8C95XX_INT_TEMP_SENSOR);
+    _en_CY8C95XX_INT_PIN_int();
+
+    // Set temperature limits
+    wsen_temp_set_low_lim(dev_wsen_temp, lowLim);
+    wsen_temp_set_high_lim(dev_wsen_temp, highLim);
+}
+ 
+/* Disable temperature sensor interrupt */
+void disTempSensorInt(void)
+{
+    _CY8C95XX_INT_TEMP_SENSOR_cb = nullptr;
+    cy8c95xx_dis_pin_int(dev_cy8c95xx, _CY8C95XX_INT_TEMP_SENSOR);
+}
+
+/* Get CY8C95XX_INT_NFAULT pin from do_pin returns -1 if pin is incorrect */
+int _get_DO_CY8C95XX_INT_NFAULT(uint8_t do_pin)
+{
+    switch (do_pin)
+    {
+        case CONTROLLINO_MICRO_DO0: return _CY8C95XX_INT_NFAULT_DO0;
+        case CONTROLLINO_MICRO_DO1: return _CY8C95XX_INT_NFAULT_DO1;
+        case CONTROLLINO_MICRO_DO2: return _CY8C95XX_INT_NFAULT_DO2;
+        case CONTROLLINO_MICRO_DO3: return _CY8C95XX_INT_NFAULT_DO3;
+        case CONTROLLINO_MICRO_DO4: return _CY8C95XX_INT_NFAULT_DO4;
+        case CONTROLLINO_MICRO_DO5: return _CY8C95XX_INT_NFAULT_DO5;
+        case CONTROLLINO_MICRO_DO6: return _CY8C95XX_INT_NFAULT_DO6;
+        case CONTROLLINO_MICRO_DO7: return _CY8C95XX_INT_NFAULT_DO7;
+        default: break;
+    }
+    return -1;
+}
+
+/* Set callback for CY8C95XX_INT_NFAULT pin */
+void _set_DO_CY8C95XX_INT_NFAULT_cb(int cy8c95xx_gpio, void(*cb)(void))
+{
+    switch (cy8c95xx_gpio)
+    {
+        case _CY8C95XX_INT_NFAULT_DO0: _CY8C95XX_INT_NFAULT_DO0_cb = cb; break;
+        case _CY8C95XX_INT_NFAULT_DO1: _CY8C95XX_INT_NFAULT_DO1_cb = cb; break;
+        case _CY8C95XX_INT_NFAULT_DO2: _CY8C95XX_INT_NFAULT_DO2_cb = cb; break;
+        case _CY8C95XX_INT_NFAULT_DO3: _CY8C95XX_INT_NFAULT_DO3_cb = cb; break;
+        case _CY8C95XX_INT_NFAULT_DO4: _CY8C95XX_INT_NFAULT_DO4_cb = cb; break;
+        case _CY8C95XX_INT_NFAULT_DO5: _CY8C95XX_INT_NFAULT_DO5_cb = cb; break;
+        case _CY8C95XX_INT_NFAULT_DO6: _CY8C95XX_INT_NFAULT_DO6_cb = cb; break;
+        case _CY8C95XX_INT_NFAULT_DO7: _CY8C95XX_INT_NFAULT_DO7_cb = cb; break;
+        default: break;
+    }
+}
+
+/* Enable or disable digital output overcurrent interrupt */
+void enOutFaultInt(uint8_t doPin, void(*cb)(void))
+{
+    int cy8c95xx_gpio = _get_DO_CY8C95XX_INT_NFAULT(doPin); // Just to have an initial value
+    if (cy8c95xx_gpio == -1) return; // Invalid pin
+
+    // Set callback
+    _set_DO_CY8C95XX_INT_NFAULT_cb(cy8c95xx_gpio, cb);
+
+    // Enable interrupt
+    cy8c95xx_en_pin_int(dev_cy8c95xx, cy8c95xx_gpio);
+    _en_CY8C95XX_INT_PIN_int();
+}
+
+/* Disable digital output overcurrent interrupt */
+void disOutOverloadInt(uint8_t doPin)
+{
+    int cy8c95xx_gpio = _get_DO_CY8C95XX_INT_NFAULT(doPin); // Just to have an initial value
+    if (cy8c95xx_gpio == -1) return; // Invalid pin
+
+    // Set callback to nullptr
+    _set_DO_CY8C95XX_INT_NFAULT_cb(cy8c95xx_gpio, nullptr);
+
+    // Disable interrupt
+    cy8c95xx_dis_pin_int(dev_cy8c95xx, cy8c95xx_gpio);
 }

@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
  
-#ifndef CONTROLLINO_DRIVER_H
-#define CONTROLLINO_DRIVER_H
+#ifndef CONTROLLINO_WIRING_H
+#define CONTROLLINO_WIRING_H
  
 /**
  * \file controlino_pin_driver.h
@@ -82,11 +82,11 @@ extern uint32_t getDigitalThreshold(pin_size_t pin); // From integer pin definit
 /**
  * \brief User can access peripherals interfaces
  */
-extern cy8c95xx_t* neo_cy8c95xx;
-extern mcp356x_t* neo_mcp356x;
-extern ad56x4_t* neo_ad56x4;
-extern bts71220_t* neo_bts71220;
-extern wsen_temp_t* neo_wsen_temp;
-extern adg728_t* neo_adg728;
+extern cy8c95xx_t* dev_cy8c95xx;
+extern mcp356x_t* dev_mcp356x;
+extern ad56x4_t* dev_ad56x4;
+extern bts71220_t* dev_bts71220;
+extern wsen_temp_t* dev_wsen_temp;
+extern adg728_t* dev_adg728;
 
-#endif  // NEO_CORE_PIN_H
+#endif  // CONTROLLINO_WIRING_H

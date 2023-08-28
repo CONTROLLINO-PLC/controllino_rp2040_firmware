@@ -35,8 +35,8 @@ void pinMode(ControllinoRp2040Pin* pin, PinMode mode)
             drv = CY8C95XX_DRV_PULL_UP;
             break;
         }
-        cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Disable PWM
-        cy8c95xx_pin_mode(neo_cy8c95xx, (int)pin->getPin(), dir, drv);
+        cy8c95xx_dis_pin_pwm(dev_cy8c95xx, (int)pin->getPin()); // Disable PWM
+        cy8c95xx_pin_mode(dev_cy8c95xx, (int)pin->getPin(), dir, drv);
         break;
         // Other pin types has fixed modes 
     case ControllinoRp2040Pin::MCP356X_PIN:
@@ -66,10 +66,10 @@ PinStatus digitalRead(ControllinoRp2040Pin* pin)
         case OUTPUT_2MA:
         case OUTPUT_8MA:
         case OUTPUT_12MA:
-            cy8c95xx_read_pin_out_lvl(neo_cy8c95xx, (int)pin->getPin(), &pinState);
+            cy8c95xx_read_pin_out_lvl(dev_cy8c95xx, (int)pin->getPin(), &pinState);
             break;
         default:
-            cy8c95xx_read_pin(neo_cy8c95xx, (int)pin->getPin(), &pinState);
+            cy8c95xx_read_pin(dev_cy8c95xx, (int)pin->getPin(), &pinState);
             break;
         }
         pinStatus = pinState ? HIGH : LOW;
@@ -94,11 +94,11 @@ void digitalWrite(ControllinoRp2040Pin* pin, PinStatus value)
     case ControllinoRp2040Pin::CY8C95XX_PIN: // cy8c95xx.h
         if (pin->getMode() == OUTPUT) {
             if (value == HIGH)
-                cy8c95xx_pin_mode(neo_cy8c95xx, (int)pin->getPin(), CY8C95XX_GPIO_OUT, CY8C95XX_DRV_STRONG);
+                cy8c95xx_pin_mode(dev_cy8c95xx, (int)pin->getPin(), CY8C95XX_GPIO_OUT, CY8C95XX_DRV_STRONG);
             else
-                cy8c95xx_pin_mode(neo_cy8c95xx, (int)pin->getPin(), CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
-            cy8c95xx_write_pin(neo_cy8c95xx, (int)pin->getPin(), (uint8_t)value);
-            cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Disable PWM
+                cy8c95xx_pin_mode(dev_cy8c95xx, (int)pin->getPin(), CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+            cy8c95xx_write_pin(dev_cy8c95xx, (int)pin->getPin(), (uint8_t)value);
+            cy8c95xx_dis_pin_pwm(dev_cy8c95xx, (int)pin->getPin()); // Disable PWM
         }
         break;
     default:
@@ -120,7 +120,7 @@ void setDigitalThreshold(ControllinoRp2040Pin* pin, uint32_t threshold)
         break;
     }
 }
-
+ 
 void setDigitalThreshold(pin_size_t pin, uint32_t threshold) {
     if (getControllinoRp2040Pin(pin) != nullptr)
         setDigitalThreshold(getControllinoRp2040Pin(pin), threshold);

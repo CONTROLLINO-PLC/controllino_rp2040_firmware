@@ -52,9 +52,9 @@ int analogRead(ControllinoRp2040Pin* pin)
             txdata |= MCP356X_MUX_VIN_POS_CH0;
             break;
         }
-        mcp356x_iwrite(neo_mcp356x, MCP356X_REG_MUX, &txdata, 1);
+        mcp356x_iwrite(dev_mcp356x, MCP356X_REG_MUX, &txdata, 1);
         delayMicroseconds(500); // Give time to update the adc conversion (adjustment for Over sample rate of 256)
-        mcp356x_read_raw_adc(neo_mcp356x, (uint32_t*)&adcValue, &dummySgn, &dummyRes);
+        mcp356x_read_raw_adc(dev_mcp356x, (uint32_t*)&adcValue, &dummySgn, &dummyRes);
         break;
     default:
         // Other pin types are digital or analog output only
@@ -113,18 +113,18 @@ void analogWrite(ControllinoRp2040Pin* pin, int value)
                 pwmCfg.devider = 0x01;
                 pwmCfg.period = 0xFF;
                 pwmCfg.pulse_wid = pulseWid;
-                cy8c95xx_set_pwm_cfg(neo_cy8c95xx, &pwmCfg, &dummyDutyCyc, &dummyFreq); // Set duty cycle to selected PWM
-                cy8c95xx_en_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Enable pwm over output
+                cy8c95xx_set_pwm_cfg(dev_cy8c95xx, &pwmCfg, &dummyDutyCyc, &dummyFreq); // Set duty cycle to selected PWM
+                cy8c95xx_en_pin_pwm(dev_cy8c95xx, (int)pin->getPin()); // Enable pwm over output
             }
             else { // if pulseWid 0xFF just output HIGH
-                cy8c95xx_dis_pin_pwm(neo_cy8c95xx, (int)pin->getPin()); // Disable pwm
+                cy8c95xx_dis_pin_pwm(dev_cy8c95xx, (int)pin->getPin()); // Disable pwm
             }
-            cy8c95xx_write_pin(neo_cy8c95xx, (int)pin->getPin(), 1); // Enable output
+            cy8c95xx_write_pin(dev_cy8c95xx, (int)pin->getPin(), 1); // Enable output
         }
         break;
     case ControllinoRp2040Pin::AD56X4_PIN: // ad56x4.h
-        ad56x4_write_input_reg(neo_ad56x4, (ad56x4_ch_addr_t)pin->getPin(), ((uint16_t)value & 0xFFFF)); // 16 bits resolution
-        ad56x4_update_dac_reg(neo_ad56x4, (ad56x4_ch_addr_t)pin->getPin());
+        ad56x4_write_input_reg(dev_ad56x4, (ad56x4_ch_addr_t)pin->getPin(), ((uint16_t)value & 0xFFFF)); // 16 bits resolution
+        ad56x4_update_dac_reg(dev_ad56x4, (ad56x4_ch_addr_t)pin->getPin());
         break;
     default:
         // Other pin types are analog only

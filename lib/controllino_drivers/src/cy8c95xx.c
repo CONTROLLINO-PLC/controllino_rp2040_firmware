@@ -31,7 +31,7 @@ cy8c95xx_err_code_t cy8c95xx_init(cy8c95xx_t* dev, cy8c95xx_cfg_t* cfg)
     // Init hardware I2C interface
     if (platform_i2c_init(cfg->i2c, cfg->i2c_speed, cfg->sda_pin, cfg->scl_pin) != PLATFORM_OK)
         return PLATFORM_I2C_INIT_ERR;
-    // Init hardware reset and int pins 
+    // Init hardware reset and cy8c95xx_gpio_t pins 
     if (platform_gpio_init(cfg->rst_pin, PLATFORM_GPIO_OUT, PLATFORM_GPIO_PULL_DISABLED) != PLATFORM_OK ||
         platform_gpio_init(cfg->int_pin, PLATFORM_GPIO_IN, PLATFORM_GPIO_PULL_DISABLED) != PLATFORM_OK)
         return PLATFORM_GPIO_INIT_ERR;
@@ -120,6 +120,21 @@ cy8c95xx_err_code_t cy8c95xx_write_bit(cy8c95xx_t* dev, cy8c95xx_reg_t reg, uint
     return cy8c95xx_write_byte(dev, reg, reg_byte);
 }
  
+/* Separated select port function to optimize coms */
+cy8c95xx_err_code_t cy8c95xx_select_port(cy8c95xx_t* dev, uint8_t port_num) {
+    static uint8_t prev_port_num = 0x07; // Save last port number to optimize coms
+    if (port_num > 0x06) return PLATFORM_ARGUMENT_ERR;
+    // Select port only if it is different from previous
+    ret = PLATFORM_OK;
+    if (prev_port_num != port_num) {
+        ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, port_num);
+        if (ret != PLATFORM_OK)
+            return ret;
+        prev_port_num = port_num;
+    }
+    return ret;
+}
+ 
 /* Writes number of bytes into EEPROM */
 cy8c95xx_err_code_t cy8c95xx_write_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t* txdata, uint8_t txlen)
 {
@@ -145,7 +160,7 @@ cy8c95xx_err_code_t cy8c95xx_read_eeprom(cy8c95xx_t* dev, uint16_t mem, uint8_t*
 cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, int pin, cy8c95xx_dir_mode_t dir, cy8c95xx_drv_mode_t drv)
 {
     if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
+    ret = cy8c95xx_select_port(dev, (0x00 + (pin / 8)));
     if (ret != PLATFORM_OK)
         return ret;
     ret = cy8c95xx_write_bit(dev, CY8C95XX_REG_PORT_DIR, (pin % 8), dir);
@@ -158,7 +173,7 @@ cy8c95xx_err_code_t cy8c95xx_pin_mode(cy8c95xx_t* dev, int pin, cy8c95xx_dir_mod
 cy8c95xx_err_code_t cy8c95xx_pin_en_inv_in(cy8c95xx_t* dev, int pin)
 {
     if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
+    ret = cy8c95xx_select_port(dev, (0x00 + (pin / 8)));
     if (ret != PLATFORM_OK)
         return ret;
     return cy8c95xx_write_bit(dev, CY8C95XX_REG_INV, (pin % 8), 1);
@@ -168,7 +183,7 @@ cy8c95xx_err_code_t cy8c95xx_pin_en_inv_in(cy8c95xx_t* dev, int pin)
 cy8c95xx_err_code_t cy8c95xx_pin_dis_inv_in(cy8c95xx_t* dev, int pin)
 {
     if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
+    ret = cy8c95xx_select_port(dev, (0x00 + (pin / 8)));
     if (ret != PLATFORM_OK)
         return ret;
     return cy8c95xx_write_bit(dev, CY8C95XX_REG_INV, (pin % 8), 0);
@@ -213,11 +228,31 @@ cy8c95xx_err_code_t cy8c95xx_write_port(cy8c95xx_t* dev, uint8_t port, uint8_t p
     return cy8c95xx_write_byte(dev, (CY8C95XX_REG_OUT_PORT0 + port), port_val);
 }
  
+/* Enable interrupt on pin with Interrupt Mask Port Register */
+cy8c95xx_err_code_t cy8c95xx_en_pin_int(cy8c95xx_t* dev, int pin)
+{
+    if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
+    ret = cy8c95xx_select_port(dev, (0x00 + (pin / 8)));
+    if (ret != PLATFORM_OK)
+        return ret;
+    return cy8c95xx_write_bit(dev, CY8C95XX_REG_INT_MASK, (pin % 8), 0);
+}
+ 
+/* Disable interrupt on pin with Interrupt Mask Port Register */
+cy8c95xx_err_code_t cy8c95xx_dis_pin_int(cy8c95xx_t* dev, int pin)
+{
+    if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
+    ret = cy8c95xx_select_port(dev, (0x00 + (pin / 8)));
+    if (ret != PLATFORM_OK)
+        return ret;
+    return cy8c95xx_write_bit(dev, CY8C95XX_REG_INT_MASK, (pin % 8), 1);
+}
+ 
 /* Enable pwm output on pin */
 cy8c95xx_err_code_t cy8c95xx_en_pin_pwm(cy8c95xx_t* dev, int pin)
 {
     if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
+    ret = cy8c95xx_select_port(dev, (0x00 + (pin / 8)));
     if (ret != PLATFORM_OK)
         return ret;
     return cy8c95xx_write_bit(dev, CY8C95XX_REG_SEL_PWM_OUT, (pin % 8), 1);
@@ -227,7 +262,7 @@ cy8c95xx_err_code_t cy8c95xx_en_pin_pwm(cy8c95xx_t* dev, int pin)
 cy8c95xx_err_code_t cy8c95xx_dis_pin_pwm(cy8c95xx_t* dev, int pin)
 {
     if (pin < 0 || pin > 59) return PLATFORM_ARGUMENT_ERR;
-    ret = cy8c95xx_write_byte(dev, CY8C95XX_REG_PORT_SEL, (0x00 + (pin / 8)));
+    ret = cy8c95xx_select_port(dev, (0x00 + (pin / 8)));
     if (ret != PLATFORM_OK)
         return ret;
     return cy8c95xx_write_bit(dev, CY8C95XX_REG_SEL_PWM_OUT, (pin % 8), 0);

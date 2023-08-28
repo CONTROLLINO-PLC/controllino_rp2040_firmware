@@ -178,20 +178,6 @@ static const uint8_t A3 =           (29u);
 #define MCP2515_DEFAULT_INT_PIN     (12u)
 #endif
  
-/* Other pins used on internal components */
-#ifndef _CY8C95XX_INT_PIN
-#define _CY8C95XX_INT_PIN           (4u)
-#endif
-#ifndef _MCP356X_INT_PIN
-#define _MCP356X_INT_PIN            (13u)
-#endif   
-#ifndef _MCP356X_CS_PIN
-#define _MCP356X_CS_PIN             (14u)
-#endif
-#ifndef _W5500_INT_PIN
-#define _W5500_INT_PIN              (15u)
-#endif
- 
 /* Analog inputs connected to MCP356X 24 bits ADC */
 static const uint8_t CONTROLLINO_MICRO_AI0 = (50u);
 static const uint8_t CONTROLLINO_MICRO_AI1 = (51u);

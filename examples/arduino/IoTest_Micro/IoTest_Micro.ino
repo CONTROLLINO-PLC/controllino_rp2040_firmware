@@ -2,6 +2,14 @@
 #include "Arduino.h"
 #include "SPI.h"
 
+void _cb(void) {
+  Serial.println("DO1");
+}
+
+void _cb1(void) {
+  Serial.printf("TEMP %f\n", readBoardTemperature());
+}
+
 void setup() {
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
@@ -19,6 +27,9 @@ void setup() {
   pinMode(CONTROLLINO_MICRO_DO1, OUTPUT);
   pinMode(CONTROLLINO_MICRO_DO4, OUTPUT);
   pinMode(CONTROLLINO_MICRO_DO5, OUTPUT);
+
+  enOutFaultInt(CONTROLLINO_MICRO_DO1, &_cb);
+  enTempSensorInt(15.00F, 40.00F, &_cb1);
 }
 
 void loop(void) {
@@ -40,6 +51,9 @@ void loop(void) {
   
   Serial.print("      CONTROLLINO_MICRO_AI1 ADC:");
   Serial.print(analogRead(CONTROLLINO_MICRO_AI1));
+
+  Serial.printf("     Current Temp: %f", readBoardTemperature());
+
 
   analogWrite(CONTROLLINO_MICRO_DO0, pwm);
   analogWrite(CONTROLLINO_MICRO_DO4, pwm);

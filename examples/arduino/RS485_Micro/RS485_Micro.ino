@@ -4,8 +4,8 @@
 RS485Class MicroRS485(RS485_SERIAL_PORT, RS485_DEFAULT_TX_PIN, RS485_DEFAULT_DE_PIN, RS485_DEFAULT_RE_PIN);
 
 void setup() {
-    Serial2.setTX(8);
-    Serial2.setRX(9);
+    Serial2.setTX(PIN_SERIAL2_TX);
+    Serial2.setRX(PIN_SERIAL2_RX);
     Serial.begin(115200);
 
     while (!Serial); // Wait for serial port to connect. Needed for native USB port only

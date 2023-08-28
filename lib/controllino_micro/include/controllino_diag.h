@@ -17,24 +17,48 @@
  
 #include "Arduino.h"
  
-/**
- *\brief Power supply monitor
- *
- */
-#define POWER_SUPLY_CONVERSION_RATIO                    (float)(24000.0F / 7362700.0F) /* 24000 mV(24 V) for 7362700 on the ADC */
+#include "cy8c95xx.h"
  
 /**
- *\brief Measure current power suply voltage
- * 
- * \return Measured power suply voltage in millivolts
+ *\brief Measured power suply voltage in millivolts
+ *
  */
 extern int readVoltageSuply(void);
  
 /**
- *\brief Measure current board temperature using WSEN temperature sensor
+ *\brief Measure current board temperature in °C using WSEN temperature sensor
  *
- * \return Measured temperature in °C
  */
 extern float readBoardTemperature(void);
  
-#endif  // NEO_CORE_DIAG_H
+/**
+ * \brief Enable temperature sensor interrupt
+ *
+ * \param lowLim low temperature limit in °C
+ * \param highLim high temperature limit in °C
+ * \param cb callback function to be called on interrupt
+ */
+void enTempSensorInt(float lowLim, float highLim, void(*cb)(void));
+ 
+/**
+ * \brief Disable temperature sensor interrupt
+ *
+ */
+void disTempSensorInt(void);
+ 
+/**
+ *\brief Enable digital output chip fault interrupt
+ *
+ * \param do digital output pin CONTROLLINO_MICRO_DO0 ... CONTROLLINO_MICRO_DO7
+ * \param cb callback function to be called on interrupt
+ */
+void enOutFaultInt(uint8_t doPin, void(*cb)(void));
+ 
+/**
+ *\brief Disable digital output chip fault interrupt
+ *
+ * \param do digital output pin CONTROLLINO_MICRO_DO0 ... CONTROLLINO_MICRO_DO7
+ */
+void disOutOverloadInt(uint8_t doPin);
+ 
+#endif  // CONTROLLINO_DIAG_H
