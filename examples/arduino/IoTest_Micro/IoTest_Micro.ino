@@ -10,6 +10,30 @@ void _cb1(void) {
   Serial.printf("TEMP %f\n", readBoardTemperature());
 }
 
+mcp4461_t* dev_mcp4461_0;
+mcp4461_t* dev_mcp4461_1;
+
+void init_pot() {
+  mcp4461_cfg_t mcp4461_cfg;
+  dev_mcp4461_0 = (mcp4461_t*)malloc(sizeof(mcp4461_t));
+  dev_mcp4461_1 = (mcp4461_t*)malloc(sizeof(mcp4461_t));
+  mcp4461_set_default_cfg(&mcp4461_cfg);
+  mcp4461_cfg.i2c_addr = MCP4461_DEV_ADDR_1;
+  mcp4461_init(dev_mcp4461_0, &mcp4461_cfg);
+  mcp4461_cfg.i2c_addr = MCP4461_DEV_ADDR_3;
+  mcp4461_init(dev_mcp4461_1, &mcp4461_cfg);
+}
+
+bool do_en = true;
+
+void enableDO0() {
+  cy8c95xx_pin_mode(dev_cy8c95xx, CY8C95XX_GPIO_0, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_UP);
+}
+
+void disableDO0() {
+  cy8c95xx_pin_mode(dev_cy8c95xx, CY8C95XX_GPIO_0, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+}
+
 void setup() {
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
@@ -28,9 +52,26 @@ void setup() {
   pinMode(CONTROLLINO_MICRO_DO4, OUTPUT);
   pinMode(CONTROLLINO_MICRO_DO5, OUTPUT);
 
-  enOutFaultInt(CONTROLLINO_MICRO_DO1, &_cb);
-  enTempSensorInt(15.00F, 40.00F, &_cb1);
+  init_pot();
+
+  float current = 0.6923F;
+  float parallel = (1.5F / (current * 0.0001F)) - 5000.0F;
+  float r = parallel * 50000.0F / (50000.0F - parallel);
+  Serial.printf("R: %f\n", r);
+
+  uint16_t rxdata;
+  mcp4461_write_reg(dev_mcp4461_0, MCP4461_REG_V_WIPER_0, 0x00);
+  mcp4461_read_reg(dev_mcp4461_0, MCP4461_REG_V_WIPER_0, &rxdata);
+  Serial.println(rxdata, HEX);
+
+  while (1)
+  {
+    delay(1000);
+  }
+  
 }
+
+unsigned long lastMillis = 0;
 
 void loop(void) {
   Serial.print("CONTROLLINO_MICRO_DI0 state:");
@@ -52,11 +93,23 @@ void loop(void) {
   Serial.print("      CONTROLLINO_MICRO_AI1 ADC:");
   Serial.print(analogRead(CONTROLLINO_MICRO_AI1));
 
-  Serial.printf("     Current Temp: %f", readBoardTemperature());
-
-
   analogWrite(CONTROLLINO_MICRO_DO0, pwm);
   analogWrite(CONTROLLINO_MICRO_DO4, pwm);
+
+  if ((millis() - lastMillis) > 5000)
+  {
+    if (do_en) {
+      Serial.println("DO0 DISABLED");
+      disableDO0();
+      do_en = false;
+    }
+    else {
+      Serial.println("DO0 ENABLED");
+      enableDO0();
+      do_en = true;
+    }
+    lastMillis = millis();
+  }
 
   Serial.println();
   delay(500);

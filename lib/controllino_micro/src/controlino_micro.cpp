@@ -202,7 +202,7 @@ void _en_CY8C95XX_INT_PIN_int(void)
 }
  
 /* Enable temperature sensor interrupt */
-void enTempSensorInt(float lowLim, float highLim, void(*cb)(void))
+void enableTempSensorInt(float lowLim, float highLim, void(*cb)(void))
 {
     if ((lowLim < -39.68F) ||
         (highLim < -39.68F) ||
@@ -221,7 +221,7 @@ void enTempSensorInt(float lowLim, float highLim, void(*cb)(void))
 }
  
 /* Disable temperature sensor interrupt */
-void disTempSensorInt(void)
+void disableTempSensorInt(void)
 {
     _CY8C95XX_INT_TEMP_SENSOR_cb = nullptr;
     cy8c95xx_dis_pin_int(dev_cy8c95xx, _CY8C95XX_INT_TEMP_SENSOR);
@@ -263,7 +263,7 @@ void _set_DO_CY8C95XX_INT_NFAULT_cb(int cy8c95xx_gpio, void(*cb)(void))
 }
 
 /* Enable or disable digital output overcurrent interrupt */
-void enOutFaultInt(uint8_t doPin, void(*cb)(void))
+void enableOutFaultInt(uint8_t doPin, void(*cb)(void))
 {
     int cy8c95xx_gpio = _get_DO_CY8C95XX_INT_NFAULT(doPin); // Just to have an initial value
     if (cy8c95xx_gpio == -1) return; // Invalid pin
@@ -277,7 +277,7 @@ void enOutFaultInt(uint8_t doPin, void(*cb)(void))
 }
 
 /* Disable digital output overcurrent interrupt */
-void disOutOverloadInt(uint8_t doPin)
+void disableOutOverloadInt(uint8_t doPin)
 {
     int cy8c95xx_gpio = _get_DO_CY8C95XX_INT_NFAULT(doPin); // Just to have an initial value
     if (cy8c95xx_gpio == -1) return; // Invalid pin

@@ -24,7 +24,8 @@
 #include "bts71220.h"
 #include "wsen_temp.h"
 #include "adg728.h"
- 
+#include "mcp4461.h"
+
 /**
  * \brief Controllino Rp2040 pin class
  */

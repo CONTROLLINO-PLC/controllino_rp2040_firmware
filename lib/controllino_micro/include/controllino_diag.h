@@ -30,7 +30,12 @@ extern int readVoltageSuply(void);
  *
  */
 extern float readBoardTemperature(void);
- 
+
+/**
+ *\brief Measure output current in milliamps
+ *
+ */
+
 /**
  * \brief Enable temperature sensor interrupt
  *
@@ -38,13 +43,13 @@ extern float readBoardTemperature(void);
  * \param highLim high temperature limit in °C
  * \param cb callback function to be called on interrupt
  */
-void enTempSensorInt(float lowLim, float highLim, void(*cb)(void));
+void enableTempSensorInt(float lowLim, float highLim, void(*cb)(void));
  
 /**
  * \brief Disable temperature sensor interrupt
  *
  */
-void disTempSensorInt(void);
+void disableTempSensorInt(void);
  
 /**
  *\brief Enable digital output chip fault interrupt
@@ -52,13 +57,13 @@ void disTempSensorInt(void);
  * \param do digital output pin CONTROLLINO_MICRO_DO0 ... CONTROLLINO_MICRO_DO7
  * \param cb callback function to be called on interrupt
  */
-void enOutFaultInt(uint8_t doPin, void(*cb)(void));
+void enableOutFaultInt(uint8_t doPin, void(*cb)(void));
  
 /**
  *\brief Disable digital output chip fault interrupt
  *
  * \param do digital output pin CONTROLLINO_MICRO_DO0 ... CONTROLLINO_MICRO_DO7
  */
-void disOutOverloadInt(uint8_t doPin);
+void disableOutOverloadInt(uint8_t doPin);
  
 #endif  // CONTROLLINO_DIAG_H
