@@ -2,10 +2,10 @@
 
 ## Hardware drivers
 
-- AD56X4 dac [lib/drivers/include/ad56x4.h](lib/drivers/include/ad56x4.h)
+- AD5664 dac [lib/drivers/include/ad5664.h](lib/drivers/include/ad5664.h)
 - BTS71220-4ESA power out [lib/drivers/include/bts71220.h](lib/drivers/include/bts71220.h)
-- CY8C95XX i2c i/o expander [lib/drivers/include/cy8c95xx.h](lib/drivers/include/cy8c95xx.h)
-- MCP356X adc [lib/drivers/include/mcp356x.h](lib/drivers/include/mcp356x.h)
+- CY8C9520 i2c i/o expander [lib/drivers/include/cy8c9520.h](lib/drivers/include/cy8c9520.h)
+- MCP3564 adc [lib/drivers/include/mcp3564.h](lib/drivers/include/mcp3564.h)
 - 2521020222501 WE temp. sensor [lib/drivers/include/wsen_temp.h](lib/drivers/include/wsen_temp.h)
 
 ## Arduino-pico port

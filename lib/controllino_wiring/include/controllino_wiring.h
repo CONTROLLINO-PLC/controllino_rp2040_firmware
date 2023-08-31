@@ -18,9 +18,9 @@
  
 #include "Arduino.h"
  
-#include "cy8c95xx.h"
-#include "mcp356x.h"
-#include "ad56x4.h"
+#include "cy8c9520.h"
+#include "mcp3564.h"
+#include "ad5664.h"
 #include "bts71220.h"
 #include "wsen_temp.h"
 #include "adg728.h"
@@ -31,7 +31,7 @@
  */
 class ControllinoRp2040Pin{
 public:
-	typedef enum { CY8C95XX_PIN, MCP356X_PIN, AD56X4_PIN, RP2040_PIN} _pin_type_t;
+	typedef enum { CY8C9520_PIN, MCP3564_PIN, AD5664_PIN, RP2040_PIN} _pin_type_t;
 	ControllinoRp2040Pin(int pin, _pin_type_t type): _pin(pin), _type(type)
 	{
 		setMode(INPUT);
@@ -83,9 +83,9 @@ extern uint32_t getDigitalThreshold(pin_size_t pin); // From integer pin definit
 /**
  * \brief User can access peripherals interfaces
  */
-extern cy8c95xx_t* dev_cy8c95xx;
-extern mcp356x_t* dev_mcp356x;
-extern ad56x4_t* dev_ad56x4;
+extern cy8c9520_t* dev_cy8c9520;
+extern mcp3564_t* dev_mcp3564;
+extern ad5664_t* dev_ad5664;
 extern bts71220_t* dev_bts71220;
 extern wsen_temp_t* dev_wsen_temp;
 extern adg728_t* dev_adg728;

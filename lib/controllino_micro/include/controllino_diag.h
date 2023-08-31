@@ -17,7 +17,7 @@
  
 #include "Arduino.h"
  
-#include "cy8c95xx.h"
+#include "cy8c9520.h"
  
 /**
  *\brief Measured power suply voltage in millivolts

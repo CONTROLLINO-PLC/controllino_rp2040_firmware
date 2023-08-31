@@ -4,8 +4,8 @@
 
 void setup()
 {
-  Wire.setSDA(2);
-  Wire.setSCL(3);
+  Wire.setSDA(PIN_WIRE0_SDA);
+  Wire.setSCL(PIN_WIRE0_SCL);
   Wire.begin();
   Serial.begin(9600);
   while (!Serial);

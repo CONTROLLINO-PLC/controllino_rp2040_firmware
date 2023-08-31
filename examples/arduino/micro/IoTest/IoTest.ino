@@ -27,11 +27,11 @@ void init_pot() {
 bool do_en = true;
 
 void enableDO0() {
-  cy8c95xx_pin_mode(dev_cy8c95xx, CY8C95XX_GPIO_0, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_UP);
+  cy8c9520_pin_mode(dev_cy8c9520, CY8C9520_GPIO_0, CY8C9520_GPIO_IN, CY8C9520_DRV_PULL_UP);
 }
 
 void disableDO0() {
-  cy8c95xx_pin_mode(dev_cy8c95xx, CY8C95XX_GPIO_0, CY8C95XX_GPIO_IN, CY8C95XX_DRV_PULL_DOWN);
+  cy8c9520_pin_mode(dev_cy8c9520, CY8C9520_GPIO_0, CY8C9520_GPIO_IN, CY8C9520_DRV_PULL_DOWN);
 }
 
 void setup() {

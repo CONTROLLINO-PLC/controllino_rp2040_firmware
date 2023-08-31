@@ -2,8 +2,8 @@
 #include "Arduino.h"
 #include "controllino_pins.h"
 
-uint8_t TEST_CY8C95XX_GPIO;
-uint8_t TEST_CY8C95XX_ADDR = CY8C95XX_DEV_ADDR_GND;
+uint8_t TEST_CY8C9520_GPIO;
+uint8_t TEST_CY8C9520_ADDR = CY8C9520_DEV_ADDR_GND;
  
 void setUp(void)
 {

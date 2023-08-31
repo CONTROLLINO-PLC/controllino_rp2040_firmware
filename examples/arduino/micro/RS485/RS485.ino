@@ -17,15 +17,15 @@ void setup() {
 }
 
 void loop() {
-    if (Serial.available()) {
-        MicroRS485.noReceive();
+    if (Serial.available()) { // If anything comes in Serial (USB), 
+        MicroRS485.noReceive(); 
         MicroRS485.beginTransmission();
-        MicroRS485.write(Serial.read());
+        MicroRS485.write(Serial.read()); // read it and send it out over RS485
         MicroRS485.endTransmission();
         MicroRS485.receive();
     }
 
-    if (MicroRS485.available()) {
-        Serial.write(MicroRS485.read());
+    if (MicroRS485.available()) { // If anything comes in over RS485
+        Serial.write(MicroRS485.read()); // read it and send it out over Serial (USB)
     }
 }

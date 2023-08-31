@@ -23,38 +23,38 @@ int analogRead(ControllinoRp2040Pin* pin)
     case ControllinoRp2040Pin::RP2040_PIN:
         adcValue = analogRead(pin->getPin());
         break;
-    case ControllinoRp2040Pin::MCP356X_PIN: // mcp356x.h
+    case ControllinoRp2040Pin::MCP3564_PIN: // mcp3564.h
         uint8_t txdata;
         uint8_t dummySgn;
         uint32_t dummyRes;
-        txdata = MCP356X_MUX_VIN_NEG_VREF_EXT_MINUS;
+        txdata = MCP3564_MUX_VIN_NEG_VREF_EXT_MINUS;
         switch (pin->getPin())
         {
-        case MCP356X_CH_CH1:
-            txdata |= MCP356X_MUX_VIN_POS_CH1;
+        case MCP3564_CH_CH1:
+            txdata |= MCP3564_MUX_VIN_POS_CH1;
             break;
-        case MCP356X_CH_CH2:
-            txdata |= MCP356X_MUX_VIN_POS_CH2;
+        case MCP3564_CH_CH2:
+            txdata |= MCP3564_MUX_VIN_POS_CH2;
             break;
-        case MCP356X_CH_CH3:
-            txdata |= MCP356X_MUX_VIN_POS_CH4;
+        case MCP3564_CH_CH3:
+            txdata |= MCP3564_MUX_VIN_POS_CH4;
             break;
-        case MCP356X_CH_CH5:
-            txdata |= MCP356X_MUX_VIN_POS_CH5;
+        case MCP3564_CH_CH5:
+            txdata |= MCP3564_MUX_VIN_POS_CH5;
             break;
-        case MCP356X_CH_CH6:
-            txdata |= MCP356X_MUX_VIN_POS_CH6;
+        case MCP3564_CH_CH6:
+            txdata |= MCP3564_MUX_VIN_POS_CH6;
             break;
-        case MCP356X_CH_CH7:
-            txdata |= MCP356X_MUX_VIN_POS_CH7;
+        case MCP3564_CH_CH7:
+            txdata |= MCP3564_MUX_VIN_POS_CH7;
             break;
         default:
-            txdata |= MCP356X_MUX_VIN_POS_CH0;
+            txdata |= MCP3564_MUX_VIN_POS_CH0;
             break;
         }
-        mcp356x_iwrite(dev_mcp356x, MCP356X_REG_MUX, &txdata, 1);
+        mcp3564_iwrite(dev_mcp3564, MCP3564_REG_MUX, &txdata, 1);
         delayMicroseconds(500); // Give time to update the adc conversion (adjustment for Over sample rate of 256)
-        mcp356x_read_raw_adc(dev_mcp356x, (uint32_t*)&adcValue, &dummySgn, &dummyRes);
+        mcp3564_read_raw_adc(dev_mcp3564, (uint32_t*)&adcValue, &dummySgn, &dummyRes);
         break;
     default:
         // Other pin types are digital or analog output only
@@ -70,61 +70,61 @@ void analogWrite(ControllinoRp2040Pin* pin, int value)
     case ControllinoRp2040Pin::RP2040_PIN:
         analogWrite(pin->getPin(), value);
         break;
-    case ControllinoRp2040Pin::CY8C95XX_PIN: // cy8c95xx.h
+    case ControllinoRp2040Pin::CY8C9520_PIN: // cy8c9520.h
         if (pin->getMode() == OUTPUT) {
-            cy8c95xx_pwm_cfg_t pwmCfg;
+            cy8c9520_pwm_cfg_t pwmCfg;
             float dummyFreq;
             float dummyDutyCyc;
             uint8_t pulseWid;
             pulseWid = (uint8_t)value & 0xFF; // 8 bit resolution
             if (pulseWid < 0xFF) {
-                switch (pin->getPin()) // CY8C95XX datasheet
+                switch (pin->getPin()) // CY8C9520 datasheet
                 {
-                case CY8C95XX_GPIO_0:
-                case CY8C95XX_GPIO_2:
-                case CY8C95XX_GPIO_4:
-                case CY8C95XX_GPIO_6:
-                case CY8C95XX_GPIO_19:
-                    pwmCfg.pwm_sel = CY8C95XX_SEL_PWM_3;
+                case CY8C9520_GPIO_0:
+                case CY8C9520_GPIO_2:
+                case CY8C9520_GPIO_4:
+                case CY8C9520_GPIO_6:
+                case CY8C9520_GPIO_19:
+                    pwmCfg.pwm_sel = CY8C9520_SEL_PWM_3;
                     break;
-                case CY8C95XX_GPIO_1:
-                case CY8C95XX_GPIO_3:
-                case CY8C95XX_GPIO_5:
-                case CY8C95XX_GPIO_7:
-                    pwmCfg.pwm_sel = CY8C95XX_SEL_PWM_1;
+                case CY8C9520_GPIO_1:
+                case CY8C9520_GPIO_3:
+                case CY8C9520_GPIO_5:
+                case CY8C9520_GPIO_7:
+                    pwmCfg.pwm_sel = CY8C9520_SEL_PWM_1;
                     break;
-                case CY8C95XX_GPIO_8:
-                case CY8C95XX_GPIO_10:
-                case CY8C95XX_GPIO_12:
-                case CY8C95XX_GPIO_14:
-                case CY8C95XX_GPIO_16:
-                    pwmCfg.pwm_sel = CY8C95XX_SEL_PWM_2;
+                case CY8C9520_GPIO_8:
+                case CY8C9520_GPIO_10:
+                case CY8C9520_GPIO_12:
+                case CY8C9520_GPIO_14:
+                case CY8C9520_GPIO_16:
+                    pwmCfg.pwm_sel = CY8C9520_SEL_PWM_2;
                     break;
-                case CY8C95XX_GPIO_9:
-                case CY8C95XX_GPIO_11:
-                case CY8C95XX_GPIO_13:
-                case CY8C95XX_GPIO_15:
-                case CY8C95XX_GPIO_17:
-                case CY8C95XX_GPIO_18:
-                    pwmCfg.pwm_sel = CY8C95XX_SEL_PWM_0;
+                case CY8C9520_GPIO_9:
+                case CY8C9520_GPIO_11:
+                case CY8C9520_GPIO_13:
+                case CY8C9520_GPIO_15:
+                case CY8C9520_GPIO_17:
+                case CY8C9520_GPIO_18:
+                    pwmCfg.pwm_sel = CY8C9520_SEL_PWM_0;
                     break;
                 }
-                pwmCfg.clk_src = CY8C95XX_PWM_CLK_SRC_367_6_HZ;
+                pwmCfg.clk_src = CY8C9520_PWM_CLK_SRC_367_6_HZ;
                 pwmCfg.devider = 0x01;
                 pwmCfg.period = 0xFF;
                 pwmCfg.pulse_wid = pulseWid;
-                cy8c95xx_set_pwm_cfg(dev_cy8c95xx, &pwmCfg, &dummyDutyCyc, &dummyFreq); // Set duty cycle to selected PWM
-                cy8c95xx_en_pin_pwm(dev_cy8c95xx, (int)pin->getPin()); // Enable pwm over output
+                cy8c9520_set_pwm_cfg(dev_cy8c9520, &pwmCfg, &dummyDutyCyc, &dummyFreq); // Set duty cycle to selected PWM
+                cy8c9520_en_pin_pwm(dev_cy8c9520, (int)pin->getPin()); // Enable pwm over output
             }
             else { // if pulseWid 0xFF just output HIGH
-                cy8c95xx_dis_pin_pwm(dev_cy8c95xx, (int)pin->getPin()); // Disable pwm
+                cy8c9520_dis_pin_pwm(dev_cy8c9520, (int)pin->getPin()); // Disable pwm
             }
-            cy8c95xx_write_pin(dev_cy8c95xx, (int)pin->getPin(), 1); // Enable output
+            cy8c9520_write_pin(dev_cy8c9520, (int)pin->getPin(), 1); // Enable output
         }
         break;
-    case ControllinoRp2040Pin::AD56X4_PIN: // ad56x4.h
-        ad56x4_write_input_reg(dev_ad56x4, (ad56x4_ch_addr_t)pin->getPin(), ((uint16_t)value & 0xFFFF)); // 16 bits resolution
-        ad56x4_update_dac_reg(dev_ad56x4, (ad56x4_ch_addr_t)pin->getPin());
+    case ControllinoRp2040Pin::AD5664_PIN: // ad5664.h
+        ad5664_write_input_reg(dev_ad5664, (ad5664_ch_addr_t)pin->getPin(), ((uint16_t)value & 0xFFFF)); // 16 bits resolution
+        ad5664_update_dac_reg(dev_ad5664, (ad5664_ch_addr_t)pin->getPin());
         break;
     default:
         // Other pin types are analog only

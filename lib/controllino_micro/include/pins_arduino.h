@@ -178,7 +178,7 @@ static const uint8_t A3 =           (29u);
 #define MCP2515_DEFAULT_INT_PIN     (12u)
 #endif
  
-/* Analog inputs connected to MCP356X 24 bits ADC */
+/* Analog inputs connected to MCP3564 24 bits ADC */
 static const uint8_t CONTROLLINO_MICRO_AI0 = (50u);
 static const uint8_t CONTROLLINO_MICRO_AI1 = (51u);
 static const uint8_t CONTROLLINO_MICRO_AI2 = (52u);

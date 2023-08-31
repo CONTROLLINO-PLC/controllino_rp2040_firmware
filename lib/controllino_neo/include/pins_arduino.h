@@ -180,14 +180,14 @@ static const uint8_t A3 =           (29u);
 #endif
  
 /* Other pins used on internal components */
-#ifndef _MCP356X_CS_PIN
-#define _MCP356X_CS_PIN             (3u)
+#ifndef _MCP3564_CS_PIN
+#define _MCP3564_CS_PIN             (3u)
 #endif
-#ifndef _AD56X4_CS_PIN
-#define _AD56X4_CS_PIN              (2u)
+#ifndef _AD5664_CS_PIN
+#define _AD5664_CS_PIN              (2u)
 #endif
  
-/* Analog inputs connected to MCP356X 24 bits ADC */
+/* Analog inputs connected to MCP3564 24 bits ADC */
 static const uint8_t CONTROLLINO_NEO_AI0 = (50u);
 static const uint8_t CONTROLLINO_NEO_AI1 = (51u);
 static const uint8_t CONTROLLINO_NEO_AI2 = (52u);
@@ -197,14 +197,14 @@ static const uint8_t CONTROLLINO_NEO_AI5 = (55u);
 static const uint8_t CONTROLLINO_NEO_AI6 = (56u);
 static const uint8_t CONTROLLINO_NEO_AI7 = (57u);
  
-/* Analog outputs connected to AD56X4 16 bits DAC */
+/* Analog outputs connected to AD5664 16 bits DAC */
 static const uint8_t CONTROLLINO_NEO_AO0 = (60u);
 static const uint8_t CONTROLLINO_NEO_AO1 = (61u);
 static const uint8_t CONTROLLINO_NEO_AO2 = (62u);
 static const uint8_t CONTROLLINO_NEO_AO3 = (63u);
  
 /*
-Digital outputs connected to CY8C95XX and drived by
+Digital outputs connected to CY8C9520 and drived by
 BTS71220 high side output controller
 */
 static const uint8_t CONTROLLINO_NEO_DO4 = (70u);
