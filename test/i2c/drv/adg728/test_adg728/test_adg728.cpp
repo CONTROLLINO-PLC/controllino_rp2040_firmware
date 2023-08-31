@@ -5,10 +5,6 @@
 static adg728_t dev;
 static adg728_err_code_t ret;
  
-#define WSEN_TEMP_TEST_SET_GET_HIGHT_LIMIT 40.5F
-#define WSEN_TEMP_TEST_SET_GET_LOW_LIMIT   1.5F
-#define WSEN_TEMP_TEST_SET_GET_LIMIT_ERROR 0.2F
- 
 void setUp(void)
 {
     adg728_cfg_t cfg;

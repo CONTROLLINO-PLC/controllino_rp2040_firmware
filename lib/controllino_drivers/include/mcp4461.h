@@ -169,31 +169,6 @@ mcp4461_err_code_t mcp4461_write_reg(mcp4461_t* dev, mcp4461_reg_t reg, uint16_t
  */
 mcp4461_err_code_t mcp4461_read_reg(mcp4461_t* dev, mcp4461_reg_t reg, uint16_t* rxdata);
  
-// /*!
-//  * \brief Increment data in memory register
-//  * \ingroup mcp4461
-//  *
-//  * \param dev Pointer to mcp4461 device struct
-//  * \param reg Register address
-//  * \return PLATFORM_I2C_COM_ERR : error in coms
-//  *         PLATFORM_ARGUMENT_ERR : error in arguments
-//  *         PLATFORM_OK : successful
-//  */
-// mcp4461_err_code_t mcp4461_increment(mcp4461_t* dev, mcp4461_reg_t reg);
- 
-// /*!
-//  * \brief Decrement data in memory register
-//  * \ingroup mcp4461
-//  *
-//  * \param dev Pointer to mcp4461 device struct
-//  * \param reg Register address
-//  * \param rxdata Pointer to receive data
-//  * \return PLATFORM_I2C_COM_ERR : error in coms
-//  *         PLATFORM_ARGUMENT_ERR : error in arguments
-//  *         PLATFORM_OK : successful
-//  */
-// mcp4461_err_code_t mcp4461_decrement(mcp4461_t* dev, mcp4461_reg_t reg);
-
 #ifdef __cplusplus
 }
 #endif
