@@ -63,12 +63,6 @@ void setup() {
   mcp4461_write_reg(dev_mcp4461_0, MCP4461_REG_V_WIPER_0, 0x00);
   mcp4461_read_reg(dev_mcp4461_0, MCP4461_REG_V_WIPER_0, &rxdata);
   Serial.println(rxdata, HEX);
-
-  while (1)
-  {
-    delay(1000);
-  }
-  
 }
 
 unsigned long lastMillis = 0;

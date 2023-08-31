@@ -1,6 +1,6 @@
 #include <unity.h>
-#include "Arduino.h"
- 
+#include "controllino_diag.h"
+
 void setUp(void)
 {
 #ifdef NATIVE_ENV

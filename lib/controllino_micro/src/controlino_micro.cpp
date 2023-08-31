@@ -79,12 +79,12 @@ void bts71220_cs_select(int cs_pin) {}
 void bts71220_cs_deselect(int cs_pin) {}
 
 /* Pin definitions for ControllinoRp2040Pin API */
-extern ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI0 = new ControllinoRp2040Pin(MCP3564_CH_CH0, ControllinoRp2040Pin::MCP3564_PIN);
-extern ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI1 = new ControllinoRp2040Pin(MCP3564_CH_CH1, ControllinoRp2040Pin::MCP3564_PIN);
-extern ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI2 = new ControllinoRp2040Pin(MCP3564_CH_CH2, ControllinoRp2040Pin::MCP3564_PIN);
-extern ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI3 = new ControllinoRp2040Pin(MCP3564_CH_CH3, ControllinoRp2040Pin::MCP3564_PIN);
-extern ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI4 = new ControllinoRp2040Pin(MCP3564_CH_CH4, ControllinoRp2040Pin::MCP3564_PIN);
-extern ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI5 = new ControllinoRp2040Pin(MCP3564_CH_CH5, ControllinoRp2040Pin::MCP3564_PIN);
+ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI0 = new ControllinoRp2040Pin(MCP3564_CH_CH0, ControllinoRp2040Pin::MCP3564_PIN);
+ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI1 = new ControllinoRp2040Pin(MCP3564_CH_CH1, ControllinoRp2040Pin::MCP3564_PIN);
+ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI2 = new ControllinoRp2040Pin(MCP3564_CH_CH2, ControllinoRp2040Pin::MCP3564_PIN);
+ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI3 = new ControllinoRp2040Pin(MCP3564_CH_CH3, ControllinoRp2040Pin::MCP3564_PIN);
+ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI4 = new ControllinoRp2040Pin(MCP3564_CH_CH4, ControllinoRp2040Pin::MCP3564_PIN);
+ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI5 = new ControllinoRp2040Pin(MCP3564_CH_CH5, ControllinoRp2040Pin::MCP3564_PIN);
  
 /* Returns ControllinoRp2040Pin API pin or nullptr */
 ControllinoRp2040Pin* getControllinoRp2040Pin(int pin)
@@ -104,11 +104,22 @@ ControllinoRp2040Pin* getControllinoRp2040Pin(int pin)
 }
  
 /* Measure power suply voltage in millivolts */
-#define POWER_SUPLY_CONVERSION_RATIO (float)(24000.0F / 7362700.0F) /* 24000 mV(24 V) for 7362700 on the ADC */
-ControllinoRp2040Pin* POWER_SUPLY_AI_PIN = new ControllinoRp2040Pin(MCP3564_CH_CH6, ControllinoRp2040Pin::MCP3564_PIN); /* Power monitoring is connected to MCP3564_CH_CH6 */
+#define POWER_SUPLY_CONVERSION_RATIO (24000.0F / 7362700.0F) /* 24000 mV(24 V) for 7362700 on the ADC */
 int readVoltageSuply(void)
 {
-    float mV = ((float)analogRead(POWER_SUPLY_AI_PIN)) * POWER_SUPLY_CONVERSION_RATIO;
+    float mV;
+    uint8_t txdata = MCP3564_MUX_VIN_POS_CH6; // Power suply monitoring is connected to ADC channel 6
+    int adcValue;
+    uint8_t dummySgn;
+    uint32_t dummyRes;
+    
+    // Read from ADC channel 6
+    mcp3564_iwrite(dev_mcp3564, MCP3564_REG_MUX, &txdata, 1);
+    delayMicroseconds(500);
+    mcp3564_read_raw_adc(dev_mcp3564, (uint32_t*)&adcValue, &dummySgn, &dummyRes);
+    
+    // Convert to mV
+    mV = (float)adcValue * POWER_SUPLY_CONVERSION_RATIO;
     return (int)mV;
 }
  
