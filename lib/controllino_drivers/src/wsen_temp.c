@@ -154,7 +154,19 @@ wsen_temp_err_code_t wsen_temp_get_low_lim(wsen_temp_t* dev, float* celsius)
     *celsius = ((float)limit - 63.0F) * 0.64F;
     return PLATFORM_OK;
 }
- 
+
+/* Disable interrupt generation */
+wsen_temp_err_code_t wsen_temp_dis_int(wsen_temp_t* dev)
+{
+    // Write 0 to both high and low limit registers to disable interrupt
+    wsen_temp_err_code_t ret;
+    uint8_t limit = 0; 
+    ret = wsen_temp_generic_write(dev, WSEN_TEMP_REG_HIGH_LIM, &limit, 1);
+    if (ret != PLATFORM_OK)
+        return ret;
+    return wsen_temp_generic_write(dev, WSEN_TEMP_REG_LOW_LIM, &limit, 1);
+}
+
 /* Get raw temperature digital value */
 wsen_temp_err_code_t wsen_temp_get_raw(wsen_temp_t* dev, uint16_t* temp)
 {

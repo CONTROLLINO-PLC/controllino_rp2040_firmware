@@ -62,7 +62,7 @@ void test_mcp3564_sread_ok()
     TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
     TEST_ASSERT_EQUAL(MCP3564_INIT_CFG_2_REG, cfg2_val);
 }
-
+ 
 void test_mcp3564_iread_ok()
 {
     uint8_t rxdata[2];
@@ -71,7 +71,7 @@ void test_mcp3564_iread_ok()
     TEST_ASSERT_EQUAL(MCP3564_INIT_CFG_2_REG, rxdata[0]);
     TEST_ASSERT_EQUAL(MCP3564_INIT_CFG_3_REG, rxdata[1]);
 }
-
+ 
 void test_mcp3564_iwrite_ok()
 {
     uint8_t txdata[2]; /* CFG_2 and CFG_3 */

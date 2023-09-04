@@ -3,32 +3,24 @@
  *
  * SPDX-License-Identifier: MIT
  */
-
+ 
 #include "controllino_wiring.h"
 #include "controllino_diag.h"
-
+ 
 /* Peripherals interfaces */
-cy8c9520_t* dev_cy8c9520;
-mcp3564_t* dev_mcp3564;
-ad5664_t* dev_ad5664;
-bts71220_t* dev_bts71220;
-wsen_temp_t* dev_wsen_temp;
-adg728_t* dev_adg728;
-
+cy8c9520_t*     dev_cy8c9520;
+mcp3564_t*      dev_mcp3564;
+ad5664_t*       dev_ad5664;
+bts71220_t*     dev_bts71220;
+wsen_temp_t*    dev_wsen_temp;
+adg728_t*       dev_adg728;
+ 
 /* Other pins used on internal components */
-#ifndef _CY8C9520_INT_PIN
-#define _CY8C9520_INT_PIN           (4u)
-#endif
-#ifndef _MCP3564_INT_PIN
-#define _MCP3564_INT_PIN            (13u)
-#endif   
-#ifndef _MCP3564_CS_PIN
-#define _MCP3564_CS_PIN             (14u)
-#endif
-#ifndef _W5500_INT_PIN
-#define _W5500_INT_PIN              (15u)
-#endif
-
+extern const uint8_t _CY8C9520_INT_PIN = (4u);
+extern const uint8_t _MCP3564_INT_PIN = (13u);
+extern const uint8_t _MCP3564_CS_PIN = (14u);
+extern const uint8_t _W5500_INT_PIN = (15u);
+ 
 /**
  * Arduino-pico variant initialization
  * Note: This function will be called on every boot before setup()
@@ -77,7 +69,7 @@ void ad5664_cs_select(int cs_pin) {}
 void ad5664_cs_deselect(int cs_pin) {}
 void bts71220_cs_select(int cs_pin) {}
 void bts71220_cs_deselect(int cs_pin) {}
-
+ 
 /* Pin definitions for ControllinoRp2040Pin API */
 ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI0 = new ControllinoRp2040Pin(MCP3564_CH_CH0, ControllinoRp2040Pin::MCP3564_PIN);
 ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI1 = new ControllinoRp2040Pin(MCP3564_CH_CH1, ControllinoRp2040Pin::MCP3564_PIN);
@@ -130,18 +122,18 @@ float readBoardTemperature(void)
     wsen_temp_get_celsius(dev_wsen_temp, &celsius);
     return celsius;
 }
-
+ 
 /* Posible interrupt sources from port expander represented by their GPIO */
-#define _CY8C9520_INT_TEMP_SENSOR   CY8C9520_GPIO_4
-#define _CY8C9520_INT_NFAULT_DO0    CY8C9520_GPIO_8
-#define _CY8C9520_INT_NFAULT_DO1    CY8C9520_GPIO_9
-#define _CY8C9520_INT_NFAULT_DO2    CY8C9520_GPIO_10
-#define _CY8C9520_INT_NFAULT_DO3    CY8C9520_GPIO_11
-#define _CY8C9520_INT_NFAULT_DO4    CY8C9520_GPIO_12
-#define _CY8C9520_INT_NFAULT_DO5    CY8C9520_GPIO_13
-#define _CY8C9520_INT_NFAULT_DO6    CY8C9520_GPIO_14
-#define _CY8C9520_INT_NFAULT_DO7    CY8C9520_GPIO_15
-
+extern const uint8_t _CY8C9520_INT_TEMP_SENSOR = CY8C9520_GPIO_4;
+extern const uint8_t _CY8C9520_INT_NFAULT_DO0 = CY8C9520_GPIO_8;
+extern const uint8_t _CY8C9520_INT_NFAULT_DO1 = CY8C9520_GPIO_9;
+extern const uint8_t _CY8C9520_INT_NFAULT_DO2 = CY8C9520_GPIO_10;
+extern const uint8_t _CY8C9520_INT_NFAULT_DO3 = CY8C9520_GPIO_11;
+extern const uint8_t _CY8C9520_INT_NFAULT_DO4 = CY8C9520_GPIO_12;
+extern const uint8_t _CY8C9520_INT_NFAULT_DO5 = CY8C9520_GPIO_13;
+extern const uint8_t _CY8C9520_INT_NFAULT_DO6 = CY8C9520_GPIO_14;
+extern const uint8_t _CY8C9520_INT_NFAULT_DO7 = CY8C9520_GPIO_15;
+ 
 /* Callbacks definition */
 void (*_CY8C9520_INT_TEMP_SENSOR_cb)(void) = nullptr;
 void (*_CY8C9520_INT_NFAULT_DO0_cb)(void) = nullptr;
@@ -152,7 +144,7 @@ void (*_CY8C9520_INT_NFAULT_DO4_cb)(void) = nullptr;
 void (*_CY8C9520_INT_NFAULT_DO5_cb)(void) = nullptr;
 void (*_CY8C9520_INT_NFAULT_DO6_cb)(void) = nullptr;
 void (*_CY8C9520_INT_NFAULT_DO7_cb)(void) = nullptr;
-
+ 
 /* Interrupt handler to find source of interrupt and call user cb */
 void _CY8C9520_INT_PIN_int_handler(void)
 {
@@ -234,10 +226,14 @@ void enableTempSensorInt(float lowLim, float highLim, void(*cb)(void))
 /* Disable temperature sensor interrupt */
 void disableTempSensorInt(void)
 {
+    // Set callback to nullptr and disable port expander interrupt
     _CY8C9520_INT_TEMP_SENSOR_cb = nullptr;
     cy8c9520_dis_pin_int(dev_cy8c9520, _CY8C9520_INT_TEMP_SENSOR);
-}
 
+    // Disable temp sensor interrupt
+    wsen_temp_dis_int(dev_wsen_temp);
+}
+ 
 /* Get CY8C9520_INT_NFAULT pin from do_pin returns -1 if pin is incorrect */
 int _get_DO_CY8C9520_INT_NFAULT(uint8_t do_pin)
 {
@@ -255,7 +251,7 @@ int _get_DO_CY8C9520_INT_NFAULT(uint8_t do_pin)
     }
     return -1;
 }
-
+ 
 /* Set callback for CY8C9520_INT_NFAULT pin */
 void _set_DO_CY8C9520_INT_NFAULT_cb(int cy8c9520_gpio, void(*cb)(void))
 {
@@ -272,7 +268,7 @@ void _set_DO_CY8C9520_INT_NFAULT_cb(int cy8c9520_gpio, void(*cb)(void))
         default: break;
     }
 }
-
+ 
 /* Enable or disable digital output overcurrent interrupt */
 void enableOutFaultInt(uint8_t doPin, void(*cb)(void))
 {
@@ -286,9 +282,9 @@ void enableOutFaultInt(uint8_t doPin, void(*cb)(void))
     cy8c9520_en_pin_int(dev_cy8c9520, cy8c9520_gpio);
     _en_CY8C9520_INT_PIN_int();
 }
-
+ 
 /* Disable digital output overcurrent interrupt */
-void disableOutOverloadInt(uint8_t doPin)
+void disableOutFaultInt(uint8_t doPin)
 {
     int cy8c9520_gpio = _get_DO_CY8C9520_INT_NFAULT(doPin); // Just to have an initial value
     if (cy8c9520_gpio == -1) return; // Invalid pin

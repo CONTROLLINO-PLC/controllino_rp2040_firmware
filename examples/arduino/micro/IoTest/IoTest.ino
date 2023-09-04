@@ -58,6 +58,7 @@ void setup() {
   float parallel = (1.5F / (current * 0.0001F)) - 5000.0F;
   float r = parallel * 50000.0F / (50000.0F - parallel);
   Serial.printf("R: %f\n", r);
+  
 
   uint16_t rxdata;
   mcp4461_write_reg(dev_mcp4461_0, MCP4461_REG_V_WIPER_0, 0x00);

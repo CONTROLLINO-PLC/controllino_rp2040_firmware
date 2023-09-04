@@ -327,6 +327,17 @@ wsen_temp_err_code_t wsen_temp_set_low_lim(wsen_temp_t* dev, float celsius);
 wsen_temp_err_code_t wsen_temp_get_low_lim(wsen_temp_t* dev, float* celsius);
  
 /*!
+ * \brief Disable interrupt generation
+ * \ingroup wsen_temp
+ *
+ * \param dev Pointer to temp sensor struct
+ * \return PLATFORM_I2C_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
+ */
+wsen_temp_err_code_t wsen_temp_dis_int(wsen_temp_t* dev);
+ 
+/*!
  * \brief Get raw temperature digital value
  * \ingroup wsen_temp
  *

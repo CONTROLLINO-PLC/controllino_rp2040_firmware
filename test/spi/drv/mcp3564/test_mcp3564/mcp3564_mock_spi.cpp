@@ -31,4 +31,7 @@ platform_err_code_t mock_spi_transfer(uint8_t* txdata, uint8_t* rxdata, size_t l
     return PLATFORM_OK;
 }
  
+void mcp3564_cs_select(int cs_pin) {}
+void mcp3564_cs_deselect(int cs_pin) {}
+ 
 #endif

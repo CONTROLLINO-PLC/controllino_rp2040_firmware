@@ -64,6 +64,6 @@ void enableOutFaultInt(uint8_t doPin, void(*cb)(void));
  *
  * \param do digital output pin CONTROLLINO_MICRO_DO0 ... CONTROLLINO_MICRO_DO7
  */
-void disableOutOverloadInt(uint8_t doPin);
+void disableOutFaultInt(uint8_t doPin);
  
 #endif  // CONTROLLINO_DIAG_H

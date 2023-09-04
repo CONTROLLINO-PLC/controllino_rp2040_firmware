@@ -76,6 +76,17 @@ void test_wsen_temp_set_get_low_lim_ok()
     );
 }
  
+void test_wsen_wsen_temp_dis_int_ok()
+{
+    ret = wsen_temp_dis_int(&dev);
+    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    uint8_t limit;
+    wsen_temp_generic_read(&dev, WSEN_TEMP_REG_HIGH_LIM, &limit, 1);
+    TEST_ASSERT_EQUAL(0x00, limit);
+    wsen_temp_generic_read(&dev, WSEN_TEMP_REG_LOW_LIM, &limit, 1);
+    TEST_ASSERT_EQUAL(0x00, limit);
+}
+ 
 void test_wsen_temp_set_lim_less_than_minus_39_68_err()
 {
     ret = wsen_temp_set_high_lim(&dev, -40.0F);
@@ -126,6 +137,7 @@ int runUnityTests(void)
     RUN_TEST(test_wsen_temp_get_ctrl_ok);
     RUN_TEST(test_wsen_temp_set_get_high_lim_ok);
     RUN_TEST(test_wsen_temp_set_get_low_lim_ok);
+    RUN_TEST(test_wsen_wsen_temp_dis_int_ok);
     RUN_TEST(test_wsen_temp_set_lim_less_than_minus_39_68_err);
     RUN_TEST(test_wsen_temp_set_lim_greater_than_122_88_err);
     RUN_TEST(test_wsen_temp_get_status);
