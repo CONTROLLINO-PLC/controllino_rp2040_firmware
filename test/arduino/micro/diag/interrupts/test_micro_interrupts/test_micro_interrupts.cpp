@@ -1,7 +1,6 @@
 #include <math.h>
 #include <unity.h>
-#include "Arduino.h"
-#include "controllino_wiring.h"
+#include "controllino_diag.h"
 
 extern const uint8_t _CY8C9520_INT_PIN;
 

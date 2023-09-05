@@ -146,6 +146,17 @@ typedef enum {
 #define MCP3564_CFG_2_GAIN_X_1               0x08
 #define MCP3564_CFG_2_GAIN_X_033             0x00
 
+typedef enum {
+    MCP3564_GAIN_X_64 =     MCP3564_CFG_2_GAIN_X_64,
+    MCP3564_GAIN_X_32 =     MCP3564_CFG_2_GAIN_X_32,
+    MCP3564_GAIN_X_16 =     MCP3564_CFG_2_GAIN_X_16,
+    MCP3564_GAIN_X_8 =      MCP3564_CFG_2_GAIN_X_8,
+    MCP3564_GAIN_X_4 =      MCP3564_CFG_2_GAIN_X_4,
+    MCP3564_GAIN_X_2 =      MCP3564_CFG_2_GAIN_X_2,
+    MCP3564_GAIN_X_1 =      MCP3564_CFG_2_GAIN_X_1,
+    MCP3564_GAIN_X_033 =    MCP3564_CFG_2_GAIN_X_033
+} mcp3564_gain_t;
+
 #define MCP3564_CFG_2_AZ_MUX_EN              0x04
 #define MCP3564_CFG_2_AZ_MUX_DIS             0x00
 #define MCP3564_CFG_2_AZ_VREF_EN             0x03
@@ -193,44 +204,48 @@ typedef enum {
  * \brief MUX_VIN+ Input Selection
  * \ingroup mcp3564
  */
-#define MCP3564_MUX_VIN_POS_NO_IN            0xF0
-#define MCP3564_MUX_VIN_POS_VCM              0xE0
-#define MCP3564_MUX_VIN_POS_TEMP             0xD0
-#define MCP3564_MUX_VIN_POS_VREF_EXT_MINUS   0xC0
-#define MCP3564_MUX_VIN_POS_VREF_EXT_PLUS    0xB0
-#define MCP3564_MUX_VIN_POS_VREF_INT         0xA0
-#define MCP3564_MUX_VIN_POS_AVDD             0x90
-#define MCP3564_MUX_VIN_POS_VSS              0x80
-#define MCP3564_MUX_VIN_POS_CH7              0x70
-#define MCP3564_MUX_VIN_POS_CH6              0x60
-#define MCP3564_MUX_VIN_POS_CH5              0x50
-#define MCP3564_MUX_VIN_POS_CH4              0x40
-#define MCP3564_MUX_VIN_POS_CH3              0x30
-#define MCP3564_MUX_VIN_POS_CH2              0x20
-#define MCP3564_MUX_VIN_POS_CH1              0x10
-#define MCP3564_MUX_VIN_POS_CH0              0x00
- 
+typedef enum {
+    MCP3564_MUX_VIN_POS_NO_IN =              0xF0,
+    MCP3564_MUX_VIN_POS_VCM =                0xE0,
+    MCP3564_MUX_VIN_POS_TEMP =               0xD0,
+    MCP3564_MUX_VIN_POS_VREF_EXT_MINUS =     0xC0,
+    MCP3564_MUX_VIN_POS_VREF_EXT_PLUS =      0xB0,
+    MCP3564_MUX_VIN_POS_VREF_INT =           0xA0,
+    MCP3564_MUX_VIN_POS_AVDD =               0x90,
+    MCP3564_MUX_VIN_POS_VSS =                0x80,
+    MCP3564_MUX_VIN_POS_CH7 =                0x70,
+    MCP3564_MUX_VIN_POS_CH6 =                0x60,
+    MCP3564_MUX_VIN_POS_CH5 =                0x50,
+    MCP3564_MUX_VIN_POS_CH4 =                0x40,
+    MCP3564_MUX_VIN_POS_CH3 =                0x30,
+    MCP3564_MUX_VIN_POS_CH2 =                0x20,
+    MCP3564_MUX_VIN_POS_CH1 =                0x10,
+    MCP3564_MUX_VIN_POS_CH0 =                0x00
+} mcp3564_mux_pos_t;
+
 /**
  * \brief MUX_VIN- Input Selection
  * \ingroup mcp3564
  */
-#define MCP3564_MUX_VIN_NEG_NO_IN            0x0F
-#define MCP3564_MUX_VIN_NEG_VCM              0x0E
-#define MCP3564_MUX_VIN_NEG_TEMP             0x0D
-#define MCP3564_MUX_VIN_NEG_VREF_EXT_MINUS   0x0C
-#define MCP3564_MUX_VIN_NEG_VREF_EXT_PLUS    0x0B
-#define MCP3564_MUX_VIN_NEG_VREF_INT         0x0A
-#define MCP3564_MUX_VIN_NEG_AVDD             0x09
-#define MCP3564_MUX_VIN_NEG_VSS              0x08
-#define MCP3564_MUX_VIN_NEG_CH7              0x07
-#define MCP3564_MUX_VIN_NEG_CH6              0x06
-#define MCP3564_MUX_VIN_NEG_CH5              0x05
-#define MCP3564_MUX_VIN_NEG_CH4              0x04
-#define MCP3564_MUX_VIN_NEG_CH3              0x03
-#define MCP3564_MUX_VIN_NEG_CH2              0x02
-#define MCP3564_MUX_VIN_NEG_CH1              0x01
-#define MCP3564_MUX_VIN_NEG_CH0              0x00
- 
+typedef enum {
+    MCP3564_MUX_VIN_NEG_NO_IN =              0x0F,
+    MCP3564_MUX_VIN_NEG_VCM =                0x0E,
+    MCP3564_MUX_VIN_NEG_TEMP =               0x0D,
+    MCP3564_MUX_VIN_NEG_VREF_EXT_MINUS =     0x0C,
+    MCP3564_MUX_VIN_NEG_VREF_EXT_PLUS =      0x0B,
+    MCP3564_MUX_VIN_NEG_VREF_INT =           0x0A,
+    MCP3564_MUX_VIN_NEG_AVDD =               0x09,
+    MCP3564_MUX_VIN_NEG_VSS =                0x08,
+    MCP3564_MUX_VIN_NEG_CH7 =                0x07,
+    MCP3564_MUX_VIN_NEG_CH6 =                0x06,
+    MCP3564_MUX_VIN_NEG_CH5 =                0x05,
+    MCP3564_MUX_VIN_NEG_CH4 =                0x04,
+    MCP3564_MUX_VIN_NEG_CH3 =                0x03,
+    MCP3564_MUX_VIN_NEG_CH2 =                0x02,
+    MCP3564_MUX_VIN_NEG_CH1 =                0x01,
+    MCP3564_MUX_VIN_NEG_CH0 =                0x00
+} mcp3564_mux_neg_t;
+
 /**
  * \brief SCAN Register
  * \ingroup mcp3564
@@ -318,6 +333,7 @@ typedef enum {
 #define MCP3564_VALID_STATUS_MASK           (uint8_t)((MCP3564_DEVICE_ADDR << 4) | ((~MCP3564_DEVICE_ADDR & 0x1) << 3))
 #define MCP3564_FCMD_ADDR_MASK              0x3C
 #define MCP3564_RW_CMD_MASK                 0x03
+#define MCP3564_CFG_2_GAIN_MASK             0x38
 #define MCP3564_CFG_3_DATA_FORMAT_MASK      0x30
  
 /**
@@ -515,6 +531,18 @@ mcp3564_err_code_t mcp3564_sread(mcp3564_t* dev, mcp3564_reg_t reg, uint8_t* rxd
 mcp3564_err_code_t mcp3564_iread(mcp3564_t* dev, mcp3564_reg_t reg, uint8_t* rxdata, uint8_t rxlen);
  
 /*!
+ * \brief Set GAIN configuration
+ * \ingroup mcp3564
+ *
+ * \param dev Pointer MCP3564 ADC struct
+ * \param gain Gain value to set
+ * \return PLATFORM_SPI_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
+ */
+mcp3564_err_code_t mcp3564_set_gain(mcp3564_t* dev, mcp3564_gain_t gain);
+ 
+/*!
  * \brief Read ADC data in default format MCP3564_CFG_3_DATA_FORMAT_DEF
  * \ingroup mcp3564
  *
@@ -580,6 +608,22 @@ mcp3564_err_code_t mcp3564_read_adc_ch_ext(mcp3564_t* dev, uint32_t* adc_data, u
  *         PLATFORM_OK : successful
  */
 mcp3564_err_code_t mcp3564_read_raw_adc(mcp3564_t* dev, uint32_t* adc_data, uint8_t* sgn, uint32_t* max_resolution);
+ 
+/*!
+ * \brief Set MUX and read current adc raw conversion data
+ * \ingroup mcp3564
+ *
+ * \param dev Pointer MCP3564 ADC struct
+ * \param adc_data Pointer to receive ADC raw data
+ * \param pos Positive input MUX selection
+ * \param neg Negative input MUX selection
+ * \param delay_us Delay in microseconds to wait for conversion
+ * \return PLATFORM_SPI_COM_ERR : error in coms
+ *         PLATFORM_ARGUMENT_ERR : error in arguments
+ *         PLATFORM_OK : successful
+ * \note delay_us deppends on oversampling rate and its the necessary delay to have a valid conversion after MUX change
+ */
+mcp3564_err_code_t mcp3564_read_adc_mux(mcp3564_t* dev, uint32_t* adc_data, mcp3564_mux_pos_t pos, mcp3564_mux_neg_t neg, uint16_t delay_us);
  
 /*!
  * \brief Read current adc voltage conversion in millivolts using \p vol_ref_min to \p vol_ref_max as reference

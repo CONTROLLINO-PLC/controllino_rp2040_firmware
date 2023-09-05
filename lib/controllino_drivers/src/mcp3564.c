@@ -144,6 +144,17 @@ mcp3564_err_code_t mcp3564_iread(mcp3564_t* dev, mcp3564_reg_t reg, uint8_t* rxd
     return mcp3564_generic_transfer(dev, (uint8_t)reg, MCP3564_CMD_INC_READ, NULL, rxdata, rxlen);
 }
  
+/* Set GAIN configuration */
+mcp3564_err_code_t mcp3564_set_gain(mcp3564_t* dev, mcp3564_gain_t gain)
+{
+    uint8_t config2_reg;
+    uint8_t ret = mcp3564_iread(dev, MCP3564_REG_CFG_2, &config2_reg, 1);
+    if (ret != PLATFORM_OK)
+        return ret;
+    config2_reg = (config2_reg & (uint8_t)(~MCP3564_CFG_2_GAIN_MASK)) | gain;
+    return mcp3564_iwrite(dev, MCP3564_REG_CFG_2, &config2_reg, 1);
+}
+ 
 /* Read ADC data in default format */
 mcp3564_err_code_t mcp3564_read_adc_def(mcp3564_t* dev, uint32_t* adc_data, uint8_t* sgn)
 {
@@ -231,7 +242,24 @@ mcp3564_err_code_t mcp3564_read_raw_adc(mcp3564_t* dev, uint32_t* adc_data, uint
     }
     return ret;
 }
-
+ 
+/* Set MUX and read current adc raw conversion data */
+mcp3564_err_code_t mcp3564_read_adc_mux(mcp3564_t* dev, uint32_t* adc_data, mcp3564_mux_pos_t pos, mcp3564_mux_neg_t neg, uint16_t delay_us)
+{
+    uint8_t ret;
+    uint8_t dummySgn;
+    uint32_t dummyRes;
+    uint8_t mux = ((uint8_t)pos | (uint8_t)neg);
+    // Write MUX register
+    ret = mcp3564_iwrite(dev, MCP3564_REG_MUX, &mux, 1);
+    if (ret != PLATFORM_OK)
+        return ret;
+    // Give time to update the adc conversion
+    platform_sleep_us(delay_us);
+    // Read adc conversion
+    return mcp3564_read_raw_adc(dev, adc_data, &dummySgn, &dummyRes);
+}
+ 
 /* Read current adc voltage conversion in millivolts */
 mcp3564_err_code_t mcp3564_read_voltage(mcp3564_t* dev, uint32_t vol_ref_min, uint32_t vol_ref_max, uint32_t* vol_val)
 {

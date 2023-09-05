@@ -85,6 +85,21 @@ void test_mcp3564_iwrite_ok()
     TEST_ASSERT_EQUAL(txdata[1], rxdata[1]);
 }
  
+void test_mcp3564_set_gain_ok()
+{
+    uint8_t config_2_reg;
+    mcp3564_iread(&dev, MCP3564_REG_CFG_2, &config_2_reg, 1);
+    TEST_ASSERT_EQUAL(MCP3564_CFG_2_GAIN_X_2, config_2_reg & MCP3564_CFG_2_GAIN_MASK);
+    ret = mcp3564_set_gain(&dev, MCP3564_GAIN_X_1);
+    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    mcp3564_iread(&dev, MCP3564_REG_CFG_2, &config_2_reg, 1);
+    TEST_ASSERT_EQUAL(MCP3564_CFG_2_GAIN_X_1, config_2_reg & MCP3564_CFG_2_GAIN_MASK);
+    ret = mcp3564_set_gain(&dev, MCP3564_GAIN_X_2);
+    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    mcp3564_iread(&dev, MCP3564_REG_CFG_2, &config_2_reg, 1);
+    TEST_ASSERT_EQUAL(MCP3564_CFG_2_GAIN_X_2, config_2_reg & MCP3564_CFG_2_GAIN_MASK);
+}
+ 
 void test_mcp3564_read_adc_format_ok()
 {
     uint32_t adc_data;
@@ -116,6 +131,19 @@ void test_mcp3564_read_adc_format_ok()
     TEST_ASSERT_EQUAL(MCP3564_RES_24_BITS, max_resolution);
 }
  
+void test_mcp3564_read_adc_mux_ok()
+{
+    uint32_t adc_data;
+    uint8_t mux;
+    uint16_t delay = 500;
+    ret = mcp3564_read_adc_mux(&dev, &adc_data, MCP3564_MUX_VIN_POS_CH0, MCP3564_MUX_VIN_NEG_VREF_EXT_MINUS, delay);
+    TEST_ASSERT_EQUAL(PLATFORM_OK, ret);
+    TEST_ASSERT_GREATER_OR_EQUAL(0, adc_data);
+    // Check if MUX is set correctly
+    mcp3564_iread(&dev, MCP3564_REG_MUX, &mux, 1);
+    TEST_ASSERT_EQUAL(MCP3564_MUX_VIN_POS_CH0 | MCP3564_MUX_VIN_NEG_VREF_EXT_MINUS, mux);
+}
+ 
 void test_mcp3564_read_voltage_ok()
 {
     uint32_t vol_val;
@@ -140,7 +168,9 @@ int runUnityTests(void)
     RUN_TEST(test_mcp3564_sread_ok);
     RUN_TEST(test_mcp3564_iread_ok);
     RUN_TEST(test_mcp3564_iwrite_ok);
+    RUN_TEST(test_mcp3564_set_gain_ok);
     RUN_TEST(test_mcp3564_read_adc_format_ok);
+    RUN_TEST(test_mcp3564_read_adc_mux_ok);
     RUN_TEST(test_mcp3564_read_voltage_ok);
     RUN_TEST(test_mcp3564_read_voltage_ref_min_greater_than_ref_max_err);
     return UNITY_END();

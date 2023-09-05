@@ -21,11 +21,7 @@
 #include "cy8c9520.h"
 #include "mcp3564.h"
 #include "ad5664.h"
-#include "bts71220.h"
-#include "wsen_temp.h"
-#include "adg728.h"
-#include "mcp4461.h"
-
+ 
 /**
  * \brief Controllino Rp2040 pin class
  */
@@ -81,13 +77,10 @@ extern void setDigitalThreshold(pin_size_t pin, uint32_t threshold); // From int
 extern uint32_t getDigitalThreshold(pin_size_t pin); // From integer pin definition
  
 /**
- * \brief User can access peripherals interfaces
+ * \brief Peripherals interfaces
  */
 extern cy8c9520_t* dev_cy8c9520;
 extern mcp3564_t* dev_mcp3564;
 extern ad5664_t* dev_ad5664;
-extern bts71220_t* dev_bts71220;
-extern wsen_temp_t* dev_wsen_temp;
-extern adg728_t* dev_adg728;
-
+ 
 #endif  // CONTROLLINO_WIRING_H

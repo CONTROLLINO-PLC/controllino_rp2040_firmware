@@ -13,8 +13,8 @@
 #include <hardware/clocks.h>
 #include <hardware/pll.h>
 #include <hardware/adc.h>
- 
-/* Controllino RP2040 analog API */
+
+/* Controllino analog API */
 int analogRead(ControllinoRp2040Pin* pin)
 {
     int adcValue = 0;
@@ -24,37 +24,36 @@ int analogRead(ControllinoRp2040Pin* pin)
         adcValue = analogRead(pin->getPin());
         break;
     case ControllinoRp2040Pin::MCP3564_PIN: // mcp3564.h
-        uint8_t txdata;
-        uint8_t dummySgn;
-        uint32_t dummyRes;
-        txdata = MCP3564_MUX_VIN_NEG_VREF_EXT_MINUS;
+        mcp3564_mux_pos_t chn;
         switch (pin->getPin())
         {
         case MCP3564_CH_CH1:
-            txdata |= MCP3564_MUX_VIN_POS_CH1;
+            chn = MCP3564_MUX_VIN_POS_CH1;
             break;
         case MCP3564_CH_CH2:
-            txdata |= MCP3564_MUX_VIN_POS_CH2;
+            chn = MCP3564_MUX_VIN_POS_CH2;
             break;
         case MCP3564_CH_CH3:
-            txdata |= MCP3564_MUX_VIN_POS_CH4;
+            chn = MCP3564_MUX_VIN_POS_CH3;
+            break;
+        case MCP3564_CH_CH4:
+            chn = MCP3564_MUX_VIN_POS_CH4;
             break;
         case MCP3564_CH_CH5:
-            txdata |= MCP3564_MUX_VIN_POS_CH5;
+            chn = MCP3564_MUX_VIN_POS_CH5;
             break;
         case MCP3564_CH_CH6:
-            txdata |= MCP3564_MUX_VIN_POS_CH6;
+            chn = MCP3564_MUX_VIN_POS_CH6;
             break;
         case MCP3564_CH_CH7:
-            txdata |= MCP3564_MUX_VIN_POS_CH7;
+            chn = MCP3564_MUX_VIN_POS_CH7;
             break;
         default:
-            txdata |= MCP3564_MUX_VIN_POS_CH0;
+            chn = MCP3564_MUX_VIN_POS_CH0;
             break;
         }
-        mcp3564_iwrite(dev_mcp3564, MCP3564_REG_MUX, &txdata, 1);
-        delayMicroseconds(500); // Give time to update the adc conversion (adjustment for Over sample rate of 256)
-        mcp3564_read_raw_adc(dev_mcp3564, (uint32_t*)&adcValue, &dummySgn, &dummyRes);
+        // 500 us delay for 256 over sample rate
+        mcp3564_read_adc_mux(dev_mcp3564, (uint32_t*)&adcValue, chn, MCP3564_MUX_VIN_NEG_VREF_EXT_MINUS, 500);
         break;
     default:
         // Other pin types are digital or analog output only

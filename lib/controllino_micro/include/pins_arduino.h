@@ -204,7 +204,13 @@ static const uint8_t CONTROLLINO_MICRO_DO7 = (24u);
  
 /* ControllinoRp2040Pin API */
 #include "controllino_wiring.h"
- 
+
+/* Enable digital output doPin -> CONTROLLINO_MICRO_DO0...D07 */
+extern "C" void enableOut(uint8_t doPin);
+
+/* Disable digital output doPin -> CONTROLLINO_MICRO_DO0...D07 */
+extern "C" void disableOut(uint8_t doPin);
+
 /* Micro internal diagnosys API */
 #include "controllino_diag.h"
 
