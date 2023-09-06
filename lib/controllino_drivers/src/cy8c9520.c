@@ -121,18 +121,24 @@ cy8c9520_err_code_t cy8c9520_write_bit(cy8c9520_t* dev, cy8c9520_reg_t reg, uint
 }
  
 /* Separated select port function to optimize coms */
+// cy8c9520_err_code_t cy8c9520_select_port(cy8c9520_t* dev, uint8_t port_num) {
+//     static uint8_t prev_port_num = 0x07; // Save last port number to optimize coms
+//     if (port_num > 0x06) return PLATFORM_ARGUMENT_ERR;
+//     // Select port only if it is different from previous
+//     ret = PLATFORM_OK;
+//     if (prev_port_num != port_num) {
+//         ret = cy8c9520_write_byte(dev, CY8C9520_REG_PORT_SEL, port_num);
+//         if (ret != PLATFORM_OK)
+//             return ret;
+//         prev_port_num = port_num;
+//     }
+//     return ret;
+// }
+ 
+/* Port select without optimization */
 cy8c9520_err_code_t cy8c9520_select_port(cy8c9520_t* dev, uint8_t port_num) {
-    static uint8_t prev_port_num = 0x07; // Save last port number to optimize coms
     if (port_num > 0x06) return PLATFORM_ARGUMENT_ERR;
-    // Select port only if it is different from previous
-    ret = PLATFORM_OK;
-    if (prev_port_num != port_num) {
-        ret = cy8c9520_write_byte(dev, CY8C9520_REG_PORT_SEL, port_num);
-        if (ret != PLATFORM_OK)
-            return ret;
-        prev_port_num = port_num;
-    }
-    return ret;
+    return cy8c9520_write_byte(dev, CY8C9520_REG_PORT_SEL, port_num);
 }
  
 /* Writes number of bytes into EEPROM */
