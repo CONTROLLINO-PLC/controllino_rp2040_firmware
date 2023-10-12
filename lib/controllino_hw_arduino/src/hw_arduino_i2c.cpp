@@ -5,10 +5,9 @@
  */
  
 #include "hw_platform.h"
-#include <Wire.h>
- 
-#define _hw_i2c_t TwoWire
-hw_i2c_t PLATFORM_I2C_HW = (hw_i2c_t)   &Wire;
+#include "Wire.h"
+
+hw_i2c_t PLATFORM_I2C_HW = (hw_i2c_t)&Wire;
 const unsigned int PLATFORM_I2C_SPEED = 100000;
 const int PLATFORM_I2C_SDA =            4;
 const int PLATFORM_I2C_SCL =            5;

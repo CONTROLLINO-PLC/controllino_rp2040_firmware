@@ -5,7 +5,7 @@
  */
  
 #include "hw_platform.h"
-#include <Arduino.h>
+#include "Arduino.h"
  
 /* Get system time microseconds */
 uint64_t platform_get_us(void)

@@ -3,10 +3,13 @@
  *
  * SPDX-License-Identifier: MIT
  */
- 
+
+#include "Arduino.h"
 #include "hw_platform.h"
-#include <Arduino.h>
- 
+
+extern "C" void digitalWrite(pin_size_t pin, PinStatus val);
+extern "C" PinStatus digitalRead(pin_size_t pin);
+
 /* Init gpio pin */
 platform_err_code_t platform_gpio_init(int pin, platform_gpio_dir_t dir, platform_gpio_pull_mod_t pull)
 {

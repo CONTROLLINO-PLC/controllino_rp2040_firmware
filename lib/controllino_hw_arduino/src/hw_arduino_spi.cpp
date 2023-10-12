@@ -5,9 +5,8 @@
  */
  
 #include "hw_platform.h"
-#include <SPI.h>
+#include "SPI.h"
  
-#define _hw_spi_t SPIClassRP2040
 hw_spi_t PLATFORM_SPI_HW = (hw_spi_t)   &SPI;
 const unsigned int PLATFORM_SPI_SPEED = 1000000;
 const int PLATFORM_SPI_MOSI =           19;
@@ -70,17 +69,21 @@ platform_err_code_t platform_spi_set_config(hw_spi_t spi_hw, unsigned int speed,
 }
  
 /* Write specified number of bytes to an SPI device */
-platform_err_code_t platform_spi_write(hw_spi_t spi_hw, uint8_t* txdata, size_t len)
+platform_err_code_t platform_spi_write(hw_spi_t spi_hw, void(*cs_select)(int), void(*cs_deselect)(int), int cs_pin, uint8_t* txdata, size_t len)
 {
     SPIClassRP2040* _SPI = (SPIClassRP2040*)spi_hw;
+    (*cs_select)(cs_pin);
     _SPI->transfer(txdata, nullptr, len);
+    (*cs_deselect)(cs_pin);
     return PLATFORM_OK;
 }
  
 /* Write and read specified number of bytes over SPI */
-platform_err_code_t platform_spi_write_read(hw_spi_t spi_hw, uint8_t* txdata, uint8_t* rxdata, size_t len)
+platform_err_code_t platform_spi_write_read(hw_spi_t spi_hw, void(*cs_select)(int), void(*cs_deselect)(int), int cs_pin, uint8_t* txdata, uint8_t* rxdata, size_t len)
 {
     SPIClassRP2040* _SPI = (SPIClassRP2040*)spi_hw;
+    (*cs_select)(cs_pin);
     _SPI->transfer(txdata, rxdata, len);
+    (*cs_deselect)(cs_pin);
     return PLATFORM_OK;
 }

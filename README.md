@@ -7,8 +7,8 @@ This repository in the form of a PlatformIO project contains the firmware resour
 ### Common
 
 - Hardware abstraction layer for all drivers [lib/controllino_drivers/include/hw_platform.h](lib/controllino_drivers/include/hw_platform.h)
-- hw_platform implementation for rp2040 SDK (used) [lib/hw_rp2040](lib/hw_rp2040)
-- hw_platform implementation for Arduino (not updated not used) [lib/hw_arduino](lib/hw_arduino)
+- hw_platform implementation for rp2040 SDK (used) [lib/controllino_hw_rp2040](lib/controllino_hw_rp2040)
+- hw_platform implementation for Arduino (not functional not used) [lib/controllino_hw_arduino](lib/controllino_hw_arduino)
 
 ### I2C
 
@@ -27,7 +27,7 @@ This repository in the form of a PlatformIO project contains the firmware resour
 
 - ControllinoRp2040Pin Class and modifications to Arduino digital and analog wiring [lib/controllino_wiring](lib/controllino_wiring)
 - Controllino Micro variant [lib/controllino_micro](lib/controllino_micro)
-- Controllino Neo variant [lib/controllino_neo](lib/controllino_neo)
+- Controllino Neo variant(not yet ready) [lib/controllino_neo](lib/controllino_neo)
 
 ## Modified Arduino libraries to support Controllino RP2040 core
 
@@ -50,7 +50,7 @@ This repository in the form of a PlatformIO project contains the firmware resour
 
 ## Unit tests
 
-The unit tests are designed to run on the devices and also in a native enviroment using mocks to simulate the hardware see [platformio.ini](platformio.ini), [unity_config.h](test/unity_config.h) and [unity_config.cpp](test/unity_config.cpp).
+The unit tests are designed to run on the devices and also in a native enviroment using mocks to simulate the hardware see [platformio.ini](platformio.ini), [unity_config.h](test/unity_config.h) and [unity_config.cpp](test/unity_config.cpp). (For now run test only on MICRO device enviroment)
 
 ### Arduino core
 
