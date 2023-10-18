@@ -12,9 +12,8 @@
  * Based on arduino-pico generic pins_arduino.h
  *
  * CONTROLLINO MICRO I/O
- * Note: All pins with value >= 32 are of course not directly connected
- * to the RP2040 and they required to be translated in the source
- * code to perform their function. Using an integer definition
+ * Note: Pins with value >= 32 are not directly connected
+ * to the RP2040 but using an integer definition
  * offers better compatibillity with Arduino API.
  *
  * \author Pedro Marquez @pmmarquez, CONTROLLINO Firmware Team
@@ -191,11 +190,15 @@ static const uint8_t CONTROLLINO_MICRO_DI0 = (26u);
 static const uint8_t CONTROLLINO_MICRO_DI1 = (27u);
 static const uint8_t CONTROLLINO_MICRO_DI2 = (28u);
 static const uint8_t CONTROLLINO_MICRO_DI3 = (29u);
- 
+// static const uint8_t CONTROLLINO_MICRO_DI0 = (56u);
+// static const uint8_t CONTROLLINO_MICRO_DI1 = (57u);
+// static const uint8_t CONTROLLINO_MICRO_DI2 = (58u);
+// static const uint8_t CONTROLLINO_MICRO_DI3 = (59u);
+
 /* Digital outputs connected to RP2040 */
-static const uint8_t CONTROLLINO_MICRO_DO0 = (5u);
-static const uint8_t CONTROLLINO_MICRO_DO1 = (6u);
-static const uint8_t CONTROLLINO_MICRO_DO2 = (7u);
+static const uint8_t CONTROLLINO_MICRO_DO0 = (13u);
+static const uint8_t CONTROLLINO_MICRO_DO1 = (14u);
+static const uint8_t CONTROLLINO_MICRO_DO2 = (15u);
 static const uint8_t CONTROLLINO_MICRO_DO3 = (20u);
 static const uint8_t CONTROLLINO_MICRO_DO4 = (21u);
 static const uint8_t CONTROLLINO_MICRO_DO5 = (22u);

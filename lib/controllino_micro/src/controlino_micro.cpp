@@ -18,9 +18,9 @@ mcp4461_t*      dev_mcp4461_1 = nullptr;
  
 /* Other pins used on internal components */
 extern const uint8_t _CY8C9520_INT_PIN =    (4u);
-extern const uint8_t _MCP3564_INT_PIN =     (13u);
-extern const uint8_t _MCP3564_CS_PIN =      (14u);
-extern const uint8_t _W5500_INT_PIN =       (15u);
+extern const uint8_t _MCP3564_INT_PIN =     (5u);
+extern const uint8_t _MCP3564_CS_PIN =      (6u);
+extern const uint8_t _W5500_INT_PIN =       (7u);
  
 /**
  * Arduino-pico variant initialization
@@ -96,7 +96,12 @@ ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI2 = new ControllinoRp2040Pin(MCP3564_
 ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI3 = new ControllinoRp2040Pin(MCP3564_CH_CH3, ControllinoRp2040Pin::MCP3564_PIN);
 ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI4 = new ControllinoRp2040Pin(MCP3564_CH_CH4, ControllinoRp2040Pin::MCP3564_PIN);
 ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI5 = new ControllinoRp2040Pin(MCP3564_CH_CH5, ControllinoRp2040Pin::MCP3564_PIN);
+// ControllinoRp2040Pin* _CONTROLLINO_MICRO_DI0 = new ControllinoRp2040Pin(26u, ControllinoRp2040Pin::RP2040_PIN);
+// ControllinoRp2040Pin* _CONTROLLINO_MICRO_DI1 = new ControllinoRp2040Pin(27u, ControllinoRp2040Pin::RP2040_PIN);
+// ControllinoRp2040Pin* _CONTROLLINO_MICRO_DI2 = new ControllinoRp2040Pin(28u, ControllinoRp2040Pin::RP2040_PIN);
+// ControllinoRp2040Pin* _CONTROLLINO_MICRO_DI3 = new ControllinoRp2040Pin(29u, ControllinoRp2040Pin::RP2040_PIN);
  
+
 /* Returns ControllinoRp2040Pin API pin or nullptr */
 ControllinoRp2040Pin* getControllinoRp2040Pin(int pin)
 {
@@ -108,7 +113,10 @@ ControllinoRp2040Pin* getControllinoRp2040Pin(int pin)
     case CONTROLLINO_MICRO_AI3: return _CONTROLLINO_MICRO_AI3;
     case CONTROLLINO_MICRO_AI4: return _CONTROLLINO_MICRO_AI4;
     case CONTROLLINO_MICRO_AI5: return _CONTROLLINO_MICRO_AI5;
-
+    // case CONTROLLINO_MICRO_DI0: return _CONTROLLINO_MICRO_DI0;
+    // case CONTROLLINO_MICRO_DI1: return _CONTROLLINO_MICRO_DI1;
+    // case CONTROLLINO_MICRO_DI2: return _CONTROLLINO_MICRO_DI2;
+    // case CONTROLLINO_MICRO_DI3: return _CONTROLLINO_MICRO_DI3;
     default: break;
     }
     return nullptr;
