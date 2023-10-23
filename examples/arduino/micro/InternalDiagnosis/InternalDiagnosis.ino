@@ -25,12 +25,12 @@ void setup() {
 void loop(void) {
   Serial.print("Power: ");
   Serial.print(readVoltageSuply()); // Board power suply
-  Serial.print(" mV");
-  Serial.print("\tTemperature Board: ");
+  Serial.print("mV");
+  Serial.print(" Temperature Board: ");
   Serial.print(readBoardTemperature(), 2); // Board Temperature
-  Serial.print(" °C");
-  Serial.print(" RP2040: ");
+  Serial.print("°C");
+  Serial.print(" Temperature RP2040: ");
   Serial.print(analogReadTemp(3.3F), 2); // Main RP2040 internal temperature measurement
-  Serial.println(" °C");
+  Serial.println("°C");
   delay(500);
 }

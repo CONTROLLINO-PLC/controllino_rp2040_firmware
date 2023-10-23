@@ -40,41 +40,38 @@ void setup() {
 unsigned long lastMillis = 0;
 
 void loop(void) {
-  Serial.print("CONTROLLINO_MICRO_DI0 state:");
-  Serial.print(digitalRead(CONTROLLINO_MICRO_DI0) ? "HIGH" : "LOW");
-  Serial.print("      CONTROLLINO_MICRO_DI1 ADC:");
+  Serial.print("CONTROLLINO_MICRO_DI1 ADC:");
   Serial.print(analogRead(CONTROLLINO_MICRO_DI1));
+
   Serial.print("      CONTROLLINO_MICRO_AI0 ADC:");
   Serial.print(analogRead(CONTROLLINO_MICRO_AI0));
   Serial.print(" DIGITAL:");
   Serial.print(digitalRead(CONTROLLINO_MICRO_AI0) ? "HIGH" : "LOW");
-
-  digitalWrite(CONTROLLINO_MICRO_DO1, digitalRead(CONTROLLINO_MICRO_DI0));
   digitalWrite(CONTROLLINO_MICRO_DO5, digitalRead(CONTROLLINO_MICRO_AI0));
-
   uint8_t pwm = map(analogRead(CONTROLLINO_MICRO_AI0), 0, 0x7FFFFF, 0, 0xFF); // Analog 23 bits to 8 bit for PWM 
-  Serial.print("      PWM:");
+  Serial.print(" PWM:");
   Serial.print(pwm);
-  
-  Serial.print("      CONTROLLINO_MICRO_AI1 ADC:");
-  Serial.print(analogRead(CONTROLLINO_MICRO_AI1));
-
   analogWrite(CONTROLLINO_MICRO_DO0, pwm);
   analogWrite(CONTROLLINO_MICRO_DO4, pwm);
 
-  Serial.print("      CURRENT_DO0:");
-  Serial.print(getOutCurrent(CONTROLLINO_MICRO_DO0));
+  Serial.print("      CONTROLLINO_MICRO_AI1 ADC:");
+  Serial.print(analogRead(CONTROLLINO_MICRO_AI1));
 
+  Serial.print("      CONTROLLINO_MICRO_DI0 state:");
+  Serial.print(digitalRead(CONTROLLINO_MICRO_DI0) ? "HIGH" : "LOW");
+  digitalWrite(CONTROLLINO_MICRO_DO1, digitalRead(CONTROLLINO_MICRO_DI0));
+  Serial.print(" CURRENT_DO1:");
+  Serial.print(getOutCurrent(CONTROLLINO_MICRO_DO1));
   if ((millis() - lastMillis) > 5000)
   {
     if (do_en) {
-      Serial.println(" DO1 DISABLED");
-      disableOut(CONTROLLINO_MICRO_DO0);
+      Serial.print(" DO1 DISABLED");
+      disableOut(CONTROLLINO_MICRO_DO1);
       do_en = false;
     }
     else {
-      Serial.println(" DO1 ENABLED");
-      enableOut(CONTROLLINO_MICRO_DO0);
+      Serial.print(" DO1 ENABLED");
+      enableOut(CONTROLLINO_MICRO_DO1);
       do_en = true;
     }
     lastMillis = millis();
