@@ -13,7 +13,7 @@
  * \defgroup ad5664
  *
  * Driver librarry to handle ad5664 DAC.
- * Based on MikroE DAC 7 Click driver (Copyright© 2020 MikroElektronika d.o.o.)
+ * Based on MikroE DAC 7 Click driver
  *
  * \author Pedro Marquez @pmmarquez, CONTROLLINO Firmware Team
  */

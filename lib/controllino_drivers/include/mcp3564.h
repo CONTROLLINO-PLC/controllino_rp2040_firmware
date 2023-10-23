@@ -13,7 +13,7 @@
  * \defgroup mcp3564
  *
  * Driver librarry to handle MCP3564 ADC.
- * Based on MikroE ADC 9 Click driver (Copyright© 2020 MikroElektronika d.o.o.)
+ * Based on MikroE ADC 9 Click driver
  *
  * \author Pedro Marquez @pmmarquez, CONTROLLINO Firmware Team
  */

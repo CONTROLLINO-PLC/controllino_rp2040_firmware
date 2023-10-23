@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) 2023 CONTROLLINO GmbH.
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+/**
+ * \file InternalDiagnosis.ino
+ *
+ * \brief Example of CONTROLLINO MICRO internal diagnosis functionalities
+ * \author Pedro Marquez @pmmarquez, CONTROLLINO Firmware Team
+ */
+
 #include "Arduino.h"
 #include "SPI.h"
 

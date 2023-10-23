@@ -13,7 +13,7 @@
  * \defgroup adg728
  *
  * Driver librarry to handle ADG728 analog matrix switch.
- * Based on MikroE AnalogMux 2 Click Driver (Copyright© 2020 MikroElektronika d.o.o.)
+ * Based on MikroE AnalogMux 2 Click Driver
  *
  * \author Pedro Marquez @pmmarquez, CONTROLLINO Firmware Team
  */

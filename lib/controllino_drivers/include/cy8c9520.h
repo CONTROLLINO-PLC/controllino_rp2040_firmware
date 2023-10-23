@@ -13,7 +13,7 @@
  * \defgroup cy8c9520
  *
  * Driver librarry to handle cy8c9520 port expander.
- * Based on MikroE Expand 6 Click Driver (Copyright© 2020 MikroElektronika d.o.o.)
+ * Based on MikroE Expand 6 Click Driver
  *
  * \author Pedro Marquez @pmmarquez , CONTROLLINO Firmware Team
  */

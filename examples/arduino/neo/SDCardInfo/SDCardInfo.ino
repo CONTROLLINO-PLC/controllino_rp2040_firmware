@@ -19,6 +19,9 @@
   modified 9 Apr 2012
   by Tom Igoe
 */
+
+// Modified version for this project
+
 // include the SD library:
 #include <SPI.h>
 #include <SD.h>

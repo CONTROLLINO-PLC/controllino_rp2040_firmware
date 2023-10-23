@@ -10,9 +10,11 @@
   created 19 July 2018
   by Sandeep Mistry
 */
+
+// Modified version for this project
+
 #include <SPI.h>
 #include <ArduinoECCX08.h>
-
 
 void setup() {
   Serial.begin(115200);

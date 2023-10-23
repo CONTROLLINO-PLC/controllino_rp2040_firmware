@@ -22,6 +22,8 @@
 
  */
 
+ // Modified version for this project
+
 #include <SPI.h>
 #include <Ethernet.h>
 

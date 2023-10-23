@@ -20,6 +20,8 @@
   This example code is in the public domain.
 */
 
+// Modified version for this project
+
 #include <SPI.h>
 #include <ArduinoECCX08.h>
 #include <utility/ECCX08SelfSignedCert.h>

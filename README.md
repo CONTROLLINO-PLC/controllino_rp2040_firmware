@@ -31,22 +31,23 @@ This repository in the form of a PlatformIO project contains the firmware resour
 
 ## Modified Arduino libraries to support Controllino RP2040 core
 
-- Wire [lib/Wire](lib/Wire)
-- CAN based on Arduino CAN library (MCP2515) [lib/arduino_can](lib/arduino_can)
+- Wire modified version of Wire library from Arduino-Pico core [lib/arduino_wire](lib/ArduinoWire)
+- CAN modified version of Arduino CAN library (MCP2515) [lib/arduino_can](lib/arduino_can)
+- ArduinoModbus modified version of Arduino Modbus library [lib/arduino_modbus](lib/arduino_modbus)
 - Other standard Arduino libraries are intended to be used without modifications like:
   - ArduinoECCX08 (ATECC608A Crypto Chip)
   - Ethernet (W5500)
   - ArduinoRS485 (RS485 coms)
-  - ArduinoModbus (Modbus coms)
   - SD (SD card access)
 
 ## Examples
 
 - Usind RP2040 sdk [examples/pico_sdk](examples/pico_sdk)
-- Using Arduino core
+- Using Arduino core:
   - Common to all variants [examples/arduino/common](examples/arduino/common)
   - Micro variant [examples/arduino/micro](examples/arduino/micro)
   - Neo variant [examples/arduino/neo](examples/arduino/neo)
+  - Note: Some modifications of these examples are needed to run on PlatformIO. Within the Arduino Core released with this repo there are examples for every library that are ready to run in Arduino IDE.
 
 ## Unit tests
 
@@ -89,3 +90,12 @@ The unit tests are designed to run on the devices and also in a native enviromen
 #### time
 
 - Common hardware abstraction functions [test/time/hw/common](test/time/hw/common)
+
+## References to external projects and libraries
+
+- Arduino-Pico core [https://github.com/earlephilhower/arduino-pico](https://github.com/earlephilhower/arduino-pico)
+- Pico SDK [https://github.com/raspberrypi/pico-sdk](https://github.com/raspberrypi/pico-sdk)
+- MikroE Click libraries [https://github.com/MikroElektronika/mikrosdk_click_v2](https://github.com/MikroElektronika/mikrosdk_click_v2)
+- WE Sensor libraries [https://github.com/WurthElektronik/SensorLibrariesArduino](https://github.com/WurthElektronik/SensorLibrariesArduino)
+- Arduino CAN library [https://github.com/sandeepmistry/arduino-CAN](https://github.com/sandeepmistry/arduino-CAN)
+- Arduino Modbus library [https://github.com/arduino-libraries/ArduinoModbus](https://github.com/arduino-libraries/ArduinoModbus)

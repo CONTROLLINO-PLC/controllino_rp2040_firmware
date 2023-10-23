@@ -1,3 +1,15 @@
+/*
+ * Copyright (c) 2023 CONTROLLINO GmbH.
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+/**
+ * \file IoTest.ino
+ *
+ * \brief Example of CONTROLLINO MICRO I/O usage
+ * \author Pedro Marquez @pmmarquez, CONTROLLINO Firmware Team
+ */
 
 #include "Arduino.h"
 #include "SPI.h"
