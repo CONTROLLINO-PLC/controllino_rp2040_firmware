@@ -1,6 +1,10 @@
-# Controllino RP2040 firmware resources
+# Controllino RP2040 firmware resources 
 
 This repository in the form of a PlatformIO project contains the firmware resources for Controllino RP2040 boards, to support bare metal programming using RP2040 SDK and Arduino programing with Controllino RP2040 core based on Arduino-Pico core.
+
+## Arduino IDE installation ❗
+
+Add [https://github.com/CONTROLLINO-PLC/controllino_rp2040_firmware/releases/download/global/package_controllino_rp2040_index.json](https://github.com/CONTROLLINO-PLC/controllino_rp2040_firmware/releases/download/global/package_controllino_rp2040_index.json) to the Additional Boards Manager URLs in the Arduino IDE preferences.
 
 ## Internal hardware drivers
 
