@@ -103,3 +103,4 @@ The unit tests are designed to run on the devices and also in a native enviromen
 - WE Sensor libraries [https://github.com/WurthElektronik/SensorLibrariesArduino](https://github.com/WurthElektronik/SensorLibrariesArduino)
 - Arduino CAN library [https://github.com/sandeepmistry/arduino-CAN](https://github.com/sandeepmistry/arduino-CAN)
 - Arduino Modbus library [https://github.com/arduino-libraries/ArduinoModbus](https://github.com/arduino-libraries/ArduinoModbus)
+- ArduinoOTA library [https://github.com/JAndrassy/ArduinoOTA](https://github.com/JAndrassy/ArduinoOTA)
