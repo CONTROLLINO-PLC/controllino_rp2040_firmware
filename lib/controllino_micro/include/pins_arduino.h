@@ -176,6 +176,9 @@ static const uint8_t A3 =           (29u);
 #ifndef MCP2515_DEFAULT_INT_PIN
 #define MCP2515_DEFAULT_INT_PIN     (12u)
 #endif
+#ifndef MCP2515_DEFAULT_CLOCK_FREQUENCY
+#define MCP2515_DEFAULT_CLOCK_FREQUENCY (long)20E6
+#endif
  
 /* Analog inputs connected to MCP3564 24 bits ADC */
 static const uint8_t CONTROLLINO_MICRO_AI0 = (50u);
@@ -207,13 +210,13 @@ static const uint8_t CONTROLLINO_MICRO_DO7 = (24u);
  
 /* ControllinoRp2040Pin API */
 #include "controllino_wiring.h"
-
+ 
 /* Enable digital output doPin -> CONTROLLINO_MICRO_DO0...D07 */
 extern "C" void enableOut(uint8_t doPin);
-
+ 
 /* Disable digital output doPin -> CONTROLLINO_MICRO_DO0...D07 */
 extern "C" void disableOut(uint8_t doPin);
-
+ 
 /* Micro internal diagnosys API */
 #include "controllino_diag.h"
 
