@@ -9,11 +9,23 @@
 #include "hardware/spi.h"
  
 typedef struct spi_inst_t _hw_spi_t;
-hw_spi_t PLATFORM_SPI_HW = (hw_spi_t)   spi0;
+#ifndef PLATFORM_SPI_HW_CUSTOM
+hw_spi_t PLATFORM_SPI_HW = (hw_spi_t)spi0;
+#else
+hw_spi_t PLATFORM_SPI_HW = (hw_spi_t)PLATFORM_SPI_HW_CUSTOM;
+#endif
+#ifndef PLATFORM_SPI_SPEED
 const unsigned int PLATFORM_SPI_SPEED = 1000000;
-const int PLATFORM_SPI_MOSI =           19;
-const int PLATFORM_SPI_MISO =           16;
+#endif
+#ifndef PLATFORM_SPI_MOSI
+const int PLATFORM_SPI_MOSI = 19;
+#endif
+#ifndef PLATFORM_SPI_MISO
+const int PLATFORM_SPI_MISO = 16;
+#endif
+#ifndef PLATFORM_SPI_SCK
 const int PLATFORM_SPI_SCK = 18;
+#endif
  
 /* Init SPI interface */
 platform_err_code_t platform_spi_init(hw_spi_t spi_hw, unsigned int speed, int mosi_pin, int miso_pin, int sck_pin)

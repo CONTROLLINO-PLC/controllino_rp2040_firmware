@@ -159,3 +159,9 @@ bts71220_err_code_t bts71220_set_sense_mux(bts71220_t* dev, bts71220_sense_mux_t
     memcpy(&txdata, &dcr_reg, 1);
     return bts71220_write_reg(dev, BTS71220_REG_DCR, txdata, dchain_num);
 }
+
+/* Enable CS for start SPI coms */
+void __attribute__((weak)) bts71220_cs_select(int cs_pin) { (void)cs_pin; };
+
+/* Disable CS after SPI coms */
+void __attribute__((weak)) bts71220_cs_deselect(int cs_pin) { (void)cs_pin; };
