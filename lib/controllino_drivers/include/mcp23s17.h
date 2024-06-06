@@ -145,9 +145,10 @@ typedef struct
     int mosi_pin;
     int miso_pin;
     int sck_pin;
-    int cs_pin;
-    int rst_pin;
-    int int_pin;
+    int cs_pin; 
+    int rst_pin;            // reset pin
+    int int_pin;            // interrupt pin
+    mcp23s17_addr_t addr;   // device address
     uint8_t spi_mode;
     uint8_t spi_bit_order;
     unsigned int spi_speed;
@@ -163,6 +164,7 @@ typedef struct
     int cs_pin;
     int rst_pin;
     int int_pin;
+    mcp23s17_addr_t addr;
     uint8_t spi_mode;
     uint8_t spi_bit_order;
     unsigned int spi_speed;
@@ -199,7 +201,6 @@ mcp23s17_err_code_t mcp23s17_init(mcp23s17_t* dev, mcp23s17_cfg_t* cfg);
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param reg Register address.
  * \param rw_cmd Read or write command.
  * \param tx_data Pointer to transmit data byte.
@@ -210,7 +211,6 @@ mcp23s17_err_code_t mcp23s17_init(mcp23s17_t* dev, mcp23s17_cfg_t* cfg);
  */
 mcp23s17_err_code_t mcp23s17_generic_transfer(
     mcp23s17_t* dev,
-    mcp23s17_addr_t addr,
     mcp23s17_regs_t reg,
     mcp23s17_rw_cmd_t rw_cmd,
     uint8_t tx_data,
@@ -218,227 +218,200 @@ mcp23s17_err_code_t mcp23s17_generic_transfer(
 );
  
 /**
- * \brief Set default internal configuration to registers
- * \ingroup mcp23s17
- *
- * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
- * \return PLATFORM_SPI_COM_ERR : error in coms
- *         PLATFORM_ARGUMENT_ERR : error in arguments
- *         PLATFORM_OK : successful
- */
-mcp23s17_err_code_t mcp23s17_set_default_internal_cfg(mcp23s17_t* dev, mcp23s17_addr_t addr);
- 
-/**
  * \brief Set register bits
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param reg Register address.
  * \param bit_mask Bits mask.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_set_bits(mcp23s17_t* dev, mcp23s17_addr_t addr, mcp23s17_regs_t reg, uint8_t bit_mask);
+mcp23s17_err_code_t mcp23s17_set_bits(mcp23s17_t* dev, mcp23s17_regs_t reg, uint8_t bit_mask);
  
 /**
  * \brief Clear register bits
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param reg Register address.
  * \param bit_mask Bits mask.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_clear_bits(mcp23s17_t* dev, mcp23s17_addr_t addr, mcp23s17_regs_t reg, uint8_t bit_mask);
+mcp23s17_err_code_t mcp23s17_clear_bits(mcp23s17_t* dev, mcp23s17_regs_t reg, uint8_t bit_mask);
  
 /**
  * \brief Toggle register bits
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param reg Register address.
  * \param bit_mask Bits mask.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_toggle_bits(mcp23s17_t* dev, mcp23s17_addr_t addr, mcp23s17_regs_t reg, uint8_t bit_mask);
+mcp23s17_err_code_t mcp23s17_toggle_bits(mcp23s17_t* dev, mcp23s17_regs_t reg, uint8_t bit_mask);
  
 /**
- * \brief Read one byte of data from PORTA
+ * \brief Read data from PORTA
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
- * \param read_data Pointer to receive data byte.
+ * \param data Pointer to receive data byte.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_read_byte_port_a(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t* read_data);
+mcp23s17_err_code_t mcp23s17_read_port_a(mcp23s17_t* dev, uint8_t* data);
  
 /**
- * \brief Read one byte of data from PORTB
+ * \brief Read data from PORTB
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
- * \param read_data Pointer to receive data byte.
+ * \param data Pointer to receive data byte.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_read_byte_port_b(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t* read_data);
+mcp23s17_err_code_t mcp23s17_read_port_b(mcp23s17_t* dev, uint8_t* data);
  
 /**
- * \brief Read the two byte of data from PORTA & PORTB
+ * \brief Read data from PORTA-PORTB and merge into one 16bit value
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
- * \param read_data Pointer to receive data.
+ * \param data Pointer to receive data.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
+ * \note PORTA is the MSB and PORTB is the LSB
  */
-mcp23s17_err_code_t mcp23s17_read_ports(mcp23s17_t* dev, mcp23s17_addr_t addr, uint16_t* read_data);
+mcp23s17_err_code_t mcp23s17_read_ports(mcp23s17_t* dev, uint16_t* data);
  
 /**
  * \brief Write one byte of data to PORTA
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param write_data Data to write.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_write_port_a(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t write_data);
+mcp23s17_err_code_t mcp23s17_write_port_a(mcp23s17_t* dev, uint8_t write_data);
  
 /**
  * \brief Clear bit from PORTA
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param bit_mask Bits mask.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_clear_bit_port_a(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t bit_mask);
+mcp23s17_err_code_t mcp23s17_clear_bit_port_a(mcp23s17_t* dev, uint8_t bit_mask);
  
 /**
  * \brief Set bit from PORTA
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param bit_mask Bits mask.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_set_bit_port_a(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t bit_mask);
+mcp23s17_err_code_t mcp23s17_set_bit_port_a(mcp23s17_t* dev, uint8_t bit_mask);
  
 /**
  * \brief Toggle bit from PORTA
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param bit_mask Bits mask.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_toggle_bit_port_a(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t bit_mask);
+mcp23s17_err_code_t mcp23s17_toggle_bit_port_a(mcp23s17_t* dev, uint8_t bit_mask);
  
 /**
  * \brief Write one byte of data to PORTB
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param write_data Data to write.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_write_port_b(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t write_data);
+mcp23s17_err_code_t mcp23s17_write_port_b(mcp23s17_t* dev, uint8_t write_data);
  
 /**
  * \brief Clear bit from PORTB
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param bit_mask Bits mask.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_clear_bit_port_b(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t bit_mask);
+mcp23s17_err_code_t mcp23s17_clear_bit_port_b(mcp23s17_t* dev, uint8_t bit_mask);
  
 /**
  * \brief Set bit from PORTB
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param bit_mask Bits mask.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_set_bit_port_b(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t bit_mask);
+mcp23s17_err_code_t mcp23s17_set_bit_port_b(mcp23s17_t* dev, uint8_t bit_mask);
  
 /**
  * \brief Toggle bit from PORTB
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param bit_mask Bits mask.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_toggle_bit_port_b(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t bit_mask);
+mcp23s17_err_code_t mcp23s17_toggle_bit_port_b(mcp23s17_t* dev, uint8_t bit_mask);
  
 /**
  * \brief Set PORTA direction
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param write_data Data to write.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_set_direction_port_a(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t write_data);
+mcp23s17_err_code_t mcp23s17_set_direction_port_a(mcp23s17_t* dev, uint8_t write_data);
  
 /**
  * \brief Set pins from PORTA as input
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param bit_mask Bit mask.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_set_input_dir_port_a(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t bit_mask);
+mcp23s17_err_code_t mcp23s17_set_input_dir_port_a(mcp23s17_t* dev, uint8_t bit_mask);
  
 /**
  * \brief Set pins from PORTA as output
@@ -451,72 +424,67 @@ mcp23s17_err_code_t mcp23s17_set_input_dir_port_a(mcp23s17_t* dev, mcp23s17_addr
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_set_output_dir_port_a(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t bit_mask);
+mcp23s17_err_code_t mcp23s17_set_output_dir_port_a(mcp23s17_t* dev, uint8_t bit_mask);
  
 /**
  * \brief Set PORTB direction
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param write_data Data to write.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_set_direction_port_b(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t write_data);
+mcp23s17_err_code_t mcp23s17_set_direction_port_b(mcp23s17_t* dev, uint8_t write_data);
 
 /**
  * \brief Set pins from PORTB as input
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param bit_mask Bit mask.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_set_input_dir_port_b(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t bit_mask);
+mcp23s17_err_code_t mcp23s17_set_input_dir_port_b(mcp23s17_t* dev, uint8_t bit_mask);
 
 /**
  * \brief Set pins from PORTB as output
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param bit_mask Bit mask.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_set_output_dir_port_b(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t bit_mask);
+mcp23s17_err_code_t mcp23s17_set_output_dir_port_b(mcp23s17_t* dev, uint8_t bit_mask);
  
 /**
  * \brief Set pull-ups of PORTA pins
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param write_data Pull up value.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_set_pull_ups_port_a(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t write_data);
+mcp23s17_err_code_t mcp23s17_set_pull_ups_port_a(mcp23s17_t* dev, uint8_t write_data);
  
 /**
  * \brief Set pull-ups of PORTB pins
  * \ingroup mcp23s17
  *
  * \param dev Pointer to MCP23S17 driver struct
- * \param addr Device address.
  * \param write_data Pull up value.
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
  */
-mcp23s17_err_code_t mcp23s17_set_pull_ups_port_b(mcp23s17_t* dev, mcp23s17_addr_t addr, uint8_t write_data);
+mcp23s17_err_code_t mcp23s17_set_pull_ups_port_b(mcp23s17_t* dev, uint8_t write_data);
  
 /**
  * \brief Active pin by position on PORTA, from PA0 to PA7
