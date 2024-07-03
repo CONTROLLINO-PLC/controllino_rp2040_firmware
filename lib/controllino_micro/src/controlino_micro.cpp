@@ -68,38 +68,30 @@ void initVariant()
 
     // ADC analog inputs
     dev_mcp3564 = (mcp3564_t*)malloc(sizeof(mcp3564_t));
-    pinMode(_MCP3564_CS_PIN, OUTPUT);
     mcp3564_cfg_t mcp3564_cfg;
     mcp3564_set_default_cfg(&mcp3564_cfg);
+    mcp3564_cfg.cs_pin = _MCP3564_CS_PIN;
     mcp3564_init(dev_mcp3564, &mcp3564_cfg);
 
     // Set default resolution for RP2040 ADC to 12 bits
     analogReadResolution(12);
 }
  
-/* SPI chip select management */
-void mcp3564_cs_select(int cs_pin) {
-    digitalWrite(_MCP3564_CS_PIN, LOW);
-}
-void mcp3564_cs_deselect(int cs_pin) {
-    digitalWrite(_MCP3564_CS_PIN, HIGH);
-}
- 
-/* Pin definitions for ControllinoRp2040Pin API */
-ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI0 = new ControllinoRp2040Pin(MCP3564_CH_CH0, ControllinoRp2040Pin::MCP3564_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI1 = new ControllinoRp2040Pin(MCP3564_CH_CH1, ControllinoRp2040Pin::MCP3564_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI2 = new ControllinoRp2040Pin(MCP3564_CH_CH2, ControllinoRp2040Pin::MCP3564_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI3 = new ControllinoRp2040Pin(MCP3564_CH_CH3, ControllinoRp2040Pin::MCP3564_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI4 = new ControllinoRp2040Pin(MCP3564_CH_CH4, ControllinoRp2040Pin::MCP3564_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI5 = new ControllinoRp2040Pin(MCP3564_CH_CH5, ControllinoRp2040Pin::MCP3564_PIN);
-// ControllinoRp2040Pin* _CONTROLLINO_MICRO_DI0 = new ControllinoRp2040Pin(26u, ControllinoRp2040Pin::RP2040_PIN);
-// ControllinoRp2040Pin* _CONTROLLINO_MICRO_DI1 = new ControllinoRp2040Pin(27u, ControllinoRp2040Pin::RP2040_PIN);
-// ControllinoRp2040Pin* _CONTROLLINO_MICRO_DI2 = new ControllinoRp2040Pin(28u, ControllinoRp2040Pin::RP2040_PIN);
-// ControllinoRp2040Pin* _CONTROLLINO_MICRO_DI3 = new ControllinoRp2040Pin(29u, ControllinoRp2040Pin::RP2040_PIN);
+/* Pin definitions for ControllinoPin API */
+ControllinoPin* _CONTROLLINO_MICRO_AI0 = new ControllinoPin(MCP3564_CH_CH0, ControllinoPin::MCP3564_PIN);
+ControllinoPin* _CONTROLLINO_MICRO_AI1 = new ControllinoPin(MCP3564_CH_CH1, ControllinoPin::MCP3564_PIN);
+ControllinoPin* _CONTROLLINO_MICRO_AI2 = new ControllinoPin(MCP3564_CH_CH2, ControllinoPin::MCP3564_PIN);
+ControllinoPin* _CONTROLLINO_MICRO_AI3 = new ControllinoPin(MCP3564_CH_CH3, ControllinoPin::MCP3564_PIN);
+ControllinoPin* _CONTROLLINO_MICRO_AI4 = new ControllinoPin(MCP3564_CH_CH4, ControllinoPin::MCP3564_PIN);
+ControllinoPin* _CONTROLLINO_MICRO_AI5 = new ControllinoPin(MCP3564_CH_CH5, ControllinoPin::MCP3564_PIN);
+// ControllinoPin* _CONTROLLINO_MICRO_DI0 = new ControllinoPin(26u, ControllinoPin::RP2040_PIN);
+// ControllinoPin* _CONTROLLINO_MICRO_DI1 = new ControllinoPin(27u, ControllinoPin::RP2040_PIN);
+// ControllinoPin* _CONTROLLINO_MICRO_DI2 = new ControllinoPin(28u, ControllinoPin::RP2040_PIN);
+// ControllinoPin* _CONTROLLINO_MICRO_DI3 = new ControllinoPin(29u, ControllinoPin::RP2040_PIN);
  
 
-/* Returns ControllinoRp2040Pin API pin or nullptr */
-ControllinoRp2040Pin* getControllinoRp2040Pin(int pin)
+/* Returns ControllinoPin API pin or nullptr */
+ControllinoPin* getControllinoPin(int pin)
 {
     switch (pin)
     {

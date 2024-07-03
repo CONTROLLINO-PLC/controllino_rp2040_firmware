@@ -6,12 +6,12 @@ uint16_t TEST_AD5664_WRITE_DAC_DATA = 0x7FFF;
 uint16_t TEST_AD5664_DAC_DATA = 0x0000;
 
 #ifdef CONTROLLINO_MICRO
-ControllinoRp2040Pin* _PIN = new ControllinoRp2040Pin(AD5664_CH_ADDR_A, ControllinoRp2040Pin::AD5664_PIN);
+ControllinoPin* _PIN = new ControllinoPin(AD5664_CH_ADDR_A, ControllinoPin::AD5664_PIN);
 #define TEST_AD5664_ARDUINO_PIN _PIN
 #define _TEST_AD5664_ARDUINO_PIN _PIN
 #endif
 #ifdef CONTROLLINO_NEO
-extern ControllinoRp2040Pin* _CONTROLLINO_NEO_AO0;
+extern ControllinoPin* _CONTROLLINO_NEO_AO0;
 #define TEST_AD5664_ARDUINO_PIN CONTROLLINO_NEO_AO0
 #define _TEST_AD5664_ARDUINO_PIN _CONTROLLINO_NEO_AO0
 #endif
@@ -30,7 +30,7 @@ void tearDown(void)
 void test_ad5664_pin_definitions_ok()
 {
     TEST_ASSERT_EQUAL(AD5664_CH_ADDR_A, _TEST_AD5664_ARDUINO_PIN->getPin());
-    TEST_ASSERT_EQUAL(ControllinoRp2040Pin::AD5664_PIN, _TEST_AD5664_ARDUINO_PIN->getType());
+    TEST_ASSERT_EQUAL(ControllinoPin::AD5664_PIN, _TEST_AD5664_ARDUINO_PIN->getType());
 }
  
 void test_ad5664_pin_pinMode_always_output()

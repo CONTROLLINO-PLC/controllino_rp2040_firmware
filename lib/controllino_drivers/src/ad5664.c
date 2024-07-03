@@ -114,3 +114,9 @@ ad5664_err_code_t ad5664_set_ch_voltage(ad5664_t* dev, ad5664_ch_addr_t ch_addr,
     ret = ad5664_update_dac_reg(dev, ch_addr);
     return ret;
 }
+
+/* Enable CS for start SPI coms */
+void __attribute__((weak)) ad5664_cs_select(int cs_pin) { platform_gpio_set(cs_pin, false); };
+
+/* Disable CS after SPI coms */
+void __attribute__((weak)) ad5664_cs_deselect(int cs_pin) { platform_gpio_set(cs_pin, true); };

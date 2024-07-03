@@ -29,7 +29,7 @@ Add [https://github.com/CONTROLLINO-PLC/controllino_rp2040_firmware/releases/dow
 
 ## Controllino RP2040 core resources based on Arduino-Pico core
 
-- ControllinoRp2040Pin Class and modifications to Arduino digital and analog wiring [lib/controllino_wiring](lib/controllino_wiring)
+- ControllinoPin Class and modifications to Arduino digital and analog wiring [lib/controllino_wiring](lib/controllino_wiring)
 - Controllino Micro variant [lib/controllino_micro](lib/controllino_micro)
 - Controllino Neo variant(not yet ready) [lib/controllino_neo](lib/controllino_neo)
 
