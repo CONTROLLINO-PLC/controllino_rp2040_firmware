@@ -85,10 +85,6 @@ void mcp3564_cs_deselect(int cs_pin) {
     digitalWrite(_MCP3564_CS_PIN, HIGH);
 }
  
-/* These are not used but need to be defined */
-void ad5664_cs_select(int cs_pin) {}
-void ad5664_cs_deselect(int cs_pin) {}
- 
 /* Pin definitions for ControllinoRp2040Pin API */
 ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI0 = new ControllinoRp2040Pin(MCP3564_CH_CH0, ControllinoRp2040Pin::MCP3564_PIN);
 ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI1 = new ControllinoRp2040Pin(MCP3564_CH_CH1, ControllinoRp2040Pin::MCP3564_PIN);

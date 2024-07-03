@@ -21,10 +21,6 @@
 #include <stdint.h>
 #include <stddef.h>
  
-#ifdef __cplusplus
-extern "C" {
-#endif
- 
 /**
  * \brief Error codes
  * \ingroup cy8c9520
@@ -46,55 +42,55 @@ typedef int cy8c9520_err_code_t;
  */
 typedef enum
 {
-    CY8C9520_REG_IN_PORT0 =                 0x00,
-    CY8C9520_REG_IN_PORT1 =                 0x01,
-    CY8C9520_REG_IN_PORT2 =                 0x02,
-    CY8C9520_REG_IN_PORT3 =                 0x03,
-    CY8C9520_REG_IN_PORT4 =                 0x04,
-    CY8C9520_REG_IN_PORT5 =                 0x05,
-    CY8C9520_REG_IN_PORT6 =                 0x06,
-    CY8C9520_REG_IN_PORT7 =                 0x07,
-    CY8C9520_REG_OUT_PORT0 =                0x08,
-    CY8C9520_REG_OUT_PORT1 =                0x09,
-    CY8C9520_REG_OUT_PORT2 =                0x0A,
-    CY8C9520_REG_OUT_PORT3 =                0x0B,
-    CY8C9520_REG_OUT_PORT4 =                0x0C,
-    CY8C9520_REG_OUT_PORT5 =                0x0D,
-    CY8C9520_REG_OUT_PORT6 =                0x0E,
-    CY8C9520_REG_OUT_PORT7 =                0x0F,
-    CY8C9520_REG_INT_STAT_PORT0 =           0x10,
-    CY8C9520_REG_INT_STAT_PORT1 =           0x11,
-    CY8C9520_REG_INT_STAT_PORT2 =           0x12,
-    CY8C9520_REG_INT_STAT_PORT3 =           0x13,
-    CY8C9520_REG_INT_STAT_PORT4 =           0x14,
-    CY8C9520_REG_INT_STAT_PORT5 =           0x15,
-    CY8C9520_REG_INT_STAT_PORT6 =           0x16,
-    CY8C9520_REG_INT_STAT_PORT7 =           0x17,
-    CY8C9520_REG_PORT_SEL =                 0x18,
-    CY8C9520_REG_INT_MASK =                 0x19,
-    CY8C9520_REG_SEL_PWM_OUT =              0x1A,
-    CY8C9520_REG_INV =                      0x1B,
-    CY8C9520_REG_PORT_DIR =                 0x1C,
-    CY8C9520_REG_PULL_UP =                  0x1D,
-    CY8C9520_REG_PULL_DOWN =                0x1E,
-    CY8C9520_REG_OPEN_DRAIN_HIGH =          0x1F,
-    CY8C9520_REG_OPEN_DRAIN_LOW =           0x20,
-    CY8C9520_REG_STRONG =                   0x21,
-    CY8C9520_REG_SLOW_STRONG =              0x22,
-    CY8C9520_REG_HIGH_Z =                   0x23,
-    CY8C9520_REG_RSRVD_1 =                  0x24,
-    CY8C9520_REG_RSRVD_2 =                  0x25,
-    CY8C9520_REG_RSRVD_3 =                  0x26,
-    CY8C9520_REG_RSRVD_4 =                  0x27,
-    CY8C9520_REG_PWM_SEL =                  0x28,
-    CY8C9520_REG_CFG_PWM =                  0x29,
-    CY8C9520_REG_PERIOD_PWM =               0x2A,
-    CY8C9520_REG_PULSE_WIDTH_PWM =          0x2B,
-    CY8C9520_REG_DIV_PWM =                  0x2C,
-    CY8C9520_REG_EEPROM =                   0x2D,
-    CY8C9520_REG_DEV_ID =                   0x2E,
-    CY8C9520_REG_WDT =                      0x2F,
-    CY8C9520_REG_CMD =                      0x30
+    CY8C9520_REG_IN_PORT0 = 0x00,
+    CY8C9520_REG_IN_PORT1 = 0x01,
+    CY8C9520_REG_IN_PORT2 = 0x02,
+    CY8C9520_REG_IN_PORT3 = 0x03,
+    CY8C9520_REG_IN_PORT4 = 0x04,
+    CY8C9520_REG_IN_PORT5 = 0x05,
+    CY8C9520_REG_IN_PORT6 = 0x06,
+    CY8C9520_REG_IN_PORT7 = 0x07,
+    CY8C9520_REG_OUT_PORT0 = 0x08,
+    CY8C9520_REG_OUT_PORT1 = 0x09,
+    CY8C9520_REG_OUT_PORT2 = 0x0A,
+    CY8C9520_REG_OUT_PORT3 = 0x0B,
+    CY8C9520_REG_OUT_PORT4 = 0x0C,
+    CY8C9520_REG_OUT_PORT5 = 0x0D,
+    CY8C9520_REG_OUT_PORT6 = 0x0E,
+    CY8C9520_REG_OUT_PORT7 = 0x0F,
+    CY8C9520_REG_INT_STAT_PORT0 = 0x10,
+    CY8C9520_REG_INT_STAT_PORT1 = 0x11,
+    CY8C9520_REG_INT_STAT_PORT2 = 0x12,
+    CY8C9520_REG_INT_STAT_PORT3 = 0x13,
+    CY8C9520_REG_INT_STAT_PORT4 = 0x14,
+    CY8C9520_REG_INT_STAT_PORT5 = 0x15,
+    CY8C9520_REG_INT_STAT_PORT6 = 0x16,
+    CY8C9520_REG_INT_STAT_PORT7 = 0x17,
+    CY8C9520_REG_PORT_SEL = 0x18,
+    CY8C9520_REG_INT_MASK = 0x19,
+    CY8C9520_REG_SEL_PWM_OUT = 0x1A,
+    CY8C9520_REG_INV = 0x1B,
+    CY8C9520_REG_PORT_DIR = 0x1C,
+    CY8C9520_REG_PULL_UP = 0x1D,
+    CY8C9520_REG_PULL_DOWN = 0x1E,
+    CY8C9520_REG_OPEN_DRAIN_HIGH = 0x1F,
+    CY8C9520_REG_OPEN_DRAIN_LOW = 0x20,
+    CY8C9520_REG_STRONG = 0x21,
+    CY8C9520_REG_SLOW_STRONG = 0x22,
+    CY8C9520_REG_HIGH_Z = 0x23,
+    CY8C9520_REG_RSRVD_1 = 0x24,
+    CY8C9520_REG_RSRVD_2 = 0x25,
+    CY8C9520_REG_RSRVD_3 = 0x26,
+    CY8C9520_REG_RSRVD_4 = 0x27,
+    CY8C9520_REG_PWM_SEL = 0x28,
+    CY8C9520_REG_CFG_PWM = 0x29,
+    CY8C9520_REG_PERIOD_PWM = 0x2A,
+    CY8C9520_REG_PULSE_WIDTH_PWM = 0x2B,
+    CY8C9520_REG_DIV_PWM = 0x2C,
+    CY8C9520_REG_EEPROM = 0x2D,
+    CY8C9520_REG_DEV_ID = 0x2E,
+    CY8C9520_REG_WDT = 0x2F,
+    CY8C9520_REG_CMD = 0x30
 } cy8c9520_reg_t;
  
 /**
@@ -102,23 +98,23 @@ typedef enum
  * \ingroup cy8c9520
  */
 typedef enum {
-    CY8C9520_SEL_PWM_0 =                    0x00,
-    CY8C9520_SEL_PWM_1 =                    0x01,
-    CY8C9520_SEL_PWM_2 =                    0x02,
-    CY8C9520_SEL_PWM_3 =                    0x03
+    CY8C9520_SEL_PWM_0 = 0x00,
+    CY8C9520_SEL_PWM_1 = 0x01,
+    CY8C9520_SEL_PWM_2 = 0x02,
+    CY8C9520_SEL_PWM_3 = 0x03
 } cy8c9520_sel_pwm_t;
-
+ 
 /**
  * \brief Clock source for pwm
  * \ingroup cy8c9520
  */
 typedef enum {
-    CY8C9520_PWM_CLK_SRC_32_KHZ =           0x00,
-    CY8C9520_PWM_CLK_SRC_24_MHZ =           0x01,
-    CY8C9520_PWM_CLK_SRC_1_5_MHZ =          0x02,
-    CY8C9520_PWM_CLK_SRC_93_75_KHZ =        0x03,
-    CY8C9520_PWM_CLK_SRC_367_6_HZ =         0x04,
-    CY8C9520_PWM_CLK_SRC_PREV =             0x05
+    CY8C9520_PWM_CLK_SRC_32_KHZ = 0x00,
+    CY8C9520_PWM_CLK_SRC_24_MHZ = 0x01,
+    CY8C9520_PWM_CLK_SRC_1_5_MHZ = 0x02,
+    CY8C9520_PWM_CLK_SRC_93_75_KHZ = 0x03,
+    CY8C9520_PWM_CLK_SRC_367_6_HZ = 0x04,
+    CY8C9520_PWM_CLK_SRC_PREV = 0x05
 } cy8c9520_clk_src_t;
  
 /**
@@ -126,13 +122,13 @@ typedef enum {
  * \ingroup cy8c9520
  */
 typedef enum {
-    CY8C9520_STORE_POR_CFG_TO_EEPROM =      0x01,
-    CY8C9520_RESTORE_DEFAULTS =             0x02,
-    CY8C9520_WRITE_EEPROM_POR =             0x03,
-    CY8C9520_READ_EEPROM_POR =              0x04,
-    CY8C9520_WRITE_DEV_CFG =                0x05,
-    CY8C9520_READ_DEV_CFG =                 0x06,
-    CY8C9520_RECFG_DEV_TO_POR =             0x07
+    CY8C9520_STORE_POR_CFG_TO_EEPROM = 0x01,
+    CY8C9520_RESTORE_DEFAULTS = 0x02,
+    CY8C9520_WRITE_EEPROM_POR = 0x03,
+    CY8C9520_READ_EEPROM_POR = 0x04,
+    CY8C9520_WRITE_DEV_CFG = 0x05,
+    CY8C9520_READ_DEV_CFG = 0x06,
+    CY8C9520_RECFG_DEV_TO_POR = 0x07
 } cy8c9520_cmd_t;
  
 /**
@@ -167,23 +163,23 @@ typedef enum {
  */
 typedef enum
 {
-    CY8C9520_DRV_PULL_UP =                  CY8C9520_REG_PULL_UP,
-    CY8C9520_DRV_PULL_DOWN =                CY8C9520_REG_PULL_DOWN,
-    CY8C9520_DRV_OPEN_DRAIN_HIGH =          CY8C9520_REG_OPEN_DRAIN_HIGH,
-    CY8C9520_DRV_OPEN_DRAIN_LOW =           CY8C9520_REG_OPEN_DRAIN_LOW,
-    CY8C9520_DRV_STRONG =                   CY8C9520_REG_STRONG,
-    CY8C9520_DRV_SLOW_STRONG =              CY8C9520_REG_SLOW_STRONG,
-    CY8C9520_DRV_HIGH_Z =                   CY8C9520_REG_HIGH_Z
+    CY8C9520_DRV_PULL_UP = CY8C9520_REG_PULL_UP,
+    CY8C9520_DRV_PULL_DOWN = CY8C9520_REG_PULL_DOWN,
+    CY8C9520_DRV_OPEN_DRAIN_HIGH = CY8C9520_REG_OPEN_DRAIN_HIGH,
+    CY8C9520_DRV_OPEN_DRAIN_LOW = CY8C9520_REG_OPEN_DRAIN_LOW,
+    CY8C9520_DRV_STRONG = CY8C9520_REG_STRONG,
+    CY8C9520_DRV_SLOW_STRONG = CY8C9520_REG_SLOW_STRONG,
+    CY8C9520_DRV_HIGH_Z = CY8C9520_REG_HIGH_Z
 } cy8c9520_drv_mode_t;
  
 /**
  * \brief Direction input/output mode for pins
  * \ingroup cy8c9520
  */
-typedef enum 
+typedef enum
 {
-    CY8C9520_GPIO_OUT =                     0x0,
-    CY8C9520_GPIO_IN =                      0x1
+    CY8C9520_GPIO_OUT = 0x0,
+    CY8C9520_GPIO_IN = 0x1
 } cy8c9520_dir_mode_t;
  
 /**
@@ -192,26 +188,26 @@ typedef enum
  */
 typedef enum
 {
-    CY8C9520_GPIO_0 =                       0x00,
-    CY8C9520_GPIO_1 =                       0x01,
-    CY8C9520_GPIO_2 =                       0x02,
-    CY8C9520_GPIO_3 =                       0x03,
-    CY8C9520_GPIO_4 =                       0x04,
-    CY8C9520_GPIO_5 =                       0x05,
-    CY8C9520_GPIO_6 =                       0x06,
-    CY8C9520_GPIO_7 =                       0x07,
-    CY8C9520_GPIO_8 =                       0x08,
-    CY8C9520_GPIO_9 =                       0x09,
-    CY8C9520_GPIO_10 =                      0x0A,
-    CY8C9520_GPIO_11 =                      0x0B,
-    CY8C9520_GPIO_12 =                      0x0C,
-    CY8C9520_GPIO_13 =                      0x0D,
-    CY8C9520_GPIO_14 =                      0x0E,
-    CY8C9520_GPIO_15 =                      0x0F,
-    CY8C9520_GPIO_16 =                      0x10,
-    CY8C9520_GPIO_17 =                      0x11,
-    CY8C9520_GPIO_18 =                      0x12,
-    CY8C9520_GPIO_19 =                      0x13,
+    CY8C9520_GPIO_0 = 0x00,
+    CY8C9520_GPIO_1 = 0x01,
+    CY8C9520_GPIO_2 = 0x02,
+    CY8C9520_GPIO_3 = 0x03,
+    CY8C9520_GPIO_4 = 0x04,
+    CY8C9520_GPIO_5 = 0x05,
+    CY8C9520_GPIO_6 = 0x06,
+    CY8C9520_GPIO_7 = 0x07,
+    CY8C9520_GPIO_8 = 0x08,
+    CY8C9520_GPIO_9 = 0x09,
+    CY8C9520_GPIO_10 = 0x0A,
+    CY8C9520_GPIO_11 = 0x0B,
+    CY8C9520_GPIO_12 = 0x0C,
+    CY8C9520_GPIO_13 = 0x0D,
+    CY8C9520_GPIO_14 = 0x0E,
+    CY8C9520_GPIO_15 = 0x0F,
+    CY8C9520_GPIO_16 = 0x10,
+    CY8C9520_GPIO_17 = 0x11,
+    CY8C9520_GPIO_18 = 0x12,
+    CY8C9520_GPIO_19 = 0x13,
 } cy8c9520_gpio_t;
  
 /**
@@ -274,7 +270,7 @@ typedef struct
  * \brief CY8C9520 expander struct
  * \ingroup cy8c9520
  */
-typedef struct 
+typedef struct
 {
     hw_i2c_t i2c;
     int rst_pin;
@@ -293,6 +289,10 @@ typedef struct
     uint8_t pulse_wid;
     uint8_t devider;
 } cy8c9520_pwm_cfg_t;
+ 
+#ifdef __cplusplus
+extern "C" {
+#endif
  
 /*!
  * \brief Initializes default configuration

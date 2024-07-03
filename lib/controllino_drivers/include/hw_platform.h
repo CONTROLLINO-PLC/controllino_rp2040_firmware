@@ -35,11 +35,18 @@ extern const int PLATFORM_I2C_SCL;
  */
 typedef struct _hw_spi_t* hw_spi_t;
 extern hw_spi_t PLATFORM_SPI_HW;
+#ifndef PLATFORM_SPI_SPEED
 extern const unsigned int PLATFORM_SPI_SPEED;
+#endif
+#ifndef PLATFORM_SPI_MOSI
 extern const int PLATFORM_SPI_MOSI;
+#endif
+#ifndef PLATFORM_SPI_MISO
 extern const int PLATFORM_SPI_MISO;
+#endif
+#ifndef PLATFORM_SPI_SCK
 extern const int PLATFORM_SPI_SCK;
- 
+#endif
 /**
  * \brief Error codes
  * \ingroup platform

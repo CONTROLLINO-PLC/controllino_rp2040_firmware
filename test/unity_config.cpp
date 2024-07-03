@@ -46,9 +46,7 @@ void unityOutputChar(unsigned int c) { putchar(c); }
 void unityOutputFlush(void) { fflush(stdout); }
 void unityOutputComplete(void) { }
 int main(int argc, char** argv) { runUnityTests(); return 0; }
-#endif
-
-#if defined(CONTROLLINO_NEO) || defined(CONTROLLINO_MICRO)
+#else
 #include <SPI.h>
 #include <Wire.h>
 void unityOutputStart(unsigned long baudrate)
@@ -100,5 +98,3 @@ void setup()
  
 void loop() {}
 #endif
-
-    
