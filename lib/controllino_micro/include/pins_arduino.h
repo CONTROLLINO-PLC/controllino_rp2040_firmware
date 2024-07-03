@@ -208,7 +208,7 @@ static const uint8_t CONTROLLINO_MICRO_DO5 = (22u);
 static const uint8_t CONTROLLINO_MICRO_DO6 = (23u);
 static const uint8_t CONTROLLINO_MICRO_DO7 = (24u);
  
-/* ControllinoRp2040Pin API */
+/* ControllinoPin API */
 #include "controllino_wiring.h"
  
 /* Enable digital output doPin -> CONTROLLINO_MICRO_DO0...D07 */

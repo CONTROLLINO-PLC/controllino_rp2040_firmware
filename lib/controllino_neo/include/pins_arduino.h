@@ -227,7 +227,7 @@ static const uint8_t CONTROLLINO_NEO_DO1 = (23u);
 static const uint8_t CONTROLLINO_NEO_DO2 = (22u);
 static const uint8_t CONTROLLINO_NEO_DO3 = (14u);
  
-/* ControllinoRp2040Pin API */
+/* ControllinoPin API */
 #include "controllino_wiring.h"
  
 /* NEO core internal diagnosys API */

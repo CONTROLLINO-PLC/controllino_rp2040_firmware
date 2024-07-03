@@ -1,12 +1,12 @@
 #include <unity.h>
 #include "controllino_wiring.h"
 
-extern ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI0;
-extern ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI1;
-extern ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI2;
-extern ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI3;
-extern ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI4;
-extern ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI5;
+extern ControllinoPin* _CONTROLLINO_MICRO_AI0;
+extern ControllinoPin* _CONTROLLINO_MICRO_AI1;
+extern ControllinoPin* _CONTROLLINO_MICRO_AI2;
+extern ControllinoPin* _CONTROLLINO_MICRO_AI3;
+extern ControllinoPin* _CONTROLLINO_MICRO_AI4;
+extern ControllinoPin* _CONTROLLINO_MICRO_AI5;
 
 extern const uint8_t _CY8C9520_EN_DO0;
 extern const uint8_t _CY8C9520_EN_DO1;
@@ -27,16 +27,16 @@ void setUp(void)
 void tearDown(void)
 {}
 
-void test_micro_getControllinoRp2040Pin()
+void test_micro_getControllinoPin()
 {
-    TEST_ASSERT_EQUAL(_CONTROLLINO_MICRO_AI0, getControllinoRp2040Pin(CONTROLLINO_MICRO_AI0));
-    TEST_ASSERT_EQUAL(_CONTROLLINO_MICRO_AI1, getControllinoRp2040Pin(CONTROLLINO_MICRO_AI1));
-    TEST_ASSERT_EQUAL(_CONTROLLINO_MICRO_AI2, getControllinoRp2040Pin(CONTROLLINO_MICRO_AI2));
-    TEST_ASSERT_EQUAL(_CONTROLLINO_MICRO_AI3, getControllinoRp2040Pin(CONTROLLINO_MICRO_AI3));
-    TEST_ASSERT_EQUAL(_CONTROLLINO_MICRO_AI4, getControllinoRp2040Pin(CONTROLLINO_MICRO_AI4));
-    TEST_ASSERT_EQUAL(_CONTROLLINO_MICRO_AI5, getControllinoRp2040Pin(CONTROLLINO_MICRO_AI5));
+    TEST_ASSERT_EQUAL(_CONTROLLINO_MICRO_AI0, getControllinoPin(CONTROLLINO_MICRO_AI0));
+    TEST_ASSERT_EQUAL(_CONTROLLINO_MICRO_AI1, getControllinoPin(CONTROLLINO_MICRO_AI1));
+    TEST_ASSERT_EQUAL(_CONTROLLINO_MICRO_AI2, getControllinoPin(CONTROLLINO_MICRO_AI2));
+    TEST_ASSERT_EQUAL(_CONTROLLINO_MICRO_AI3, getControllinoPin(CONTROLLINO_MICRO_AI3));
+    TEST_ASSERT_EQUAL(_CONTROLLINO_MICRO_AI4, getControllinoPin(CONTROLLINO_MICRO_AI4));
+    TEST_ASSERT_EQUAL(_CONTROLLINO_MICRO_AI5, getControllinoPin(CONTROLLINO_MICRO_AI5));
     // Wrong pin number
-    TEST_ASSERT_EQUAL(nullptr, getControllinoRp2040Pin(0));
+    TEST_ASSERT_EQUAL(nullptr, getControllinoPin(0));
 }
 
 void test_micro_enableOutput()
@@ -174,7 +174,7 @@ void test_micro_disableOutput()
 int runUnityTests(void)
 {
     UNITY_BEGIN();
-    RUN_TEST(test_micro_getControllinoRp2040Pin);
+    RUN_TEST(test_micro_getControllinoPin);
     RUN_TEST(test_micro_enableOutput);
     RUN_TEST(test_micro_disableOutput);
     UNITY_END();

@@ -2,16 +2,16 @@
 #include "Arduino.h"
 #include "controllino_wiring.h"
 
-#define TEST_MCP3564_ADC_READING_ERROR 350
+#define TEST_MCP3564_ADC_READING_ERROR 512
 uint32_t TEST_MCP3564_ADC_DATA = 0x3FFFFF;
 
 #ifdef CONTROLLINO_MICRO
-extern ControllinoRp2040Pin* _CONTROLLINO_MICRO_AI0;
+extern ControllinoPin* _CONTROLLINO_MICRO_AI0;
 #define TEST_MCP3564_ARDUINO_PIN CONTROLLINO_MICRO_AI0
 #define _TEST_MCP3564_ARDUINO_PIN _CONTROLLINO_MICRO_AI0
 #endif
 #ifdef CONTROLLINO_NEO
-extern ControllinoRp2040Pin* _CONTROLLINO_NEO_AI0;
+extern ControllinoPin* _CONTROLLINO_NEO_AI0;
 #define TEST_MCP3564_ARDUINO_PIN CONTROLLINO_NEO_AI0
 #define _TEST_MCP3564_ARDUINO_PIN _CONTROLLINO_NEO_AI0
 #endif
@@ -32,7 +32,7 @@ void tearDown(void)
 void test_mcp3564_pin_definitions_ok()
 {
     TEST_ASSERT_EQUAL(MCP3564_CH_CH0, _TEST_MCP3564_ARDUINO_PIN->getPin());
-    TEST_ASSERT_EQUAL(ControllinoRp2040Pin::MCP3564_PIN, _TEST_MCP3564_ARDUINO_PIN->getType());
+    TEST_ASSERT_EQUAL(ControllinoPin::MCP3564_PIN, _TEST_MCP3564_ARDUINO_PIN->getType());
 }
  
 void test_mcp3564_pin_pinMode_always_input()

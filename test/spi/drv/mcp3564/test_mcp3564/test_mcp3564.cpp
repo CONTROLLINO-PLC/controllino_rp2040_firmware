@@ -4,6 +4,7 @@
  
 static mcp3564_t dev;
 static mcp3564_err_code_t ret;
+extern const uint8_t _MCP3564_CS_PIN;
  
 #define MCP3564_TEST_VOL_REF_MIN 0 /* 0 V */
 #define MCP3564_TEST_VOL_REF_MAX 10000 /* 10000 mV or 10 V */
@@ -12,6 +13,7 @@ void setUp(void)
 {
     mcp3564_cfg_t cfg;
     mcp3564_set_default_cfg(&cfg);
+    cfg.cs_pin = _MCP3564_CS_PIN;
     ret = mcp3564_init(&dev, &cfg);
 }
  

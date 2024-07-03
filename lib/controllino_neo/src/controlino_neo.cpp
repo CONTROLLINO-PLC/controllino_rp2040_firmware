@@ -94,31 +94,31 @@ void bts71220_cs_deselect(int cs_pin) {
     cy8c9520_write_pin(neo_cy8c9520, CY8C9520_GPIO_12, 1);
 }
  
-/* Pin definitions for ControllinoRp2040Pin API */
-ControllinoRp2040Pin* _CONTROLLINO_NEO_AI0 = new ControllinoRp2040Pin(MCP3564_CH_CH0, ControllinoRp2040Pin::MCP3564_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_NEO_AI1 = new ControllinoRp2040Pin(MCP3564_CH_CH1, ControllinoRp2040Pin::MCP3564_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_NEO_AI2 = new ControllinoRp2040Pin(MCP3564_CH_CH2, ControllinoRp2040Pin::MCP3564_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_NEO_AI3 = new ControllinoRp2040Pin(MCP3564_CH_CH3, ControllinoRp2040Pin::MCP3564_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_NEO_AI4 = new ControllinoRp2040Pin(MCP3564_CH_CH4, ControllinoRp2040Pin::MCP3564_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_NEO_AI5 = new ControllinoRp2040Pin(MCP3564_CH_CH5, ControllinoRp2040Pin::MCP3564_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_NEO_AI6 = new ControllinoRp2040Pin(MCP3564_CH_CH6, ControllinoRp2040Pin::MCP3564_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_NEO_AI7 = new ControllinoRp2040Pin(MCP3564_CH_CH7, ControllinoRp2040Pin::MCP3564_PIN);
+/* Pin definitions for ControllinoPin API */
+ControllinoPin* _CONTROLLINO_NEO_AI0 = new ControllinoPin(MCP3564_CH_CH0, ControllinoPin::MCP3564_PIN);
+ControllinoPin* _CONTROLLINO_NEO_AI1 = new ControllinoPin(MCP3564_CH_CH1, ControllinoPin::MCP3564_PIN);
+ControllinoPin* _CONTROLLINO_NEO_AI2 = new ControllinoPin(MCP3564_CH_CH2, ControllinoPin::MCP3564_PIN);
+ControllinoPin* _CONTROLLINO_NEO_AI3 = new ControllinoPin(MCP3564_CH_CH3, ControllinoPin::MCP3564_PIN);
+ControllinoPin* _CONTROLLINO_NEO_AI4 = new ControllinoPin(MCP3564_CH_CH4, ControllinoPin::MCP3564_PIN);
+ControllinoPin* _CONTROLLINO_NEO_AI5 = new ControllinoPin(MCP3564_CH_CH5, ControllinoPin::MCP3564_PIN);
+ControllinoPin* _CONTROLLINO_NEO_AI6 = new ControllinoPin(MCP3564_CH_CH6, ControllinoPin::MCP3564_PIN);
+ControllinoPin* _CONTROLLINO_NEO_AI7 = new ControllinoPin(MCP3564_CH_CH7, ControllinoPin::MCP3564_PIN);
 
-ControllinoRp2040Pin* _CONTROLLINO_NEO_AO0 = new ControllinoRp2040Pin(AD5664_CH_ADDR_A, ControllinoRp2040Pin::AD5664_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_NEO_AO1 = new ControllinoRp2040Pin(AD5664_CH_ADDR_B, ControllinoRp2040Pin::AD5664_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_NEO_AO2 = new ControllinoRp2040Pin(AD5664_CH_ADDR_C, ControllinoRp2040Pin::AD5664_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_NEO_AO3 = new ControllinoRp2040Pin(AD5664_CH_ADDR_D, ControllinoRp2040Pin::AD5664_PIN);
+ControllinoPin* _CONTROLLINO_NEO_AO0 = new ControllinoPin(AD5664_CH_ADDR_A, ControllinoPin::AD5664_PIN);
+ControllinoPin* _CONTROLLINO_NEO_AO1 = new ControllinoPin(AD5664_CH_ADDR_B, ControllinoPin::AD5664_PIN);
+ControllinoPin* _CONTROLLINO_NEO_AO2 = new ControllinoPin(AD5664_CH_ADDR_C, ControllinoPin::AD5664_PIN);
+ControllinoPin* _CONTROLLINO_NEO_AO3 = new ControllinoPin(AD5664_CH_ADDR_D, ControllinoPin::AD5664_PIN);
 
-ControllinoRp2040Pin* _CONTROLLINO_NEO_DO4 = new ControllinoRp2040Pin(CY8C9520_GPIO_9, ControllinoRp2040Pin::CY8C9520_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_NEO_DO5 = new ControllinoRp2040Pin(CY8C9520_GPIO_8, ControllinoRp2040Pin::CY8C9520_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_NEO_DO6 = new ControllinoRp2040Pin(CY8C9520_GPIO_7, ControllinoRp2040Pin::CY8C9520_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_NEO_DO7 = new ControllinoRp2040Pin(CY8C9520_GPIO_6, ControllinoRp2040Pin::CY8C9520_PIN);
+ControllinoPin* _CONTROLLINO_NEO_DO4 = new ControllinoPin(CY8C9520_GPIO_9, ControllinoPin::CY8C9520_PIN);
+ControllinoPin* _CONTROLLINO_NEO_DO5 = new ControllinoPin(CY8C9520_GPIO_8, ControllinoPin::CY8C9520_PIN);
+ControllinoPin* _CONTROLLINO_NEO_DO6 = new ControllinoPin(CY8C9520_GPIO_7, ControllinoPin::CY8C9520_PIN);
+ControllinoPin* _CONTROLLINO_NEO_DO7 = new ControllinoPin(CY8C9520_GPIO_6, ControllinoPin::CY8C9520_PIN);
 
-ControllinoRp2040Pin* _CONTROLLINO_NEO_RE_PIN = new ControllinoRp2040Pin(CY8C9520_GPIO_14, ControllinoRp2040Pin::CY8C9520_PIN);
-ControllinoRp2040Pin* _CONTROLLINO_NEO_DE_PIN = new ControllinoRp2040Pin(CY8C9520_GPIO_15, ControllinoRp2040Pin::CY8C9520_PIN);
+ControllinoPin* _CONTROLLINO_NEO_RE_PIN = new ControllinoPin(CY8C9520_GPIO_14, ControllinoPin::CY8C9520_PIN);
+ControllinoPin* _CONTROLLINO_NEO_DE_PIN = new ControllinoPin(CY8C9520_GPIO_15, ControllinoPin::CY8C9520_PIN);
  
-/* Returns ControllinoRp2040Pin API pin or nullptr */
-ControllinoRp2040Pin* getControllinoRp2040Pin(int pin)
+/* Returns ControllinoPin API pin or nullptr */
+ControllinoPin* getControllinoPin(int pin)
 {
     switch (pin)
     {

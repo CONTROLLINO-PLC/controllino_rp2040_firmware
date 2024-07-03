@@ -6,13 +6,13 @@ uint8_t TEST_CY8C9520_GPIO;
 uint8_t TEST_CY8C9520_ADDR = CY8C9520_DEV_ADDR_GND;
 
 #ifdef CONTROLLINO_MICRO
-ControllinoRp2040Pin* _PIN = new ControllinoRp2040Pin(CY8C9520_GPIO_17, ControllinoRp2040Pin::CY8C9520_PIN);
+ControllinoPin* _PIN = new ControllinoPin(CY8C9520_GPIO_17, ControllinoPin::CY8C9520_PIN);
 #define TEST_CY8C9520_ARDUINO_PIN _PIN
 #define _TEST_CY8C9520_ARDUINO_PIN _PIN
 #define TEST_CY8C9520_GPIO CY8C9520_GPIO_17
 #endif
 #ifdef CONTROLLINO_NEO
-extern ControllinoRp2040Pin* _CONTROLLINO_NEO_DO4;
+extern ControllinoPin* _CONTROLLINO_NEO_DO4;
 #define TEST_CY8C9520_ARDUINO_PIN CONTROLLINO_NEO_DO4
 #define _TEST_CY8C9520_ARDUINO_PIN _CONTROLLINO_NEO_DO4
 #define TEST_CY8C9520_GPIO CY8C9520_GPIO_9
@@ -34,7 +34,7 @@ void tearDown(void)
 void test_cy8c9520_pin_definitions_ok()
 {
     TEST_ASSERT_EQUAL(TEST_CY8C9520_GPIO, _TEST_CY8C9520_ARDUINO_PIN->getPin());
-    TEST_ASSERT_EQUAL(ControllinoRp2040Pin::CY8C9520_PIN, _TEST_CY8C9520_ARDUINO_PIN->getType());
+    TEST_ASSERT_EQUAL(ControllinoPin::CY8C9520_PIN, _TEST_CY8C9520_ARDUINO_PIN->getType());
 }
  
 void test_cy8c9520_pin_pinMode_is_input_pull_up_down_or_output()
