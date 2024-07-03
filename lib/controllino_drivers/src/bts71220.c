@@ -161,7 +161,7 @@ bts71220_err_code_t bts71220_set_sense_mux(bts71220_t* dev, bts71220_sense_mux_t
 }
 
 /* Enable CS for start SPI coms */
-void __attribute__((weak)) bts71220_cs_select(int cs_pin) { (void)cs_pin; };
+void __attribute__((weak)) bts71220_cs_select(int cs_pin) { platform_gpio_set(cs_pin, false); };
 
 /* Disable CS after SPI coms */
-void __attribute__((weak)) bts71220_cs_deselect(int cs_pin) { (void)cs_pin; };
+void __attribute__((weak)) bts71220_cs_deselect(int cs_pin) { platform_gpio_set(cs_pin, true); };

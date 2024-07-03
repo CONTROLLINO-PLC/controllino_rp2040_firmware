@@ -26,8 +26,6 @@
  * \ingroup mcp23s17
  */
 typedef int mcp23s17_err_code_t;
-#define MCP23S17_OK             0x00
-#define MCP23S17_INIT_ERROR     0xFF
  
 /**
  * \brief MCP23S17 addresses
@@ -289,7 +287,7 @@ mcp23s17_err_code_t mcp23s17_read_port_b(mcp23s17_t* dev, uint8_t* data);
  * \return PLATFORM_SPI_COM_ERR : error in coms
  *         PLATFORM_ARGUMENT_ERR : error in arguments
  *         PLATFORM_OK : successful
- * \note PORTA is the MSB and PORTB is the LSB
+ * \note PORTB is the MSB and PORTA is the LSB
  */
 mcp23s17_err_code_t mcp23s17_read_ports(mcp23s17_t* dev, uint16_t* data);
  

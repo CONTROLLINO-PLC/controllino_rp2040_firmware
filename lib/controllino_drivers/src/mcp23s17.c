@@ -135,7 +135,7 @@ mcp23s17_err_code_t mcp23s17_read_port_b(mcp23s17_t* dev, uint8_t* data)
     return PLATFORM_OK;
 }
 
-/* Read data from PORTA-PORTB and merge into one 16bit value */
+/* Read data from PORTA-PORTB and merge into one 16bit value PORTA is the MSB and PORTB is the LSB */
 mcp23s17_err_code_t mcp23s17_read_ports(mcp23s17_t* dev, uint16_t* data)
 {
     uint8_t porta;
@@ -146,7 +146,7 @@ mcp23s17_err_code_t mcp23s17_read_ports(mcp23s17_t* dev, uint16_t* data)
     ret = mcp23s17_read_port_b(dev, &portb);
     if (ret != PLATFORM_OK)
         return ret;
-    *data = (porta << 8) | portb;
+    *data = (portb << 8) | porta;
     return PLATFORM_OK;
 }
 
@@ -267,7 +267,7 @@ void mcp23s17_get_interrupt(mcp23s17_t* dev, uint8_t* state)
 {}
 
 /* Enable CS for start SPI coms */
-void __attribute__((weak)) mcp23s17_cs_select(int cs_pin) { (void)cs_pin; };
+void __attribute__((weak)) mcp23s17_cs_select(int cs_pin) { platform_gpio_set(cs_pin, false); };
 
 /* Disable CS after SPI coms*/
-void __attribute__((weak)) mcp23s17_cs_deselect(int cs_pin) { (void)cs_pin; };
+void __attribute__((weak)) mcp23s17_cs_deselect(int cs_pin) { platform_gpio_set(cs_pin, true); };

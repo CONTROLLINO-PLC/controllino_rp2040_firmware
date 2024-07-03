@@ -9,6 +9,7 @@ void setUp(void)
 {
     mcp23s17_cfg_t cfg;
     mcp23s17_set_default_cfg(&cfg);
+    cfg.cs_pin = MCP23S17_CS;
     ret = mcp23s17_init(&dev, &cfg);
 }
  

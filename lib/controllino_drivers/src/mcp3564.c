@@ -280,7 +280,7 @@ mcp3564_err_code_t mcp3564_read_voltage(mcp3564_t* dev, uint32_t vol_ref_min, ui
 }
 
 /* Enable CS for start SPI coms */
-void __attribute__((weak)) mcp3564_cs_select(int cs_pin) { (void)cs_pin; };
+void __attribute__((weak)) mcp3564_cs_select(int cs_pin) { platform_gpio_set(cs_pin, false); };
 
 /* Disable CS after SPI coms */
-void __attribute__((weak)) mcp3564_cs_deselect(int cs_pin) { (void)cs_pin; };
+void __attribute__((weak)) mcp3564_cs_deselect(int cs_pin) { platform_gpio_set(cs_pin, true); };
