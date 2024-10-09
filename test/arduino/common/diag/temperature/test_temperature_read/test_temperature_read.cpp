@@ -1,6 +1,6 @@
 #include <unity.h>
 #include "Arduino.h"
-#include "controllino_diag.h"
+#include "diag.h"
 
 float _readBoardTemperature(void)
 {

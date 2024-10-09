@@ -26,7 +26,7 @@
 
 // Modified version for this project
 
-#include <SPI.h>
+#include <Arduino.h>
 
 void setup() {
     Serial.begin(115200);

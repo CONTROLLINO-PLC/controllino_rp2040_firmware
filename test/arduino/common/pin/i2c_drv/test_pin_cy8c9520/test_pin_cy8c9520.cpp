@@ -1,6 +1,6 @@
 #include <unity.h>
 #include "Arduino.h"
-#include "controllino_wiring.h"
+#include "wiring.h"
 
 uint8_t TEST_CY8C9520_GPIO;
 uint8_t TEST_CY8C9520_ADDR = CY8C9520_DEV_ADDR_GND;

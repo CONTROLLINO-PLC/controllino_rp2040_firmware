@@ -22,7 +22,6 @@
 
 // Modified version for this project
 
-#include <SPI.h>
 #include "ArduinoRS485.h"
 
 RS485Class MicroRS485(RS485_SERIAL_PORT, RS485_DEFAULT_TX_PIN, RS485_DEFAULT_DE_PIN, RS485_DEFAULT_RE_PIN);

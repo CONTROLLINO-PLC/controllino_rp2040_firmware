@@ -22,7 +22,6 @@
 
 // Modified version for this project
 
-#include <SPI.h>
 #include <ArduinoECCX08.h>
 #include <utility/ECCX08SelfSignedCert.h>
 #include <utility/ECCX08DefaultTLSConfig.h>

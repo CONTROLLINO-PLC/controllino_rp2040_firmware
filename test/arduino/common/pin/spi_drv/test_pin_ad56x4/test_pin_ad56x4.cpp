@@ -1,6 +1,6 @@
 #include <unity.h>
 #include "Arduino.h"
-#include "controllino_wiring.h"
+#include "wiring.h"
 
 uint16_t TEST_AD5664_WRITE_DAC_DATA = 0x7FFF;
 uint16_t TEST_AD5664_DAC_DATA = 0x0000;

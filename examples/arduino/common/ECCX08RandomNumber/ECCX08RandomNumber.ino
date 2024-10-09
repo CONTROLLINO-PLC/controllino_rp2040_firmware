@@ -13,7 +13,6 @@
 
 // Modified version for this project
 
-#include <SPI.h>
 #include <ArduinoECCX08.h>
 
 void setup() {

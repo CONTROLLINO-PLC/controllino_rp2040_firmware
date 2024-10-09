@@ -1,5 +1,5 @@
 #include <unity.h>
-#include "controllino_diag.h"
+#include "diag.h"
 
 void setUp(void)
 {

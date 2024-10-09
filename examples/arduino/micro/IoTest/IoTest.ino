@@ -12,7 +12,6 @@
   */
 
 #include <Arduino.h>
-#include <SPI.h>
 
 bool do_en = true;
 unsigned long lastMillis = 0;

@@ -1,6 +1,6 @@
 #include <unity.h>
 #include "Arduino.h"
-#include "controllino_wiring.h"
+#include "wiring.h"
 
 #define TEST_MCP3564_ADC_READING_ERROR 512
 uint32_t TEST_MCP3564_ADC_DATA = 0x3FFFFF;
