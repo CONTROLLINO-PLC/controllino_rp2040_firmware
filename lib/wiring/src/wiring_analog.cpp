@@ -14,20 +14,8 @@
 #include <hardware/pll.h>
 #include <hardware/adc.h>
 
- /* Modifications of wiring_analog.cpp on arduino-pico  */
-void __clearADCPin(pin_size_t p);
-
-static uint32_t analogScale = 255;
-static uint32_t analogFreq = 1000;
-static uint32_t pwmInitted = 0;
-static bool scaleInitted = false;
-static bool adcInitted = false;
-static uint16_t analogWritePseudoScale = 1;
-static uint16_t analogWriteSlowScale = 1;
-
-auto_init_mutex(_dacMutex);
-
 /* Controllino analog API */
+
 int analogRead(ControllinoPin* pin)
 {
     int adcValue = 0;
@@ -65,8 +53,8 @@ int analogRead(ControllinoPin* pin)
             chn = MCP3564_MUX_VIN_POS_CH0;
             break;
         }
-        // 500 us delay for 256 over sample rate
-        mcp3564_read_adc_mux(dev_mcp3564, (uint32_t*)&adcValue, chn, MCP3564_MUX_VIN_NEG_VREF_EXT_MINUS, 500);
+        // 300 us delay for 128 over sample rate
+        mcp3564_read_adc_mux(dev_mcp3564, (uint32_t*)&adcValue, chn, MCP3564_MUX_VIN_NEG_VREF_EXT_MINUS, 300);
         break;
     default:
         // Other pin types are digital or analog output only
@@ -74,6 +62,8 @@ int analogRead(ControllinoPin* pin)
     }
     return adcValue;
 }
+
+static uint32_t analogScale = 255;
 
 void analogWrite(ControllinoPin* pin, int value)
 {
@@ -144,6 +134,17 @@ void analogWrite(ControllinoPin* pin, int value)
         break;
     }
 }
+
+/* Modifications of wiring_analog.cpp on arduino-pico  */
+void __clearADCPin(pin_size_t p);
+
+auto_init_mutex(_dacMutex);
+static uint32_t analogFreq = 1000;
+static uint32_t pwmInitted = 0;
+static bool scaleInitted = false;
+static bool adcInitted = false;
+static uint16_t analogWritePseudoScale = 1;
+static uint16_t analogWriteSlowScale = 1;
 
 extern "C" void analogWriteFreq(uint32_t freq) {
     if (freq == analogFreq) {
@@ -240,7 +241,7 @@ extern "C" void analogWrite(pin_size_t pin, int val) {
 }
 
 auto_init_mutex(_adcMutex);
-static uint8_t _readBits = 10;
+uint8_t _readBits = 24; // Default to 24 bits resolution
 static uint8_t _lastADCMux = 0;
 static uint32_t _adcGPIOInit = 0;
 
@@ -274,8 +275,7 @@ extern "C" int analogRead(pin_size_t pin) {
         return (_readBits < 12) ? adc_read() >> (12 - _readBits) : adc_read() << (_readBits - 12);
     }
     else if (getControllinoPin(pin) != nullptr) {
-        // Max 24 bits resolution
-        return (_readBits < 24) ? analogRead(getControllinoPin(pin)) >> (24 - _readBits) : analogRead(getControllinoPin(pin)) << (_readBits - 24);
+        return (_readBits < 23) ? analogRead(getControllinoPin(pin)) >> (23 - _readBits) : analogRead(getControllinoPin(pin)) << (_readBits - 23); // Max 23 bits resolution
     }
     return 0;
 }

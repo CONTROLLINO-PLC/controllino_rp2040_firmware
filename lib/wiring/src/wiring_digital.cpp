@@ -49,6 +49,8 @@ void pinMode(ControllinoPin* pin, PinMode mode)
     pin->setMode(mode);
 }
 
+extern uint8_t _readBits; // from wiring_analog.cpp
+
 PinStatus digitalRead(ControllinoPin* pin)
 {
     PinStatus pinStatus = LOW;
@@ -75,7 +77,8 @@ PinStatus digitalRead(ControllinoPin* pin)
         pinStatus = pinState ? HIGH : LOW;
         break;
     case ControllinoPin::MCP3564_PIN:
-        pinStatus = (analogRead(pin) >= pin->_getDigitalThreshold()) ? HIGH : LOW;
+        // If adc reading (use same analog resolution as with analogRead) is greater than threshold return HIGH
+        pinStatus = ((_readBits < 23) ? analogRead(pin) >> (23 - _readBits) : analogRead(pin) << (_readBits - 23) >= pin->_getDigitalThreshold()) ? HIGH : LOW; // Max 23 bits resolution
         break;
     default:
         // In other pins digitalRead does not make sense

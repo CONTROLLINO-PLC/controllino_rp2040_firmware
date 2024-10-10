@@ -154,11 +154,11 @@ static const uint8_t A3 =           (29u);
 #ifndef RS485_DEFAULT_TX_PIN
 #define RS485_DEFAULT_TX_PIN        PIN_SERIAL2_TX
 #endif
-#ifndef RS485_DEFAULT_RE_PIN
-#define RS485_DEFAULT_RE_PIN        (10u)
+#ifndef CUSTOM_RS485_DEFAULT_RE_PIN
+#define CUSTOM_RS485_DEFAULT_RE_PIN (10u)
 #endif
-#ifndef RS485_DEFAULT_DE_PIN
-#define RS485_DEFAULT_DE_PIN        (11u)
+#ifndef CUSTOM_RS485_DEFAULT_DE_PIN
+#define CUSTOM_RS485_DEFAULT_DE_PIN (11u)
 #endif
  
 /* For Arduino ETHERNET library */

@@ -72,9 +72,6 @@ void initVariant()
     mcp3564_set_default_cfg(&mcp3564_cfg);
     mcp3564_cfg.cs_pin = _MCP3564_CS_PIN;
     mcp3564_init(dev_mcp3564, &mcp3564_cfg);
-
-    // Set default resolution for RP2040 ADC to 12 bits
-    analogReadResolution(12);
 }
  
 /* Pin definitions for ControllinoPin API */
@@ -115,9 +112,9 @@ ControllinoPin* getControllinoPin(int pin)
 int readVoltageSuply(void)
 {
     // Power suply monitoring is connected to ADC channel 6
-    // 500 us delay for 256 over sample rate
+    // 300 us delay for 128 over sample rate
     uint32_t adcValue;
-    mcp3564_read_adc_mux(dev_mcp3564, &adcValue, MCP3564_MUX_VIN_POS_CH6, MCP3564_MUX_VIN_NEG_VREF_EXT_MINUS, 500);
+    mcp3564_read_adc_mux(dev_mcp3564, &adcValue, MCP3564_MUX_VIN_POS_CH6, MCP3564_MUX_VIN_NEG_VREF_EXT_MINUS, 300);
     return (float)adcValue * POWER_SUPLY_CONVERSION_RATIO; // Convert to mV
 }
  
@@ -440,8 +437,8 @@ uint16_t getOutCurrent(uint8_t doPin)
         uint32_t adcValue;
         // Default gain is x2 needs to be changed to x1
         mcp3564_set_gain(dev_mcp3564, MCP3564_GAIN_X_1);
-        // 500 us delay for 256 over sample rate
-        mcp3564_read_adc_mux(dev_mcp3564, &adcValue, MCP3564_MUX_VIN_POS_CH7, MCP3564_MUX_VIN_NEG_VREF_EXT_MINUS, 500);
+        // 300 us delay for 128 over sample rate
+        mcp3564_read_adc_mux(dev_mcp3564, &adcValue, MCP3564_MUX_VIN_POS_CH7, MCP3564_MUX_VIN_NEG_VREF_EXT_MINUS, 300);
         // Set gain back to x2
         mcp3564_set_gain(dev_mcp3564, MCP3564_GAIN_X_2);
 
