@@ -1,4 +1,4 @@
-# Controllino RP2040 firmware resources
+# Controllino RP2 firmware resources
 
 This repository in the form of a PlatformIO project contains the firmware resources for Controllino RP2 boards, to support bare metal programming using Pico SDK and Arduino programing with Controllino RP2 core based on Arduino-Pico core.
 
