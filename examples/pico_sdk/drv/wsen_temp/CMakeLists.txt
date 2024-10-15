@@ -3,7 +3,7 @@ add_executable(example_wsen_temp)
 target_sources(example_wsen_temp PUBLIC 
     ${CMAKE_CURRENT_LIST_DIR}/main.c
 )
-target_link_libraries(example_wsen_temp neo_drivers pico_stdlib hardware_i2c hardware_spi hardware_pio)
+target_link_libraries(example_wsen_temp drivers pico_stdlib hardware_i2c hardware_spi hardware_pio)
 pico_enable_stdio_usb(example_wsen_temp 1)
 pico_enable_stdio_uart(example_wsen_temp 1)
 pico_add_extra_outputs(example_wsen_temp)
