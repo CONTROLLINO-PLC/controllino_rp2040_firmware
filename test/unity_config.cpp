@@ -47,8 +47,7 @@ void unityOutputFlush(void) { fflush(stdout); }
 void unityOutputComplete(void) { }
 int main(int argc, char** argv) { runUnityTests(); return 0; }
 #else
-#include <SPI.h>
-#include <Wire.h>
+#include <Arduino.h>
 void unityOutputStart(unsigned long baudrate)
 {
 #ifdef UNITY_OUTPUT_SERIAL1

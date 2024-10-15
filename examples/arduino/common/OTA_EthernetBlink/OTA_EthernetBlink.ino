@@ -18,7 +18,6 @@
   Modified for Controllino
 */
 
-#include <SPI.h>
 #include <Ethernet.h>
 #include <ArduinoOTA.h>
 

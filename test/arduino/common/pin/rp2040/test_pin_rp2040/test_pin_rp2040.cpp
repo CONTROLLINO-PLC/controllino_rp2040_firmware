@@ -1,6 +1,6 @@
 #include <unity.h>
 #include "Arduino.h"
-#include "controllino_wiring.h"
+#include "wiring.h"
 
 #define TEST_RP2040_GPIO (pin_size_t)0
 

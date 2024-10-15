@@ -1,6 +1,6 @@
 #include <math.h>
 #include <unity.h>
-#include "controllino_diag.h"
+#include "diag.h"
 
 extern uint16_t _CONTROLLINO_MICRO_DO0_R;
 extern uint16_t _CONTROLLINO_MICRO_DO1_R;

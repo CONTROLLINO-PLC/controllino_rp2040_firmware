@@ -1,5 +1,5 @@
 #include <unity.h>
-#include "controllino_wiring.h"
+#include "wiring.h"
 
 extern ControllinoPin* _CONTROLLINO_MICRO_AI0;
 extern ControllinoPin* _CONTROLLINO_MICRO_AI1;

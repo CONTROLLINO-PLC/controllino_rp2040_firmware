@@ -14,7 +14,6 @@
 
 // Modified version for this project
 
-#include <SPI.h>
 #include <Ethernet.h>
 
 #include <ArduinoRS485.h> // ArduinoModbus depends on the ArduinoRS485 library
